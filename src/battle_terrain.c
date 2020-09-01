@@ -281,6 +281,7 @@ static u8 TryLoadAlternateAreaTerrain(u8 terrain)
 #ifdef UNBOUND
 	u16 tileBehavior;
 	s16 x, y;
+	u8 mapSec = GetCurrentRegionMapSectionId();
 
 	PlayerGetDestCoords(&x, &y);
 	tileBehavior = MapGridGetMetatileBehaviorAt(x, y);
@@ -318,10 +319,18 @@ static u8 TryLoadAlternateAreaTerrain(u8 terrain)
 				terrain = BATTLE_TERRAIN_SNOW_FIELD;
 			else if (IsCurrentAreaDesert())
 				terrain = BATTLE_TERRAIN_DESERT;
+			else if (mapSec == MAPSEC_ANTISIS_CITY)
+				terrain = BATTLE_TERRAIN_ANTISIS_CITY;
+			else if (IsCurrentAreaSwamp())
+				terrain = BATTLE_TERRAIN_BOG;
 			break;
 		case BATTLE_TERRAIN_GRASS:
 			if (IsCurrentAreaWinter())
 				terrain = BATTLE_TERRAIN_SNOW_GRASS;
+			break;
+		case BATTLE_TERRAIN_POND:
+			if (IsCurrentAreaSwamp())
+				terrain = BATTLE_TERRAIN_BOG_WATER;
 			break;
 		case BATTLE_TERRAIN_SNOW_FIELD:
 			if (MetatileBehavior_IsTallGrass(tileBehavior))
@@ -331,6 +340,33 @@ static u8 TryLoadAlternateAreaTerrain(u8 terrain)
 			if (IsCurrentAreaDesert())
 				terrain = BATTLE_TERRAIN_DESERT;
 			break;
+	}
+
+	if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING))
+	{
+		switch (terrain) {
+			case BATTLE_TERRAIN_CAVE:
+				terrain = BATTLE_TERRAIN_WATER_IN_CAVE;
+				break;
+			case BATTLE_TERRAIN_VOLCANO:
+				terrain = BATTLE_TERRAIN_LAVA_IN_VOLCANO;
+				break;
+			case BATTLE_TERRAIN_FOREST:
+				terrain = BATTLE_TERRAIN_WATER_IN_FOREST;
+				break;
+			case BATTLE_TERRAIN_DARK_CAVE:
+				terrain = BATTLE_TERRAIN_DARK_CAVE_WATER;
+				break;
+			case BATTLE_TERRAIN_SNOW_CAVE:
+				terrain = BATTLE_TERRAIN_WATER_IN_SNOW_CAVE;
+				break;
+			case BATTLE_TERRAIN_ANTISIS_SEWERS:
+				terrain = BATTLE_TERRAIN_ANTISIS_SEWERS_WATER;
+				break;
+			case BATTLE_TERRAIN_BOG:
+				terrain = BATTLE_TERRAIN_BOG_WATER;
+				break;
+		}
 	}
 #endif
 

@@ -99,6 +99,7 @@
 #define SE_CHOMP 0x9A
 #define SE_MUD_SLAP 0xA1
 #define SE_LEAVES 0xA2
+#define SE_EXPLOSION 0xAA
 #define SE_GLASS_BREAK 0xBF
 #define SE_EARTHQUAKE 0xE3
 

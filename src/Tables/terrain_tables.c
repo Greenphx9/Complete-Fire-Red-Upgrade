@@ -424,7 +424,61 @@ const struct TerrainTableStruct gTerrainTable[] =
 			.camouflageType = TYPE_DARK,
 			.secretPowerEffect = MOVE_EFFECT_SLEEP,
 			.secretPowerAnim = MOVE_FEINTATTACK,
-			.naturePowerMove = MOVE_DARKPULSE,
+			.naturePowerMove = MOVE_NIGHTDAZE,
+			.burmyForm = SPECIES_NONE,
+		},
+
+	[BATTLE_TERRAIN_ANTISIS_CITY + 4] =
+		{
+			.camouflageType = TYPE_STEEL,
+			.secretPowerEffect = MOVE_EFFECT_DEF_MINUS_1,
+			.secretPowerAnim = MOVE_METALCLAW,
+			.naturePowerMove = MOVE_FLASHCANNON,
+			.burmyForm = SPECIES_BURMY_TRASH,
+		},
+
+	[BATTLE_TERRAIN_ANTISIS_SEWERS + 4] =
+		{
+			.camouflageType = TYPE_POISON,
+			.secretPowerEffect = MOVE_EFFECT_TOXIC,
+			.secretPowerAnim = MOVE_POISONTAIL,
+			.naturePowerMove = MOVE_SLUDGEBOMB,
+			.burmyForm = SPECIES_BURMY_TRASH,
+		},
+
+	[BATTLE_TERRAIN_ANTISIS_SEWERS_WATER + 4] =
+		{
+			.camouflageType = TYPE_POISON,
+			.secretPowerEffect = MOVE_EFFECT_TOXIC,
+			.secretPowerAnim = MOVE_POISONTAIL,
+			.naturePowerMove = MOVE_SLUDGEWAVE,
+			.burmyForm = SPECIES_NONE,
+		},
+
+	[BATTLE_TERRAIN_SKY_BATTLE + 4] =
+		{
+			.camouflageType = TYPE_FLYING,
+			.secretPowerEffect = MOVE_EFFECT_FLINCH,
+			.secretPowerAnim = MOVE_WINGATTACK,
+			.naturePowerMove = MOVE_AIRSLASH,
+			.burmyForm = SPECIES_NONE,
+		},
+
+	[BATTLE_TERRAIN_BOG + 4] =
+		{
+			.camouflageType = TYPE_GROUND,
+			.secretPowerEffect = MOVE_EFFECT_SPD_MINUS_1,
+			.secretPowerAnim = MOVE_MUDSHOT,
+			.naturePowerMove = MOVE_MUDBOMB,
+			.burmyForm = SPECIES_BURMY_SANDY,
+		},
+
+	[BATTLE_TERRAIN_BOG_WATER + 4] =
+		{
+			.camouflageType = TYPE_GROUND,
+			.secretPowerEffect = MOVE_EFFECT_ACC_MINUS_1,
+			.secretPowerAnim = MOVE_MUDSLAP,
+			.naturePowerMove = MOVE_MUDDYWATER,
 			.burmyForm = SPECIES_NONE,
 		},
 #endif
