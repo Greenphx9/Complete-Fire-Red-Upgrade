@@ -38,6 +38,7 @@ bool8 IsFloatingWithMagnetism(u8 bank);
 bool8 IsMonFloatingWithMagnetism(struct Pokemon* mon);
 u8 ViableMonCountFromBank(u8 bank);
 u8 ViableMonCountFromBankLoadPartyRange(u8 bank);
+bool8 HasMonToSwitchTo(u8 bank);
 bool8 CheckContact(u16 move, u8 bank);
 bool8 CheckContactByMon(u16 move, struct Pokemon* mon);
 bool8 IsContactMove(u16 move, u8 bankAtk, u8 bankDef);

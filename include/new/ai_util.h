@@ -50,7 +50,6 @@ bool8 IsDamagingMoveUnusableByMon(u16 move, struct Pokemon* monAtk, u8 bankDef);
 bool8 IsSuckerPunchOkayToUseThisRound(u16 move, u8 bankAtk, u8 bankDef);
 u16 GetAIChosenMove(u8 bankAtk, u8 bankDef);
 bool8 IsTrapped(u8 bank, bool8 switching);
-bool8 BankHasMonToSwitchTo(u8 bank);
 bool8 IsTakingSecondaryDamage(u8 bank);
 bool8 WillFaintFromSecondaryDamage(u8 bank);
 u16 CalcSecondaryEffectChance(u8 bank, u16 move);
