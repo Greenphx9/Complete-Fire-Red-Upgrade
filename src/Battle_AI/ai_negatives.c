@@ -1070,9 +1070,56 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 			break;
 
 		case EFFECT_CONVERSION:
-			//Check first move type
-			if (IsOfType(bankAtk, gBattleMoves[gBattleMons[bankAtk].moves[0]].type))
-				DECREASE_VIABILITY(10);
+			if (move == MOVE_REFLECTTYPE)
+			{
+				u8 defType1 = gBattleMons[bankDef].type1;
+				u8 defType2 = gBattleMons[bankDef].type2;
+				u8 defType3 = gBattleMons[bankDef].type3;
+
+				//If target has no type
+				if((IS_BLANK_TYPE(defType1))
+				&& (IS_BLANK_TYPE(defType2))
+				&& (IS_BLANK_TYPE(defType3)))
+				{
+					DECREASE_VIABILITY(10);
+				}
+				else if (MoveBlockedBySubstitute(move, bankAtk, bankDef))
+				{
+					DECREASE_VIABILITY(10);
+				}
+				else
+				{
+					//If target has no main types, but has a third type
+					if ((IS_BLANK_TYPE(defType1))
+					&&  (IS_BLANK_TYPE(defType2))
+					&& !(IS_BLANK_TYPE(defType3)))
+					{
+						defType1 = TYPE_NORMAL;
+						defType2 = TYPE_NORMAL;
+					}
+					else //Target Has Main Type
+					{
+						if (IS_BLANK_TYPE(defType1))
+							defType1 = defType2;
+						else if (IS_BLANK_TYPE(defType2))
+							defType2 = defType1;
+
+						if (IS_BLANK_TYPE(defType3)) //Just in case it has a burned out Fire type
+							defType3 = TYPE_BLANK;
+					}
+
+					if (gBattleMons[bankAtk].type1 == defType1
+					&&  gBattleMons[bankAtk].type2 == defType2
+					&&  gBattleMons[bankAtk].type3 == defType3)
+						DECREASE_VIABILITY(10);	//All types already match
+				}
+			}
+			else
+			{
+				//Check first move type
+				if (IsOfType(bankAtk, gBattleMoves[gBattleMons[bankAtk].moves[0]].type))
+					DECREASE_VIABILITY(10);
+			}
 			break;
 
 		case EFFECT_RESTORE_HP:
@@ -1300,7 +1347,8 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 			}
 			else if (predictedMove == MOVE_NONE)
 				DECREASE_VIABILITY(10);
-			goto AI_SUBSTITUTE_CHECK;
+			else
+				goto AI_SUBSTITUTE_CHECK;
 
 		case EFFECT_METRONOME:
 			break;
@@ -1313,6 +1361,8 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 			|| data->defAbility == ABILITY_MAGICGUARD
 			|| PARTNER_MOVE_EFFECT_IS_SAME)
 				DECREASE_VIABILITY(10);
+			else
+				goto AI_SUBSTITUTE_CHECK;
 			break;
 
 		case EFFECT_DISABLE:
@@ -1392,13 +1442,16 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 					|| data->defAbility == ABILITY_NOGUARD
 					|| PARTNER_MOVE_EFFECT_IS_SAME)
 						DECREASE_VIABILITY(10);
-					break;
+					else
+						goto AI_SUBSTITUTE_CHECK;
 			}
 			break;
 
 		case EFFECT_SKETCH:
 			if (gLastUsedMoves[bankDef] == MOVE_NONE)
 				DECREASE_VIABILITY(10);
+			else
+				goto AI_SUBSTITUTE_CHECK;
 			break;
 
 		case EFFECT_DESTINY_BOND:
@@ -1883,6 +1936,7 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 				DECREASE_VIABILITY(10);
 				break;
 			}
+
 			switch (move) {
 				case MOVE_HEALINGWISH:
 				case MOVE_LUNARDANCE:
@@ -1902,7 +1956,8 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 					{
 						DECREASE_VIABILITY(10);
 					}
-					break;
+					else
+						goto AI_SUBSTITUTE_CHECK;
 			}
 			break;
 
@@ -1943,7 +1998,7 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 			if (IsTaunted(bankDef)
 			|| ABILITY(bankDef) == ABILITY_OBLIVIOUS
 			|| PARTNER_MOVE_EFFECT_IS_SAME)
-				DECREASE_VIABILITY(1);
+				DECREASE_VIABILITY(10);
 			break;
 
 		case EFFECT_FOLLOW_ME:
@@ -1956,12 +2011,14 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 				DECREASE_VIABILITY(10);
 			break;
 
-		case EFFECT_TRICK:
+		case EFFECT_TRICK:	
 			switch (move) {
 				case MOVE_BESTOW:
 					if (data->atkItem == ITEM_NONE
 					|| !CanTransferItem(data->atkSpecies, data->atkItem))
 						DECREASE_VIABILITY(10);
+					else
+						goto AI_SUBSTITUTE_CHECK;
 					break;
 
 				default: //Trick
@@ -1972,13 +2029,12 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 					|| !CanTransferItem(data->defSpecies, data->defItem)
 					|| (data->defAbility == ABILITY_STICKYHOLD))
 						DECREASE_VIABILITY(10);
-					break;
+					else
+						goto AI_SUBSTITUTE_CHECK;
 			}
 			break;
 
-		case EFFECT_ROLE_PLAY:
-			data->atkAbility = *GetAbilityLocation(bankAtk);
-			data->defAbility = *GetAbilityLocation(bankDef);
+		case EFFECT_ROLE_PLAY: ;
 			u8 atkAbility = *GetAbilityLocation(bankAtk);
 			u8 defAbility = *GetAbilityLocation(bankDef);
 
@@ -2028,8 +2084,6 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 				DECREASE_VIABILITY(10);
 			break;
 
-			break;
-
 		case EFFECT_MAGIC_COAT:
 			if (!MagicCoatableMovesInMoveset(bankDef))
 				DECREASE_VIABILITY(10);
@@ -2064,9 +2118,9 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 			}
 			break;
 
-		case EFFECT_SKILL_SWAP:
-			atkAbility2 = *GetAbilityLocation(bankAtk); //Get actual abilities
-			defAbility2 = *GetAbilityLocation(bankDef);
+		case EFFECT_SKILL_SWAP: ;
+			u8 atkAbility2 = *GetAbilityLocation(bankAtk); //Get actual abilities
+			u8 defAbility2 = *GetAbilityLocation(bankDef);
 
 			switch (move) {
 				case MOVE_WORRYSEED:
@@ -2074,6 +2128,8 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 					|| gSpecialAbilityFlags[defAbility2].gWorrySeedBannedAbilities
 					|| MoveBlockedBySubstitute(move, bankAtk, bankDef))
 						DECREASE_VIABILITY(10);
+					else
+						goto AI_SUBSTITUTE_CHECK;
 					break;
 
 				case MOVE_GASTROACID:
@@ -2081,10 +2137,12 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 					||  gSpecialAbilityFlags[defAbility2].gGastroAcidBannedAbilities
 					||  MoveBlockedBySubstitute(move, bankAtk, bankDef))
 						DECREASE_VIABILITY(10);
+					else
+						goto AI_SUBSTITUTE_CHECK;
 					break;
 
 				case MOVE_ENTRAINMENT:
-					if (data->atkAbility == ABILITY_NONE
+					if (atkAbility2 == ABILITY_NONE
 					||  IsDynamaxed(bankDef)
 					||  gSpecialAbilityFlags[atkAbility2].gEntrainmentBannedAbilitiesAttacker
 					||  gSpecialAbilityFlags[defAbility2].gEntrainmentBannedAbilitiesTarget
@@ -2102,15 +2160,19 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 					||  gSpecialAbilityFlags[defAbility2].gSimpleBeamBannedAbilities
 					||  MoveBlockedBySubstitute(move, bankAtk, bankDef))
 						DECREASE_VIABILITY(10);
+					else
+						goto AI_SUBSTITUTE_CHECK;
 					break;
 
 				default: //Skill Swap
-					if (data->atkAbility == ABILITY_NONE || data->defAbility == ABILITY_NONE
+					if (atkAbility2 == ABILITY_NONE || defAbility2 == ABILITY_NONE
 					|| IsDynamaxed(bankAtk)
 					|| IsDynamaxed(bankDef)
 					|| gSpecialAbilityFlags[atkAbility2].gSkillSwapBannedAbilities
 					|| gSpecialAbilityFlags[defAbility2].gSkillSwapBannedAbilities)
 						DECREASE_VIABILITY(10);
+					else
+						goto AI_SUBSTITUTE_CHECK;
 			}
 			break;
 
@@ -2648,6 +2710,9 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 
 						else if (targetNegativeStages < targetPositiveStages)
 							DECREASE_VIABILITY(5); //More stages would be made positive than negative
+						
+						else
+							goto AI_SUBSTITUTE_CHECK;
 					}
 			}
 			break;
@@ -2666,11 +2731,18 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 											| BATTLE_TYPE_FRONTIER
 											| BATTLE_TYPE_TRAINER_TOWER))
 					|| !(gBattleTypeFlags & BATTLE_TYPE_TRAINER) //Wild battle
-					|| SIDE(bankAtk) != B_SIDE_PLAYER //Only increase money amount if will benefit player
-					|| gNewBS->HappyHourByte != 0) //Already used Happy Hour
+					|| SIDE(bankAtk) != B_SIDE_PLAYER) //Only increase money amount if will benefit player
 					{
 						if (!IsTypeZCrystal(data->atkItem, moveType) || gNewBS->zMoveData.used[bankAtk] || IsMegaZMoveBannedBattle())
 							DECREASE_VIABILITY(10);
+					}
+					else //Normal battle
+					{
+						if (!IsTypeZCrystal(data->atkItem, moveType) || gNewBS->zMoveData.used[bankAtk] || IsMegaZMoveBannedBattle())
+						{
+							if (gNewBS->HappyHourByte != 0) //Already used Happy Hour
+								DECREASE_VIABILITY(10);
+						}
 					}
 					break;
 
