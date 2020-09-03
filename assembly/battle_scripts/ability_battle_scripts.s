@@ -202,7 +202,6 @@ BattleScript_TraceActivates:
 	call BattleScript_AbilityPopUpRevert
 	tryactivateswitchinability BANK_SCRIPTING
 	end3
-	
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -234,7 +233,6 @@ BattleScript_TerrainFromAbility:
 	end3
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
 
 BattleScript_ImposterActivates:
 	callasm TransferAbilityPopUpHelperAsImposter
@@ -756,7 +754,13 @@ BattleScript_WanderingSpiritActivates:
 	printstring 0xB8
 	waitmessage DELAY_1SECOND
 	tryactivateswitchinability BANK_ATTACKER
+	swapattackerwithtarget
+	callasm RestoreOriginalAttackerAndTarget
+	swapattackerwithtarget
 	tryactivateswitchinability BANK_TARGET
+	swapattackerwithtarget
+	callasm RestoreOriginalAttackerAndTarget
+	return
 
 BattleScript_WanderingSpiritActivatesReturn:
 	swapattackerwithtarget
