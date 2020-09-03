@@ -3250,27 +3250,24 @@ void atkA2_mirrorcoatdamagecalculator(void) {
 
 void atkA3_disablelastusedattack(void)
 {
-	int i;
-	u8 bankDef;
+	u8 i, bankDef;
+	u16 lastMove;
 
-	if(gLastUsedAbility == ABILITY_CURSEDBODY)
-		bankDef = gBankAttacker; //For Cursed Body
-	else
-		bankDef = gBankTarget; //For Disable
-
-	/*if (gBattlescriptCurrInstr[1] == BS_GET_TARGET)
-		bankDef = gBankTarget;
-	else
-		bankDef = gBankAttacker; //For Cursed Body*/
-
-	for (i = 0; i < MAX_MON_MOVES; i++)
+	if (gBattlescriptCurrInstr[1] == BS_GET_TARGET)
 	{
-		if (gBattleMons[bankDef].moves[i] == gLastUsedMoves[bankDef])
-			break;
+		bankDef = gBankTarget;
+		lastMove = gLastUsedMoves[bankDef];
+	}
+	else
+	{
+		bankDef = gBankAttacker; //For Cursed Body
+		lastMove = gCurrentMove;
 	}
 
-	if (gDisableStructs[bankDef].disabledMove == 0
-	&& i != MAX_MON_MOVES
+	i = FindMovePositionInMoveset(lastMove, bankDef);
+
+	if (i < MAX_MON_MOVES
+	&& gDisableStructs[bankDef].disabledMove == 0
 	&& gBattleMons[bankDef].pp[i] != 0
 	&& !IsAnyMaxMove(gLastUsedMoves[bankDef])
 	&& !IsZMove(gLastUsedMoves[bankDef])
