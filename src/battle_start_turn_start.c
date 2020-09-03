@@ -1759,20 +1759,20 @@ s32 BracketCalc(u8 bank)
 	if (BATTLER_ALIVE(bank))
 	{
 		if(ability == ABILITY_QUICKDRAW) {
-			if (gRandomTurnNumber % 100 < 30)
+			if (gRandomTurnNumber < (0xFFFF * 30) / 100)
 			{
 				gNewBS->CustapQuickClawIndicator |= gBitTable[bank];
 				return 1;
 			}
 		}
 		switch (itemEffect) {
-		case ITEM_EFFECT_QUICK_CLAW:
-			if (gRandomTurnNumber % 100 < itemQuality)
-			{
-				gNewBS->CustapQuickClawIndicator |= gBitTable[bank];
-				return 1;
-			}
-			break;
+			case ITEM_EFFECT_QUICK_CLAW:
+				if (gRandomTurnNumber < (0xFFFF * itemQuality) / 100)
+				{
+					gNewBS->CustapQuickClawIndicator |= gBitTable[bank];
+					return 1;
+				}
+				break;
 
 		case ITEM_EFFECT_CUSTAP_BERRY:
 			if (!AbilityBattleEffects(ABILITYEFFECT_CHECK_OTHER_SIDE, bank, ABILITY_UNNERVE, 0, 0)
