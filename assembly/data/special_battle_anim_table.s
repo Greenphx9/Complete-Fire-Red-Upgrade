@@ -705,7 +705,7 @@ BATON_PASS_ANIM:
 .pool
 DRAGON_TAIL_BLOW_AWAY_ANIM:
 	playsound2 0x7a SOUND_PAN_TARGET
-	launchtask AnimTask_SlideOffScreen 0x5 0x2 0x1 0x8
+	launchtask AnimTask_SlideOffScreen 0x5 0x2 bank_target 0x8
 	waitanimation
 	endanimation
 
