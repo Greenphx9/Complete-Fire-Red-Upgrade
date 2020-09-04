@@ -1169,6 +1169,8 @@ void ClearSwitchBytes(u8 bank)
 	gProtectStructs[bank].BanefulBunker = 0;
 	gProtectStructs[bank].obstruct = 0;
 	gProtectStructs[bank].enduredSturdy = 0;
+
+	gNewBS->AttackerDidDamageAtLeastOnce = FALSE;
 	
 	DestroyMegaIndicator(bank);
 	ClearBattlerAbilityHistory(bank);
