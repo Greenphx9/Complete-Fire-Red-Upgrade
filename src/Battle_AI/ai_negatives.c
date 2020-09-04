@@ -348,7 +348,7 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 			case ABILITY_FLOWERVEIL:
 				if (IsOfType(bankDef, TYPE_GRASS)
-				&& (CheckTableForMoveEffect(move, gSetStatusMoveEffects) || CheckTableForMoveEffect(move, gStatLoweringMoveEffects)))
+				&& (CheckTableForMovesEffect(move, gSetStatusMoveEffects) || CheckTableForMovesEffect(move, gStatLoweringMoveEffects)))
 				{
 					DECREASE_VIABILITY(10);
 					return viability;
@@ -364,7 +364,7 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				break;
 
 			case ABILITY_CONTRARY:
-				if (CheckTableForMoveEffect(move, gStatLoweringMoveEffects))
+				if (CheckTableForMovesEffect(move, gStatLoweringMoveEffects))
 				{
 					if (!TARGETING_PARTNER) //Good idea to attack partner
 					{
@@ -412,7 +412,7 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 			case ABILITY_DEFIANT:
 			case ABILITY_COMPETITIVE:
-				if (CheckTableForMoveEffect(move, gStatLoweringMoveEffects))
+				if (CheckTableForMovesEffect(move, gStatLoweringMoveEffects))
 				{
 					if (!TARGETING_PARTNER) //Good idea to attack partner
 					{
@@ -423,7 +423,7 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				break;
 
 			case ABILITY_COMATOSE:
-				if (CheckTableForMoveEffect(move, gSetStatusMoveEffects))
+				if (CheckTableForMovesEffect(move, gSetStatusMoveEffects))
 				{
 					DECREASE_VIABILITY(10);
 					return viability;
@@ -432,7 +432,7 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 			case ABILITY_SHIELDSDOWN:
 				if (GetBankPartyData(bankDef)->species == SPECIES_MINIOR_SHIELD
-				&&  CheckTableForMoveEffect(move, gSetStatusMoveEffects))
+				&&  CheckTableForMovesEffect(move, gSetStatusMoveEffects))
 				{
 					DECREASE_VIABILITY(10);
 					return viability;
@@ -447,7 +447,7 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			case ABILITY_LEAFGUARD:
 				if (WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_SUN_ANY)
 				&& data->defItemEffect != ITEM_EFFECT_UTILITY_UMBRELLA
-				&& CheckTableForMoveEffect(move, gSetStatusMoveEffects))
+				&& CheckTableForMovesEffect(move, gSetStatusMoveEffects))
 				{
 					DECREASE_VIABILITY(10);
 					return viability;
@@ -493,7 +493,7 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 				case ABILITY_FLOWERVEIL:
 					if ((IsOfType(bankDef, TYPE_GRASS))
-					&& (CheckTableForMoveEffect(move, gSetStatusMoveEffects) || CheckTableForMoveEffect(move, gStatLoweringMoveEffects)))
+					&& (CheckTableForMovesEffect(move, gSetStatusMoveEffects) || CheckTableForMovesEffect(move, gStatLoweringMoveEffects)))
 					{
 						DECREASE_VIABILITY(10);
 						return viability;
@@ -545,7 +545,7 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				break;
 
 			case MISTY_TERRAIN:
-				if (CheckTableForMoveEffect(move, gSetStatusMoveEffects) || CheckTableForMoveEffect(move, gConfusionMoveEffects))
+				if (CheckTableForMovesEffect(move, gSetStatusMoveEffects) || CheckTableForMovesEffect(move, gConfusionMoveEffects))
 				{
 					DECREASE_VIABILITY(10);
 					return viability;
