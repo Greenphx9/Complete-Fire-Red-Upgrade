@@ -285,6 +285,7 @@ gMPlayInfo_SE2 = 0x3007380;
 gMPlayInfo_SE3 = 0x30073D0;
 
 /* Bag RAM */
+sItemMenuIconSpriteIds = 0x2039878;
 gBagMenuState = 0x203ACFC;
 sBagMenuDisplay = 0x203AD10;
 sBagContextMenuItemsBuffer = 0x203AD20;
@@ -865,8 +866,11 @@ sItemIconTilesBufferPadded = 0x2039888;
 sSpriteTemplate_ItemIcon = 0x83d427C;
 IsMail = 0x80980F8 | 1;
 CopyItemIconPicTo4x4Buffer = 0x809872C | 1;
+ResetItemMenuIconState = 0x80984D8 | 1;
 AddItemIconSprite = 0x8098758 | 1;
 AddCustomItemIconSprite = 0x809881C | 1;
+DestroyItemMenuIcon = 0x8098940 | 1;
+CreateItemMenuIcon = 0x80988E8 | 1;
 GetBagItemQuantity = 0x8099DA0 | 1;
 CopyItemName = 0x8099E90 | 1;
 CheckBagHasItem = 0x8099F40 | 1;
@@ -918,6 +922,7 @@ BagCreateYesNoMenuBottomRight = 0x810BAE8 | 1;
 CheckVSSeeker = 0x810C4EC | 1;
 GoToTMMenu = 0x81317F8 | 1;
 AddScrollIndicatorArrowPairParameterized = 0x8133B40 | 1;
+RemoveScrollIndicatorArrowPair = 0x8133C30 | 1;
 GoToBerryMenu = 0x813CD50 | 1;
 BuyMenuDisplayMessage = 0x813F75C | 1;
 

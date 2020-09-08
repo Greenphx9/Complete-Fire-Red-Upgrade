@@ -520,9 +520,9 @@ bool8 NewXSpecialBoost(u16 item, u8 boostAmount)
 	u8 stat;
 	bool8 retVal = TRUE; //Didn't work by default
 
-	if (item == ITEM_X_SP_DEF) //Not in Gen 3
-		stat = STAT_STAGE_SPDEF;
-	else
+	//if (item == ITEM_X_SP_DEF) //Not in Gen 3
+	//	stat = STAT_STAGE_SPDEF;
+	//else
 		stat = STAT_STAGE_SPATK;
 
 	if (STAT_STAGE(gActiveBattler, stat) < STAT_STAGE_MAX)

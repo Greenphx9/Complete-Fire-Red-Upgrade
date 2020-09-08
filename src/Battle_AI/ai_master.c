@@ -2689,10 +2689,10 @@ static bool8 ShouldAIUseItem(void)
 					gBattleStruct->AI_itemFlags[gActiveBattler & BIT_FLANK] |= 0x4;
 				if (itemEffects[2] & ITEM2_X_SPATK)
 				{
-					if (item != ITEM_X_SP_DEF) //Sp. Atk
+					//if (item != ITEM_X_SP_DEF) //Sp. Atk
 						gBattleStruct->AI_itemFlags[gActiveBattler & BIT_FLANK] |= 0x8;
-					else //Sp. Def
-						gBattleStruct->AI_itemFlags[gActiveBattler & BIT_FLANK] |= 0x10;
+					//else //Sp. Def
+					//	gBattleStruct->AI_itemFlags[gActiveBattler & BIT_FLANK] |= 0x10;
 				}
 				if (itemEffects[2] & ITEM2_X_ACCURACY)
 					gBattleStruct->AI_itemFlags[gActiveBattler & BIT_FLANK] |= 0x20;

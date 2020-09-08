@@ -458,7 +458,7 @@ enum
 #define ITEM_POWDER_JAR 372
 #define ITEM_RUBY 373
 #define ITEM_SAPPHIRE 374
-#define ITEM_X_SP_DEF 375 //DONT USE THIS. This is to help CFRU compile
+#define ITEM_N_A 375
 
 //Type-Resist + New Berries
 #define ITEM_OCCA_BERRY 0x1BE
