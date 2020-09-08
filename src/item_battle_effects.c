@@ -880,7 +880,7 @@ u8 ItemBattleEffects(u8 caseID, u8 bank, bool8 moveTurn, bool8 doPluck)
 					&& TOOK_DAMAGE(gBankTarget)
 					&& MOVE_HAD_EFFECT
 					&& (umodsi(Random(), 100)) < bankQuality
-					&& !CheckTableForMove(gCurrentMove, gFlinchChanceMoves)
+					&& !gSpecialMoveFlags[gCurrentMove].gFlinchChanceMoves
 					&& gBattleMons[gBankTarget].hp)
 					{
 						gBattleMons[gBankTarget].status2 |= STATUS2_FLINCHED;
@@ -890,7 +890,8 @@ u8 ItemBattleEffects(u8 caseID, u8 bank, bool8 moveTurn, bool8 doPluck)
 					if (gNewBS->totalDamageGiven > 0
 					&& bank != gBankTarget
 					&& BATTLER_ALIVE(bank)
-					&& !BATTLER_MAX_HP(bank))
+					&& !BATTLER_MAX_HP(bank)
+					&& !SheerForceCheck())
 					{
 						if (gBattleMons[bank].hp <= gBattleMons[bank].maxHP / 2)
 							gNewBS->lessThanHalfHPBeforeShellBell = TRUE; //For Emergency Exit

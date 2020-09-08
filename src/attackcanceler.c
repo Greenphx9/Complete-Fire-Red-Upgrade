@@ -305,7 +305,7 @@ static u8 AtkCanceller_UnableToUseMove(void)
 			{
 				if (umodsi(Random(), 5))
 				{
-					if (!CheckTableForMove(gCurrentMove, gMovesCanUnfreezeAttacker) || gMoveResultFlags & MOVE_RESULT_FAILED) // unfreezing via a move effect happens in case 13
+					if (!gSpecialMoveFlags[gCurrentMove].gMovesCanUnfreezeAttacker || gMoveResultFlags & MOVE_RESULT_FAILED) // unfreezing via a move effect happens in case 13
 					{
 						gBattlescriptCurrInstr = BattleScript_MoveUsedIsFrozen;
 						gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
@@ -414,7 +414,7 @@ static u8 AtkCanceller_UnableToUseMove(void)
 		case CANCELLER_RAID_BATTLES_FAILED_MOVES:
 		case CANCELLER_RAID_BATTLES_FAILED_MOVES_2:
 			if (IsRaidBattle()
-			&& (CheckTableForMove(gCurrentMove, gRaidBattleBannedMoves)
+			&& (gSpecialMoveFlags[gCurrentMove].gRaidBattleBannedMoves
 			 || (gCurrentMove == MOVE_TRANSFORM && gBankTarget == BANK_RAID_BOSS && gNewBS->dynamaxData.raidShieldsUp))
 			&& !gNewBS->zMoveData.active) //Raid Battles stop status Z-Moves, so there will be a second check later on
 			{
@@ -430,9 +430,9 @@ static u8 AtkCanceller_UnableToUseMove(void)
 
 		case CANCELLER_DYNAMAX_FAILED_MOVES:
 			if ((IsDynamaxed(gBankTarget)
-			 && CheckTableForMove(gCurrentMove, gDynamaxBannedMoves)
+			 && gSpecialMoveFlags[gCurrentMove].gDynamaxBannedMoves
 			 && !gNewBS->zMoveData.active) //Dynamax Pokemon stop status Z-Moves, so there will be a second check later on
-			|| (IsRaidBattle() && GetBattlerPosition(gBankAttacker) == B_POSITION_OPPONENT_LEFT && CheckTableForMove(gCurrentMove, gRaidBattleBannedRaidMonMoves)))
+			|| (IsRaidBattle() && GetBattlerPosition(gBankAttacker) == B_POSITION_OPPONENT_LEFT && gSpecialMoveFlags[gCurrentMove].gRaidBattleBannedRaidMonMoves))
 			{
 				gBattleScripting.bank = gBankAttacker;
 				CancelMultiTurnMoves(gBankAttacker);
@@ -545,7 +545,7 @@ static u8 AtkCanceller_UnableToUseMove(void)
 		case CANCELLER_GRAVITY:
 		case CANCELLER_GRAVITY_2:
 			if (IsGravityActive()
-			&& CheckTableForMove(gCurrentMove, gGravityBannedMoves)
+			&& gSpecialMoveFlags[gCurrentMove].gGravityBannedMoves
 			&& !gNewBS->zMoveData.active //Gravity stops Z-Moves, so there will be a second check later on
 			&& !IsAnyMaxMove(gCurrentMove))
 			{
@@ -746,7 +746,7 @@ static u8 AtkCanceller_UnableToUseMove(void)
 		case CANCELLER_THAW: // move thawing
 			if (gBattleMons[gBankAttacker].status1 & STATUS1_FREEZE)
 			{
-				if (CheckTableForMove(gCurrentMove, gMovesCanUnfreezeAttacker)
+				if (gSpecialMoveFlags[gCurrentMove].gMovesCanUnfreezeAttacker
 				&& !(gMoveResultFlags & MOVE_RESULT_FAILED)) //When Burn Up fails, it can't unfreeze
 				{
 					gBattleMons[gBankAttacker].status1 &= ~(STATUS1_FREEZE);
@@ -808,7 +808,7 @@ static u8 AtkCanceller_UnableToUseMove(void)
 			break;
 
 		case CANCELLER_GRAVITY_Z_MOVES:
-			if (IsGravityActive() && CheckTableForMove(gCurrentMove, gGravityBannedMoves) && gNewBS->zMoveData.active) //Gravity stops Z-Moves after they apply their effect
+			if (IsGravityActive() && gSpecialMoveFlags[gCurrentMove].gGravityBannedMoves && gNewBS->zMoveData.active) //Gravity stops Z-Moves after they apply their effect
 			{
 				gBattleScripting.bank = gBankAttacker;
 				CancelMultiTurnMoves(gBankAttacker);
@@ -821,7 +821,7 @@ static u8 AtkCanceller_UnableToUseMove(void)
 
 		case CANCELLER_SKY_BATTLE:
 		#ifdef FLAG_SKY_BATTLE
-			if (FlagGet(FLAG_SKY_BATTLE) && CheckTableForMove(gCurrentMove, gSkyBattleBannedMoves))
+			if (FlagGet(FLAG_SKY_BATTLE) && gSpecialMoveFlags[gCurrentMove].gSkyBattleBannedMoves)
 			{
 				gBattleScripting.bank = gBankAttacker;
 				CancelMultiTurnMoves(gBankAttacker);
@@ -963,7 +963,7 @@ static u8 AtkCanceller_UnableToUseMove(void)
 			break;
 
 		case CANCELLER_MULTIHIT_MOVES:
-			if (CheckTableForMove(gCurrentMove, gTwoToFiveStrikesMoves))
+			if (gSpecialMoveFlags[gCurrentMove].gTwoToFiveStrikesMoves)
 			{
 				u8 ability = ABILITY(gBankAttacker);
 
@@ -994,7 +994,7 @@ static u8 AtkCanceller_UnableToUseMove(void)
 
 				PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
 			}
-			else if (CheckTableForMove(gCurrentMove, gTwoStrikesMoves))
+			else if (gSpecialMoveFlags[gCurrentMove].gTwoStrikesMoves)
 			{
 				gMultiHitCounter = 2;
 				PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
@@ -1043,7 +1043,7 @@ static u8 AtkCanceller_UnableToUseMove(void)
 				const u8* backupScript = gBattlescriptCurrInstr; //Script can get overwritten by ability blocking
 
 				if (gBattleMoves[gCurrentMove].target & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL)
-				&& !CheckTableForMove(gCurrentMove, gSpecialWholeFieldMoves))
+				&& !gSpecialMoveFlags[gCurrentMove].gSpecialWholeFieldMoves)
 				{
 					u8 priority = PriorityCalc(gBankAttacker, ACTION_USE_MOVE, gCurrentMove);
 

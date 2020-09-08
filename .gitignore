@@ -430,3 +430,6 @@ FodyWeavers.xsd
 *.cheats
 *.ips
 *.toml
+
+# Generated C Tables from json, not neccessary, I just like to view them :)
+tables/

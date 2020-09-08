@@ -492,10 +492,10 @@ void PlayAttackAnimationForExplosion(void)
 void CopycatFunc(void)
 {
 	if (gNewBS->LastUsedMove == 0
-		|| gNewBS->LastUsedMove == 0xFFFF
-		|| IsZMove(gNewBS->LastUsedMove)
-		|| IsAnyMaxMove(gNewBS->LastUsedMove)
-		|| CheckTableForMove(gNewBS->LastUsedMove, gCopycatBannedMoves))
+	|| gNewBS->LastUsedMove == 0xFFFF
+	|| IsZMove(gNewBS->LastUsedMove)
+	|| IsAnyMaxMove(gNewBS->LastUsedMove)
+	|| gSpecialMoveFlags[gNewBS->LastUsedMove].gCopycatBannedMoves)
 	{
 		gBattlescriptCurrInstr = BattleScript_ButItFailed - 1 - 5;	//From PP Reduce
 	}
@@ -563,9 +563,9 @@ void MeFirstFunc(void)
 	u16 move = gChosenMovesByBanks[gBankTarget];
 
 	if (SPLIT(move) == SPLIT_STATUS
-		|| GetBattlerTurnOrderNum(gBankTarget) < gCurrentTurnActionNumber
-		|| CheckTableForMove(move, gMeFirstBannedMoves)
-		|| CheckTableForMove(move, gMovesThatCallOtherMoves))
+	|| GetBattlerTurnOrderNum(gBankTarget) < gCurrentTurnActionNumber
+	|| gSpecialMoveFlags[move].gMeFirstBannedMoves
+	|| gSpecialMoveFlags[move].gMovesThatCallOtherMoves)
 	{
 		gBattlescriptCurrInstr = BattleScript_ButItFailed - 5 - 1; //Start from PP Reduce
 	}
@@ -1106,19 +1106,19 @@ void TryExecuteInstruct(void)
 {
 	u16 move = gLastPrintedMoves[gBankTarget];
 
-	if (CheckTableForMove(move, gInstructBannedMoves)
-		|| CheckTableForMove(move, gMovesThatRequireRecharging)
-		|| CheckTableForMove(move, gMovesThatCallOtherMoves)
-		|| IsZMove(move)
-		|| IsAnyMaxMove(move)
-		|| IsDynamaxed(gBankTarget)
-		|| (gLockedMoves[gBankTarget] != 0 && gLockedMoves[gBankTarget] != 0xFFFF)
-		|| gBattleMons[gBankTarget].status2 & STATUS2_MULTIPLETURNS
-		|| FindMovePositionInMoveset(move, gBankTarget) == 4 //No longer knows the move
-		|| gBattleMons[gBankTarget].pp[FindMovePositionInMoveset(move, gBankTarget)] == 0
-		|| (GetBattlerTurnOrderNum(gBankTarget) > gCurrentTurnActionNumber && (gChosenMovesByBanks[gBankTarget] == MOVE_FOCUSPUNCH
-			|| gChosenMovesByBanks[gBankTarget] == MOVE_BEAKBLAST
-			|| gChosenMovesByBanks[gBankTarget] == MOVE_SHELLTRAP)))
+	if (gSpecialMoveFlags[move].gInstructBannedMoves
+	||  gSpecialMoveFlags[move].gMovesThatRequireRecharging
+	||  gSpecialMoveFlags[move].gMovesThatCallOtherMoves
+	|| IsZMove(move)
+	|| IsAnyMaxMove(move)
+	|| IsDynamaxed(gBankTarget)
+	|| (gLockedMoves[gBankTarget] != 0 && gLockedMoves[gBankTarget] != 0xFFFF)
+	|| gBattleMons[gBankTarget].status2 & STATUS2_MULTIPLETURNS
+	|| FindMovePositionInMoveset(move, gBankTarget) == 4 //No longer knows the move
+	|| gBattleMons[gBankTarget].pp[FindMovePositionInMoveset(move, gBankTarget)] == 0
+	|| (GetBattlerTurnOrderNum(gBankTarget) > gCurrentTurnActionNumber && (gChosenMovesByBanks[gBankTarget] == MOVE_FOCUSPUNCH
+													 || gChosenMovesByBanks[gBankTarget] == MOVE_BEAKBLAST
+													 || gChosenMovesByBanks[gBankTarget] == MOVE_SHELLTRAP)))
 	{
 		gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
 		return;
