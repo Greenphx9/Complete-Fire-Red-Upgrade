@@ -294,12 +294,12 @@ def ProcessSpecialFlagFile(flagFile: str) -> str:
 
     objectFile = ProcessCToObjectFile(cFile, objectFile)
     #Not necessary, I just like it:
-    if cFile == './assembly\data\ability_tables.c':
-        newPath = r'D:\Modding\Complete-Fire-Red-Upgrade\tables\ability_tables.c';
-    elif cFile == './assembly\data\move_tables.c':
+    if cFile == './assembly\data\move_tables.c':
         newPath = r'D:\Modding\Complete-Fire-Red-Upgrade\tables\move_tables.c';
-    else:
+    elif cFile == './assembly\data\species_tables.c':
         newPath = r'D:\Modding\Complete-Fire-Red-Upgrade\tables\species_tables.c';
+    else:
+        newPath = r'D:\Modding\Complete-Fire-Red-Upgrade\tables\ability_tables.c';
     shutil.copyfile(cFile, newPath)
     os.remove(cFile)  # Remove the generated C file
     return objectFile

@@ -37228,7 +37228,7 @@ const struct BaseStats gBaseStats2[] =
 		.ability1 = ABILITY_WEAKARMOR,
 		.ability2 = ABILITY_NONE,
 		.safariZoneFleeRate = 0,
-		.hiddenAbility = ABILITY_PERISH_BODY,
+		.hiddenAbility = ABILITY_PERISHBODY,
 		.noFlip = TRUE,
 	},
 

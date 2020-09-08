@@ -20,6 +20,7 @@
 #include "../include/new/learn_move.h"
 #include "../include/new/move_battle_scripts.h"
 #include "../include/new/move_tables.h"
+#include "../include/new/species_tables.h"
 #include "../include/new/stat_buffs.h"
 #include "../include/new/switching.h"
 
@@ -33,7 +34,6 @@ battle_script_util.c
 
 extern const u8* gBattleScriptsForMoveEffects[];
 
-extern const species_t gTelekinesisBanList[];
 extern const struct FlingStruct gFlingTable[];
 
 void SetTargetPartner(void)
@@ -848,9 +848,9 @@ void CheckTelekinesisFail(void)
 	u16 species = gBattleMons[gBankTarget].species;
 
 	if (gStatuses3[gBankTarget] & (STATUS3_TELEKINESIS | STATUS3_ROOTED | STATUS3_SMACKED_DOWN)
-		|| IsGravityActive()
-		|| ITEM_EFFECT(gBankTarget) == ITEM_EFFECT_IRON_BALL
-		|| CheckTableForSpecies(species, gTelekinesisBanList))
+	||  IsGravityActive()
+	||  ITEM_EFFECT(gBankTarget) == ITEM_EFFECT_IRON_BALL
+	||  gSpecialSpeciesFlags[species].telekinesisBan)
 	{
 		gBattlescriptCurrInstr = BattleScript_ButItFailed - 5 - 2;
 	}

@@ -33,7 +33,8 @@
 #include "../include/new/mega.h"
 #include "../include/new/multi.h"
 #include "../include/new/pokemon_storage_system.h"
-#include "../include/new/util2.h"
+#include "../include/new/species_tables.h"
+#include "../include/new/util.h"
 
 #include "Tables/battle_tower_spreads.h"
 #include "Tables/raid_encounters.h"
@@ -2182,7 +2183,7 @@ static bool8 TooManyLegendariesOnGSCupTeam(const u16 species, const u8 partySize
 	u8 legendCount = 0;
 	bool8 isMulti = IsFrontierMulti(VarGet(VAR_BATTLE_FACILITY_BATTLE_TYPE));
 
-	if (!CheckTableForSpecies(species, gGSCup_LegendarySpeciesList))
+	if (!gSpecialSpeciesFlags[species].gsCupLegendaries)
 		return FALSE; //Allowed normally so we don't care
 
 	for (int i = 0; i < partySize; ++i)
@@ -2190,7 +2191,7 @@ static bool8 TooManyLegendariesOnGSCupTeam(const u16 species, const u8 partySize
 		if (speciesArray[i] == SPECIES_NONE)
 			continue;
 
-		if (CheckTableForSpecies(speciesArray[i], gGSCup_LegendarySpeciesList))
+		if (gSpecialSpeciesFlags[speciesArray[i]].gsCupLegendaries)
 			++legendCount;
 
 		if (isMulti && legendCount >= 1) //1 legendary per multi trainer
@@ -2209,307 +2210,435 @@ static bool8 PokemonTierBan(const u16 species, const u16 item, const struct Batt
 	u8 ability;
 	const u16* moveLoc;
 
-	if (species == SPECIES_EGG)
-		return 1;
+	if (species == SPECIES_EGG
+	#ifdef SPECIES_ETERNATUS_ETERNAMAX
+	|| species == SPECIES_ETERNATUS_ETERNAMAX
+	#endif
+	) //Hackmon
+		return TRUE;
 
 	u16 battleFormat = VarGet(VAR_BATTLE_FACILITY_BATTLE_TYPE);
 
 	switch (tier) {
-	case BATTLE_FACILITY_STANDARD:
-	case BATTLE_FACILITY_MEGA_BRAWL:
-	case BATTLE_FACILITY_DYNAMAX_STANDARD:
-		if (CheckTableForSpecies(species, gBattleTowerStandardSpeciesBanList)
-			|| CheckTableForItem(item, gBattleTowerStandard_ItemBanList))
-			return TRUE;
-		break;
+		case BATTLE_FACILITY_STANDARD:
+		case BATTLE_FACILITY_MEGA_BRAWL:
+		case BATTLE_FACILITY_DYNAMAX_STANDARD:
+			//Load correct ability
+			switch (checkFromLocationType) {
+				case CHECK_BATTLE_TOWER_SPREADS:
+					moveLoc = spread->moves;
+					LOAD_TIER_CHECKING_ABILITY;
+					break;
+				default:
+					moveLoc = mon->moves;
+					ability = GetMonAbility(mon);
+			}
 
-	case BATTLE_FACILITY_OU:
-	case BATTLE_FACILITY_NATIONAL_DEX_OU:
-	STANDARD_OU_CHECK:
-		//For OU, there's a species, item, ability, and move ban list
-			//Load correct ability and moves
-		switch (checkFromLocationType) {
-		case CHECK_BATTLE_TOWER_SPREADS:
-			moveLoc = spread->moves;
-			LOAD_TIER_CHECKING_ABILITY;
+			if (gSpecialSpeciesFlags[species].battleTowerStandardBan
+			||  CheckTableForItem(item, gBattleTowerStandard_ItemBanList)
+			|| (ability == ABILITY_BATTLEBOND && tier != BATTLE_FACILITY_MEGA_BRAWL))// && BATTLE_FACILITY_NUM != IN_RING_CHALLENGE)) //Battle Bond is banned in Standard
+				return TRUE;
+
 			break;
 
-		default:
-			moveLoc = mon->moves;
-			ability = GetMonAbility(mon);
-		}
-
-		if (IsFrontierSingles(battleFormat))
-		{
-			if (tier == BATTLE_FACILITY_NATIONAL_DEX_OU)
+			/*if (BATTLE_FACILITY_NUM == IN_RING_CHALLENGE) //1v1
 			{
-				if (CheckTableForSpecies(species, gSmogonNationalDexOU_SpeciesBanList)
-					|| CheckTableForItem(item, gSmogonNationalDexOU_ItemBanList))
+				#ifdef UNBOUND
+				if (species == SPECIES_REGIGIGAS && ability == ABILITY_STALL && !FlagGet(FLAG_ABILITY_RANDOMIZER)) //Too OP 1v1
 					return TRUE;
-			}
-			else //Gen 7 OU
-			{
-				if (CheckTableForSpecies(species, gSmogonOU_SpeciesBanList)
-					|| CheckTableForItem(item, gSmogonOU_ItemBanList))
-					return TRUE;
-			}
+				#endif
 
-			//Check Banned Abilities
-			if (CheckTableForAbility(ability, gSmogonOU_AbilityBanList))
-				return TRUE;
-
-			//Check Banned Moves
-			for (i = 0; i < MAX_MON_MOVES; ++i)
-			{
-				if (CheckTableForMove(moveLoc[i], gSmogon_MoveBanList)
-					|| moveLoc[i] == MOVE_BATONPASS)
-					return TRUE;
-			}
-		}
-		else //Double Battles
-		{
-			bool8 knowsRecycle = FALSE;
-			bool8 knowsPainSplit = FALSE;
-			bool8 knowsFling = FALSE;
-			bool8 knowsHealingMove = FALSE;
-
-			if (CheckTableForSpecies(species, gSmogonOUDoubles_SpeciesBanList)
-				|| CheckTableForItem(item, gSmogonOUDoubles_ItemBanList))
-				return TRUE;
-
-			//Check Banned Abilities
-			if (CheckTableForAbility(ability, gSmogonOUDoubles_AbilityBanList))
-				return TRUE;
-
-			//Check Banned Moves
-			for (i = 0; i < MAX_MON_MOVES; ++i)
-			{
-				if (CheckTableForMove(moveLoc[i], gSmogon_MoveBanList)
-					|| CheckTableForMove(moveLoc[i], gSmogonOUDoubles_MoveBanList))
+				if (item == ITEM_FOCUS_SASH) //No Focus Sash in Ring Challenge
 					return TRUE;
 
-				switch (moveLoc[i]) {
-				case MOVE_HEALPULSE:
-				case MOVE_MILKDRINK:
-				case MOVE_MOONLIGHT:
-				case MOVE_MORNINGSUN:
-				case MOVE_RECOVER:
-				case MOVE_ROOST:
-				case MOVE_SLACKOFF:
-				case MOVE_SOFTBOILED:
-				case MOVE_WISH:
-					knowsHealingMove = TRUE;
-					break;
-				case MOVE_RECYCLE:
-					knowsRecycle = TRUE;
-					break;
-				case MOVE_PAINSPLIT:
-					knowsPainSplit = TRUE;
-					break;
-				case MOVE_FLING:
-					knowsFling = TRUE;
-					break;
-				}
-
-				if (knowsRecycle && ItemId_GetHoldEffect(item) == ITEM_EFFECT_RESTORE_PP) //Leppa Berry
+				//Check Banned Moves
+				for (i = 0; i < MAX_MON_MOVES; ++i)
 				{
-					if (knowsHealingMove
-						|| knowsPainSplit
-						|| knowsFling)
+					if (CheckTableForMove(moveLoc[i], gRingChallenge_MoveBanList))
 						return TRUE;
 				}
 			}
-		}
-		break;
+			break;*/
 
-	case BATTLE_FACILITY_UBER:
-	case BATTLE_FACILITY_UBER_CAMOMONS:
-	STANDARD_UBER_CHECK:
-		//For Ubers ban Rayquaza with Dragon Ascent (handled in mega.c), Moody, and some moves
-		switch (checkFromLocationType) {
-		case CHECK_BATTLE_TOWER_SPREADS:
-			moveLoc = spread->moves;
-			LOAD_TIER_CHECKING_ABILITY;
-			break;
-
-		default:
-			moveLoc = mon->moves;
-			ability = GetMonAbility(mon);
-		}
-
-		//Check Banned Abilities
-		if (ability == ABILITY_MOODY)
-			return 1;
-
-		//Check Banned Moves
-		for (i = 0; i < MAX_MON_MOVES; ++i) {
-			if (CheckTableForMove(moveLoc[i], gSmogon_MoveBanList))
-				return TRUE;
-		}
-		break;
-
-	case BATTLE_FACILITY_LITTLE_CUP:
-	case BATTLE_FACILITY_LC_CAMOMONS:
-		if (!CheckTableForSpecies(species, gSmogonLittleCup_SpeciesList)
-			|| CheckTableForItem(item, gSmogonLittleCup_ItemBanList))
-			return TRUE; //Banned
-
-		if (checkFromLocationType == CHECK_BATTLE_TOWER_SPREADS)
-			moveLoc = spread->moves;
-		else
-			moveLoc = mon->moves;
-
-		for (i = 0; i < MAX_MON_MOVES; ++i) {
-			if (CheckTableForMove(moveLoc[i], gSmogonLittleCup_MoveBanList))
-				return TRUE;
-		}
-		break;
-
-	case BATTLE_FACILITY_MIDDLE_CUP:
-	case BATTLE_FACILITY_MC_CAMOMONS:
-		if (IsFrontierSingles(battleFormat)) //Middle Cup in Singles
-		{
-			if (!CheckTableForSpecies(species, gMiddleCup_SpeciesList)
-				|| CheckTableForItem(item, gMiddleCup_ItemBanList))
-				return TRUE; //Banned
-
+		case BATTLE_FACILITY_OU:
+		case BATTLE_FACILITY_NATIONAL_DEX_OU:
+		STANDARD_OU_CHECK:
+		//For OU, there's a species, item, ability, and move ban list
 			//Load correct ability and moves
 			switch (checkFromLocationType) {
-			case CHECK_BATTLE_TOWER_SPREADS:
-				moveLoc = spread->moves;
-				LOAD_TIER_CHECKING_ABILITY;
-				break;
+				case CHECK_BATTLE_TOWER_SPREADS:
+					moveLoc = spread->moves;
+					LOAD_TIER_CHECKING_ABILITY;
+					break;
+				default:
+					moveLoc = mon->moves;
+					ability = GetMonAbility(mon);
+			}
 
-			default:
-				moveLoc = mon->moves;
-				ability = GetMonAbility(mon);
+			if (IsFrontierSingles(battleFormat))
+			{
+				if (tier == BATTLE_FACILITY_NATIONAL_DEX_OU)
+				{
+					if (gSpecialSpeciesFlags[species].smogonNationalDexOUBan
+					||  CheckTableForItem(item, gSmogonNationalDexOU_ItemBanList))
+						return TRUE;
+				}
+				else //Gen 7 OU
+				{
+					if (gSpecialSpeciesFlags[species].smogonOUBan
+					||  CheckTableForItem(item, gSmogonOU_ItemBanList))
+						return TRUE;
+				}
+
+				//Check Banned Abilities
+				if (CheckTableForAbility(ability, gSmogonOU_AbilityBanList))
+					return TRUE;
+
+				//Check Banned Moves
+				for (i = 0; i < MAX_MON_MOVES; ++i)
+				{
+					if (CheckTableForMove(moveLoc[i], gSmogon_MoveBanList)
+					|| moveLoc[i] == MOVE_BATONPASS)
+						return TRUE;
+				}
+			}
+			else //Double Battles
+			{
+				bool8 knowsRecycle = FALSE;
+				bool8 knowsPainSplit = FALSE;
+				bool8 knowsFling = FALSE;
+				bool8 knowsHealingMove = FALSE;
+
+				if (gSpecialSpeciesFlags[species].smogonOUDoublesBan
+				||  CheckTableForItem(item, gSmogonOUDoubles_ItemBanList))
+					return TRUE;
+
+				//Check Banned Abilities
+				if (CheckTableForAbility(ability, gSmogonOUDoubles_AbilityBanList))
+					return TRUE;
+
+				//Check Banned Moves
+				for (i = 0; i < MAX_MON_MOVES; ++i)
+				{
+					if (CheckTableForMove(moveLoc[i], gSmogon_MoveBanList)
+					||  CheckTableForMove(moveLoc[i], gSmogonOUDoubles_MoveBanList))
+						return TRUE;
+
+					switch (moveLoc[i]) {
+						case MOVE_HEALPULSE:
+						case MOVE_MILKDRINK:
+						case MOVE_MOONLIGHT:
+						case MOVE_MORNINGSUN:
+						case MOVE_RECOVER:
+						case MOVE_ROOST:
+						case MOVE_SLACKOFF:
+						case MOVE_SOFTBOILED:
+						case MOVE_WISH:
+							knowsHealingMove = TRUE;
+							break;
+						case MOVE_RECYCLE:
+							knowsRecycle = TRUE;
+							break;
+						case MOVE_PAINSPLIT:
+							knowsPainSplit = TRUE;
+							break;
+						case MOVE_FLING:
+							knowsFling = TRUE;
+							break;
+					}
+
+					if (knowsRecycle && ItemId_GetHoldEffect(item) == ITEM_EFFECT_RESTORE_PP) //Leppa Berry
+					{
+						if (knowsHealingMove
+						||  knowsPainSplit
+						||  knowsFling)
+							return TRUE;
+					}
+				}
+			}
+			break;
+
+		case BATTLE_FACILITY_UBER:
+		case BATTLE_FACILITY_UBER_CAMOMONS:
+		STANDARD_UBER_CHECK:
+		//For Ubers ban Rayquaza with Dragon Ascent (handled in mega.c), Moody, and some moves
+			switch (checkFromLocationType) {
+				case CHECK_BATTLE_TOWER_SPREADS:
+					moveLoc = spread->moves;
+					LOAD_TIER_CHECKING_ABILITY;
+					break;
+				default:
+					moveLoc = mon->moves;
+					ability = GetMonAbility(mon);
 			}
 
 			//Check Banned Abilities
-			if (CheckTableForAbility(ability, gMiddleCup_AbilityBanList))
-				return TRUE;
-		}
-		else //GS Cup
-		{
-			if (CheckTableForItem(item, gBattleTowerStandard_ItemBanList))
-				return TRUE;
+			if (ability == ABILITY_MOODY)
+				return 1;
 
-			if (CheckTableForSpecies(species, gBattleTowerStandardSpeciesBanList)
-				&& !CheckTableForSpecies(species, gGSCup_LegendarySpeciesList))
-				return TRUE;
-		}
-		break;
-
-	case BATTLE_FACILITY_MONOTYPE:
-		//For Monotype, there's a species, item, ability, and move ban list
-		if (CheckTableForSpecies(species, gSmogonMonotype_SpeciesBanList)
-			|| CheckTableForItem(item, gSmogonMonotype_ItemBanList))
-			return TRUE;
-
-		//Load correct ability and moves
-		switch (checkFromLocationType) {
-		case CHECK_BATTLE_TOWER_SPREADS:
-			moveLoc = spread->moves;
-			LOAD_TIER_CHECKING_ABILITY;
+			//Check Banned Moves
+			for (i = 0; i < MAX_MON_MOVES; ++i)
+			{
+				if (CheckTableForMove(moveLoc[i], gSmogon_MoveBanList))
+					return TRUE;
+			}
 			break;
 
-		default:
-			moveLoc = mon->moves;
-			ability = GetMonAbility(mon);
-		}
+		case BATTLE_FACILITY_LITTLE_CUP:
+		case BATTLE_FACILITY_LC_CAMOMONS:
+			if (!gSpecialSpeciesFlags[species].smogonLittleCup
+			||  CheckTableForItem(item, gSmogonLittleCup_ItemBanList))
+				return TRUE; //Banned
 
-		//Check Banned Abilities
-		if (CheckTableForAbility(ability, gSmogonMonotype_AbilityBanList))
-			return TRUE;
+			if (checkFromLocationType == CHECK_BATTLE_TOWER_SPREADS)
+				moveLoc = spread->moves;
+			else
+				moveLoc = mon->moves;
 
-		//Check Banned Moves
-		for (i = 0; i < MAX_MON_MOVES; ++i) {
-			if (CheckTableForMove(moveLoc[i], gSmogon_MoveBanList)
+			for (i = 0; i < MAX_MON_MOVES; ++i)
+			{
+				if (CheckTableForMove(moveLoc[i], gSmogonLittleCup_MoveBanList))
+					return TRUE;
+			}
+			break;
+
+		case BATTLE_FACILITY_MIDDLE_CUP:
+		case BATTLE_FACILITY_MC_CAMOMONS:
+			if (IsFrontierSingles(battleFormat)) //Middle Cup in Singles
+			{
+				if (!gSpecialSpeciesFlags[species].middleCup
+				||   CheckTableForItem(item, gMiddleCup_ItemBanList))
+					return TRUE; //Banned
+
+				//Load correct ability and moves
+				switch (checkFromLocationType) {
+					case CHECK_BATTLE_TOWER_SPREADS:
+						LOAD_TIER_CHECKING_ABILITY;
+						break;
+					default:
+						ability = GetMonAbility(mon);
+				}
+
+				//Check Banned Abilities
+				if (CheckTableForAbility(ability, gMiddleCup_AbilityBanList))
+					return TRUE;
+			}
+			else //GS Cup
+			{
+				if (CheckTableForItem(item, gBattleTowerStandard_ItemBanList))
+					return TRUE;
+
+				if (gSpecialSpeciesFlags[species].battleTowerStandardBan
+				&& !gSpecialSpeciesFlags[species].gsCupLegendaries)
+					return TRUE;
+			}
+			break;
+
+		case BATTLE_FACILITY_MONOTYPE:
+		//For Monotype, there's a species, item, ability, and move ban list
+			if (gSpecialSpeciesFlags[species].smogonMonotypeBan
+			||  CheckTableForItem(item, gSmogonMonotype_ItemBanList))
+				return TRUE;
+
+			//Load correct ability and moves
+			switch (checkFromLocationType) {
+				case CHECK_BATTLE_TOWER_SPREADS:
+					moveLoc = spread->moves;
+					LOAD_TIER_CHECKING_ABILITY;
+					break;
+				default:
+					moveLoc = mon->moves;
+					ability = GetMonAbility(mon);
+			}
+
+			//Check Banned Abilities
+			if (CheckTableForAbility(ability, gSmogonMonotype_AbilityBanList))
+				return TRUE;
+
+			//Check Banned Moves
+			for (i = 0; i < MAX_MON_MOVES; ++i)
+			{
+				if (CheckTableForMove(moveLoc[i], gSmogon_MoveBanList)
 				|| moveLoc[i] == MOVE_BATONPASS
 				|| moveLoc[i] == MOVE_SWAGGER)
+					return TRUE;
+			}
+			break;
+
+		case BATTLE_FACILITY_CAMOMONS:
+			if (gSpecialSpeciesFlags[species].smogonCamomonsBan)
 				return TRUE;
-		}
-		break;
 
-	case BATTLE_FACILITY_CAMOMONS:
-		if (CheckTableForSpecies(species, gSmogonCamomons_SpeciesBanList))
-			return TRUE;
+			goto STANDARD_OU_CHECK;
 
-		goto STANDARD_OU_CHECK;
+		case BATTLE_FACILITY_SCALEMONS:
+			if (gSpecialSpeciesFlags[species].smogonScalemonsBan
+			||  CheckTableForItem(item, gSmogonScalemons_ItemBanList))
+				return TRUE;
 
-	case BATTLE_FACILITY_SCALEMONS:
-		if (CheckTableForSpecies(species, gSmogonScalemons_SpeciesBanList)
-			|| CheckTableForItem(item, gSmogonScalemons_ItemBanList))
-			return TRUE;
+			//Load correct ability and moves
+			switch (checkFromLocationType) {
+				case CHECK_BATTLE_TOWER_SPREADS:
+					LOAD_TIER_CHECKING_ABILITY;
+					break;
+				default:
+					ability = GetMonAbility(mon);
+			}
 
-		//Load correct ability and moves
-		switch (checkFromLocationType) {
-		case CHECK_BATTLE_TOWER_SPREADS:
-			moveLoc = spread->moves;
-			LOAD_TIER_CHECKING_ABILITY;
+			//Check Banned Abilities
+			if (CheckTableForAbility(ability, gSmogonScalemons_AbilityBanList))
+				return TRUE;
+
+			goto STANDARD_UBER_CHECK;
+
+		case BATTLE_FACILITY_350_CUP:
+			if (gSpecialSpeciesFlags[species].smogon350CupBan
+			||  CheckTableForItem(item, gSmogon350Cup_ItemBanList))
+				return TRUE;
+
+			//Load correct ability and moves
+			switch (checkFromLocationType) {
+				case CHECK_BATTLE_TOWER_SPREADS:
+					LOAD_TIER_CHECKING_ABILITY;
+					break;
+				default:
+					ability = GetMonAbility(mon);
+			}
+
+			//Check Banned Abilities
+			if (CheckTableForAbility(ability, gSmogon350Cup_AbilityBanList))
+				return TRUE;
+
+			goto STANDARD_UBER_CHECK;
+
+		case BATTLE_FACILITY_AVERAGE_MONS:
+			if (gSpecialSpeciesFlags[species].smogonAverageMonsBan
+			||  CheckTableForItem(item, gSmogonAverageMons_ItemBanList))
+				return TRUE;
+
+			//Load correct ability and moves
+			switch (checkFromLocationType) {
+				case CHECK_BATTLE_TOWER_SPREADS:
+					LOAD_TIER_CHECKING_ABILITY;
+					break;
+				default:
+					ability = GetMonAbility(mon);
+			}
+
+			//Check Banned Abilities
+			if (CheckTableForAbility(ability, gSmogonAverageMons_AbilityBanList))
+				return TRUE;
 			break;
 
-		default:
-			moveLoc = mon->moves;
-			ability = GetMonAbility(mon);
-		}
+		case BATTLE_FACILITY_BENJAMIN_BUTTERFREE:
+			if (gSpecialSpeciesFlags[species].smogonBenjaminButterfreeBan)
+				return TRUE;
 
-		//Check Banned Abilities
-		if (CheckTableForAbility(ability, gSmogonScalemons_AbilityBanList))
-			return TRUE;
+			goto STANDARD_OU_CHECK;
 
-		goto STANDARD_UBER_CHECK;
+		/*case BATTLE_FACILITY_METRONOME:
+			//No Steel Types, Pokemon with BST > 625 (including Megas), and banned items or abilities
+			if (gBaseStats[species].type1 == TYPE_STEEL
+			||  gBaseStats[species].type2 == TYPE_STEEL
+			||  GetBaseStatsTotal(species) > 625)
+				return TRUE;
 
-	case BATTLE_FACILITY_350_CUP:
-		if (CheckTableForSpecies(species, gSmogon350Cup_SpeciesBanList)
-			|| CheckTableForItem(item, gSmogon350Cup_ItemBanList))
-			return TRUE;
+			//Check banned items
+			if (CheckTableForItem(item, gSmogonMetronome_ItemBanList))
+				return TRUE;
 
-		//Load correct ability and moves
-		switch (checkFromLocationType) {
-		case CHECK_BATTLE_TOWER_SPREADS:
-			moveLoc = spread->moves;
-			LOAD_TIER_CHECKING_ABILITY;
+			//Load correct ability and moves
+			switch (checkFromLocationType) {
+				case CHECK_BATTLE_TOWER_SPREADS:
+					moveLoc = spread->moves;
+					LOAD_TIER_CHECKING_ABILITY;
+					break;
+				default:
+					moveLoc = mon->moves;
+					ability = GetMonAbility(mon);
+			}
+
+			//Check if can Mega Evolve and if that species should be banned
+			u16 megaSpecies = GetMegaSpecies(species, item, moveLoc);
+			if (megaSpecies != SPECIES_NONE)
+			{
+				if (gBaseStats[megaSpecies].type1 == TYPE_STEEL
+				||  gBaseStats[megaSpecies].type2 == TYPE_STEEL
+				||  GetBaseStatsTotal(megaSpecies) > 625)
+					return TRUE;
+			}
+
+			//Check banned abilities
+			if (CheckTableForAbility(ability, gSmogonMetronome_AbilityBanList))
+				return TRUE;
+
+			//Check specific item-ability combination
+			if (ability == ABILITY_HARVEST
+			&& (item == ITEM_JABOCA_BERRY || item == ITEM_ROWAP_BERRY))
+				return TRUE;
 			break;
+		*/
+		case BATTLE_FACILITY_UU:
+			if (gSpecialSpeciesFlags[species].smogonUUBan
+			||  CheckTableForItem(item, gSmogonUU_ItemBanList))
+				return TRUE;
 
-		default:
-			moveLoc = mon->moves;
-			ability = GetMonAbility(mon);
-		}
+			//Load correct ability and moves
+			switch (checkFromLocationType) {
+				case CHECK_BATTLE_TOWER_SPREADS:
+					LOAD_TIER_CHECKING_ABILITY;
+					break;
+				default:
+					ability = GetMonAbility(mon);
+			}
 
-		//Check Banned Abilities
-		if (CheckTableForAbility(ability, gSmogon350Cup_AbilityBanList))
-			return TRUE;
+			//Check Banned Abilities
+			if (CheckTableForAbility(ability, gSmogonUU_AbilityBanList))
+				return TRUE;
 
-		goto STANDARD_UBER_CHECK;
+			goto STANDARD_OU_CHECK;
 
-	case BATTLE_FACILITY_AVERAGE_MONS:
-		if (CheckTableForSpecies(species, gSmogonAverageMons_SpeciesBanList)
-			|| CheckTableForItem(item, gSmogonAverageMons_ItemBanList))
-			return TRUE;
+		case BATTLE_FACILITY_RU:
+			if (gSpecialSpeciesFlags[species].smogonRUBan
+			||  gSpecialSpeciesFlags[species].smogonUUBan
+			||  CheckTableForItem(item, gSmogonRU_ItemBanList)
+			||  CheckTableForItem(item, gSmogonUU_ItemBanList))
+				return TRUE;
 
-		//Load correct ability and moves
-		switch (checkFromLocationType) {
-		case CHECK_BATTLE_TOWER_SPREADS:
-			moveLoc = spread->moves;
-			LOAD_TIER_CHECKING_ABILITY;
-			break;
+			//Load correct ability and moves
+			switch (checkFromLocationType) {
+				case CHECK_BATTLE_TOWER_SPREADS:
+					moveLoc = spread->moves;
+					LOAD_TIER_CHECKING_ABILITY;
+					break;
+				default:
+					moveLoc = mon->moves;
+					ability = GetMonAbility(mon);
+			}
 
-		default:
-			moveLoc = mon->moves;
-			ability = GetMonAbility(mon);
-		}
+			//Check Banned Abilities
+			if (CheckTableForAbility(ability, gSmogonRU_AbilityBanList))
+				return TRUE;
 
-		//Check Banned Abilities
-		if (CheckTableForAbility(ability, gSmogonAverageMons_AbilityBanList))
-			return TRUE;
-		break;
+			//Check Banned Moves
+			for (i = 0; i < MAX_MON_MOVES; ++i)
+			{
+				if (moveLoc[i] == MOVE_AURORAVEIL)
+					return TRUE;
+			}
 
-	case BATTLE_FACILITY_BENJAMIN_BUTTERFREE:
-		if (CheckTableForSpecies(species, gSmogonBenjaminButterfree_SpeciesBanList))
-			return TRUE;
+			goto STANDARD_OU_CHECK;
+	
+		case BATTLE_FACILITY_NU:
+			if (gSpecialSpeciesFlags[species].smogonNUBan
+			||  gSpecialSpeciesFlags[species].smogonRUBan
+			||  gSpecialSpeciesFlags[species].smogonUUBan
+			||  CheckTableForItem(item, gSmogonNU_ItemBanList)
+			||  CheckTableForItem(item, gSmogonRU_ItemBanList)
+			||  CheckTableForItem(item, gSmogonUU_ItemBanList))
+				return TRUE;
 
-		goto STANDARD_OU_CHECK;
+			goto STANDARD_OU_CHECK;
 	}
 
 	return FALSE; //Not banned
@@ -3651,28 +3780,11 @@ void TryRandomizeSpecies(unusedArg u16* species)
 		{
 			newSpecies *= id;
 			newSpecies = MathMax(1, newSpecies % NUM_SPECIES_RANDOMIZER);
-		} while (CheckTableForSpecies(newSpecies, gRandomizerSpeciesBanList));
-
+		} while (gSpecialSpeciesFlags[newSpecies].randomizerBan);
+		
 		*species = newSpecies;
 	}
 #endif
-}
-void TryFullRandomizeSpecies(unusedArg u16* species)
-{
-//#ifdef FLAG_POKEMON_RANDOMIZER
-	//if ((FlagGet(FLAG_POKEMON_RANDOMIZER) && !FlagGet(FLAG_BATTLE_FACILITY) && *species != SPECIES_NONE && *species < NUM_SPECIES))
-	//{
-		
-		u32 newSpecies = *species;
-
-		do
-		{
-			newSpecies = Random() % NUM_SPECIES;
-		} while (CheckTableForSpecies(newSpecies, gRandomizerSpeciesBanList));
-
-		*species = newSpecies;
-	//}
-//#endif
 }
 
 u16 GetRandomizedSpecies(u16 species)
@@ -3770,7 +3882,7 @@ void CreateBoxMon(struct BoxPokemon* boxMon, u16 species, u8 level, u8 fixedIV, 
 
 #ifdef CREATE_WITH_X_PERFECT_IVS
 		{
-			if (CheckTableForSpecies(species, gSetPerfectXIvList))
+			if (gSpecialSpeciesFlags[species].setPerfectXIVs)
 			{
 				u8 numPerfectStats = 0;
 				u8 perfect = 31;
