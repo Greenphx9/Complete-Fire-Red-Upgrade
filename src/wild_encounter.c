@@ -1336,6 +1336,21 @@ static void CreateScriptedWildMon(u16 species, u8 level, u16 item, u16* moves, b
 
 	if (FlagGet(FLAG_HIDDEN_ABILITY))
 		gEnemyParty[index].hiddenAbility = TRUE;
+
+	#ifdef UNBOUND
+	if (species == SPECIES_SHADOW_WARRIOR)
+	{
+		//Shadow Warriors have preset natures and can't be shiny
+		u32 shadowWarriorPersonalities[] = {0xCC94DC29, 0xEB9752E1}; //Either Adamant or Jolly
+		u32 shadowWarriorOtId = 0x0;
+
+		SetMonData(&gEnemyParty[index], MON_DATA_PERSONALITY, &shadowWarriorPersonalities[Random() & 1]); //Randomly set one of the above natures
+		SetMonData(&gEnemyParty[index], MON_DATA_OT_ID, &shadowWarriorOtId);
+
+		if (VarGet(VAR_GAME_DIFFICULTY) == OPTIONS_EXPERT_DIFFICULTY)
+			gEnemyParty[index].hiddenAbility = TRUE; //Give it Wonder Guard
+	}
+	#endif
 }
 
 void TrySetWildDoubleBattleTypeScripted()
