@@ -4998,7 +4998,7 @@ void AnimTask_SlideOffScreen(u8 taskId)
 	u8 bank, spriteId;
 
 	bank = LoadBattleAnimTarget(0);
-	spriteId = GetAnimBattlerSpriteId(bank);
+	spriteId = GetAnimBattlerSpriteId(gBattleAnimArgs[0]);
 
 	if (spriteId < MAX_SPRITES)
 	{
