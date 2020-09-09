@@ -1208,13 +1208,13 @@ static u8 BuildFrontierParty(struct Pokemon* const party, const u16 trainerId, c
 	const struct MultiBattleTowerTrainer* multiPartner = &gFrontierMultiBattleTrainers[tableId];
 
 	switch (trainerId) {
-	case BATTLE_TOWER_TID:
-		trainerGender = trainer->gender;
-		break;
-	case BATTLE_TOWER_SPECIAL_TID:
-	case FRONTIER_BRAIN_TID:
-		trainerGender = specialTrainer->gender;
-		break;
+		case BATTLE_TOWER_TID:
+			trainerGender = trainer->gender;
+			break;
+		case BATTLE_TOWER_SPECIAL_TID:
+		case FRONTIER_BRAIN_TID:
+			trainerGender = specialTrainer->gender;
+			break;
 	}
 
 	if (forPlayer)
@@ -1253,87 +1253,232 @@ static u8 BuildFrontierParty(struct Pokemon* const party, const u16 trainerId, c
 		do
 		{
 			switch (trainerId) {
-			case BATTLE_TOWER_SPECIAL_TID:
-			case FRONTIER_BRAIN_TID:
-				if (tier == BATTLE_FACILITY_MEGA_BRAWL)
-				{	//Force these trainers to have at least X amount of Mega Pokemon
-					if (monsCount < 6)
-					{
-						if (builder->numMegas < 2 && i + (2 - builder->numMegas) >= monsCount)
-							goto GENERIC_RANDOM_SPREADS; //Force at least two megas
+				case BATTLE_TOWER_SPECIAL_TID:
+				case FRONTIER_BRAIN_TID:
+					if (tier == BATTLE_FACILITY_MEGA_BRAWL)
+					{	//Force these trainers to have at least X amount of Mega Pokemon
+						if (monsCount < 6)
+						{
+							if (builder->numMegas < 2 && i + (2 - builder->numMegas) >= monsCount)
+								goto GENERIC_RANDOM_SPREADS; //Force at least two megas
+						}
+						else //6v6
+						{
+							if (builder->numMegas < 3 && i + (3 - builder->numMegas) >= monsCount)
+								goto GENERIC_RANDOM_SPREADS; //Force at least three megas
+						}
 					}
-					else //6v6
-					{
-						if (builder->numMegas < 3 && i + (3 - builder->numMegas) >= monsCount)
-							goto GENERIC_RANDOM_SPREADS; //Force at least three megas
-					}
-				}
 
-				switch (tier) {
-				case BATTLE_FACILITY_UBER:
-				case BATTLE_FACILITY_NO_RESTRICTIONS:
-				case BATTLE_FACILITY_UBER_CAMOMONS:
-				SPECIAL_TRAINER_LEGENDARY_SPREADS:
-					if (specialTrainer->legendarySpreads != NULL)
-						spread = &specialTrainer->legendarySpreads[Random() % specialTrainer->legSpreadSize];
-					else
-						goto REGULAR_LEGENDARY_SPREADS;
+					switch (tier) {
+						case BATTLE_FACILITY_UBER:
+						case BATTLE_FACILITY_NO_RESTRICTIONS:
+						case BATTLE_FACILITY_UBER_CAMOMONS:
+						SPECIAL_TRAINER_LEGENDARY_SPREADS:
+							if (specialTrainer->legendarySpreads != NULL)
+								spread = &specialTrainer->legendarySpreads[Random() % specialTrainer->legSpreadSize];
+							else
+								goto REGULAR_LEGENDARY_SPREADS;
+							break;
+						case BATTLE_FACILITY_LITTLE_CUP:
+						case BATTLE_FACILITY_LC_CAMOMONS:
+						SPECIAL_TRAINER_LITTLE_SPREADS:
+							if (specialTrainer->littleCupSpreads != NULL)
+								spread = &specialTrainer->littleCupSpreads[Random() % specialTrainer->lcSpreadSize];
+							else
+								goto REGULAR_LC_SPREADS;
+							break;
+						case BATTLE_FACILITY_MIDDLE_CUP:
+						case BATTLE_FACILITY_MC_CAMOMONS:
+							if (IsFrontierSingles(battleType))
+							{
+								SPECIAL_TRAINER_MIDDLE_SPREADS:
+								if (specialTrainer->middleCupSpreads != NULL)
+									spread = &specialTrainer->middleCupSpreads[Random() % specialTrainer->mcSpreadSize];
+								else
+									goto REGULAR_MC_SPREADS;
+							}
+							else //Doubles - GS Cup
+							{
+								if ((Random() & 1) == 0) //50% chance of pulling legendary
+									goto SPECIAL_TRAINER_LEGENDARY_SPREADS;
+
+								goto SPECIAL_TRAINER_REGULAR_SPREADS;
+							}
+							break;
+						case BATTLE_FACILITY_SCALEMONS: ;
+							if (trainerId == FRONTIER_BRAIN_TID && BATTLE_FACILITY_NUM == IN_BATTLE_MINE)
+								goto SPECIAL_TRAINER_LITTLE_SPREADS;
+
+							rand = Random() & 7;
+							switch (rand) {
+								case 0: //High prevalence of baby spreads b/c they
+								case 1: //get insane stats in Scalemons
+								case 2:
+								case 3:
+									goto SPECIAL_TRAINER_LITTLE_SPREADS;
+								case 4:
+								case 5:
+									goto SPECIAL_TRAINER_MIDDLE_SPREADS;
+							}
+							goto SPECIAL_TRAINER_REGULAR_SPREADS;
+						case BATTLE_FACILITY_350_CUP: ;
+						SPECIAL_TRAINER_350_SPREADS:
+							if (trainerId == FRONTIER_BRAIN_TID && BATTLE_FACILITY_NUM == IN_BATTLE_MINE)
+								goto SPECIAL_TRAINER_LITTLE_SPREADS;
+
+							rand = Random() & 3;
+							switch (rand) {
+								case 0:
+								case 1:
+									if (specialTrainer->littleCupSpreads != NULL)
+										spread = &specialTrainer->littleCupSpreads[Random() % specialTrainer->lcSpreadSize];
+									else
+										spread = &gLittleCupSpreads[Random() % TOTAL_LITTLE_CUP_SPREADS];
+
+									u16 bst = GetBaseStatsTotal(spread->species);
+									if (bst > 350 || bst < 250)
+										goto SPECIAL_TRAINER_350_SPREADS; //Reroll if doesn't have viable stats
+									break;
+								case 2:
+									goto SPECIAL_TRAINER_LEGENDARY_SPREADS;
+								default:
+									goto SPECIAL_TRAINER_REGULAR_SPREADS;
+							}
+							break;
+						case BATTLE_FACILITY_AVERAGE_MONS: ;
+							if (trainerId == FRONTIER_BRAIN_TID && BATTLE_FACILITY_NUM == IN_BATTLE_MINE)
+								goto SPECIAL_TRAINER_LITTLE_SPREADS;
+
+							rand = Random() & 3;
+							switch (rand) {
+								case 0:
+									goto SPECIAL_TRAINER_LITTLE_SPREADS;
+								case 1:
+									goto SPECIAL_TRAINER_MIDDLE_SPREADS;
+								case 2:
+									goto SPECIAL_TRAINER_LEGENDARY_SPREADS;
+							}
+							goto SPECIAL_TRAINER_REGULAR_SPREADS;
+						default:
+						SPECIAL_TRAINER_REGULAR_SPREADS:
+							if (specialTrainer->regularSpreads != NULL)
+								spread = &specialTrainer->regularSpreads[Random() % specialTrainer->regSpreadSize]; //Special trainers have preset spreads.
+							else
+								goto REGULAR_SPREADS;
+					}
 					break;
-				case BATTLE_FACILITY_LITTLE_CUP:
-				case BATTLE_FACILITY_LC_CAMOMONS:
-				SPECIAL_TRAINER_LITTLE_SPREADS:
-					if (specialTrainer->littleCupSpreads != NULL)
-						spread = &specialTrainer->littleCupSpreads[Random() % specialTrainer->lcSpreadSize];
-					else
-						goto REGULAR_LC_SPREADS;
+				case BATTLE_FACILITY_MULTI_TRAINER_TID: //This will only get called if the Player's party was not set up properly beforehand
+					if (IsRandomBattleTowerBattle())
+						goto GENERIC_RANDOM_SPREADS; //Generate random Pokemon for the partner in random battles
+
+					switch (tier) {
+						case BATTLE_FACILITY_UBER:
+						case BATTLE_FACILITY_NO_RESTRICTIONS:
+						case BATTLE_FACILITY_UBER_CAMOMONS:
+						MULTI_PARTNER_LEGENDARY_SPREADS:
+							if (multiPartner->legendarySpreads != NULL)
+								spread = &multiPartner->legendarySpreads[Random() % multiPartner->legSpreadSize];
+							else
+								goto REGULAR_LEGENDARY_SPREADS;
+							break;
+						case BATTLE_FACILITY_LITTLE_CUP:
+						case BATTLE_FACILITY_LC_CAMOMONS:
+						MULTI_PARTNER_LITTLE_SPREADS:
+							if (multiPartner->littleCupSpreads != NULL)
+								spread = &multiPartner->littleCupSpreads[Random() % multiPartner->lcSpreadSize];
+							else
+								goto REGULAR_LC_SPREADS;
+							break;
+						case BATTLE_FACILITY_MIDDLE_CUP:
+						case BATTLE_FACILITY_MC_CAMOMONS:
+							if (IsFrontierSingles(battleType))
+							{
+								goto REGULAR_MC_SPREADS; //Middle Cup doesn't exist in Multi Battles so this is error prevention for something
+							}
+							else //Doubles - GS Cup
+							{
+								if ((Random() & 1) == 0) //50% chance of pulling legendary
+									goto MULTI_PARTNER_LEGENDARY_SPREADS;
+
+								goto MULTI_PARTNER_REGULAR_SPREADS;
+							}
+							break;
+						case BATTLE_FACILITY_SCALEMONS: ;
+							rand = Random() & 7;
+							switch (rand) {
+								case 0: //High prevalence of baby spreads b/c they
+								case 1: //get insane stats in Scalemons
+								case 2:
+								case 3:
+								case 4:
+									goto MULTI_PARTNER_LITTLE_SPREADS;
+							}
+							goto MULTI_PARTNER_REGULAR_SPREADS;
+						case BATTLE_FACILITY_350_CUP: ;
+						MULTI_PARTNER_350_SPREADS:
+							rand = Random() & 3;
+							switch (rand) {
+								case 0:
+								case 1:
+									if (multiPartner->littleCupSpreads != NULL)
+										spread = &multiPartner->littleCupSpreads[Random() % multiPartner->lcSpreadSize];
+									else
+										spread = &gLittleCupSpreads[Random() % TOTAL_LITTLE_CUP_SPREADS];
+
+									u16 bst = GetBaseStatsTotal(spread->species);
+									if (bst > 350 || bst < 250)
+										goto MULTI_PARTNER_350_SPREADS; //Reroll if doesn't have viable stats
+									break;
+								case 2:
+									goto MULTI_PARTNER_LEGENDARY_SPREADS;
+								default:
+									goto MULTI_PARTNER_REGULAR_SPREADS;
+							}
+							break;
+						case BATTLE_FACILITY_AVERAGE_MONS: ;
+							rand = Random() & 3;
+							switch (rand) {
+								case 0:
+								case 1:
+									goto MULTI_PARTNER_LITTLE_SPREADS;
+								case 2:
+									goto MULTI_PARTNER_LEGENDARY_SPREADS;
+							}
+							goto MULTI_PARTNER_REGULAR_SPREADS;
+						default:
+						MULTI_PARTNER_REGULAR_SPREADS:
+							if (multiPartner->regularSpreads != NULL)
+								spread = &multiPartner->regularSpreads[Random() % multiPartner->regSpreadSize]; //Multi trainers have preset spreads.
+							else
+								goto REGULAR_SPREADS;
+					}
 					break;
-				case BATTLE_FACILITY_MIDDLE_CUP:
-				case BATTLE_FACILITY_MC_CAMOMONS:
-					if (IsFrontierSingles(battleType))
-					{
-					SPECIAL_TRAINER_MIDDLE_SPREADS:
-						if (specialTrainer->middleCupSpreads != NULL)
-							spread = &specialTrainer->middleCupSpreads[Random() % specialTrainer->mcSpreadSize];
-						else
-							goto REGULAR_MC_SPREADS;
-					}
-					else //Doubles - GS Cup
-					{
-						if ((Random() & 1) == 0) //50% chance of pulling legendary
-							goto SPECIAL_TRAINER_LEGENDARY_SPREADS;
-
-						goto SPECIAL_TRAINER_REGULAR_SPREADS;
-					}
-					break;
-				case BATTLE_FACILITY_SCALEMONS:;
-					if (trainerId == FRONTIER_BRAIN_TID && BATTLE_FACILITY_NUM == IN_BATTLE_MINE)
-						goto SPECIAL_TRAINER_LITTLE_SPREADS;
-
-					rand = Random() & 7;
-					switch (rand) {
-					case 0: //High prevalence of baby spreads b/c they
-					case 1: //get insane stats in Scalemons
-					case 2:
-					case 3:
-						goto SPECIAL_TRAINER_LITTLE_SPREADS;
-					case 4:
-					case 5:
-						goto SPECIAL_TRAINER_MIDDLE_SPREADS;
-					}
-					goto SPECIAL_TRAINER_REGULAR_SPREADS;
-				case BATTLE_FACILITY_350_CUP:;
-				SPECIAL_TRAINER_350_SPREADS:
-					if (trainerId == FRONTIER_BRAIN_TID && BATTLE_FACILITY_NUM == IN_BATTLE_MINE)
-						goto SPECIAL_TRAINER_LITTLE_SPREADS;
-
-					rand = Random() & 3;
-					switch (rand) {
-					case 0:
-					case 1:
-						if (specialTrainer->littleCupSpreads != NULL)
-							spread = &specialTrainer->littleCupSpreads[Random() % specialTrainer->lcSpreadSize];
-						else
+				case BATTLE_TOWER_TID:
+				GENERIC_RANDOM_SPREADS:
+					switch (tier) {
+						case BATTLE_FACILITY_UBER:
+						case BATTLE_FACILITY_NO_RESTRICTIONS:
+						case BATTLE_FACILITY_UBER_CAMOMONS:
+							if (Random() % 100 < 5) //5% chance per mon of not being legendary
+								spread = &gFrontierSpreads[Random() % TOTAL_SPREADS];
+							else
+							REGULAR_LEGENDARY_SPREADS:
+								spread = &gFrontierLegendarySpreads[Random() % TOTAL_LEGENDARY_SPREADS];
+							break;
+						case BATTLE_FACILITY_LITTLE_CUP:
+						case BATTLE_FACILITY_LC_CAMOMONS:
+						REGULAR_LC_SPREADS:
 							spread = &gLittleCupSpreads[Random() % TOTAL_LITTLE_CUP_SPREADS];
+							break;
+						case BATTLE_FACILITY_MIDDLE_CUP:
+						case BATTLE_FACILITY_MC_CAMOMONS:
+							if (!IsFrontierSingles(battleType)) //Doubles - GS Cup
+							{
+								if ((Random() & 1) == 0)
+									goto REGULAR_LEGENDARY_SPREADS;
+
+								goto REGULAR_SPREADS;
+							}
 
 						REGULAR_MC_SPREADS:
 							spread = &gMiddleCupSpreads[Random() % TOTAL_MIDDLE_CUP_SPREADS];
@@ -1417,10 +1562,9 @@ static u8 BuildFrontierParty(struct Pokemon* const party, const u16 trainerId, c
 							spread = &gFrontierSpreads[Random() % TOTAL_SPREADS];
 							break;
 					}
+
+					spread = TryAdjustSpreadForSpecies(spread); //Update Arceus
 					break;
-				case BATTLE_FACILITY_AVERAGE_MONS:;
-					if (trainerId == FRONTIER_BRAIN_TID && BATTLE_FACILITY_NUM == IN_BATTLE_MINE)
-						goto SPECIAL_TRAINER_LITTLE_SPREADS;
 
 				default: //forPlayer
 					switch (tier) {
@@ -1484,277 +1628,15 @@ static u8 BuildFrontierParty(struct Pokemon* const party, const u16 trainerId, c
 						default:
 							goto REGULAR_SPREADS;
 					}
-					goto SPECIAL_TRAINER_REGULAR_SPREADS;
-				default:
-				SPECIAL_TRAINER_REGULAR_SPREADS:
-					if (specialTrainer->regularSpreads != NULL)
-						spread = &specialTrainer->regularSpreads[Random() % specialTrainer->regSpreadSize]; //Special trainers have preset spreads.
-					else
-						goto REGULAR_SPREADS;
-				}
-				break;
-			case BATTLE_FACILITY_MULTI_TRAINER_TID: //This will only get called if the Player's party was not set up properly beforehand
-				if (IsRandomBattleTowerBattle())
-					goto GENERIC_RANDOM_SPREADS; //Generate random Pokemon for the partner in random battles
-
-				switch (tier) {
-				case BATTLE_FACILITY_UBER:
-				case BATTLE_FACILITY_NO_RESTRICTIONS:
-				case BATTLE_FACILITY_UBER_CAMOMONS:
-				MULTI_PARTNER_LEGENDARY_SPREADS:
-					if (multiPartner->legendarySpreads != NULL)
-						spread = &multiPartner->legendarySpreads[Random() % multiPartner->legSpreadSize];
-					else
-						goto REGULAR_LEGENDARY_SPREADS;
-					break;
-				case BATTLE_FACILITY_LITTLE_CUP:
-				case BATTLE_FACILITY_LC_CAMOMONS:
-				MULTI_PARTNER_LITTLE_SPREADS:
-					if (multiPartner->littleCupSpreads != NULL)
-						spread = &multiPartner->littleCupSpreads[Random() % multiPartner->lcSpreadSize];
-					else
-						goto REGULAR_LC_SPREADS;
-					break;
-				case BATTLE_FACILITY_MIDDLE_CUP:
-				case BATTLE_FACILITY_MC_CAMOMONS:
-					if (IsFrontierSingles(battleType))
-					{
-						goto REGULAR_MC_SPREADS; //Middle Cup doesn't exist in Multi Battles so this is error prevention for something
-					}
-					else //Doubles - GS Cup
-					{
-						if ((Random() & 1) == 0) //50% chance of pulling legendary
-							goto MULTI_PARTNER_LEGENDARY_SPREADS;
-
-						goto MULTI_PARTNER_REGULAR_SPREADS;
-					}
-					break;
-				case BATTLE_FACILITY_SCALEMONS:;
-					rand = Random() & 7;
-					switch (rand) {
-					case 0: //High prevalence of baby spreads b/c they
-					case 1: //get insane stats in Scalemons
-					case 2:
-					case 3:
-					case 4:
-						goto MULTI_PARTNER_LITTLE_SPREADS;
-					}
-					goto MULTI_PARTNER_REGULAR_SPREADS;
-				case BATTLE_FACILITY_350_CUP:;
-				MULTI_PARTNER_350_SPREADS:
-					rand = Random() & 3;
-					switch (rand) {
-					case 0:
-					case 1:
-						if (multiPartner->littleCupSpreads != NULL)
-							spread = &multiPartner->littleCupSpreads[Random() % multiPartner->lcSpreadSize];
-						else
-							spread = &gLittleCupSpreads[Random() % TOTAL_LITTLE_CUP_SPREADS];
-
-						u16 bst = GetBaseStatsTotal(spread->species);
-						if (bst > 350 || bst < 250)
-							goto MULTI_PARTNER_350_SPREADS; //Reroll if doesn't have viable stats
-						break;
-					case 2:
-						goto MULTI_PARTNER_LEGENDARY_SPREADS;
-					default:
-						goto MULTI_PARTNER_REGULAR_SPREADS;
-					}
-					break;
-				case BATTLE_FACILITY_AVERAGE_MONS:;
-					rand = Random() & 3;
-					switch (rand) {
-					case 0:
-					case 1:
-						goto MULTI_PARTNER_LITTLE_SPREADS;
-					case 2:
-						goto MULTI_PARTNER_LEGENDARY_SPREADS;
-					}
-					goto MULTI_PARTNER_REGULAR_SPREADS;
-				default:
-				MULTI_PARTNER_REGULAR_SPREADS:
-					if (multiPartner->regularSpreads != NULL)
-						spread = &multiPartner->regularSpreads[Random() % multiPartner->regSpreadSize]; //Multi trainers have preset spreads.
-					else
-						goto REGULAR_SPREADS;
-				}
-				break;
-			case BATTLE_TOWER_TID:
-			GENERIC_RANDOM_SPREADS:
-				switch (tier) {
-				case BATTLE_FACILITY_UBER:
-				case BATTLE_FACILITY_NO_RESTRICTIONS:
-				case BATTLE_FACILITY_UBER_CAMOMONS:
-					if (Random() % 100 < 5) //5% chance per mon of not being legendary
-						spread = &gFrontierSpreads[Random() % TOTAL_SPREADS];
-					else
-						REGULAR_LEGENDARY_SPREADS :
-						spread = &gFrontierLegendarySpreads[Random() % TOTAL_LEGENDARY_SPREADS];
-					break;
-				case BATTLE_FACILITY_LITTLE_CUP:
-				case BATTLE_FACILITY_LC_CAMOMONS:
-				REGULAR_LC_SPREADS:
-					spread = &gLittleCupSpreads[Random() % TOTAL_LITTLE_CUP_SPREADS];
-					break;
-				case BATTLE_FACILITY_MIDDLE_CUP:
-				case BATTLE_FACILITY_MC_CAMOMONS:
-					if (!IsFrontierSingles(battleType)) //Doubles - GS Cup
-					{
-						if ((Random() & 1) == 0)
-							goto REGULAR_LEGENDARY_SPREADS;
-
-						goto REGULAR_SPREADS;
-					}
-
-				REGULAR_MC_SPREADS:
-					spread = &gMiddleCupSpreads[Random() % TOTAL_MIDDLE_CUP_SPREADS];
-					break;
-				case BATTLE_FACILITY_OU:
-				case BATTLE_FACILITY_NATIONAL_DEX_OU:
-				case BATTLE_FACILITY_MONOTYPE:
-				case BATTLE_FACILITY_CAMOMONS:
-					//25% chance of trying to use a legend allowed in these tiers
-					if ((Random() & 3) == 0)
-						goto REGULAR_LEGENDARY_SPREADS;
-
-					goto REGULAR_SPREADS;
-				case BATTLE_FACILITY_SCALEMONS:;
-					rand = Random() & 7;
-					switch (rand) {
-					case 0: //High prevalence of baby spreads b/c they
-					case 1: //get insane stats in Scalemons
-					case 2:
-					case 3:
-						goto REGULAR_LC_SPREADS;
-					case 4:
-					case 5:
-						goto REGULAR_MC_SPREADS;
-					}
-					goto REGULAR_SPREADS;
-				case BATTLE_FACILITY_350_CUP:;
-				REGULAR_350_SPREADS:
-					rand = Random() & 3;
-					switch (rand) {
-					case 0:
-					case 1:
-						spread = &gLittleCupSpreads[Random() % TOTAL_LITTLE_CUP_SPREADS];
-
-						u16 bst = GetBaseStatsTotal(spread->species);
-						if (bst > 350 || bst < 250)
-							goto REGULAR_350_SPREADS; //Reroll if doesn't have viable stats
-						break;
-					case 2:
-						goto REGULAR_LEGENDARY_SPREADS;
-					default:
-						goto REGULAR_SPREADS;
-					}
-					break;
-				case BATTLE_FACILITY_AVERAGE_MONS:;
-					rand = Random() & 3;
-					switch (rand) {
-					case 0:
-						goto REGULAR_LC_SPREADS;
-					case 1:
-						goto REGULAR_MC_SPREADS;
-					case 2:
-						goto REGULAR_LEGENDARY_SPREADS;
-					}
-					goto REGULAR_SPREADS;
-				case BATTLE_FACILITY_STANDARD:
-				case BATTLE_FACILITY_DYNAMAX_STANDARD:
-					if (trainerId != BATTLE_TOWER_TID) //Multi partner team
-						goto REGULAR_SPREADS;
-
-					u16 streak = GetCurrentBattleTowerStreak();
-					if (streak < 2)
-					{
-						spread = &gLittleCupSpreads[Random() % TOTAL_LITTLE_CUP_SPREADS]; //Load Little Cup spreads for first two battles to make them easier
-						break;
-					}
-					else if (streak < 5)
-					{
-						spread = &gMiddleCupSpreads[Random() % TOTAL_MIDDLE_CUP_SPREADS]; //Load Middle Cup spreads for battles 3-5 to make them easier
-						break;
-					}
-					__attribute__((fallthrough));
-				case BATTLE_FACILITY_BENJAMIN_BUTTERFREE: //Don't use legends even though you can
-				case BATTLE_FACILITY_MEGA_BRAWL:
-				default:
-				REGULAR_SPREADS:
-					spread = &gFrontierSpreads[Random() % TOTAL_SPREADS];
-					break;
-				}
-
-				spread = TryAdjustSpreadForSpecies(spread); //Update Arceus
-				break;
-
-			default: //forPlayer
-				switch (tier) {
-				case BATTLE_FACILITY_UBER:
-				case BATTLE_FACILITY_NO_RESTRICTIONS:
-				case BATTLE_FACILITY_UBER_CAMOMONS:
-					goto REGULAR_LEGENDARY_SPREADS;
-				case BATTLE_FACILITY_LITTLE_CUP:
-				case BATTLE_FACILITY_LC_CAMOMONS:
-					goto REGULAR_LC_SPREADS;
-				case BATTLE_FACILITY_MIDDLE_CUP:
-				case BATTLE_FACILITY_MC_CAMOMONS:
-					if (!IsFrontierSingles(battleType)) //Doubles - GS Cup
-					{
-						if ((Random() & 1) == 0)
-							goto REGULAR_LEGENDARY_SPREADS;
-
-						goto REGULAR_SPREADS;
-					}
-					goto REGULAR_MC_SPREADS;
-				case BATTLE_FACILITY_OU:
-				case BATTLE_FACILITY_NATIONAL_DEX_OU:
-				case BATTLE_FACILITY_MONOTYPE:
-				case BATTLE_FACILITY_CAMOMONS:
-					//25% chance of trying to use a legend allowed in these tiers
-					if ((Random() & 3) == 0)
-						goto REGULAR_LEGENDARY_SPREADS;
-
-					goto REGULAR_SPREADS;
-				case BATTLE_FACILITY_SCALEMONS:;
-					rand = Random() & 7;
-					switch (rand) {
-					case 0: //High prevalence of baby spreads b/c they
-					case 1: //get insane stats in Scalemons
-					case 2:
-					case 3:
-						goto REGULAR_LC_SPREADS;
-					case 4:
-					case 5:
-						goto REGULAR_MC_SPREADS;
-					}
-					goto REGULAR_SPREADS;
-				case BATTLE_FACILITY_350_CUP:;
-					goto REGULAR_350_SPREADS;
-				case BATTLE_FACILITY_AVERAGE_MONS:;
-					rand = Random() & 3;
-					switch (rand) {
-					case 0:
-						goto REGULAR_LC_SPREADS;
-					case 1:
-						goto REGULAR_MC_SPREADS;
-					case 2:
-						goto REGULAR_LEGENDARY_SPREADS;
-					}
-					goto REGULAR_SPREADS;
-
-				default:
-					goto REGULAR_SPREADS;
-				}
 			}
 
 			species = spread->species;
 			dexNum = SpeciesToNationalPokedexNum(species);
 			item = spread->item;
 			ability = (gMain.inBattle && gBattleTypeFlags & BATTLE_TYPE_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_ABILITY_SUPPRESSION) ? 0
-				: ConvertFrontierAbilityNumToAbility(spread->ability, species);
+					: ConvertFrontierAbilityNumToAbility(spread->ability, species);
 			itemEffect = (ability == ABILITY_KLUTZ
-				|| (gMain.inBattle && gBattleTypeFlags & BATTLE_TYPE_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_MAGIC_ROOM)) ? 0 : ItemId_GetHoldEffect(item);
+					  || (gMain.inBattle && gBattleTypeFlags & BATTLE_TYPE_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_MAGIC_ROOM)) ? 0 : ItemId_GetHoldEffect(item);
 
 			if (IsFrontierSingles(battleType))
 			{
@@ -1764,7 +1646,7 @@ static u8 BuildFrontierParty(struct Pokemon* const party, const u16 trainerId, c
 			else //Double Battle
 			{
 				if (!spread->forDoubles) //Certain spreads are only for single battles
-					continue; 
+					continue;
 			}
 
 			if (tier == BATTLE_FACILITY_MEGA_BRAWL && !IsMegaStone(item))
@@ -1809,14 +1691,14 @@ static u8 BuildFrontierParty(struct Pokemon* const party, const u16 trainerId, c
 			//Prevent duplicate species and items
 			//Only allow one Mega Stone & Z-Crystal per team
 			if (!IsPokemonBannedBasedOnStreak(species, item, builder->speciesArray, monsCount, trainerId, tier, forPlayer)
-				&& (!builder->speciesOnTeam[dexNum] || tier == BATTLE_FACILITY_NO_RESTRICTIONS)
-				&& (!ItemAlreadyOnTeam(item, monsCount, builder->itemArray) || tier == BATTLE_FACILITY_NO_RESTRICTIONS)
-				&& (tier == BATTLE_FACILITY_MEGA_BRAWL || itemEffect != ITEM_EFFECT_MEGA_STONE || item == ITEM_ULTRANECROZIUM_Z || !builder->itemEffectOnTeam[ITEM_EFFECT_MEGA_STONE])
-				&& ((itemEffect != ITEM_EFFECT_Z_CRYSTAL && item != ITEM_ULTRANECROZIUM_Z) || !builder->itemEffectOnTeam[ITEM_EFFECT_Z_CRYSTAL])
-				&& !PokemonTierBan(species, item, spread, NULL, tier, CHECK_BATTLE_TOWER_SPREADS)
-				&& !(tier == BATTLE_FACILITY_MONOTYPE && TeamNotAllSameType(species, item, monsCount, builder->speciesArray, builder->itemArray))
-				&& !(tier == BATTLE_FACILITY_GS_CUP && !IsFrontierSingles(battleType) && TooManyLegendariesOnGSCupTeam(species, monsCount, builder->speciesArray))
-				&& !((trainerId == BATTLE_TOWER_TID || forPlayer || (trainerId == BATTLE_FACILITY_MULTI_TRAINER_TID && IsRandomBattleTowerBattle())) && TeamDoesntHaveSynergy(spread, builder)))
+			&& (!builder->speciesOnTeam[dexNum] || tier == BATTLE_FACILITY_NO_RESTRICTIONS)
+			&& (!ItemAlreadyOnTeam(item, monsCount, builder->itemArray) || tier == BATTLE_FACILITY_NO_RESTRICTIONS)
+			&& (tier == BATTLE_FACILITY_MEGA_BRAWL || itemEffect != ITEM_EFFECT_MEGA_STONE || item == ITEM_ULTRANECROZIUM_Z || !builder->itemEffectOnTeam[ITEM_EFFECT_MEGA_STONE])
+			&& ((itemEffect != ITEM_EFFECT_Z_CRYSTAL && item != ITEM_ULTRANECROZIUM_Z) || !builder->itemEffectOnTeam[ITEM_EFFECT_Z_CRYSTAL])
+			&& !PokemonTierBan(species, item, spread, NULL, tier, CHECK_BATTLE_TOWER_SPREADS)
+			&& !(tier == BATTLE_FACILITY_MONOTYPE && TeamNotAllSameType(species, item, monsCount, builder->speciesArray, builder->itemArray))
+			&& !(tier == BATTLE_FACILITY_GS_CUP && !IsFrontierSingles(battleType) && TooManyLegendariesOnGSCupTeam(species, monsCount, builder->speciesArray))
+			&& !((trainerId == BATTLE_TOWER_TID || forPlayer || (trainerId == BATTLE_FACILITY_MULTI_TRAINER_TID && IsRandomBattleTowerBattle())) && TeamDoesntHaveSynergy(spread, builder)))
 			{
 				class = PredictFightingStyle(spread->moves, ability, itemEffect, 0xFF);
 
@@ -1860,43 +1742,43 @@ static u8 BuildFrontierParty(struct Pokemon* const party, const u16 trainerId, c
 				if (!IsFrontierSingles(battleType)) //Doubles or Multi
 				{
 					switch (ability) {
-					case ABILITY_VOLTABSORB:
-					case ABILITY_MOTORDRIVE:
-					case ABILITY_LIGHTNINGROD:
-						builder->partyIndex[ELECTRIC_IMMUNITY] = i;
-						break;
+						case ABILITY_VOLTABSORB:
+						case ABILITY_MOTORDRIVE:
+						case ABILITY_LIGHTNINGROD:
+							builder->partyIndex[ELECTRIC_IMMUNITY] = i;
+							break;
 
-					case ABILITY_WATERABSORB:
-					case ABILITY_DRYSKIN:
-					case ABILITY_STORMDRAIN:
-						builder->partyIndex[WATER_IMMUNITY] = i;
-						break;
+						case ABILITY_WATERABSORB:
+						case ABILITY_DRYSKIN:
+						case ABILITY_STORMDRAIN:
+							builder->partyIndex[WATER_IMMUNITY] = i;
+							break;
 
-					case ABILITY_FLASHFIRE:
-						builder->partyIndex[FIRE_IMMUNITY] = i;
-						break;
+						case ABILITY_FLASHFIRE:
+							builder->partyIndex[FIRE_IMMUNITY] = i;
+							break;
 
-					case ABILITY_SAPSIPPER:
-						builder->partyIndex[GRASS_IMMUNITY] = i;
-						break;
+						case ABILITY_SAPSIPPER:
+							builder->partyIndex[GRASS_IMMUNITY] = i;
+							break;
 
-					case ABILITY_LEVITATE:
-						if (itemEffect != ITEM_EFFECT_IRON_BALL)
-							builder->partyIndex[GROUND_IMMUNITY] = i;
-						break;
+						case ABILITY_LEVITATE:
+							if (itemEffect != ITEM_EFFECT_IRON_BALL)
+								builder->partyIndex[GROUND_IMMUNITY] = i;
+							break;
 
-					case ABILITY_SOUNDPROOF:
-						builder->partyIndex[SOUND_IMMUNITY] = i;
-						break;
+						case ABILITY_SOUNDPROOF:
+							builder->partyIndex[SOUND_IMMUNITY] = i;
+							break;
 
-					case ABILITY_JUSTIFIED:
-						builder->partyIndex[JUSTIFIED_BOOSTED] = i;
-						break;
+						case ABILITY_JUSTIFIED:
+							builder->partyIndex[JUSTIFIED_BOOSTED] = i;
+							break;
 					}
 
 					u8 typeDmg;
-					u8 defType1 = (gBattleTypeFlags & BATTLE_TYPE_CAMOMONS) ? GetCamomonsTypeBySpread(spread, 0) : gBaseStats2[species].type1;
-					u8 defType2 = (gBattleTypeFlags & BATTLE_TYPE_CAMOMONS) ? GetCamomonsTypeBySpread(spread, 1) : gBaseStats2[species].type2;
+					u8 defType1 = (gBattleTypeFlags & BATTLE_TYPE_CAMOMONS) ? GetCamomonsTypeBySpread(spread, 0) : gBaseStats[species].type1;
+					u8 defType2 = (gBattleTypeFlags & BATTLE_TYPE_CAMOMONS) ? GetCamomonsTypeBySpread(spread, 1) : gBaseStats[species].type2;
 
 					for (j = 0; j < ARRAY_COUNT(sImmunities); ++j)
 					{
@@ -2448,29 +2330,10 @@ static bool8 PokemonTierBan(const u16 species, const u16 item, const struct Batt
 
 			if (gSpecialSpeciesFlags[species].battleTowerStandardBan
 			||  CheckTableForItem(item, gBattleTowerStandard_ItemBanList)
-			|| (ability == ABILITY_BATTLEBOND && tier != BATTLE_FACILITY_MEGA_BRAWL))// && BATTLE_FACILITY_NUM != IN_RING_CHALLENGE)) //Battle Bond is banned in Standard
+			|| (ability == ABILITY_BATTLEBOND && tier != BATTLE_FACILITY_MEGA_BRAWL)) //Battle Bond is banned in Standard
 				return TRUE;
 
 			break;
-
-			/*if (BATTLE_FACILITY_NUM == IN_RING_CHALLENGE) //1v1
-			{
-				#ifdef UNBOUND
-				if (species == SPECIES_REGIGIGAS && ability == ABILITY_STALL && !FlagGet(FLAG_ABILITY_RANDOMIZER)) //Too OP 1v1
-					return TRUE;
-				#endif
-
-				if (item == ITEM_FOCUS_SASH) //No Focus Sash in Ring Challenge
-					return TRUE;
-
-				//Check Banned Moves
-				for (i = 0; i < MAX_MON_MOVES; ++i)
-				{
-					if (CheckTableForMove(moveLoc[i], gRingChallenge_MoveBanList))
-						return TRUE;
-				}
-			}
-			break;*/
 
 		case BATTLE_FACILITY_OU:
 		case BATTLE_FACILITY_NATIONAL_DEX_OU:
@@ -2789,6 +2652,7 @@ static bool8 PokemonTierBan(const u16 species, const u16 item, const struct Batt
 			&& (item == ITEM_JABOCA_BERRY || item == ITEM_ROWAP_BERRY))
 				return TRUE;
 			break;
+
 		case BATTLE_FACILITY_UU:
 			if (gSpecialSpeciesFlags[species].smogonUUBan
 			||  CheckTableForItem(item, gSmogonUU_ItemBanList))

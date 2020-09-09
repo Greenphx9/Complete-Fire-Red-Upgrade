@@ -939,6 +939,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	[SPECIES_MELMETAL] =
 	{
 		.battleTowerStandardBan = TRUE,
+		.smogonUUBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 	},
