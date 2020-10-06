@@ -27254,6 +27254,7 @@ gMaxSteelspikeCurvedSpriteTemplate: objtemplate ANIM_TAG_LARGE_SPIKE ANIM_TAG_LA
 .pool
 @Credits to Skeli
 ANIM_G_MAX_WILDFIRE_MOVE:
+	loadparticle ANIM_TAG_BIRD
 	loadparticle ANIM_TAG_SMALL_EMBER
 	loadparticle ANIM_TAG_UNUSED_EXPLOSION_2
 	loadparticle ANIM_TAG_FLASH_CANNON_BALL
@@ -27261,6 +27262,7 @@ ANIM_G_MAX_WILDFIRE_MOVE:
 	loadparticle ANIM_TAG_ACUPRESSURE_FINGER @;Extra colour
 	playsound2 0x85 SOUND_PAN_ATTACKER
 	launchtask AnimTask_pal_fade 0xa 0x5 PAL_BG 0x1 0x0 0xE 0x0 @;Black
+	launchtask AnimTask_BlendParticle 0x5 0x5 ANIM_TAG_BIRD 0x0 0xF 0xF 0x057C @;Red
 	launchtask AnimTask_BlendParticle 0x5 0x5 ANIM_TAG_FLASH_CANNON_BALL 0x0 0xF 0xF 0x057C @;Red
 	launchtask AnimTask_BlendParticle 0x5 0x5 ANIM_TAG_SHARP_TEETH 0x0 0xF 0xF 0x01DD @;Orange
 	launchtask AnimTask_BlendParticle 0x5 0x5 ANIM_TAG_ACUPRESSURE_FINGER 0x0 0xF 0xF 0x063C @;Yellow
@@ -27272,7 +27274,7 @@ ANIM_G_MAX_WILDFIRE_MOVE:
 	launchtask AnimTask_scroll_background 0x5 0x4 0xfb00 0x0 0x0 0xFFFF
 	waitbgfadein
 	soundcomplex 0x8A SOUND_PAN_ATTACKER 0xa 0x4
-	launchtemplate MAX_FLARE_BALL_LAUNCH_RED TEMPLATE_ATTACKER | 2, 0x4, 0, 0, 50, -35
+	launchtemplate WILDFIRE_BIRD TEMPLATE_ATTACKER | 2, 0x6 0, 0, 0, 0, 50, -35
 	pause 0x4
 	launchtemplate MAX_FLARE_BALL_LAUNCH_RED TEMPLATE_ATTACKER | 2, 0x4, 0, 0, 50, -35
 	pause 0x4
@@ -27294,6 +27296,9 @@ ANIM_G_MAX_WILDFIRE_MOVE:
 	call UNSET_SCROLLING_BG
 	waitanimation
 	endanimation
+
+.align 2
+WILDFIRE_BIRD: objtemplate ANIM_TAG_BIRD ANIM_TAG_BIRD OAM_DOUBLE_64x64 gDummySpriteAnimTable 0x0 gSpriteAffineAnimTable_MaxFlareBall 0x80B4495
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool

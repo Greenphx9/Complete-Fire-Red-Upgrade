@@ -104,7 +104,7 @@ Slight HP recovery at turn end.
 Prevents stat reduction.
 
 #org @DESC_MOODY
-Raises one stat and lowers another.
+Ups one stat and downs another.
 
 #org @DESC_HYDRATION
 Heals status problems in rain.

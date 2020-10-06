@@ -42,3 +42,4 @@ extern const u8 sText_MaximaLastSwitchIn[];
 extern const u8 sText_BrockRematchFirstMonDown[];
 extern const u8 sText_BrockRematchLastSwitchIn[];
 extern const u8 sText_BrockRematchLastLowHP[];
+extern const u8 sText_RogueElectivire_DynamaxMsg[];
