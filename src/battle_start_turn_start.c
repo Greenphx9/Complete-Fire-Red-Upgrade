@@ -126,18 +126,22 @@ void BattleBeginFirstTurn(void)
 
 	if (!gBattleExecBuffer) //Inlclude Safari Check Here?
 	{
-		switch (*state) {
-		case BackupPartyItems:
-			SavePartyItems();
-			++* state;
-			break;
-		case GetTurnOrder:
-			gNewBS->skipBankStatAnim = 0xFF;
-			for (i = 0; i < gBattlersCount; ++i)
-			{
-				gBanksByTurnOrder[i] = i;
-				ResetBestMonToSwitchInto(i);
-			}
+		switch(*state) {
+			case BackupPartyItems:
+				#ifdef FLAG_SEMI_SHIFT
+				if (FlagGet(FLAG_SEMI_SHIFT))
+					gBattleScripting.battleStyle = OPTIONS_BATTLE_STYLE_SEMI_SHIFT;
+				#endif
+				SavePartyItems();
+				++*state;
+				break;
+			case GetTurnOrder:
+				gNewBS->skipBankStatAnim = 0xFF;
+				for (i = 0; i < gBattlersCount; ++i)
+				{
+					gBanksByTurnOrder[i] = i;
+					ResetBestMonToSwitchInto(i);
+				}
 
 			for (i = 0; i < gBattlersCount - 1; ++i)
 			{
