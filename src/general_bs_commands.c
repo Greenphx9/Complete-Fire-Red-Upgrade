@@ -721,7 +721,7 @@ void atk0C_datahpupdate(void)
 
 				if (gStatuses3[gActiveBattler] & STATUS3_ILLUSION
 				&& !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE)
-				&& gBattleMons[gActiveBattler].hp == 0)
+				&& !BATTLER_ALIVE(gActiveBattler))
 				{
 					gBattleScripting.bank = gActiveBattler;
 					gStatuses3[gActiveBattler] &= ~(STATUS3_ILLUSION);
@@ -2084,6 +2084,13 @@ void atk6A_removeitem(void)
 	gNewBS->NoSymbiosisByte = FALSE;
 	gNewBS->IncinerateCounters[bank] = 0;
 	gWishFutureKnock.knockedOffPokes[SIDE(bank)] &= ~(gBitTable[gBattlerPartyIndexes[bank]]);
+}
+
+void atk6B_atknameinbuff1(void)
+{
+	PREPARE_MON_NICK_BUFFER(gBattleTextBuff1, gBankAttacker, GetIllusionPartyNumber(gBankAttacker))
+
+	gBattlescriptCurrInstr++;
 }
 
 void atk70_recordlastability(void)

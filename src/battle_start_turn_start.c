@@ -193,18 +193,32 @@ void BattleBeginFirstTurn(void)
 						continue;
 #endif
 
-					UpdateTypesForCamomons(*bank);
-					gBattleScripting.bank = *bank;
-					BattleScriptPushCursorAndCallback(BattleScript_CamomonsTypeRevealEnd3);
+					if (AreAbilitiesSuppressed()) //Most likely Circus
+					{
+						gNewBS->SuppressedAbilities[*bank] = gBattleMons[*bank].ability;
+						gBattleMons[*bank].ability = 0;
+					}
 
-					if (gBattleMons[*bank].type1 == gBattleMons[*bank].type2)
-						gBattleStringLoader = gText_CamomonsTypeReveal;
-					else
-						gBattleStringLoader = gText_CamomonsTypeRevealDualType;
-					PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMons[*bank].type1);
-					PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[*bank].type2);
-					++* bank;
-					return;
+					if (gBattleTypeFlags & BATTLE_TYPE_CAMOMONS) //The Pokemon takes on the types of its first two moves
+					{
+						#ifndef NO_GHOST_BATTLES
+						if (IS_GHOST_BATTLE && SIDE(*bank) == B_SIDE_OPPONENT)
+							continue;
+						#endif
+
+						UpdateTypesForCamomons(*bank);
+						gBattleScripting.bank = *bank;
+						BattleScriptPushCursorAndCallback(BattleScript_CamomonsTypeRevealEnd3);
+
+						if (gBattleMons[*bank].type1 == gBattleMons[*bank].type2)
+							gBattleStringLoader = gText_CamomonsTypeReveal;
+						else
+							gBattleStringLoader = gText_CamomonsTypeRevealDualType;
+						PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMons[*bank].type1);
+						PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[*bank].type2);
+						++*bank;
+						return;
+					}
 				}
 			}
 
