@@ -37996,8 +37996,8 @@ const struct BattleTowerSpread gFrontierSpreads[] =
 		.modifyMovesDoubles = FALSE,
 	},
 	{
-		.species = SPECIES_GOURGEIST_XL,
-		.nature = NATURE_BRAVE,
+		.species = SPECIES_GOURGEIST_M,
+		.nature = NATURE_JOLLY,
 		.hpIv = 31,
 		.atkIv = 31,
 		.defIv = 31,
@@ -38023,7 +38023,7 @@ const struct BattleTowerSpread gFrontierSpreads[] =
 	},
 	{
 		.species = SPECIES_GOURGEIST,
-		.nature = NATURE_CALM,
+		.nature = NATURE_JOLLY,
 		.hpIv = 31,
 		.atkIv = 31,
 		.defIv = 31,
