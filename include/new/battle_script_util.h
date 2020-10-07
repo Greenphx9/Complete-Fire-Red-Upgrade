@@ -133,3 +133,4 @@ void CorrodeItem(void);
 void TryFailPoltergeist(void);
 bool8 IsSpringtideStormSpDefDown(u8 bank);
 void ChooseMoveEffectForSpringtideStorm(void);
+void WakeUpSleepingPokemon(void);

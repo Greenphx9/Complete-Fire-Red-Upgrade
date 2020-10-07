@@ -1657,6 +1657,9 @@ bool8 CanBePutToSleep(u8 bank, bool8 checkFlowerVeil)
 	if (DoesSleepClausePrevent(bank))
 		return FALSE;
 
+	if (IsUproarBeingMade())
+		return FALSE;
+
 	return TRUE;
 }
 

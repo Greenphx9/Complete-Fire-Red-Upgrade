@@ -3328,7 +3328,22 @@ BS_159_Uproar:
 	attackstring
 	jumpifsecondarystatus BANK_ATTACKER STATUS2_MULTIPLETURNS BS_HIT_FROM_DAMAGE_CALC
 	ppreduce
-	goto BS_HIT_FROM_DAMAGE_CALC
+	call STANDARD_DAMAGE + 2
+	seteffectwithchancetarget
+	prefaintmoveendeffects 0x0
+	faintpokemonaftermove
+	callasm WakeUpSleepingPokemon
+	goto BS_MOVE_END
+
+.global BattleScript_UproarWokeUp
+BattleScript_UproarWokeUp:
+	cureprimarystatus BANK_SCRIPTING .LReturn
+	refreshhpbar BANK_SCRIPTING
+	setword BATTLE_STRING_LOADER gText_WokenByUproar
+	printstring 0x184
+	waitmessage DELAY_1SECOND
+.LReturn:
+	return
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -3372,7 +3387,7 @@ BS_161_SpitUp:
 	ppreduce
 	stockpiletobasedamage 0x81D7E6A @;Spit Up Fail
 	tryactivateprotean
-	call STANDARD_DAMAGE+2
+	call STANDARD_DAMAGE + 2
 	seteffectwithchancetarget
 	prefaintmoveendeffects 0x0
 	faintpokemonaftermove
