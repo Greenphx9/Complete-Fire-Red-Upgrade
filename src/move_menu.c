@@ -33,11 +33,6 @@
 /*
 move_menu.c
 	functions for displaying move data and z moves in the battle menu
-
-tables:
-	sTypeIconPositions
-	sTypeIconPicTable
-
 */
 
 //TODO: Make The Z-Move Names change colour (look in SetPpNumbersPaletteInMoveSelection)
@@ -49,10 +44,6 @@ extern const u8 gDynamaxMovePowers[MOVES_COUNT];
 extern const u8 sTargetIdentities[];
 extern const u16 gUserInterfaceGfx_TypeHighlightingPal[];
 extern const u8 gMoveEffectsThatIgnoreWeaknessResistance[];
-extern const u8 CamomonsTypeIconsTiles[];
-extern const u8 CamomonsTypeIcons2Tiles[];
-extern const u16 CamomonsTypeIconsPal[];
-extern const u16 CamomonsTypeIcons2Pal[];
 extern const u8 PSSIconsTiles[];
 
 //This file's functions:
@@ -2079,85 +2070,6 @@ bool8 IsBagDisabled(void)
 
 	return FlagGet(FLAG_DISABLE_BAG) || (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_FRONTIER));
 }
-
-/*static void TryLoadTypeIcons(void)
-{
-	//if (IsRaidBattle() || IS_DOUBLE_BATTLE) {
-	//	return;
-	//}
-	#ifndef HEALTHBAR_TYPE_ICONS
-	if (((gBattleTypeFlags & BATTLE_TYPE_CAMOMONS)
-	#ifdef FLAG_HEALTHBAR_TYPE_ICONS
-	|| FlagGet(FLAG_HEALTHBAR_TYPE_ICONS)
-	#endif
-	)
-	&&
-	#else
-	if (
-	#endif
-	!(gBattleTypeFlags & BATTLE_TYPE_LINK)
-	&& IndexOfSpritePaletteTag(TYPE_ICON_TAG) == 0xFF)
-	{
-		LoadSpritePalette(&sTypeIconPalTemplate);
-		LoadSpritePalette(&sTypeIconPalTemplate2);
-		for (u8 position = 0; position < gBattlersCount; ++position)
-		{
-			if (!BATTLER_ALIVE(GetBattlerAtPosition(position)))
-				continue;
-
-			for (u8 typeNum = 0; typeNum < 2; ++typeNum) //Load each type
-			{
-				u8 spriteId;
-				s16 x = sTypeIconPositions[position][IS_SINGLE_BATTLE].x;
-				s16 y = sTypeIconPositions[position][IS_SINGLE_BATTLE].y + (11 * typeNum); //2nd type is 13px below
-
-				const u8* type1Ptr;
-				if (gStatuses3[GetBattlerAtPosition(position)] & STATUS3_ILLUSION && !(gBattleTypeFlags & BATTLE_TYPE_CAMOMONS))
-					type1Ptr = &gBaseStats2[GetIllusionPartyData(GetBattlerAtPosition(position))->species].type1;
-				else
-					type1Ptr = &gBattleMons[GetBattlerAtPosition(position)].type1;
-
-				u8 type = *(type1Ptr + typeNum);
-
-				switch (type) { //Certain types have a different palette
-					case TYPE_FLYING:
-					case TYPE_POISON:
-					case TYPE_GROUND:
-					case TYPE_DRAGON:
-					case TYPE_MYSTERY:
-					case TYPE_ROOSTLESS:
-					case TYPE_BLANK:
-						spriteId = CreateSpriteAtEnd(&sTypeIconSpriteTemplate2, x, y, 0xFF);
-						break;
-					default:
-						spriteId = CreateSpriteAtEnd(&sTypeIconSpriteTemplate, x, y, 0xFF);
-				}
-
-				if (spriteId != MAX_SPRITES)
-				{
-					struct Sprite* sprite = &gSprites[spriteId];
-					sprite->data[0] = position;
-					sprite->data[1] = gActiveBattler;
-					sprite->data[3] = y; //Save original y-value for bouncing
-
-					if (IS_SINGLE_BATTLE)
-					{
-						if (SIDE(GetBattlerAtPosition(position)) == B_SIDE_PLAYER)
-							SetSpriteOamFlipBits(sprite, TRUE, FALSE); //Flip horizontally
-					}
-					else //Double Battle
-					{
-						if (SIDE(GetBattlerAtPosition(position)) == B_SIDE_OPPONENT)
-							SetSpriteOamFlipBits(sprite, TRUE, FALSE); //Flip horizontally
-					}
-
-					RequestSpriteFrameImageCopy(type, sprite->oam.tileNum, sprite->images);
-				}
-			}
-		}
-	}
-}
-*/
 
 static void HandleInputTeamPreview(void)
 {
