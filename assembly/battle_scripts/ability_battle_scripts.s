@@ -939,7 +939,7 @@ BattleScript_Receiver:
 
 BattleScript_Symbiosis:
 	call BattleScript_AbilityPopUp
-	setword BATTLE_STRING_LOADER SymbiosisString
+	setword BATTLE_STRING_LOADER gText_SymbiosisTransfer
 	printstring 0x184
 	waitmessage DELAY_1SECOND
 	call BattleScript_AbilityPopUpRevert
