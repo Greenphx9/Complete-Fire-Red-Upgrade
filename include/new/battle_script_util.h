@@ -135,3 +135,4 @@ bool8 IsSpringtideStormSpDefDown(u8 bank);
 void ChooseMoveEffectForSpringtideStorm(void);
 void WakeUpSleepingPokemon(void);
 void HandleIllusionShiftSwitch(void);
+void ClearStatBuffEffectNotProtectAffected(void);

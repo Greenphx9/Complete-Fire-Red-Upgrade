@@ -489,6 +489,12 @@ void SetMoveEffect(bool8 primary, u8 certain)
 			case MOVE_EFFECT_SP_DEF_PLUS_1:
 			case MOVE_EFFECT_ACC_PLUS_1:
 			case MOVE_EFFECT_EVS_PLUS_1:
+				if (gNewBS->statBuffEffectNotProtectAffected)
+				{
+					flags |= STAT_CHANGE_NOT_PROTECT_AFFECTED;
+					gNewBS->statBuffEffectNotProtectAffected = FALSE;
+				}
+
 				if (ChangeStatBuffs(SET_STAT_BUFF_VALUE(1),
 									gBattleCommunication[MOVE_EFFECT_BYTE] - MOVE_EFFECT_ATK_PLUS_1 + 1,
 									affectsUser | certain, 0))
@@ -517,6 +523,12 @@ void SetMoveEffect(bool8 primary, u8 certain)
 					gBattleScripting.statChanger = DECREASE_1 | (gBattleCommunication[MOVE_EFFECT_BYTE] - MOVE_EFFECT_ATK_MINUS_1 + 1);
 					flags |= STAT_CHANGE_BS_PTR;
 				}
+				
+				if (gNewBS->statBuffEffectNotProtectAffected)
+				{
+					flags |= STAT_CHANGE_NOT_PROTECT_AFFECTED;
+					gNewBS->statBuffEffectNotProtectAffected = FALSE;
+				}
 
 				if (ChangeStatBuffs(SET_STAT_BUFF_VALUE(1) | STAT_BUFF_NEGATIVE,
 									gBattleCommunication[MOVE_EFFECT_BYTE] - MOVE_EFFECT_ATK_MINUS_1 + 1,
@@ -541,6 +553,12 @@ void SetMoveEffect(bool8 primary, u8 certain)
 			case MOVE_EFFECT_SP_DEF_PLUS_2:
 			case MOVE_EFFECT_ACC_PLUS_2:
 			case MOVE_EFFECT_EVS_PLUS_2:
+				if (gNewBS->statBuffEffectNotProtectAffected)
+				{
+					flags |= STAT_CHANGE_NOT_PROTECT_AFFECTED;
+					gNewBS->statBuffEffectNotProtectAffected = FALSE;
+				}
+
 				if (ChangeStatBuffs(SET_STAT_BUFF_VALUE(2),
 									gBattleCommunication[MOVE_EFFECT_BYTE] - MOVE_EFFECT_ATK_PLUS_2 + 1,
 									affectsUser | certain, 0))
@@ -568,6 +586,12 @@ void SetMoveEffect(bool8 primary, u8 certain)
 				{
 					gBattleScripting.statChanger = DECREASE_2 | (gBattleCommunication[MOVE_EFFECT_BYTE] - MOVE_EFFECT_ATK_MINUS_2 + 1);
 					flags |= STAT_CHANGE_BS_PTR;
+				}
+
+				if (gNewBS->statBuffEffectNotProtectAffected)
+				{
+					flags |= STAT_CHANGE_NOT_PROTECT_AFFECTED;
+					gNewBS->statBuffEffectNotProtectAffected = FALSE;
 				}
 
 				if (ChangeStatBuffs(SET_STAT_BUFF_VALUE(2) | STAT_BUFF_NEGATIVE,

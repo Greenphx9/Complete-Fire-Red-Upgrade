@@ -873,6 +873,7 @@ struct NewBattleStruct
 	bool8 lessThanHalfHPBeforeShellBell : 1; //For Emergency Exit
 	bool8 usedLastBall : 1; //Helps prevent the bag from opening
 	bool8 threwBall : 1; //Last Used Ball only appears once a ball has been thrown once
+	bool8 statBuffEffectNotProtectAffected : 1; //For Max Moves
 
 	//Other
 	u16 LastUsedMove;
