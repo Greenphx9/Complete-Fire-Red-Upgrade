@@ -604,6 +604,7 @@ DecompressTrainerFrontPic = 0x80346C4 | 1;
 DecompressTrainerBackPic = 0x8034750 | 1;
 battle_load_health_boxes_unused = 0x80347A8 | 1;
 load_gfxc_health_bar = 0x8034964 | 1;
+SpriteCB_SetInvisible = 0x80356FC | 1;
 sub_80357C8 = 0x80357C8 | 1;
 SetControllerToOpponent = 0x8035A7D | 1;
 sub_8035BE8 = 0x8035BE8 | 1;

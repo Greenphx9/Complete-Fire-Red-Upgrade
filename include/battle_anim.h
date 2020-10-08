@@ -401,7 +401,7 @@ u8 __attribute__((long_call)) GetBattlerSpriteCoord2(u8 battlerId, u8 coordType)
 
 u8 __attribute__((long_call)) GetBankPosition(u8 bank, u8 attributeId);
 
-bool8 __attribute__((long_call)) IsBankSpritePresent(u8 bank);
+bool8 __attribute__((long_call)) IsBattlerSpritePresent(u8 bank);
 void __attribute__((long_call)) sub_80A6C68(u8 arg0);
 u8 __attribute__((long_call)) GetAnimBankSpriteId(u8 wantedBank);
 bool8 __attribute__((long_call)) IsDoubleBattle(void);
@@ -458,6 +458,7 @@ void __attribute__((long_call)) AnimLoadCompressedBgTilemap(u32 bgId, const u32 
 void __attribute__((long_call)) AnimLoadCompressedBgGfx(u32 bgId, const u32 *src, u32 tilesOffset);
 void __attribute__((long_call)) RelocateBattleBgPal(u16 paletteNum, u16 *dest, s32 offset, u8 largeScreen);
 void __attribute__((long_call)) TranslateMonSpriteLinearFixedPoint(struct Sprite *sprite);
+void __attribute__((long_call)) SpriteCB_SetInvisible(struct Sprite *sprite);
 
 // battle_anim_80A9C70.s
 #define STAT_ANIM_PLUS1  15
