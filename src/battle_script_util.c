@@ -988,39 +988,39 @@ void TopsyTurvyFunc(void)
 void DoFairyLockHappyHourFunc(void)
 {
 	switch (gCurrentMove) {
-	case MOVE_FAIRYLOCK:
-		if (IsFairyLockActive())
-			gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
-		else
-		{
-			gNewBS->FairyLockTimer = 2;
-			gBattleStringLoader = FairyLockString;
-		}
-		break;
+		case MOVE_FAIRYLOCK:
+			if (IsFairyLockActive())
+				gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
+			else
+			{
+				gNewBS->FairyLockTimer = 2;
+				gBattleStringLoader = FairyLockString;
+			}
+			break;
 
-	case MOVE_HAPPYHOUR:
-		if (!gNewBS->HappyHourByte)
-		{
-			gNewBS->HappyHourByte = TRUE;
-			gBattleStruct->moneyMultiplier *= 2;
-		}
-		gBattleStringLoader = HappyHourString;
-		break;
+		case MOVE_HAPPYHOUR:
+			if (!gNewBS->usedHappyHour)
+			{
+				gNewBS->usedHappyHour = TRUE;
+				gBattleStruct->moneyMultiplier *= 2;
+			}
+			gBattleStringLoader = HappyHourString;
+			break;
 
-	case MOVE_CELEBRATE:
-		gBattleStringLoader = CelebrateString;
-		break;
+		case MOVE_CELEBRATE:
+			gBattleStringLoader = CelebrateString;
+			break;
 
-	case MOVE_HOLDHANDS:
-		if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE
-			&& gBattleMons[PARTNER(gBankAttacker)].hp)
-		{
-			gBattleStringLoader = HoldHandsString;
-		}
-		else
-			gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
+		case MOVE_HOLDHANDS:
+			if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE
+				&& gBattleMons[PARTNER(gBankAttacker)].hp)
+			{
+				gBattleStringLoader = HoldHandsString;
+			}
+			else
+				gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
 
-		break;
+			break;
 	}
 }
 

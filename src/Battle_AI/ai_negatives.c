@@ -2785,7 +2785,7 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 					{
 						if (!IsTypeZCrystal(data->atkItem, moveType) || gNewBS->zMoveData.used[bankAtk] || IsMegaZMoveBannedBattle())
 						{
-							if (gNewBS->HappyHourByte != 0) //Already used Happy Hour
+							if (gNewBS->usedHappyHour != 0) //Already used Happy Hour
 								DECREASE_VIABILITY(10);
 						}
 					}
