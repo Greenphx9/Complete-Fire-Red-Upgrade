@@ -2425,8 +2425,11 @@ static void PrintDexNavMessage(u8 messageId)
 	WindowPrint(WIN_TEXTBOX, 1, 4, 0, &sBlackText, GetPlayerTextSpeedDelay(), gStringVar4);
 	RunTextPrinters();
 
-	if (sDexNavGUIPtr->cursorSpriteId < MAX_SPRITES)
-		StartSpriteAnim(&gSprites[sDexNavGUIPtr->cursorSpriteId], 1); //Pointing and unmoving
+	if (messageId != MESSAGE_NO_POKEMON_HERE) //Don't animate cursor if it doesn't exist
+	{
+		if (sDexNavGUIPtr->cursorSpriteId < MAX_SPRITES)
+			StartSpriteAnim(&gSprites[sDexNavGUIPtr->cursorSpriteId], 1); //Pointing and unmoving
+	}
 
 	ShowBg(BG_TEXTBOX);
 }
@@ -3570,9 +3573,12 @@ static void CreateWaterScrollArrows(void)
 
 static void CreateCursor(void)
 {
-	LoadSpriteSheet(&sCursorSpriteSheet);
-	LoadSpritePalette(&sCursorSpritePalette);
-	sDexNavGUIPtr->cursorSpriteId = CreateSprite(&sGUICursorTemplate, 30, 48, 0);
+	if (AnyPokemonInCurrentArea()) //Don't bother if going to close right away
+	{
+		LoadSpriteSheet(&sCursorSpriteSheet);
+		LoadSpritePalette(&sCursorSpritePalette);
+		sDexNavGUIPtr->cursorSpriteId = CreateSprite(&sGUICursorTemplate, 30, 48, 0);
+	}
 }
 
 static void CreateRegisteredIcon(void)

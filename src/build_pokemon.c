@@ -2156,50 +2156,22 @@ void GiveMonXPerfectIVs(struct Pokemon* mon, u8 totalPerfectStats)
 
 static u8 ConvertFrontierAbilityNumToAbility(const u8 abilityNum, const u16 species)
 {
-	//Pick potential ivs to set to 31
-	u8 i, numPerfectStats;
-	u8 perfect = 31;
-	bool8 perfectStats[NUM_STATS] = {0};
-
-	for (i = 0, numPerfectStats = 0; i < NUM_STATS; ++i) //Count how many stats are already perfect
-	{
-		if (GetMonData(mon, MON_DATA_HP_IV + i, NULL) >= 31)
-		{
-			perfectStats[i] = TRUE;
-			++numPerfectStats;
-		}
-	}
-
-	while (numPerfectStats < totalPerfectStats) //Assign the rest of the prefect stats
-	{
-		u8 statId = Random() % NUM_STATS;
-		if (!perfectStats[statId]) //Must be unique
-		{
-			perfectStats[statId] = TRUE;
-			++numPerfectStats;
-			SetMonData(mon, MON_DATA_HP_IV + statId, &perfect);
-		}
-	}
-}
-
-static u8 ConvertFrontierAbilityNumToAbility(const u8 abilityNum, const u16 species)
-{
 	u8 ability = ABILITY_NONE;
 
 	switch (abilityNum) {
-	case FRONTIER_ABILITY_1:
-		ability = gBaseStats2[species].ability1;
-		break;
-	case FRONTIER_ABILITY_2:
-		ability = gBaseStats2[species].ability2;
-		break;
-	case FRONTIER_ABILITY_HIDDEN:
-		ability = gBaseStats2[species].hiddenAbility;
-		break;
+		case FRONTIER_ABILITY_1:
+			ability = GetAbility1(species);
+			break;
+		case FRONTIER_ABILITY_2:
+			ability = GetAbility2(species);
+			break;
+		case FRONTIER_ABILITY_HIDDEN:
+			ability = GetHiddenAbility(species);
+			break;
 	}
-	
+
 	if (ability == ABILITY_NONE)
-		ability = gBaseStats2[species].ability1;
+		ability = GetAbility1(species);
 
 	return ability;
 }
