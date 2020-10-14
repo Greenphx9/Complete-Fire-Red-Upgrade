@@ -1887,6 +1887,7 @@ void HandleInputChooseAction(void)
 					EmitTwoReturnValues(1, ACTION_USE_ITEM, 0);
 					break;
 				case 1:
+				RAID_RUN:
 					EmitTwoReturnValues(1, ACTION_RUN, 0);
 					break;
 			}
@@ -1908,6 +1909,7 @@ void HandleInputChooseAction(void)
 					EmitTwoReturnValues(1, ACTION_SWITCH, 0);
 					break;
 				case 3:
+				NORMAL_RUN:
 					gNewBS->megaData.chosen[gActiveBattler] = FALSE;
 					gNewBS->ultraData.chosen[gActiveBattler] = FALSE;
 
@@ -2031,6 +2033,15 @@ void HandleInputChooseAction(void)
 			DisplayInBattleTeamPreview();
 			gBattlerControllerFuncs[gActiveBattler] = HandleInputTeamPreview;
 		}
+	}
+	else if (gMain.newKeys & R_BUTTON)
+	{
+		PlaySE(SE_SELECT);
+
+		if (RAID_BATTLE_END)
+			goto RAID_RUN;
+		else
+			goto NORMAL_RUN;
 	}
 }
 
