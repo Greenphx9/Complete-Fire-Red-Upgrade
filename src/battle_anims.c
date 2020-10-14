@@ -1166,6 +1166,12 @@ void AnimTask_TechnoBlast(u8 taskId)
 	DestroyAnimVisualTask(taskId);
 }
 
+void AnimTask_TerrainPulse(u8 taskId)
+{
+	gBattleAnimArgs[0] = gTerrainType;
+	DestroyAnimVisualTask(taskId);
+}
+
 void AnimTask_GetTimeOfDay(u8 taskId)
 {
 	gBattleAnimArgs[0] = 0; //Daytime
@@ -2716,7 +2722,7 @@ static void SpriteCB_FallingObjectStep(struct Sprite *sprite)
 			sprite->data[1] = 0;
 			sprite->invisible ^= 1;
 			if (++sprite->data[2] == 10)
-				DestroySpriteAndMatrix(sprite);
+				SetCallbackToStoredInData6(sprite);
 		}
 		break;
 	}
@@ -2750,6 +2756,7 @@ void SpriteCB_FallingObject(struct Sprite *sprite)
 
 		sprite->data[3] = gBattleAnimArgs[2]; //Speed
 		sprite->callback = SpriteCB_FallingObjectStep;
+		StoreSpriteCallbackInData6(sprite, DestroyAnimSprite);
 	}
 }
 
@@ -2828,6 +2835,7 @@ void SpriteCB_FallingObjectOnTargetCentre(struct Sprite *sprite)
 
 	sprite->data[3] = gBattleAnimArgs[2]; //Speed
 	sprite->callback = SpriteCB_FallingObjectStep;
+	StoreSpriteCallbackInData6(sprite, DestroyAnimSprite);
 }
 
 //Throws acid at a single target.

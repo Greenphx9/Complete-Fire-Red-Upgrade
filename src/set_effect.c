@@ -919,15 +919,12 @@ bool8 SetMoveEffect2(void)
 			{
 				break;
 			}
-			if(gBattleTypeFlags & BATTLE_TYPE_TRAINER || gBattleTypeFlags & BATTLE_TYPE_DYNAMAX)
-			{
-				break;
-			}
-			else if (ITEM(gEffectBank) == 0
-			||  ITEM(gBankAttacker) != 0
-			||  !CanTransferItem(SPECIES(gEffectBank), ITEM(gEffectBank))
-			||  !CanTransferItem(SPECIES(gBankAttacker), ITEM(gEffectBank))
-			||	!BATTLER_ALIVE(gBankAttacker))
+			else if (!BATTLER_ALIVE(gBankAttacker)
+			|| ITEM(gEffectBank) == ITEM_NONE
+			|| ITEM(gBankAttacker) != ITEM_NONE
+			|| !CanTransferItem(SPECIES(gEffectBank), ITEM(gEffectBank))
+			|| !CanTransferItem(SPECIES(gBankAttacker), ITEM(gEffectBank))
+			|| (gNewBS->corrodedItems[SIDE(gBankAttacker)] & gBitTable[gBattlerPartyIndexes[gBankAttacker]]))
 			{
 				break;
 			}

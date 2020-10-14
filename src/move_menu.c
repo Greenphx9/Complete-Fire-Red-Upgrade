@@ -2017,6 +2017,7 @@ void HandleInputChooseAction(void)
 				gNewBS->usedLastBall = TRUE;
 				gNewBS->megaData.chosen[gActiveBattler] = FALSE;
 				gNewBS->ultraData.chosen[gActiveBattler] = FALSE;
+				BattlePutTextOnWindow(gText_EmptyString, 0);
 				EmitTwoReturnValues(1, ACTION_USE_ITEM, 0);
 				PlayerBufferExecCompleted();
 			}

@@ -5622,6 +5622,7 @@ LastResortBS:
 .global BS_243_DamageSetTerrain
 BS_243_DamageSetTerrain:
 	attackcanceler
+	callasm TryFailSteelRoller
 	accuracycheck BS_MOVE_MISSED 0x0
 	call STANDARD_DAMAGE
 	jumpifmovehadnoeffect BS_MOVE_FAINT

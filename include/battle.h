@@ -798,9 +798,8 @@ struct NewBattleStruct
 	u8 hiddenAnimBattlerSprites;
 
 	//Bit Fields for Party
-	u8 BelchCounters;
-	u8 IllusionBroken;
 	u8 revealedEnemyMons;
+	u8 canBelch[NUM_BATTLE_SIDES];
 	u8 corrodedItems[NUM_BATTLE_SIDES];
 
 	//Other Helpers
@@ -809,6 +808,7 @@ struct NewBattleStruct
 	u8 preFaintEffectsState; //For tracking effects that happen right before the target faints
 	u8 faintEffectsState; //For tracking effects that happen after the target faints
 	u8 endTurnBlockState; //For tracking sub-blocks utilized by the end turn function
+	u8 IllusionBroken;
 	u8 SentInBackup;
 	u8 OriginalAttackerTargetCount;
 	u8 MoveBounceTargetCount;
