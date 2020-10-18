@@ -571,7 +571,7 @@ static void RestoreNonConsumableItems(void)
 	u16* items = gNewBS->itemBackup;
 	bool8 keepConsumables = TRUE;
 
-	if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+	if (gBattleTypeFlags & BATTLE_TYPE_TRAINER || IsRaidBattle())
 	{
 		for (int i = 0; i < PARTY_SIZE; ++i)
 		{
