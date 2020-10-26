@@ -24,34 +24,6 @@ general_attack_battle_scripts.s
 	
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-.global BS_100_Spite
-BS_100_Spite:
-	jumpifmove MOVE_EERIESPELL EerieSpite
-	attackcanceler
-	accuracycheck FAILED_PRE 0x00000000
-	attackstringnoprotean
-	ppreduce
-	reducepprandom FAILED
-	tryactivateprotean
-	attackanimation
-	waitanimation
-	printstring 0x8D
-	waitmessage DELAY_1SECOND
-	goto BS_MOVE_END
-
-EerieSpite:
-	attackcanceler
-	accuracycheck BS_MOVE_MISSED 0x0
-	attackstring
-	call STANDARD_DAMAGE
-	jumpiffainted BANK_TARGET BS_MOVE_FAINT
-	jumpifmovehadnoeffect BS_MOVE_FAINT
-	reducepprandom BS_MOVE_FAINT
-	printstring 0x8D
-	waitmessage DELAY_1SECOND
-	goto BS_MOVE_FAINT
-	
-
 .global BS_001_SetSleep
 BS_001_SetSleep:
 	attackcanceler
@@ -1505,8 +1477,21 @@ BS_059_LowerTargetDef2:
 .global BS_060_LowerTargetSpd2
 BS_060_LowerTargetSpd2:
 	setstatchanger STAT_SPD | DECREASE_2
+	jumpifmove MOVE_COTTONSPORE CottonSporeBS
 	goto 0x81D6C13
 
+CottonSporeBS:
+	attackcanceler
+	jumpifbehindsubstitute BANK_TARGET FAILED_PRE
+	typecalc2
+	jumpifmovehadnoeffect CottonSporeNoEffect
+	goto 0x81D6C1E
+
+CottonSporeNoEffect:
+	attackstring
+	ppreduce
+	goto NOEFFECT
+	
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 .global BS_061_LowerTargetSpAtk2
@@ -2166,6 +2151,36 @@ BS_098_DestinyBond:
 .global BS_099_Flail @;Was Flail
 BS_099_Flail:
 	goto BS_STANDARD_HIT
+
+@;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+.global BS_100_Spite
+BS_100_Spite:
+	attackcanceler
+	jumpifmove MOVE_EERIESPELL EerieSpellBS
+	accuracycheck FAILED_PRE 0x0
+	attackstringnoprotean
+	ppreduce
+	reducepprandom FAILED
+	tryactivateprotean
+	attackanimation
+	waitanimation
+	printstring 0x8D
+	waitmessage DELAY_1SECOND
+	goto BS_MOVE_END
+
+EerieSpellBS:
+	accuracycheck BS_MOVE_MISSED 0x0
+	call STANDARD_DAMAGE
+	jumpifmovehadnoeffect BS_MOVE_FAINT
+	jumpifbehindsubstitute BANK_TARGET BS_MOVE_FAINT
+	reducepprandom EerieSpellPostEffect
+	printstring 0x8D
+	waitmessage DELAY_1SECOND
+EerieSpellPostEffect:
+	prefaintmoveendeffects 0x0
+	faintpokemonaftermove
+	goto BS_MOVE_END
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -3105,23 +3120,25 @@ BS_145_SkullBash:
 	call BattleScript_FirstChargingTurn
 	jumpifmove MOVE_METEORBEAM BS_MeteorBeam
 	setstatchanger STAT_DEF | INCREASE_1
-	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
-	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
+	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN SkipSkullBashStatBuff
+	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 SkipSkullBashStatBuff
 	setgraphicalstatchangevalues
 	playanimation BANK_ATTACKER ANIM_STAT_BUFF ANIM_ARG_1
 	printfromtable 0x83FE57C
 	waitmessage DELAY_1SECOND
+SkipSkullBashStatBuff:
 	call BattleScript_CheckPowerHerb
 	goto BS_MOVE_END
 
 BS_MeteorBeam:
 	setstatchanger STAT_SPATK | INCREASE_1
-	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
-	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
+	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN SkipMeteorBeamStatBuff
+	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 SkipMeteorBeamStatBuff
 	setgraphicalstatchangevalues
 	playanimation BANK_ATTACKER ANIM_STAT_BUFF ANIM_ARG_1
 	printfromtable 0x83FE57C
 	waitmessage DELAY_1SECOND
+SkipMeteorBeamStatBuff:
 	call BattleScript_CheckPowerHerb
 	goto BS_MOVE_END
 

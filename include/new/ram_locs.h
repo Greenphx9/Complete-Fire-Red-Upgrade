@@ -167,7 +167,7 @@ extern u16 gLastUsedBall; //0x203B774
 #define gLastUsedRepel (*(u16*) 0x203C748)
 //#define sBagItemAmounts ((u16*) 0x203C74A)
 #define gSelectedOrderFromParty ((u8*) 0x203C750)
-#define gDontFadeWhite (*((bool8*) 0x203C756))
+extern bool8 gDontFadeWhite; //0x203C756
 #define gWindowsLitUp (*((bool8*) 0x203C757))
 #define gWildDataSwitch (*((const u8**) 0x203C758))
 extern u8 gDexNavSearchLevels[999]; //0x203C75C -999 slots

@@ -881,6 +881,7 @@ struct NewBattleStruct
 	bool8 usedLastBall : 1; //Helps prevent the bag from opening
 	bool8 threwBall : 1; //Last Used Ball only appears once a ball has been thrown once
 	bool8 statBuffEffectNotProtectAffected : 1; //For Max Moves
+	bool8 rolloutFinalHit : 1; //Helps with Rollout 5th hit damage calc
 
 	//Other
 	u16 LastUsedMove;

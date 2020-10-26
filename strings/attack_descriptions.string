@@ -1241,7 +1241,7 @@ The user attacks\nby sending a fright-\nful amount of small\nghosts.
 #org @DESC_GLACIAL_LANCE
 The user attacks\nby hurling an ice-\ncloaked lance.
 
-#org @DESC_EERIESPELL
+#org @DESC_EERIE_SPELL
 The user attacks with\nits psychic power. This\nremoves 3 PP from \nthe target's last move.
 
 #org @DESC_ZIPPY_ZAP

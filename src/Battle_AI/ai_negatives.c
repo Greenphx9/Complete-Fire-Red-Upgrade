@@ -401,6 +401,14 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				}
 				break;
 
+			case ABILITY_MIRRORARMOR:
+				if (CheckTableForMovesEffect(move, gStatLoweringMoveEffects))
+				{
+					DECREASE_VIABILITY(20);
+					return viability;
+				}
+				break;
+
 			case ABILITY_HYPERCUTTER:
 				if ((moveEffect == EFFECT_ATTACK_DOWN ||  moveEffect == EFFECT_ATTACK_DOWN_2)
 				&& move != MOVE_PLAYNICE && move != MOVE_NOBLEROAR && move != MOVE_TEARFULLOOK && move != MOVE_VENOMDRENCH)
@@ -1649,8 +1657,19 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 			{
 				if (WillFaintFromSecondaryDamage(bankAtk)
 				&&  data->defAbility != ABILITY_MOXIE
-				&&  data->defAbility != ABILITY_BEASTBOOST
-				&&  data->defAbility != ABILITY_GRIMNEIGH)
+				#ifdef ABILITY_GRIMNEIGH
+				&&  data->defAbility != ABILITY_GRIMNEIGH
+				#endif
+				#ifdef ABILITY_CHILLINGNEIGH
+				&&  data->defAbility != ABILITY_CHILLINGNEIGH
+				#endif
+				#ifdef ABILITY_ASONE_GRIM
+				&&  data->defAbility != ABILITY_ASONE_GRIM
+				#endif
+				#ifdef ABILITY_ASONE_CHILLING
+				&&  data->defAbility != ABILITY_ASONE_CHILLING
+				#endif
+				&&  data->defAbility != ABILITY_BEASTBOOST)
 				{
 					DECREASE_VIABILITY(10); //Don't protect if you're going to faint after protecting
 				}
@@ -2912,6 +2931,13 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 			break;
 
 		case EFFECT_SUCKER_PUNCH: ;
+			//TODO: MAKE SURE LOGIC IS ALSO HANDLED IN AI BEST MOVE CALC
+			//		If AI is dumb AI or semi-smart use regular logic
+			//		If AI hasn't used Sucker Punch yet, regular logic
+			//		If Bank is controlled by Player use regular logic
+			//		If AI has revealed Sucker Punch (maybe check PP?)
+			//			If foe can use a status move
+			//				50% chance to pick Sucker Punch
 			if (predictedMove != MOVE_NONE)
 			{
 				if (SPLIT(predictedMove) == SPLIT_STATUS

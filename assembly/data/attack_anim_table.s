@@ -4809,22 +4809,21 @@ DUALCHOP_HIT: objtemplate ANIM_TAG_IMPACT ANIM_TAG_POISON_BUBBLE OAM_NORMAL_BLEN
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
-@Credit WesleyFG
+@Credits to Skeli
 ANIM_DOUBLEHIT:
 	loadparticle ANIM_TAG_IMPACT
-	loadparticle ANIM_TAG_POISON_BUBBLE
 	pokespritetoBG bank_target
 	setblends 0x80c
 	launchtemplate Template_HorizontalLunge 0x2 0x2 0x4 0x4
 	pause 0x6
-	launchtemplate DUALCHOP_HIT 0x2 0x4 0xFFFA 0x5 0x1 0x1
+	launchtemplate Template_Hit 0x2 0x4 0xFFFA 0x5 0x1 0x1
 	launchtask AnimTask_move_bank 0x2 0x5 bank_target 0x3 0x0 0x6 0x1
 	playsound2 0x84 SOUND_PAN_TARGET
 	pause 0x8
 	waitanimation
 	launchtemplate Template_HorizontalLunge 0x2 0x2 0x4 0x4
 	pause 0x6
-	launchtemplate DUALCHOP_HIT 0x2 0x4 0x0 0x0 0x1 0x1
+	launchtemplate Template_Hit 0x2 0x4 0x0 0x0 0x1 0x1
 	launchtask AnimTask_move_bank 0x2 0x5 bank_target 0x3 0x0 0x6 0x1
 	playsound2 0x84 SOUND_PAN_TARGET
 	pause 0x8
@@ -5495,7 +5494,7 @@ ANIM_BABYDOLLEYES:
 	setblends 0x808
 	launchtask AnimTask_pal_fade 0xa 0x5 PAL_BG 0x0 0x0 0xA 0x7FFF
 	waitanimation
-	launchtemplate 0x83FEE5C 0x5 0x4 0x0 0x0 0x1 0x0
+	launchtemplate 0x83FEE5C TEMPLATE_TARGET | 2, 0x4 0x0 0x0 0x1 0x0
 	pause 0x20
 	playsound2 0xb9 SOUND_PAN_ATTACKER
 	launchtask AnimTask_ScaleMonAndRestore 0x5 0x5 0xfffb 0xfffb 0xa bank_attacker 0x1
@@ -19234,8 +19233,7 @@ ANIM_PLACEHOLDER:
 	goto ANIM_DOUBLEEDGE
 	endanimation
 
-
-
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
 @Credits to ghoulslash
 ANIM_BREAKNECK_BLITZ:

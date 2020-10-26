@@ -1918,6 +1918,7 @@ void TryLoadTypeIcons(void)
 				u8 type = *(type1Ptr + typeNum);
 
 				switch (type) { //Certain types have a different palette
+					case TYPE_NORMAL:
 					case TYPE_FLYING:
 					case TYPE_POISON:
 					case TYPE_GROUND:

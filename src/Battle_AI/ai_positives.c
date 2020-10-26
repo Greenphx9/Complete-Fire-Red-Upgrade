@@ -2502,8 +2502,19 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				|| !WillFaintFromSecondaryDamage(bankDef)
 				|| IsMovePredictionHealingMove(bankDef, bankAtk)
 				|| atkAbility == ABILITY_MOXIE
-				|| atkAbility == ABILITY_BEASTBOOST
-				|| atkAbility == ABILITY_GRIMNEIGH)
+				#ifdef ABILITY_GRIMNEIGH
+				||atkAbility == ABILITY_GRIMNEIGH
+				#endif
+				#ifdef ABILITY_CHILLINGNEIGH
+				|| atkAbility == ABILITY_CHILLINGNEIGH
+				#endif
+				#ifdef ABILITY_ASONE_GRIM
+				|| atkAbility == ABILITY_ASONE_GRIM
+				#endif
+				#ifdef ABILITY_ASONE_CHILLING
+				|| atkAbility == ABILITY_ASONE_CHILLING
+				#endif
+				|| atkAbility == ABILITY_BEASTBOOST)
 					INCREASE_VIABILITY(2);
 			}
 		}
@@ -2647,8 +2658,19 @@ u8 AIScript_SemiSmart(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				|| !WillFaintFromSecondaryDamage(bankDef)
 				|| IsMovePredictionHealingMove(bankDef, bankAtk)
 				|| data->atkAbility == ABILITY_MOXIE
-				|| data->atkAbility == ABILITY_BEASTBOOST
-				|| data->atkAbility == ABILITY_GRIMNEIGH)
+				#ifdef ABILITY_GRIMNEIGH
+				|| data->atkAbility == ABILITY_GRIMNEIGH
+				#endif
+				#ifdef ABILITY_CHILLINGNEIGH
+				|| data->atkAbility == ABILITY_CHILLINGNEIGH
+				#endif
+				#ifdef ABILITY_ASONE_GRIM
+				|| data->atkAbility == ABILITY_ASONE_GRIM
+				#endif
+				#ifdef ABILITY_ASONE_CHILLING
+				|| data->atkAbility == ABILITY_ASONE_CHILLING
+				#endif
+				|| data->atkAbility == ABILITY_BEASTBOOST)
 					INCREASE_VIABILITY(2);
 			}
 		}

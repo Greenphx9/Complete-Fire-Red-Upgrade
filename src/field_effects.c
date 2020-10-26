@@ -21,6 +21,7 @@
 #include "../include/new/dynamic_ow_pals.h"
 
 #include "../include/new/dexnav.h"
+#include "../include/new/follow_me.h"
 #include "../include/new/overworld.h"
 #include "../include/new/util2.h"
 
@@ -603,6 +604,10 @@ static u8 GetNumMiningSpots(void)
 
 	if (gMapHeader.mapType == MAP_TYPE_UNDERWATER)
 		divisor = 500; //Harder to find spots underwater so increase chance
+	#ifdef MAPSEC_CRYSTAL_PEAK
+	else if (GetCurrentRegionMapSectionId() == MAPSEC_CRYSTAL_PEAK)
+		divisor = 600; //Smaller room so ensure at least two spots
+	#endif
 	else
 		divisor = 1000;
 
@@ -746,7 +751,7 @@ static void FldEff_Explosion(void)
 
 	LoadCompressedSpriteSheetUsingHeap(&gExplosionSpriteSheet);
 	LoadCompressedSpritePaletteUsingHeap(&gExplosionSpritePalette);
-	spriteId = CreateSpriteAtEnd(&sExplosionSpriteTemplate, x, y, 0);
+	spriteId = CreateSpriteAtEnd(&sExplosionSpriteTemplate, x, y, 1);
 	if (spriteId != MAX_SPRITES)
 	{
 		struct Sprite* sprite = &gSprites[spriteId];
@@ -998,6 +1003,7 @@ static bool8 RockClimb_ContinueRideOrEnd(struct Task *task, struct EventObject *
 	if (!EventObjectClearHeldMovementIfFinished(eventObject))
 		return FALSE;
 
+	TryAttachFollowerToPlayer();
 	PlayerGetDestCoords(&task->tDestX, &task->tDestY);
 	MoveCoords(task->tMovementDir, &task->tDestX, &task->tDestY);
 	if (MetatileBehavior_IsRockClimbableWall(MapGridGetMetatileBehaviorAt(task->tDestX, task->tDestY)))

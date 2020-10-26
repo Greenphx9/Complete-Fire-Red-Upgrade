@@ -2710,7 +2710,14 @@ static s32 CalculateBaseDamage(struct DamageCalc* data)
 	//Second Target Item Checks
 	switch (data->defItemEffect) {
 		case ITEM_EFFECT_WEAKNESS_BERRY:
-			if (!AbilityBattleEffects(ABILITYEFFECT_CHECK_OTHER_SIDE, bankDef, ABILITY_UNNERVE, 0, 0) && data->atkAbility != ABILITY_UNNERVE)
+			if (!AbilityBattleEffects(ABILITYEFFECT_CHECK_OTHER_SIDE, bankDef, ABILITY_UNNERVE, 0, 0) && data->atkAbility != ABILITY_UNNERVE
+			#ifdef ABILITY_ASONE_GRIM
+			&& !AbilityBattleEffects(ABILITYEFFECT_CHECK_OTHER_SIDE, bankDef, ABILITY_ASONE_GRIM, 0, 0) && data->atkAbility != ABILITY_ASONE_GRIM
+			#endif
+			#ifdef ABILITY_ASONE_CHILLING
+			&& !AbilityBattleEffects(ABILITYEFFECT_CHECK_OTHER_SIDE, bankDef, ABILITY_ASONE_CHILLING, 0, 0) && data->atkAbility != ABILITY_ASONE_CHILLING
+			#endif
+			)
 			{
 				if ((data->resultFlags & MOVE_RESULT_SUPER_EFFECTIVE && data->defItemQuality == data->moveType)
 				|| (data->defItemQuality == TYPE_NORMAL && data->moveType == TYPE_NORMAL)) //Chilan Berry
@@ -3016,7 +3023,8 @@ static u16 GetBasePower(struct DamageCalc* data)
 				if (gBattleMons[bankAtk].status2 & STATUS2_DEFENSE_CURL)
 					power *= 2;
 
-				if (gBattleMons[bankAtk].status2 & STATUS2_MULTIPLETURNS) //Rollout has started
+				if (gBattleMons[bankAtk].status2 & STATUS2_MULTIPLETURNS //Rollout has started
+				|| gNewBS->rolloutFinalHit) //It's the final hit of rollout so the status isn't set anymore
 				{
 					for (i = 1; i < (5 - gDisableStructs[bankAtk].rolloutTimer); ++i)
 						power *= 2;
@@ -3303,7 +3311,8 @@ static u16 GetBasePower(struct DamageCalc* data)
 
 		case MOVE_BOLTBEAK:
 		case MOVE_FISHIOUSREND:
-			if (BankMovedBeforeIgnoreSwitch(bankAtk, bankDef))
+			if (!(data->specialFlags & (FLAG_IGNORE_TARGET | FLAG_CHECKING_FROM_MENU))
+			&& BankMovedBeforeIgnoreSwitch(bankAtk, bankDef))
 				power *= 2;
 			break;
 
@@ -3318,7 +3327,8 @@ static u16 GetBasePower(struct DamageCalc* data)
 			break;
 
 		case MOVE_RISINGVOLTAGE:
-			if (gTerrainType == ELECTRIC_TERRAIN && data->defIsGrounded)
+			if (!(data->specialFlags & FLAG_IGNORE_TARGET)
+			&& gTerrainType == ELECTRIC_TERRAIN && data->defIsGrounded)
 				power *= 2;
 			break;
 
@@ -3523,6 +3533,20 @@ static u16 AdjustBasePower(struct DamageCalc* data, u16 power)
 			if (CheckSoundMove(move))
 				power = (power * 13) / 10;
 			break;
+
+		#ifdef ABILITY_TRANSISTOR
+		case ABILITY_TRANSISTOR:
+		//1.5x Boost
+			power = (power * 15) / 10;
+			break;
+		#endif
+
+		#ifdef ABILITY_DRAGONSMAW
+		case ABILITY_DRAGONSMAW:
+		//1.5x Boost
+			power = (power * 15) / 10;
+			break;
+		#endif
 	}
 
 	//Check attacker partner ability boost
@@ -3790,7 +3814,7 @@ u16 CalcVisualBasePower(u8 bankAtk, u8 bankDef, u16 move, bool8 ignoreDef)
 u8 GetNaturalGiftMoveType(u16 item)
 {
 	u32 i;
-	u8 moveType = TYPE_MYSTERY; //If the berry isn't in the table, it has no type
+	u8 moveType = TYPE_NORMAL; //If the berry isn't in the table, it's just shown as a normal type move (can't be Mystery because of Max Strike)
 
 	if (IsBerry(item))
 	{

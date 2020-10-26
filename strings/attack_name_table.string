@@ -1881,7 +1881,7 @@ Zing Zap
 Elec Terrain
 
 #org @NAME_GRAS_TERRAIN
-Gras Terrain
+GrassTerrain
 
 #org @NAME_MIST_TERRAIN
 Mist Terrain
@@ -2070,7 +2070,7 @@ Octolock
 Bolt Beak
 
 #org @NAME_FISHIOUS_REND
-Fishy Rend
+FishiousRend
 
 #org @NAME_COURT_CHANGE
 Court Change
