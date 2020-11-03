@@ -3430,6 +3430,22 @@ static void DexNavPrintStaticText(void)
 	PrintGUIAreaDescriptors();
 }
 
+static void CreateGrayscaleMonIconPalettes(void)
+{
+	u8 index = IndexOfSpritePaletteTag(POKE_ICON_BASE_PAL_TAG);
+	u8 finalIndex = index + 3;
+
+	for (; index < finalIndex; ++index)
+	{
+		//Make a copy of each mon icon palette in the garbage slots usually loaded after the normal 3
+		Memcpy(&gPlttBufferUnfaded2[(index + 3) * 16], &gPlttBufferUnfaded2[index * 16], 0x20);
+		Memcpy(&gPlttBufferFaded2[(index + 3) * 16], &gPlttBufferFaded2[index * 16], 0x20);
+		//Grayscale that copy
+		TintPalette_GrayScale(&gPlttBufferUnfaded2[(index + 3) * 16], 16);
+		TintPalette_GrayScale(&gPlttBufferFaded2[(index + 3) * 16], 16);
+	}
+}
+
 static void DexNavLoadMonIcons(void)
 {
 	u8 letter;

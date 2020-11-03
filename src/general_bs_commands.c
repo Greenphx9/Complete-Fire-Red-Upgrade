@@ -917,7 +917,7 @@ void atk0F_resultmessage(void)
 				else
 					gBattleStringLoader = gText_SuperEffectiveTarget;
 			}
-			else
+			else if (gMultiHitCounter <= 1 || !BATTLER_ALIVE(gBankTarget)) //Only print once after multi-hit moves - always when KOing
 				stringId = STRINGID_SUPEREFFECTIVE;
 			break;
 
@@ -935,7 +935,7 @@ void atk0F_resultmessage(void)
 				else
 					gBattleStringLoader = gText_NotVeryEffectiveTarget;
 			}
-			else
+			else if (gMultiHitCounter <= 1 || !BATTLER_ALIVE(gBankTarget)) //Only print once after multi-hit moves - always when KOing
 				stringId = STRINGID_NOTVERYEFFECTIVE;
 			break;
 

@@ -80,6 +80,7 @@ u8 __attribute__((long_call)) GetRunningDirectionAnimNum(u8 direction);
 void __attribute__((long_call)) npc_apply_anim_looping(struct EventObject *eventObject, struct Sprite *sprite, u8 animNum);
 void __attribute__((long_call)) npc_apply_direction(struct EventObject *eventObject, struct Sprite *sprite, u8 direction, u8 speed);
 bool8 __attribute__((long_call)) npc_obj_ministep_stop_on_arrival(struct EventObject *eventObject, struct Sprite *sprite);
+u8 __attribute__((long_call)) GetEventObjectIdByLocalIdAndMap(u8, u8, u8);
 u8 __attribute__((long_call)) GetEventObjectIdByLocalIdAndMapInternal(u8 localId, u8 mapNum, u8 mapGroupId);
 u8 __attribute__((long_call)) GetEventObjectIdByLocalId(u8 localId);
 void __attribute__((long_call)) FaceDirection(struct EventObject *eventObject, struct Sprite *sprite, u8 direction);
@@ -142,7 +143,6 @@ extern const struct SpriteTemplate *const gFieldEffectObjectTemplatePointers[];
 extern const u8 gReflectionEffectPaletteMap[];
 
 void ResetEventObjects(void);
-u8 GetEventObjectIdByLocalIdAndMap(u8, u8, u8);
 bool8 TryGetEventObjectIdByLocalIdAndMap(u8, u8, u8, u8 *);
 u8 GetEventObjectIdByXY(s16, s16);
 void SetEventObjectDirection(struct EventObject *, u8);
