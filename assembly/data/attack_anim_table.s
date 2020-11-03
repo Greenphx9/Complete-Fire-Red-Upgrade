@@ -16762,7 +16762,7 @@ ANIM_SPIRIT_BREAK:
 	endanimation
 	
 .align 2
-SPIRIT_BREAK_CHARGE_BALL: objtemplate ANIM_TAG_CIRCLE_OF_LIGHT ANIM_TAG_CIRCLE_OF_LIGHT OAM_NORMAL_64x64 gDummySpriteAnimTable 0x0 gSpriteAffineAnimTable_SpiritBreakBall 0x80AE71D
+SPIRIT_BREAK_CHARGE_BALL: objtemplate ANIM_TAG_CIRCLE_OF_LIGHT ANIM_TAG_CIRCLE_OF_LIGHT OAM_NORMAL_64x64 gDummySpriteAnimTable 0x0 gSpriteAffineAnimTable_SpiritBreakBall SpriteCB_SpriteOnMonUntilAffineAnimEnds
 Template_UnusedExplosion2: objtemplate ANIM_TAG_UNUSED_EXPLOSION_2 ANIM_TAG_UNUSED_EXPLOSION_2 OAM_OFF_32x32 0x83E3F90 0x0 gDummySpriteAffineAnimTable SpriteCB_AnimSpriteOnMonPos
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -17006,13 +17006,13 @@ EXPANDING_FORCE_BOTH_TARGETS:
 	waitanimation
 	launchtask AnimTask_move_bank 0x2 0x5 bank_target 0x5 0x0 0x18 0x1 @;High power
 	launchtask AnimTask_move_bank 0x2 0x5 target_partner 0x5 0x0 0x18 0x1
-	call BOOMBURST_EXPLOSION_GEYSER
+	call CENTRED_EXPLOSION_GEYSER
 	waitanimation
 	call UNSET_SCROLLING_BG
 	pokespritefromBG side_target
 	endanimation
 
-BOOMBURST_EXPLOSION_GEYSER:
+CENTRED_EXPLOSION_GEYSER:
 	launchtemplate CENTRED_LIGHTBURN_EXPLODE TEMPLATE_TARGET | 4, 0x3, 0x0003 0x0005 bank_target
 	playsound2 0xaa SOUND_PAN_TARGET
 	pause 0x0

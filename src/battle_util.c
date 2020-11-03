@@ -514,8 +514,8 @@ bool8 ProtectsAgainstZMoves(u16 move, u8 bankAtk, u8 bankDef)
 	{
 		return TRUE;
 	}
-	else if (gSideStatuses[SIDE(bankDef)] & (SIDE_STATUS_WIDE_GUARD)
-		&& (gBattleMoves[move].target == MOVE_TARGET_BOTH || gBattleMoves[move].target == MOVE_TARGET_FOES_AND_ALLY))
+	else if (gSideStatuses[SIDE(bankDef)] & SIDE_STATUS_WIDE_GUARD
+		&& (GetBaseMoveTarget(move, bankAtk) & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY)))
 	{
 		return TRUE;
 	}
@@ -729,7 +729,7 @@ u8 GetMoveTarget(u16 move, u8 useMoveTarget)
 	if (useMoveTarget)
 		moveTarget = useMoveTarget - 1;
 	else
-		moveTarget = gBattleMoves[move].target;
+		moveTarget = GetBaseMoveTarget(move, bankAtk);
 
 	switch (moveTarget) {
 	case MOVE_TARGET_SELECTED:
@@ -1304,7 +1304,7 @@ bool8 IsMoveAffectedByParentalBond(u16 move, u8 bankAtk)
 	{
 		if (IS_DOUBLE_BATTLE)
 		{
-			switch (gBattleMoves[move].target) {
+			switch (GetBaseMoveTarget(move, bankAtk)) {
 				case MOVE_TARGET_BOTH:
 					if (CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE, 0, FOE(bankAtk)) >= 2) //Check for single target
 						return FALSE;

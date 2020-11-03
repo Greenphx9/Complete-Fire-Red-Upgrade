@@ -52,7 +52,7 @@ u8 AIScript_Partner(const u8 bankAtk, const u8 bankAtkPartner, const u16 origina
 
 	u8 moveSplit = CalcMoveSplit(move, bankAtk, bankDef);
 	bool8 partnerProtects = DoesProtectionMoveBlockMove(bankAtk, bankAtkPartner, move, partnerMove);
-	bool8 onlyHitsBothFoes = gBattleMoves[move].target == MOVE_TARGET_BOTH;
+	bool8 onlyHitsBothFoes = GetBaseMoveTarget(move, bankAtk) == MOVE_TARGET_BOTH;
 
 	if (!partnerProtects && !onlyHitsBothFoes)
 	{
@@ -507,7 +507,7 @@ u8 AIScript_Partner(const u8 bankAtk, const u8 bankAtkPartner, const u16 origina
 
 						if (instructedMove != MOVE_NONE
 						&& SPLIT(instructedMove) != SPLIT_STATUS
-						&&  gBattleMoves[instructedMove].target & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL)) //Use instruct on multi-target moves
+						&& GetBaseMoveTarget(instructedMove, bankAtkPartner) & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL)) //Use instruct on multi-target moves
 						{
 							IncreaseHelpingHandViability(&viability, class);
 						}

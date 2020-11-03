@@ -550,12 +550,13 @@ void UpdateBestDoubleKillingMoveScore(u8 bankAtk, u8 bankDef, u8 bankAtkPartner,
 
 		if (!(gBitTable[i] & moveLimitations))
 		{
+			u8 moveTarget = GetBaseMoveTarget(move, bankAtk);
 			for (j = 0; j < gBattlersCount / 2; ++j)
 			{
 				//mgba_printf(MGBA_LOG_WARN, "");
 				currTarget = foes[j];
 
-				if (foeAlive[j] && (j == 0 || gBattleMoves[move].target & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL)) //Only can hit second foe with spread move
+				if (foeAlive[j] && (j == 0 || moveTarget & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL)) //Only can hit second foe with spread move
 				&& !partnerHandling[j]) //Don't count the target if the partner is already taking care of it
 				{
 					if (!(AI_SpecialTypeCalc(move, bankAtk, currTarget) & MOVE_RESULT_NO_EFFECT)) //Move has effect on current target
@@ -652,7 +653,7 @@ void UpdateBestDoubleKillingMoveScore(u8 bankAtk, u8 bankDef, u8 bankAtkPartner,
 				}
 			}
 
-			if (gBattleMoves[move].target & MOVE_TARGET_ALL
+			if (moveTarget & MOVE_TARGET_ALL
 			&&  RangeMoveCanHurtPartner(move, bankAtk, bankAtkPartner))
 			{
 				u8 status1 = gBattleMons[bankAtkPartner].status1;
@@ -706,8 +707,8 @@ void UpdateBestDoubleKillingMoveScore(u8 bankAtk, u8 bankDef, u8 bankAtkPartner,
 			bestIndex = i;
 		else if (currScore == bestScore)
 		{
-			u8 currentBestRange = gBattleMoves[gBattleMons[bankAtk].moves[bestIndex]].target;
-			u8 checkBestRange = gBattleMoves[gBattleMons[bankAtk].moves[i]].target;
+			u8 currentBestRange = GetBaseMoveTarget(gBattleMons[bankAtk].moves[bestIndex], bankAtk);
+			u8 checkBestRange = GetBaseMoveTarget(gBattleMons[bankAtk].moves[i], bankAtk);
 
 			if (currentBestRange & MOVE_TARGET_ALL
 			&& !(checkBestRange & MOVE_TARGET_ALL)
@@ -728,8 +729,8 @@ void UpdateBestDoubleKillingMoveScore(u8 bankAtk, u8 bankDef, u8 bankAtkPartner,
 
 u8 GetDoubleKillingScore(u16 move, u8 bankAtk, u8 bankDef)
 {
-	if (gBattleMoves[move].target & MOVE_TARGET_ALL
-	&&  gBattleMoves[gChosenMovesByBanks[PARTNER(bankAtk)]].effect == EFFECT_PROTECT
+	if (gBattleMoves[gChosenMovesByBanks[PARTNER(bankAtk)]].effect == EFFECT_PROTECT
+	&& GetBaseMoveTarget(move, bankAtk) & MOVE_TARGET_ALL
 	&& !gNewBS->recalculatedBestDoublesKillingScores[bankAtk])
 	{
 		//Recalculate as partner has chosen to protect from spread move
@@ -1054,7 +1055,7 @@ move_t CalcStrongestMove(const u8 bankAtk, const u8 bankDef, const bool8 onlySpr
 		if (!(gBitTable[i] & moveLimitations))
 		{
 			if (gBattleMoves[move].power == 0
-			|| (onlySpreadMoves && !(gBattleMoves[move].target & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL))))
+			|| (onlySpreadMoves && !(GetBaseMoveTarget(move, bankAtk) & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL))))
 				continue;
 
 			if (gBattleMoves[move].effect == EFFECT_COUNTER || gBattleMoves[move].effect == EFFECT_MIRROR_COAT) //Includes Metal Burst
@@ -2671,7 +2672,7 @@ bool8 DamagingAllHitMoveTypeInMoveset(u8 bank, u8 moveType)
 		{
 			if (GetMoveTypeSpecial(bank, move) == moveType
 			&&  SPLIT(move) != SPLIT_STATUS
-			&&  gBattleMoves[move].target & MOVE_TARGET_ALL)
+			&&  GetBaseMoveTarget(move, bank) & MOVE_TARGET_ALL)
 				return TRUE;
 		}
 	}
@@ -2717,7 +2718,7 @@ bool8 DamagingSpreadMoveInMoveset(u8 bank)
 		if (!(gBitTable[i] & moveLimitations))
 		{
 			if (SPLIT(move) != SPLIT_STATUS
-			&&  gBattleMoves[move].target & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL))
+			&&  GetBaseMoveTarget(move, bank) & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL))
 				return TRUE;
 		}
 	}
@@ -2808,7 +2809,7 @@ bool8 MoveInMovesetWithAccuracyLessThan(u8 bankAtk, u8 bankDef, u8 acc, bool8 ig
 				continue;
 
 			if (gBattleMoves[move].accuracy == 0 //Always hits
-			||  gBattleMoves[move].target & (MOVE_TARGET_USER | MOVE_TARGET_OPPONENTS_FIELD))
+			||  GetBaseMoveTarget(move, bankAtk) & (MOVE_TARGET_USER | MOVE_TARGET_OPPONENTS_FIELD))
 				continue;
 
 			if (AccuracyCalc(move, bankAtk, bankDef) < acc)

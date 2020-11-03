@@ -1058,7 +1058,7 @@ bank_t LoadBattleAnimTarget(u8 arg)
 {
 	u8 battler;
 
-	if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+	if (IS_DOUBLE_BATTLE)
 	{
 		switch (gBattleAnimArgs[arg]) {
 			case ANIM_ATTACKER:
@@ -1718,14 +1718,14 @@ void SpriteCB_SpriteToCentreOfSide(struct Sprite* sprite)
 
 		if (gBattleAnimArgs[2] == 0) //Attacker
 		{
-			if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+			if (IS_DOUBLE_BATTLE)
 				InitSpritePosToAnimAttackersCentre(sprite, var);
 			else
 				InitSpritePosToAnimAttacker(sprite, var);
 		}
 		else
 		{
-			if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+			if (IS_DOUBLE_BATTLE)
 				InitSpritePosToAnimTargetsCentre(sprite, var);
 			else
 				InitSpritePosToAnimTarget(sprite, var);
@@ -1748,14 +1748,14 @@ void SpriteCB_RandomCentredHits(struct Sprite* sprite)
 
 	if (gBattleAnimArgs[0] == 0)
 	{
-		if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+		if (IS_DOUBLE_BATTLE)
 			InitSpritePosToAnimAttackersCentre(sprite, FALSE);
 		else
 			InitSpritePosToAnimAttacker(sprite, FALSE);
 	}
 	else
 	{
-		if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+		if (IS_DOUBLE_BATTLE)
 			InitSpritePosToAnimTargetsCentre(sprite, FALSE);
 		else
 			InitSpritePosToAnimTarget(sprite, FALSE);
@@ -1770,7 +1770,7 @@ void SpriteCB_RandomCentredHits(struct Sprite* sprite)
 
 void SpriteCB_CentredElectricity(struct Sprite* sprite)
 {
-	if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+	if (IS_DOUBLE_BATTLE)
 		InitSpritePosToAnimTargetsCentre(sprite, FALSE);
 	else
 		InitSpritePosToAnimTarget(sprite, FALSE);
@@ -1789,7 +1789,7 @@ void SpriteCB_CentredElectricity(struct Sprite* sprite)
 
 void SpriteCB_CentredSpiderWeb(struct Sprite* sprite)
 {
-	if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+	if (IS_DOUBLE_BATTLE)
 		InitSpritePosToAnimTargetsCentre(sprite, FALSE);
 	else
 		InitSpritePosToAnimTarget(sprite, FALSE);
@@ -1839,14 +1839,14 @@ void SpriteCB_CoreEnforcerHits(struct Sprite* sprite)
 
 	if (gBattleAnimArgs[2] == 0)
 	{
-		if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+		if (IS_DOUBLE_BATTLE)
 			InitSpritePosToAnimAttackersCentre(sprite, FALSE);
 		else
 			InitSpritePosToAnimAttacker(sprite, FALSE);
 	}
 	else
 	{
-		if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+		if (IS_DOUBLE_BATTLE)
 			InitSpritePosToAnimTargetsCentre(sprite, FALSE);
 		else
 			InitSpritePosToAnimTarget(sprite, FALSE);
@@ -1858,7 +1858,7 @@ void SpriteCB_CoreEnforcerHits(struct Sprite* sprite)
 
 void SpriteCB_CoreEnforcerBeam(struct Sprite* sprite)
 {
-	if (!(gBattleTypeFlags & BATTLE_TYPE_DOUBLE))
+	if (!(IS_DOUBLE_BATTLE))
 		SpriteCB_AnimSolarbeamBigOrb(sprite);
 	else
 	{
@@ -2042,7 +2042,7 @@ void SpriteCB_MindBlownBall(struct Sprite *sprite)
 
 static u8 GetProperCentredCoord(u8 bank, u8 coordType)
 {
-	if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+	if (IS_DOUBLE_BATTLE)
 	{
 		return (GetBattlerSpriteCoord2(bank, coordType)
 			  +  GetBattlerSpriteCoord2(PARTNER(bank), coordType)) / 2;

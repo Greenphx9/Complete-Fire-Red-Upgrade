@@ -239,13 +239,14 @@ static u8 CalcPossibleCritChance(u8 bankAtk, u8 bankDef, u16 move, struct Pokemo
 void atk05_damagecalc(void)
 {
 	struct DamageCalc data = {0};
+	u8 moveTarget = GetBaseMoveTarget(gCurrentMove, gBankAttacker);
 	gBattleStruct->dynamicMoveType = GetMoveTypeSpecial(gBankAttacker, gCurrentMove);
 
 	if (gNewBS->calculatedSpreadMoveData && gMultiHitCounter == 0)
 	{
 		//Just use the calculated values below
 	}
-	else if (IS_DOUBLE_BATTLE && gBattleMoves[gCurrentMove].target & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL))
+	else if (IS_DOUBLE_BATTLE && moveTarget & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL))
 	{
 		data.bankAtk = gBankAttacker;
 		data.move = gCurrentMove;
@@ -255,7 +256,7 @@ void atk05_damagecalc(void)
 		for (u32 bankDef = 0; bankDef < gBattlersCount; ++bankDef)
 		{
 			if (!BATTLER_ALIVE(bankDef) || bankDef == gBankAttacker
-			|| (bankDef == PARTNER(gBankAttacker) && !(gBattleMoves[gCurrentMove].target & MOVE_TARGET_ALL))
+			|| (bankDef == PARTNER(gBankAttacker) && !(moveTarget & MOVE_TARGET_ALL))
 			|| gNewBS->ResultFlags[bankDef] & MOVE_RESULT_NO_EFFECT
 			|| gNewBS->noResultString[bankDef])
 					continue; //Don't bother with this target
@@ -679,7 +680,8 @@ void atk06_typecalc(void)
 	u8 atkType1 = gBattleMons[gBankAttacker].type1;
 	u8 atkType2 = gBattleMons[gBankAttacker].type2;
 	u8 atkType3 = gBattleMons[gBankAttacker].type3;
-	bool8 calcSpreadMove = IS_DOUBLE_BATTLE && gBattleMoves[gCurrentMove].target & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL);
+	u8 moveTarget = GetBaseMoveTarget(gCurrentMove, gBankAttacker);
+	bool8 calcSpreadMove = IS_DOUBLE_BATTLE && moveTarget & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL);
 
 	if (gCurrentMove != MOVE_STRUGGLE)
 	{
@@ -690,7 +692,7 @@ void atk06_typecalc(void)
 			else if (gNewBS->calculatedSpreadMoveData)
 				break; //Already calculated type adjustment
 			else if (!BATTLER_ALIVE(bankDef) || bankDef == gBankAttacker
-			|| (bankDef == PARTNER(gBankAttacker) && !(gBattleMoves[gCurrentMove].target & MOVE_TARGET_ALL))
+			|| (bankDef == PARTNER(gBankAttacker) && !(moveTarget & MOVE_TARGET_ALL))
 			|| gNewBS->noResultString[bankDef])
 				continue;
 
@@ -1546,22 +1548,25 @@ u8 GetExceptionMoveType(u8 bankAtk, u16 move)
 			break;
 		
 		case MOVE_TERRAINPULSE:
-			switch (gTerrainType) {
-				case ELECTRIC_TERRAIN:
-					moveType = TYPE_ELECTRIC;
-					break;
-				case GRASSY_TERRAIN:
-					moveType = TYPE_GRASS;
-					break;
-				case MISTY_TERRAIN:
-					moveType = TYPE_FAIRY;
-					break;
-				case PSYCHIC_TERRAIN:
-					moveType = TYPE_PSYCHIC;
-					break;
-				default:
-					moveType = TYPE_NORMAL;
-					break;
+			if (CheckGrounding(bankAtk))
+			{
+				switch (gTerrainType) {
+					case ELECTRIC_TERRAIN:
+						moveType = TYPE_ELECTRIC;
+						break;
+					case GRASSY_TERRAIN:
+						moveType = TYPE_GRASS;
+						break;
+					case MISTY_TERRAIN:
+						moveType = TYPE_FAIRY;
+						break;
+					case PSYCHIC_TERRAIN:
+						moveType = TYPE_PSYCHIC;
+						break;
+					default:
+						moveType = TYPE_NORMAL;
+						break;
+				}
 			}
 			break;
 	}
@@ -1643,7 +1648,7 @@ u8 GetMonExceptionMoveType(struct Pokemon* mon, u16 move)
 			break;
 
 		case MOVE_TERRAINPULSE:
-			if (gMain.inBattle)
+			if (gMain.inBattle && CheckMonGrounding(mon))
 			{
 				switch (gTerrainType) {
 					case ELECTRIC_TERRAIN:
@@ -1719,7 +1724,8 @@ void AdjustDamage(bool8 checkFalseSwipe)
 {
 	s32 damage = gBattleMoveDamage;
 	u8 resultFlags = gMoveResultFlags;
-	bool8 calcSpreadMove = checkFalseSwipe && IS_DOUBLE_BATTLE && gBattleMoves[gCurrentMove].target & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL);
+	u8 moveTarget = GetBaseMoveTarget(gCurrentMove, gBankAttacker);
+	bool8 calcSpreadMove = checkFalseSwipe && IS_DOUBLE_BATTLE && moveTarget & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL);
 	gStringBank = gBankTarget;
 
 	for (u32 bankDef = 0; bankDef < gBattlersCount; ++bankDef)
@@ -1729,7 +1735,7 @@ void AdjustDamage(bool8 checkFalseSwipe)
 		else if (gNewBS->calculatedSpreadMoveData)
 			break; //Already calculated adjusted damage
 		else if (!BATTLER_ALIVE(bankDef) || bankDef == gBankAttacker
-		|| (bankDef == PARTNER(gBankAttacker) && !(gBattleMoves[gCurrentMove].target & MOVE_TARGET_ALL))
+		|| (bankDef == PARTNER(gBankAttacker) && !(moveTarget & MOVE_TARGET_ALL))
 		|| gNewBS->noResultString[bankDef])
 			continue;
 
@@ -2787,10 +2793,11 @@ static s32 CalculateBaseDamage(struct DamageCalc* data)
 	//Spread Move Cut
 	if (IS_DOUBLE_BATTLE)
 	{
-		if (gBattleMoves[move].target & MOVE_TARGET_BOTH && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE, bankAtk, bankDef) >= 2)
+		u8 moveTarget = GetBaseMoveTargetByGrounding(move, data->atkIsGrounded);
+		if (moveTarget & MOVE_TARGET_BOTH && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE, bankAtk, bankDef) >= 2)
 			damage = (damage * 75) / 100;
 
-		else if (gBattleMoves[move].target & MOVE_TARGET_FOES_AND_ALLY && CountAliveMonsInBattle(BATTLE_ALIVE_EXCEPT_ACTIVE, bankAtk, bankDef) >= 2)
+		else if (moveTarget & MOVE_TARGET_FOES_AND_ALLY && CountAliveMonsInBattle(BATTLE_ALIVE_EXCEPT_ACTIVE, bankAtk, bankDef) >= 2)
 			damage = (damage * 75) / 100;
 	}
 

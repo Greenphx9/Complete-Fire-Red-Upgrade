@@ -561,7 +561,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			}
 			/* Automatically runs the above check for target's partner too
 			else if (IS_DOUBLE_BATTLE
-			&& gBattleMoves[move].target & MOVE_TARGET_BOTH && CanBeConfused(data->bankDefPartner))
+			&& moveTarget & MOVE_TARGET_BOTH && CanBeConfused(data->bankDefPartner))
 			{
 				if (defPartnerStatus1 & STATUS1_PARALYSIS
 				|| defPartnerStatus2 & (STATUS2_INFATUATION)
@@ -918,6 +918,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			break;
 
 		case EFFECT_PROTECT: ;
+			u8 predictedMoveTarget = GetBaseMoveTarget(predictedMove, bankDef);
 			switch (move)
 			{
 				case MOVE_QUICKGUARD:
@@ -934,7 +935,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 					break;
 
 				case MOVE_WIDEGUARD:
-					if (predictedMove != MOVE_NONE && gBattleMoves[predictedMove].target & (MOVE_TARGET_ALL | MOVE_TARGET_BOTH))
+					if (predictedMove != MOVE_NONE && predictedMoveTarget & (MOVE_TARGET_ALL | MOVE_TARGET_BOTH))
 					{
 						if (IS_SINGLE_BATTLE)
 						{
@@ -944,7 +945,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 						else
 							IncreaseTeamProtectionViability(&viability, class);
 					}
-					else if (IS_DOUBLE_BATTLE && gBattleMoves[data->partnerMove].target & MOVE_TARGET_ALL)
+					else if (IS_DOUBLE_BATTLE && GetBaseMoveTarget(data->partnerMove, data->bankAtkPartner) & MOVE_TARGET_ALL)
 					{
 						if (atkAbility != ABILITY_TELEPATHY
 						&& !(AI_SpecialTypeCalc(data->partnerMove, data->bankAtkPartner, bankAtk) & MOVE_RESULT_NO_EFFECT)) //Move has effect
@@ -953,7 +954,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 					break;
 
 				case MOVE_CRAFTYSHIELD:
-					if (predictedMove != MOVE_NONE && SPLIT(predictedMove) == SPLIT_STATUS && !(gBattleMoves[predictedMove].target & MOVE_TARGET_USER))
+					if (predictedMove != MOVE_NONE && SPLIT(predictedMove) == SPLIT_STATUS && !(predictedMoveTarget & MOVE_TARGET_USER))
 					{
 						if (IS_SINGLE_BATTLE)
 						{
@@ -966,7 +967,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 					break;
 
 				case MOVE_MATBLOCK:
-					if (gDisableStructs[bankAtk].isFirstTurn && predictedMove != MOVE_NONE && SPLIT(predictedMove) != SPLIT_STATUS && !(gBattleMoves[predictedMove].target & MOVE_TARGET_USER))
+					if (gDisableStructs[bankAtk].isFirstTurn && predictedMove != MOVE_NONE && SPLIT(predictedMove) != SPLIT_STATUS && !(predictedMoveTarget & MOVE_TARGET_USER))
 					{
 						if (IS_SINGLE_BATTLE)
 						{
@@ -1785,7 +1786,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			break;
 
 		case EFFECT_MAGIC_COAT:
-			if (SPLIT(predictedMove) == SPLIT_STATUS && gBattleMoves[predictedMove].target & (MOVE_TARGET_SELECTED | MOVE_TARGET_OPPONENTS_FIELD | MOVE_TARGET_BOTH))
+			if (SPLIT(predictedMove) == SPLIT_STATUS && GetBaseMoveTarget(predictedMove, bankDef) & (MOVE_TARGET_SELECTED | MOVE_TARGET_OPPONENTS_FIELD | MOVE_TARGET_BOTH))
 				INCREASE_STATUS_VIABILITY(3);
 			break;
 

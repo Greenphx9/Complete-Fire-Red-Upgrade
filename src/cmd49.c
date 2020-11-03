@@ -1027,7 +1027,8 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 				if (!(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE)
 				&& !gProtectStructs[gBankAttacker].chargingTurn)
 				{
-					if (gBattleMoves[gCurrentMove].target == MOVE_TARGET_BOTH)
+					u8 moveTarget = GetBaseMoveTarget(gCurrentMove, gBankAttacker);
+					if (moveTarget == MOVE_TARGET_BOTH)
 					{
 						if ((gNewBS->OriginalAttackerTargetCount < 2 && !gNewBS->MoveBounceInProgress)
 						|| (gNewBS->MoveBounceTargetCount < 2 && gNewBS->MoveBounceInProgress))
@@ -1077,7 +1078,7 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 							}
 						}
 					}
-					else if (gBattleMoves[gCurrentMove].target == MOVE_TARGET_ALL && !gSpecialMoveFlags[gCurrentMove].gSpecialWholeFieldMoves)
+					else if (moveTarget == MOVE_TARGET_ALL && !gSpecialMoveFlags[gCurrentMove].gSpecialWholeFieldMoves)
 					{
 						if (gNewBS->OriginalAttackerTargetCount < 3)
 						{ //Get Next Target
@@ -1420,7 +1421,7 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 
 		case ATK49_END_ZMOVES:
 			if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE
-			&&  gBattleMoves[gCurrentMove].target & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL))
+			&&  GetBaseMoveTarget(gCurrentMove, gBankAttacker) & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL))
 			{
 				int i;
 
@@ -1534,7 +1535,7 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 
 				if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE
 				&&  gNewBS->CurrentTurnAttacker == PARTNER(bank)
-				&&  gBattleMoves[gCurrentMove].target == MOVE_TARGET_SELECTED
+				&&  GetBaseMoveTarget(gCurrentMove, gBankAttacker) == MOVE_TARGET_SELECTED
 				&&  gBattleMons[gNewBS->CurrentTurnTarget].hp)
 					gBankTarget = gNewBS->CurrentTurnTarget; //Target the same as partner's target
 				else

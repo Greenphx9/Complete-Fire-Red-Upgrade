@@ -185,8 +185,9 @@ void atk03_ppreduce(void) {
 
 	if (gBattleExecBuffer) return;
 
-	if (!gSpecialStatuses[gBankAttacker].ppNotAffectedByPressure) {
-		switch (gBattleMoves[gCurrentMove].target) {
+	if (!gSpecialStatuses[gBankAttacker].ppNotAffectedByPressure)
+	{
+		switch (GetBaseMoveTarget(gCurrentMove, gBankAttacker)) {
 			case MOVE_TARGET_FOES_AND_ALLY:
 				ppToDeduct += AbilityBattleEffects(ABILITYEFFECT_COUNT_ON_FIELD, gBankAttacker, ABILITY_PRESSURE, 0, 0);
 				break;
@@ -260,9 +261,11 @@ void TryActivateWeakenessBerryFutureSight(void)
 
 static bool8 IsSingleTargetOfDoublesSpreadMove(void)
 {
-	if (gBattleMoves[gCurrentMove].target & MOVE_TARGET_ALL)
+	u8 moveTarget = GetBaseMoveTarget(gCurrentMove, gBankAttacker);
+
+	if (moveTarget & MOVE_TARGET_ALL)
 		return gNewBS->allSpreadTargets <= 1;
-	else if (gBattleMoves[gCurrentMove].target & MOVE_TARGET_BOTH)
+	else if (moveTarget & MOVE_TARGET_BOTH)
 		return gNewBS->foeSpreadTargets <= 1;
 
 	return TRUE;
@@ -272,7 +275,7 @@ static bool8 IsDoubleSpreadMove(void)
 {
 	return IS_DOUBLE_BATTLE
 		&& !(gHitMarker & (HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_NON_ATTACK_DMG | HITMARKER_UNABLE_TO_USE_MOVE))
-		&& gBattleMoves[gCurrentMove].target & (MOVE_TARGET_ALL | MOVE_TARGET_BOTH)
+		&& GetBaseMoveTarget(gCurrentMove, gBankAttacker) & (MOVE_TARGET_ALL | MOVE_TARGET_BOTH)
 		&& !IsSingleTargetOfDoublesSpreadMove();
 }
 
@@ -332,7 +335,7 @@ void atk09_attackanimation(void)
 		for (u8 bankDef = 0; bankDef < gBattlersCount; ++bankDef)
 		{
 			if (!BATTLER_ALIVE(bankDef) || bankDef == gBankAttacker
-			|| (bankDef == PARTNER(gBankAttacker) && !(gBattleMoves[gCurrentMove].target & MOVE_TARGET_ALL))
+			|| (bankDef == PARTNER(gBankAttacker) && !(GetBaseMoveTarget(gCurrentMove, gBankAttacker) & MOVE_TARGET_ALL))
 			|| (gNewBS->noResultString[bankDef] && gNewBS->noResultString[bankDef] != 2))
 				continue; //Don't bother with this target
 
@@ -378,13 +381,15 @@ void atk09_attackanimation(void)
 	}
 	else
 	{
+		u8 moveTarget = GetBaseMoveTarget(gCurrentMove, gBankAttacker);
+	
 		if (gNewBS->ParentalBondOn == 1)
 		{
 			gBattlescriptCurrInstr++;
 			return;
 		}
 		else if (gBattleScripting.animTargetsHit > 0
-			&&  (gBattleMoves[gCurrentMove].target & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY | MOVE_TARGET_DEPENDS)
+			&& (moveTarget & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY | MOVE_TARGET_DEPENDS)
 			  || gCurrentMove == MOVE_DEFOG
 			  || gCurrentMove == MOVE_SHELLSMASH
 			  || gCurrentMove == MOVE_HOWL))
@@ -411,8 +416,12 @@ void atk09_attackanimation(void)
 			else
 				multihit = gMultiHitCounter;
 
+			u8 animTurn = gBattleScripting.animTurn;
+			if (gCurrentMove == MOVE_EXPANDINGFORCE && moveTarget & MOVE_TARGET_BOTH)
+				animTurn = 1; //Play doubles animation
+
 			gNewBS->attackAnimationPlayed = TRUE;
-			EmitMoveAnimation(0, gCurrentMove, gBattleScripting.animTurn, gBattleMovePower, gBattleMoveDamage, gBattleMons[gBankAttacker].friendship, &gDisableStructs[gBankAttacker], multihit);
+			EmitMoveAnimation(0, gCurrentMove, animTurn, gBattleMovePower, gBattleMoveDamage, gBattleMons[gBankAttacker].friendship, &gDisableStructs[gBankAttacker], multihit);
 			gBattleScripting.animTurn += 1;
 			gBattleScripting.animTargetsHit += 1;
 			MarkBufferBankForExecution(gBankAttacker);
@@ -1966,7 +1975,7 @@ static void UpdateMoveStartValuesForCalledMove(void)
 	ResetDoublesSpreadMoveCalcs();
 	gHitMarker &= ~(HITMARKER_ATTACKSTRING_PRINTED);
 
-	if (gBattleMoves[gCurrentMove].target & MOVE_TARGET_USER)
+	if (GetBaseMoveTarget(gCurrentMove, gBankAttacker) & MOVE_TARGET_USER)
 		gBankTarget = gBankAttacker;
 }
 
@@ -2230,11 +2239,12 @@ void atk78_faintifabilitynotdamp(void)
 	gBattlescriptCurrInstr++;
 }
 
-void atk7A_jumpifnexttargetvalid(void) {
+void atk7A_jumpifnexttargetvalid(void)
+{
 	u8* jump_loc = T1_READ_PTR(gBattlescriptCurrInstr + 1);
 
-	if (IS_DOUBLE_BATTLE) {
-
+	if (IS_DOUBLE_BATTLE)
+	{
 		if (gBankAttacker == GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)
 		&& gBankTarget == GetBattlerAtPosition(B_POSITION_PLAYER_LEFT))
 		{
@@ -2244,13 +2254,14 @@ void atk7A_jumpifnexttargetvalid(void) {
 
 		for (gBankTarget++; gBankTarget < gBattlersCount; gBankTarget++)
 		{
-			if (gBankTarget == gBankAttacker && !(gBattleMoves[gCurrentMove].target & MOVE_TARGET_USER))
+			if (gBankTarget == gBankAttacker && !(GetBaseMoveTarget(gCurrentMove, gBankAttacker) & MOVE_TARGET_USER))
 				continue;
 			if (!(gAbsentBattlerFlags & gBitTable[gBankTarget]))
 				break;
 		}
 
 		if (gBankTarget >= gBattlersCount)
+		{
 			if (gBankAttacker == GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)
 			&&  !(gAbsentBattlerFlags & gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)]))
 			{
@@ -2259,6 +2270,7 @@ void atk7A_jumpifnexttargetvalid(void) {
 			}
 			else
 				gBattlescriptCurrInstr += 5;
+		}
 		else
 			gBattlescriptCurrInstr = jump_loc;
 	}
