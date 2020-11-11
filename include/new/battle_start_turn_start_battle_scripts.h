@@ -33,3 +33,5 @@ extern const u8 gText_CamomonsTypeReveal[];
 extern const u8 gText_CamomonsTypeRevealDualType[];
 extern const u8 gText_RaidBattleReveal[];
 extern const u8 gText_DynamaxUsable[];
+extern const u8 gText_RainbowBattleStart[];
+extern const u8 gText_ShadowShieldBattleStart[];

@@ -63,6 +63,7 @@ s32 DoPoisonFieldEffect(void);
 void TaskRepel(u8 taskId);
 bool8 UpdateRepelCounter(void);
 const u8* GetInteractedWaterScript(u32 unused1, u8 metatileBehavior, u8 direction);
+bool8 CanUseEscapeRopeOnCurrMap(void);
 
 //Exported Constants
 enum

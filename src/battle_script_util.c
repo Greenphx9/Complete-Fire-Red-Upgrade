@@ -1921,7 +1921,7 @@ void RestoreEffectBankHPStatsAndRemoveBackupSpecies(void)
 		gBattleStruct->chosenMovePositions[gEffectBank] = originalMovePos;
 		gMoveSelectionCursor[gEffectBank] = originalMovePos;
 	}
-	else
+	else if (!gProtectStructs[gEffectBank].onlyStruggle) //Isn't already struggling
 	{
 		gNewBS->devolveForgotMove |= gBitTable[gEffectBank]; //Can't use move anymore
 		gMoveSelectionCursor[gEffectBank] = 0; //Reset selection so can't select null move

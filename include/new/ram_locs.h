@@ -89,7 +89,7 @@
 /*u8*/  #define gAbilitiesPerBank ((u8*) 0x2039A30)
 		//#define gStringInfo ((struct BattleMsgData*) *((u32*) 0x2039A34))
 
-		#define sHofFadingRelated (*((u32*) 0x0203AB34))
+		#define sHofSelectedPaletteIndices (*((u32*) 0x0203AB34))
 		#define gHasHallOfFameRecords (*(u8*) 0x0203AB44)
 
 /*u8*/	#define gQuestLogMode (*((u8*) 0x203ADFA))

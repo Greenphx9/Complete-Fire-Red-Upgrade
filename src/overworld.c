@@ -89,6 +89,7 @@ static const u8* GetCustomWalkingScript(void);
 static bool8 SafariZoneTakeStep(void);
 static bool8 IsRunningDisabledByFlag(void);
 static bool8 UseRegisteredKeyItemOnField(void);
+bool8 CanUseEscapeRopeOnCurrMap(void);
 
 #ifdef VAR_DEFAULT_WALKING_SCRIPT
 //Table full of pointers to custom walking scripts

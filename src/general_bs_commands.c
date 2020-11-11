@@ -2996,7 +2996,7 @@ bool8 HailHurts(u8 bank)
 
 	if (TakesGeneralWeatherDamage(bank))
 	{
-		if (!IsOfType(bank, TYPE_ICE) && ability != ABILITY_ICEBODY && ability != ABILITY_SNOWCLOAK && ability != ABILITY_SLUSHRUSH)
+		if (!IsOfType(bank, TYPE_ICE) && ability != ABILITY_ICEBODY && ability != ABILITY_SNOWCLOAK)
 			return TRUE;
 	}
 

@@ -1786,12 +1786,20 @@ static bool8 ShouldTryGigantamaxRaidMon(void)
 
 void DetermineRaidStars(void)
 {
-	u8 numBadges = GetOpenWorldBadgeCount();
+	u8 min, max;
 	if (FlagGet(FLAG_BATTLE_FACILITY))
-		numBadges = 9; //Battle Frontier Demo
+	{
+		//Battle Frontier Demo
+		min = 5; 
+		max = 6;
+	}
+	else
+	{
+		u8 numBadges = GetOpenWorldBadgeCount();
+		min = gRaidBattleStarsByBadges[numBadges][0];
+		max = gRaidBattleStarsByBadges[numBadges][1];
+	}
 
-	u8 min = gRaidBattleStarsByBadges[numBadges][0];
-	u8 max = gRaidBattleStarsByBadges[numBadges][1];
 	u32 randomNum = GetRaidRandomNumber();
 
 	if (min == max)

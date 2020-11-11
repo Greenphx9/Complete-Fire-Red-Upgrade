@@ -3,6 +3,7 @@
 #include "../include/battle_transition.h"
 #include "../include/battle_setup.h"
 #include "../include/event_data.h"
+#include "../include/load_save.h"
 #include "../include/random.h"
 #include "../include/constants/songs.h"
 #include "../include/constants/trainers.h"
@@ -41,6 +42,8 @@ enum BattleBeginStates
 	ThirdTypeRemoval,
 	RaidBattleReveal,
 	DynamaxUsableIndicator,
+	RainbowBattleMessage,
+	ShadowShieldBattleMessage,
 	NeutralizingGas,
 	SwitchInAbilities,
 	Intimidate,
@@ -106,6 +109,11 @@ void HandleNewBattleRamClearBeforeBattle(void)
 		gNewBS->dynamaxData.timer[B_POSITION_OPPONENT_LEFT] = -2; //Don't revert
 		gNewBS->dynamaxData.backupRaidMonItem = GetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, NULL); //For Frontier
 	}
+
+	#ifdef FLAG_BENJAMIN_BUTTERFREE_BATTLE
+	if (FlagGet(FLAG_BENJAMIN_BUTTERFREE_BATTLE))
+		SavePlayerParty(); //Backup party to be restored after the battle
+	#endif
 
 	FormsRevert(gPlayerParty); //Try to reset all forms before battle
 	HeroDuoFormsInit(gPlayerParty);
@@ -246,17 +254,39 @@ void BattleBeginFirstTurn(void)
 				++*state;
 				break;
 
-		case DynamaxUsableIndicator:
-#ifdef DYNAMAX_FEATURE
-			gBattleScripting.bank = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
-			if (DynamaxEnabled(gBattleScripting.bank))
-			{
-				gBattleStringLoader = gText_DynamaxUsable;
-				BattleScriptPushCursorAndCallback(BattleScript_DynamaxEnergySwirl);
-			}
-#endif
-			++* state;
-			break;
+			case DynamaxUsableIndicator:
+				#ifdef DYNAMAX_FEATURE
+				gBattleScripting.bank = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
+				if (DynamaxEnabled(gBattleScripting.bank))
+				{
+					gBattleStringLoader = gText_DynamaxUsable;
+					BattleScriptPushCursorAndCallback(BattleScript_DynamaxEnergySwirl);
+				}
+				#endif
+				++*state;
+				break;
+
+			case RainbowBattleMessage:
+				#ifdef FLAG_RAINBOW_BATTLE
+				if (FlagGet(FLAG_RAINBOW_BATTLE))
+				{
+					gBattleStringLoader = gText_RainbowBattleStart;
+					BattleScriptPushCursorAndCallback(BattleScript_PrintCustomStringEnd3);
+				}
+				#endif
+				++*state;
+				break;
+
+			case ShadowShieldBattleMessage:
+				#ifdef FLAG_SHADOW_SHIELD_BATTLE
+				if (FlagGet(FLAG_SHADOW_SHIELD_BATTLE))
+				{
+					gBattleStringLoader = gText_ShadowShieldBattleStart;
+					BattleScriptPushCursorAndCallback(BattleScript_PrintCustomStringEnd3);
+				}
+				#endif
+				++*state;
+				break;
 
 		case NeutralizingGas:
 			for (; *bank < gBattlersCount; ++ * bank)
