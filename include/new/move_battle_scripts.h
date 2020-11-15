@@ -202,6 +202,8 @@ extern const u8 gText_TargetTrappedThunderCage[];
 extern const u8 gText_TargetSplinters[];
 extern const u8 gText_StormOfLeaves[];
 extern const u8 gText_EffectBankAfflictedBySplinters[];
+extern const u8 gText_BuffetedByViciousSandstorm[];
+extern const u8 gText_ViciousSandstormContinues[];
 
 extern const u8 BattleScript_HealingWishHeal[];
 extern const u8 BattleScript_LunarDanceHeal[];

@@ -201,6 +201,7 @@ const struct TerrainTableStruct gTerrainTable[] =
 			.burmyForm = SPECIES_BURMY_TRASH,
 		},
 
+#ifndef UNBOUND
 	[BATTLE_TERRAIN_LORLEI + 4] =
 		{
 			.camouflageType = TYPE_ICE,
@@ -256,8 +257,53 @@ const struct TerrainTableStruct gTerrainTable[] =
 		},
 
 	//ADD NEW ENTRIES HERE
-
+	#endif
 #ifdef UNBOUND //The ones below are for Pokemon Unbound. Feel free to remove.
+	[BATTLE_TERRAIN_MOLEMAN + 4] =
+		{
+			.camouflageType = TYPE_GROUND,
+			.secretPowerEffect = MOVE_EFFECT_ACC_MINUS_1,
+			.secretPowerAnim = MOVE_MUDSLAP,
+			.naturePowerMove = MOVE_EARTHPOWER,
+			.burmyForm = SPECIES_BURMY_TRASH,
+		},
+
+	[BATTLE_TERRAIN_ELIAS + 4] =
+		{
+			.camouflageType = TYPE_GHOST,
+			.secretPowerEffect = MOVE_EFFECT_EVS_MINUS_1,
+			.secretPowerAnim = MOVE_SHADOWSNEAK,
+			.naturePowerMove = MOVE_SHADOWBALL,
+			.burmyForm = SPECIES_BURMY_TRASH,
+		},
+
+	[BATTLE_TERRAIN_ANABELLE + 4] =
+		{
+			.camouflageType = TYPE_FAIRY,
+			.secretPowerEffect = MOVE_EFFECT_SP_ATK_MINUS_1,
+			.secretPowerAnim = MOVE_FAIRYWIND,
+			.naturePowerMove = MOVE_MOONBLAST,
+			.burmyForm = SPECIES_BURMY_TRASH,
+		},
+
+	[BATTLE_TERRAIN_PENNY + 4] =
+		{
+			.camouflageType = TYPE_DRAGON,
+			.secretPowerEffect = MOVE_EFFECT_ATK_MINUS_1,
+			.secretPowerAnim = MOVE_DRAGONRAGE,
+			.naturePowerMove = MOVE_DRAGONPULSE,
+			.burmyForm = SPECIES_BURMY_TRASH,
+		},
+
+	[BATTLE_TERRAIN_CHAMPION + 4] =
+		{
+			.camouflageType = TYPE_NORMAL,
+			.secretPowerEffect = MOVE_EFFECT_PARALYSIS,
+			.secretPowerAnim = MOVE_BODYSLAM,
+			.naturePowerMove = MOVE_HYPERBEAM,
+			.burmyForm = SPECIES_BURMY_TRASH,
+		},
+
 	[BATTLE_TERRAIN_SNOW_FIELD + 4] =
 		{
 			.camouflageType = TYPE_ICE,

@@ -1969,6 +1969,7 @@ bool8 IsCurrentAreaWinter(void)
 		return mapSec == MAPSEC_FROZEN_HEIGHTS
 			|| mapSec == MAPSEC_ROUTE_1
 			|| mapSec == MAPSEC_BELLIN_TOWN
+			|| mapSec == MAPSEC_ICICLE_CAVE
 			|| mapSec == MAPSEC_ROUTE_8
 			|| mapSec == MAPSEC_BLIZZARD_CITY
 			|| mapSec == MAPSEC_FROZEN_FOREST
@@ -2052,12 +2053,6 @@ void PlayGrassFootstepNoise(void)
 {
 	if (IsFanfareTaskInactive()) //Sound interrupts fanfare
 		PlaySE(SE_GRASS_FOOTSTEP);
-}
-
-void PlaySandFootstepNoise(void)
-{
-	if (IsFanfareTaskInactive()) //Sound interrupts fanfare
-		PlaySE(SE_SAND_FOOTSTEP);
 }
 
 extern bool8 (*const GetLedgeJumpFuncs[])(u8);
@@ -2405,6 +2400,9 @@ bool8 TrySetupDiveDownScript(void)
 {
 	if (HasBadgeToUseDive()
 	&& (!gFollowerState.inProgress || gFollowerState.flags & FOLLOWER_FLAG_CAN_DIVE)
+	#if (defined FLAG_BOUGHT_ADM && !defined DEBUG_HMS)
+	&& FlagGet(FLAG_BOUGHT_ADM)
+	#endif
 	&& TrySetDiveWarp() == 2)
 	{
 		u16 item = ITEM_NONE;

@@ -140,6 +140,7 @@ Avoids ball and bomb moves.
 Flying moves hit first.
 
 #org @DESC_MOXIE
+#org @DESC_CHILLINGNEIGH
 Knockouts boost Attack.
 
 #org @DESC_AFTERMATH
@@ -247,6 +248,12 @@ Attacks hit twice. 2nd deals less.
 
 #org @DESC_MOLDBREAKER
 Moves ignore Abilities.
+
+#org @DESC_ASONE_GRIM
+Both Unnerve and Grim Neigh.
+
+#org @DESC_ASONE_CHILLING
+Both Unnerve and Chilling Neigh.
 
 #org @DESC_ZENMODE
 Transforms below half HP.

@@ -860,7 +860,8 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 
 		case EFFECT_SPEED_UP:
 		case EFFECT_SPEED_UP_2:
-			if (data->atkAbility == ABILITY_CONTRARY || !AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_SPEED))
+			if (data->atkAbility == ABILITY_CONTRARY || !AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_SPEED)
+			|| (IsTrickRoomActive() && gNewBS->TrickRoomTimer != 1)) //Trick Room not about to end
 				DECREASE_VIABILITY(10);
 			else if(IsTrickRoomActive())
 				DECREASE_VIABILITY(10);
@@ -2439,6 +2440,8 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 						&& (STAT_STAGE(bankAtk, STAT_STAGE_SPATK) >= STAT_STAGE_MAX || !SpecialMoveInMoveset(bankAtk))
 						&&  STAT_STAGE(bankAtk, STAT_STAGE_SPDEF) >= STAT_STAGE_MAX)
 							DECREASE_VIABILITY(10);
+						else if (IsTrickRoomActive() && gNewBS->TrickRoomTimer != 1) //Trick Room not about to end
+							DECREASE_VIABILITY(10);
 						break;
 
 					default:
@@ -2463,12 +2466,13 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 					&&  (STAT_STAGE(bankAtk, STAT_STAGE_ATK) >= STAT_STAGE_MAX || !PhysicalMoveInMoveset(bankAtk))
 					&&  (STAT_STAGE(bankAtk, STAT_STAGE_SPEED) >= STAT_STAGE_MAX))
 						DECREASE_VIABILITY(10);
-					else if (IsTrickRoomActive())
+					else if (IsTrickRoomActive() && gNewBS->TrickRoomTimer != 1) //Trick Room not about to end
 						DECREASE_VIABILITY(10);
 					break;
 
 				default: //Dragon Dance + Shift Gear
-					if (data->atkAbility == ABILITY_CONTRARY)
+					if (data->atkAbility == ABILITY_CONTRARY
+					|| (IsTrickRoomActive() && gNewBS->TrickRoomTimer != 1)) //Trick Room not about to end
 						DECREASE_VIABILITY(10);
 					else if(MoveInMoveset(MOVE_HAZE, bankDef) || MoveInMoveset(MOVE_FREEZYFROST, bankDef)) {
 						DECREASE_VIABILITY(10);
@@ -2509,7 +2513,7 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 					break;
 
 				case MOVE_SPEEDSWAP:
-					if (IsTrickRoomActive())
+					if (IsTrickRoomActive() && gNewBS->TrickRoomTimer != 1) //Trick Room not about to end
 					{
 						if (gBattleMons[bankAtk].speed <= gBattleMons[bankDef].speed)
 							DECREASE_VIABILITY(10);

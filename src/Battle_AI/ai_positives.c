@@ -429,6 +429,8 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			&& (MoveBlockedBySubstitute(move, bankAtk, bankDef) //Attack has to hit substitute to break it
 			 || data->atkItemEffect == ITEM_EFFECT_FLINCH))
 				INCREASE_VIABILITY(3); //Move past strongest move
+			else if (move == MOVE_SCALESHOT)
+				goto AI_SPEED_PLUS;
 			break;
 
 		case EFFECT_CONVERSION:
@@ -485,11 +487,6 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				else
 					INCREASE_STATUS_VIABILITY(1); //AI enjoys poisoning
 			}
-			break;
-
-		case EFFECT_LIGHT_SCREEN:
-			if (ShouldSetUpScreens(bankAtk, bankDef, move))
-				INCREASE_VIABILITY(7);
 			break;
 
 		case EFFECT_REST:
@@ -573,6 +570,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			break;
 
 		case EFFECT_REFLECT:
+		case EFFECT_LIGHT_SCREEN:
 			switch (move) {
 				case MOVE_AURORAVEIL:
 				case MOVE_G_MAX_RESONANCE_P:
@@ -583,6 +581,8 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 							INCREASE_VIABILITY(10);
 						else if (IsClassScreener(class))
 							INCREASE_VIABILITY(8);
+						else if (IsClassDoublesTeamSupport(class))
+							INCREASE_VIABILITY(15);
 						else
 							INCREASE_STATUS_VIABILITY(2);
 					}
@@ -593,6 +593,8 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 					{
 						if (IsClassScreener(class))
 							INCREASE_VIABILITY(7);
+						else if (IsClassDoublesTeamSupport(class))
+							INCREASE_VIABILITY(15);
 						else
 							INCREASE_STATUS_VIABILITY(2);
 					}
@@ -1002,7 +1004,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 					if (atkAbility == ABILITY_STANCECHANGE //Special logic for Aegislash
 					&&  data->atkSpecies == SPECIES_AEGISLASH_BLADE
 					&&  !IsBankIncapacitated(bankDef)
-					&& (Random() % 2 == 0)) //Added randomness so that its not abusable
+					&&  Random() & 1) //50% of being a good idea
 					{
 						if (IsClassStall(class))
 							INCREASE_VIABILITY(3);
@@ -2185,14 +2187,6 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				case MOVE_TRICKROOM:
 					if (!IsTrickRoomActive()
 					&& GetPokemonOnSideSpeedAverage(bankAtk) < GetPokemonOnSideSpeedAverage(bankDef))
-					{
-						if (IsClassDoublesTrickRoomer(class))
-							INCREASE_VIABILITY(19);
-						else
-							INCREASE_STATUS_VIABILITY(3);
-					}
-					else if (IsTrickRoomActive()
-					&& GetPokemonOnSideSpeedAverage(bankAtk) >= GetPokemonOnSideSpeedAverage(bankDef))
 					{
 						if (IsClassDoublesTrickRoomer(class))
 							INCREASE_VIABILITY(19);

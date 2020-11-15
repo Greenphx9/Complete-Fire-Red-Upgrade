@@ -990,10 +990,12 @@ void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 		&& Overworld_MapTypeAllowsTeleportAndFly(gMapHeader.mapType) //Only add if usable
 		#ifndef DEBUG_HMS
 		&& HasBadgeToUseFieldMove(FIELD_MOVE_FLY)
-		&& CheckBagHasItem(ITEM_HM02_FLY, 1) > 0
-		&& CanMonLearnTMTutor(&mons[slotId], ITEM_HM02_FLY, 0) == CAN_LEARN_MOVE
+		&& (
+		 #ifdef FLAG_BOUGHT_ADM
+		 FlagGet(FLAG_BOUGHT_ADM) ||
+		 #endif
+		 (CheckBagHasItem(ITEM_HM02_FLY, 1) > 0 && CanMonLearnTMTutor(&mons[slotId], ITEM_HM02_FLY, 0) == CAN_LEARN_MOVE)))
 		#endif
-		)
 		{
 			AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_FIELD_MOVES + FIELD_MOVE_FLY);
 			++k;
@@ -1110,6 +1112,11 @@ static bool8 SetUpFieldMove_Dive(void)
 {
 	if (gFollowerState.inProgress && !(gFollowerState.flags & FOLLOWER_FLAG_CAN_DIVE))
 		return FALSE;
+
+	#if (defined FLAG_BOUGHT_ADM && !defined DEBUG_HMS)
+	if (!FlagGet(FLAG_BOUGHT_ADM))
+		return FALSE;
+	#endif
 
 	gFieldEffectArguments[1] = TrySetDiveWarp();
 	if (gFieldEffectArguments[1] != 0)

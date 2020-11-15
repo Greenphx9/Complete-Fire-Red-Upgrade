@@ -175,11 +175,15 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 						}
 						break;
 
-					case ABILITY_POISONTOUCH:
+					case ABILITY_POISONTOUCH: ;
+						u8 chance = 30;
+						if (BankSideHasRainbow(gBankAttacker))
+							chance *= 2;
+
 						if (CheckContact(gCurrentMove, gBankAttacker)
 						&& ABILITY(gBankTarget) != ABILITY_SHIELDDUST
 						&& CanBePoisoned(gBankTarget, gBankAttacker, TRUE)
-						&& umodsi(Random(), 100) < 30)
+						&& umodsi(Random(), 100) < chance)
 						{
 							BattleScriptPushCursor();
 							gBattlescriptCurrInstr = BattleScript_PoisonTouch;
@@ -654,20 +658,16 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 				++gBattleScripting.multihitString[4];
 				if (--gMultiHitCounter == 0)
 				{
-					if (gCurrentMove == MOVE_SCALESHOT && !SheerForceCheck()) {
-						if (STAT_CAN_RISE(gBankAttacker, STAT_STAGE_SPEED)) {
-							PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_STAGE_SPEED);
-							gEffectBank = gBankAttacker;
-							gBattleScripting.bank = gBankAttacker;
-							gBattleScripting.statChanger = INCREASE_1 | STAT_STAGE_SPEED;
-							gBattleScripting.animArg1 = 0xE + STAT_STAGE_SPEED;
-							gBattleScripting.animArg2 = 0;
-
+					if (gCurrentMove == MOVE_SCALESHOT && !SheerForceCheck())
+					{
+						if (STAT_CAN_RISE(gBankAttacker, STAT_STAGE_SPEED)
+						||  STAT_CAN_FALL(gBankAttacker, STAT_STAGE_DEF))
+						{
 							BattleScriptPushCursor();
-							gBattlescriptCurrInstr = BattleScript_ScaleShot;
-							effect = 1;
+							gBattlescriptCurrInstr = BattleScript_ScaleShotBuff;
 						}
 					}
+
 					BattleScriptPushCursor();
 					gBattlescriptCurrInstr = BattleScript_MultiHitPrintStrings;
 					effect = 1;
@@ -707,6 +707,17 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 					}
 					else
 					{
+						if (BATTLER_ALIVE(gBankAttacker)
+						&& gCurrentMove == MOVE_SCALESHOT && !SheerForceCheck())
+						{
+							if (STAT_CAN_RISE(gBankAttacker, STAT_STAGE_SPEED)
+							||  STAT_CAN_FALL(gBankAttacker, STAT_STAGE_DEF))
+							{
+								BattleScriptPushCursor();
+								gBattlescriptCurrInstr = BattleScript_ScaleShotBuff;
+							}
+						}
+
 						BattleScriptPushCursor();
 						gBattlescriptCurrInstr = BattleScript_MultiHitPrintStrings;
 						effect = 1;

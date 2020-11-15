@@ -103,11 +103,6 @@ static struct ReplaceAbility sReplaceAbilities[] =
         .replaceAbilityString = NAME_CHILLING_NEIGH,
     },
     {
-        .species = SPECIES_CALYREX_ICE_RIDER,
-        .currAbility = ABILITY_MOXIE,
-        .replaceAbilityString = NAME_CHILLING_NEIGH,
-    },
-    {
         .species = SPECIES_DIGLETT_A,
         .currAbility = ABILITY_GOOEY,
         .replaceAbilityString = NAME_TANGLING_HAIR,

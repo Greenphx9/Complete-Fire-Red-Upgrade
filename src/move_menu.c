@@ -1123,7 +1123,7 @@ static void MoveSelectionDisplayDetails(void)
 		BattlePutTextOnWindow(gDisplayedStringBattle, i + 3);
 	}
 
-	//Display Move Name
+//Display Move Name
 	MoveNameToDisplayedStringBattle(gMoveSelectionCursor[gActiveBattler]);
 	BattlePutTextOnWindow(gDisplayedStringBattle, 3); //Slot of Move 1
 

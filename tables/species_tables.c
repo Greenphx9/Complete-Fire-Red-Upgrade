@@ -1044,6 +1044,38 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smartWild = TRUE,
 	},
 #endif
+#ifdef SPECIES_CALYREX_ICE_RIDER
+	[SPECIES_CALYREX_ICE_RIDER] =
+	{
+		.battleTowerStandardBan = TRUE,
+		.setPerfectXIVs = TRUE,
+		.smartWild = TRUE,
+	},
+#endif
+#ifdef SPECIES_CALYREX_SHADOW_RIDER
+	[SPECIES_CALYREX_SHADOW_RIDER] =
+	{
+		.battleTowerStandardBan = TRUE,
+		.setPerfectXIVs = TRUE,
+		.smartWild = TRUE,
+	},
+#endif
+#ifdef SPECIES_SPECTRIER
+	[SPECIES_SPECTRIER] =
+	{
+		.battleTowerStandardBan = TRUE,
+		.setPerfectXIVs = TRUE,
+		.smartWild = TRUE,
+	},
+#endif
+#ifdef SPECIES_GLASTRIER
+	[SPECIES_GLASTRIER] =
+	{
+		.battleTowerStandardBan = TRUE,
+		.setPerfectXIVs = TRUE,
+		.smartWild = TRUE,
+	},
+#endif
 #ifdef SPECIES_AEGISLASH
 	[SPECIES_AEGISLASH] =
 	{
@@ -4468,6 +4500,24 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smartWild = TRUE,
 	},
 #endif
+#ifdef SPECIES_ARTICUNO_G
+	[SPECIES_ARTICUNO_G] =
+	{
+		.setPerfectXIVs = TRUE,
+	},
+#endif
+#ifdef SPECIES_ZAPDOS_G
+	[SPECIES_ZAPDOS_G] =
+	{
+		.setPerfectXIVs = TRUE,
+	},
+#endif
+#ifdef SPECIES_MOLTRES_G
+	[SPECIES_MOLTRES_G] =
+	{
+		.setPerfectXIVs = TRUE,
+	},
+#endif
 #ifdef SPECIES_REGIROCK
 	[SPECIES_REGIROCK] =
 	{
@@ -4533,6 +4583,20 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 #endif
 #ifdef SPECIES_POIPOLE
 	[SPECIES_POIPOLE] =
+	{
+		.setPerfectXIVs = TRUE,
+		.smartWild = TRUE,
+	},
+#endif
+#ifdef SPECIES_REGIELEKI
+	[SPECIES_REGIELEKI] =
+	{
+		.setPerfectXIVs = TRUE,
+		.smartWild = TRUE,
+	},
+#endif
+#ifdef SPECIES_REGIDRAGO
+	[SPECIES_REGIDRAGO] =
 	{
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
