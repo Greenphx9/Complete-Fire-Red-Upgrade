@@ -9,6 +9,7 @@
 #include "../include/random.h"
 #include "../include/sound.h"
 
+#include "../include/constants/region_map_sections.h"
 #include "../include/constants/songs.h"
 
 #include "../include/new/battle_anims.h"
@@ -5105,6 +5106,41 @@ void SlideMonToOriginalPos(struct Sprite *sprite)
 	}
 }
 
+void SetAverageBattlerPositions(u8 battlerId, bool8 respectMonPicOffsets, s16 *x, s16 *y)
+{
+	u8 xCoordType, yCoordType;
+	s16 battlerX, battlerY;
+	s16 partnerX, partnerY;
+
+	if (!respectMonPicOffsets)
+	{
+		xCoordType = BATTLER_COORD_X;
+		yCoordType = BATTLER_COORD_Y;
+	}
+	else
+	{
+		xCoordType = BATTLER_COORD_X_2;
+		yCoordType = BATTLER_COORD_Y_PIC_OFFSET;
+	}
+
+	battlerX = GetBattlerSpriteCoord(battlerId, xCoordType);
+	battlerY = GetBattlerSpriteCoord(battlerId, yCoordType);
+	if (IsDoubleBattle() && (!IsRaidBattle() || SIDE(battlerId) == B_SIDE_PLAYER))
+	{
+		partnerX = GetBattlerSpriteCoord(BATTLE_PARTNER(battlerId), xCoordType);
+		partnerY = GetBattlerSpriteCoord(BATTLE_PARTNER(battlerId), yCoordType);
+	}
+	else
+	{
+		partnerX = battlerX;
+		partnerY = battlerY;
+	}
+
+	*x = (battlerX + partnerX) / 2;
+	*y = (battlerY + partnerY) / 2;
+}
+
+
 void AnimTask_AllBanksInvisible(u8 taskId)
 {
 	for (int i = 0; i < gBattlersCount; ++i)
@@ -5213,6 +5249,8 @@ void UpdateOamPriorityInAllHealthboxes(u8 priority)
 			break;
 
 		case CONTROLLER_BALLTHROWANIM:
+			if (gBattleTypeFlags & BATTLE_TYPE_OLD_MAN)
+				goto DEFAULT_CASE; //Because the game thinks the old man's a healthbox for some reason
 			break;
 
 		case CONTROLLER_CHOOSEACTION:
@@ -5967,6 +6005,11 @@ void SpriteCB_EnemyShadow(struct Sprite *shadowSprite)
 	if (!battlerSprite->inUse || !IsBattlerSpritePresent(battlerId)
 	#ifdef FLAG_SKY_BATTLE
 	|| FlagGet(FLAG_SKY_BATTLE) //Doesn't make sense to use Shadows in Sky Battle
+	#endif
+	#ifdef MAPSEC_DISTORTION_WORLD
+	|| (GetCurrentRegionMapSectionId() == MAPSEC_DISTORTION_WORLD
+	 && !(gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+	 && SIDE(battlerId) == B_SIDE_OPPONENT) //Fighting Giratina
 	#endif
 	)
 	{

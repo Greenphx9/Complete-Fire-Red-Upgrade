@@ -30,6 +30,7 @@
 	}																																						\
 																																							\
 	CreateMon(&party[i], speciesToCreate, lvl, baseIV, TRUE, personalityValue, otIdType, otid);																\
+	TryFixMiniorForm(&party[i]);																																\
 	party[i].metLevel = structure[i].lvl;																													\
 }
 

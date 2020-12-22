@@ -53,6 +53,7 @@ enum SwitchInStates
 	SwitchIn_Items,
 	SwitchIn_AirBalloon,
 	SwitchIn_TotemPokemon,
+	SwitchIn_MagnetRiseBattle,
 	SwitchIn_PixieBoost,
 	SwitchIn_LastPokemonMusic,
 	SwitchIn_TrainerMessage,
@@ -146,7 +147,11 @@ static bool8 TryRemovePrimalWeather(u8 bank, u8 ability)
 
 	switch (ability) {
 		case ABILITY_PRIMORDIALSEA:
-			if (gBattleWeather & WEATHER_RAIN_PRIMAL)
+			if (gBattleWeather & WEATHER_RAIN_PRIMAL
+			#ifdef FLAG_PRIMORDIAL_SEA_BATTLE
+			&& !FlagGet(FLAG_PRIMORDIAL_SEA_BATTLE) //Should continue to rain even if mon leaves the field
+			#endif
+			)
 				gBattleStringLoader = PrimalRainEndString;
 			break;
 		case ABILITY_DESOLATELAND:
@@ -154,7 +159,11 @@ static bool8 TryRemovePrimalWeather(u8 bank, u8 ability)
 				gBattleStringLoader = PrimalSunEndString;
 			break;
 		case ABILITY_DELTASTREAM:
-			if (gBattleWeather & WEATHER_AIR_CURRENT_PRIMAL)
+			if (gBattleWeather & WEATHER_AIR_CURRENT_PRIMAL
+			#ifdef FLAG_DELTA_STREAM_BATTLE
+			&& !FlagGet(FLAG_DELTA_STREAM_BATTLE) //Should continue to blow even if mon leaves the field
+			#endif
+			)
 				gBattleStringLoader = PrimalAirCurrentEndString;
 	}
 
@@ -885,6 +894,25 @@ void atk52_switchineffects(void)
 			++gNewBS->switchInEffectsState;
 		__attribute__ ((fallthrough));
 
+		case SwitchIn_MagnetRiseBattle:
+			#ifdef FLAG_MAGNET_RISE_BATTLE
+			if (FlagGet(FLAG_MAGNET_RISE_BATTLE))
+			{
+				if (IsFloatingWithMagnetism(gActiveBattler)
+				&& CheckGrounding(gActiveBattler) == IN_AIR)
+				{
+					BattleScriptPushCursor();
+					gBattleStringLoader = gText_MagnetRiseBattleStart;
+					gBattlescriptCurrInstr = BattleScript_PrintCustomString;
+					gBankAttacker = gBattleScripting.bank = gActiveBattler;
+					++gNewBS->switchInEffectsState;
+					return;
+				}
+			}
+			#endif
+			++gNewBS->switchInEffectsState;
+		__attribute__ ((fallthrough));
+
 		case SwitchIn_PixieBoost:
 			#ifdef FLAG_PIXIE_BATTLE
 			if (FlagGet(FLAG_PIXIE_BATTLE))
@@ -1233,6 +1261,7 @@ void ClearSwitchBytes(u8 bank)
 	DestroyMegaIndicator(bank);
 	ClearBattlerAbilityHistory(bank);
 	ClearBattlerItemEffectHistory(bank);
+	ClearBattlerMoveHistory(bank);
 }
 
 void ClearSwitchBits(u8 bank)

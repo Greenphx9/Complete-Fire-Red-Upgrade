@@ -672,28 +672,28 @@ npc 1 41 9 EventScript_Strength
 
 
 ## Slot Machines
-sign 10 14 12 EventScript_SlotMachine
-sign 10 14 13 EventScript_SlotMachine
-sign 10 14 14 EventScript_SlotMachine
-sign 10 14 15 EventScript_SlotMachine
-sign 10 14 16 EventScript_SlotMachine
-sign 10 14 17 EventScript_SlotMachine
-sign 10 14 18 EventScript_SlotMachine
-sign 10 14 19 EventScript_SlotMachine
-sign 10 14 20 EventScript_SlotMachine
-sign 10 14 21 EventScript_SlotMachine
-sign 10 14 22 EventScript_SlotMachine
-sign 10 14 23 EventScript_SlotMachine
-sign 10 14 24 EventScript_SlotMachine
-sign 10 14 25 EventScript_SlotMachine
-sign 10 14 26 EventScript_SlotMachine
-sign 10 14 27 EventScript_SlotMachine
-sign 10 14 28 EventScript_SlotMachine
-sign 10 14 29 EventScript_SlotMachine
-sign 10 14 30 EventScript_SlotMachine
-sign 10 14 31 EventScript_SlotMachine
-sign 10 14 32 EventScript_SlotMachine
-sign 10 14 33 EventScript_SlotMachine
+##sign 10 14 12 EventScript_SlotMachine
+##sign 10 14 13 EventScript_SlotMachine
+##sign 10 14 14 EventScript_SlotMachine
+##sign 10 14 15 EventScript_SlotMachine
+##sign 10 14 16 EventScript_SlotMachine
+##sign 10 14 17 EventScript_SlotMachine
+##sign 10 14 18 EventScript_SlotMachine
+##sign 10 14 19 EventScript_SlotMachine
+##sign 10 14 20 EventScript_SlotMachine
+##sign 10 14 21 EventScript_SlotMachine
+##sign 10 14 22 EventScript_SlotMachine
+##sign 10 14 23 EventScript_SlotMachine
+##sign 10 14 24 EventScript_SlotMachine
+##sign 10 14 25 EventScript_SlotMachine
+##sign 10 14 26 EventScript_SlotMachine
+##sign 10 14 27 EventScript_SlotMachine
+##sign 10 14 28 EventScript_SlotMachine
+##sign 10 14 29 EventScript_SlotMachine
+##sign 10 14 30 EventScript_SlotMachine
+##sign 10 14 31 EventScript_SlotMachine
+##sign 10 14 32 EventScript_SlotMachine
+##sign 10 14 33 EventScript_SlotMachine
 
 
 

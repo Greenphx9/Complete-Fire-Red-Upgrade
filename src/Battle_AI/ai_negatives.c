@@ -684,9 +684,9 @@ MOVESCR_CHECK_0:
 			{
 				DECREASE_VIABILITY(10);
 			}
-			else if ( (HasProtectionMoveInMoveset(bankDef, 0) && gDisableStructs[bankDef].protectUses < 1) || MoveEffectInMoveset(EFFECT_SEMI_INVULNERABLE, bankDef))
+			else if (data->defStatus3 & STATUS3_SEMI_INVULNERABLE && MoveWouldHitFirst(move, bankAtk, bankDef))
 			{
-				DECREASE_VIABILITY(10);
+				DECREASE_VIABILITY(10); //Don't explode if target will still be semi-invulnerable when attack lands
 			}
 			else if (ViableMonCountFromBank(bankDef) == 1 //If the Target only has one PKMN left
 			&& MoveKnocksOutXHits(move, bankAtk, bankDef, 1)) //The AI can knock out the target
@@ -1222,6 +1222,11 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 		case EFFECT_LIGHT_SCREEN:
 			if (gSideStatuses[SIDE(bankAtk)] & SIDE_STATUS_LIGHTSCREEN || (MoveInMoveset(MOVE_BRICKBREAK, bankDef) || (MoveInMoveset(MOVE_DEFOG, bankDef) )))
 				DECREASE_VIABILITY(10);
+			else if (AI_THINKING_STRUCT->aiFlags > AI_SCRIPT_SEMI_SMART //Only smart AI
+				&& !IsBankIncapacitated(bankDef) //Enemy can attack
+				&& (HasUsedMoveWithEffect(bankDef, EFFECT_BRICK_BREAK) || HasUsedMove(bankDef, MOVE_DEFOG))) //Has used a move that could break screens before
+					DECREASE_VIABILITY(9); //Better not to use screen since player will probably try to cheese AI
+				break;
 			break;
 
 		case EFFECT_0HKO:
@@ -1321,7 +1326,8 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 			break;
 
 		case EFFECT_REFLECT:
-			switch (move) {
+			switch (move)
+			{
 				case MOVE_AURORAVEIL:
 					if (gNewBS->AuroraVeilTimers[SIDE(bankAtk)]
 					|| !(gBattleWeather & WEATHER_HAIL_ANY)
@@ -1336,6 +1342,11 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 					|| PARTNER_MOVE_EFFECT_IS_SAME_NO_TARGET
 					|| (MoveInMoveset(MOVE_BRICKBREAK, bankDef) || (MoveInMoveset(MOVE_DEFOG, bankDef)))) 
 						DECREASE_VIABILITY(10);
+					else if (AI_THINKING_STRUCT->aiFlags > AI_SCRIPT_SEMI_SMART //Only smart AI
+					&& !IsBankIncapacitated(bankDef) //Enemy can attack
+					&& (HasUsedMoveWithEffect(bankDef, EFFECT_BRICK_BREAK) || HasUsedMove(bankDef, MOVE_DEFOG))) //Has used a move that could break screens before
+						DECREASE_VIABILITY(9); //Better not to use screen since player will probably try to cheese AI
+					break;
 			}
 			break;
 
@@ -1674,15 +1685,21 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 				{
 					DECREASE_VIABILITY(10); //Don't protect if you're going to faint after protecting
 				}
-				else if (gDisableStructs[bankAtk].protectUses == 1 && Random() % 100 < 50)
+				else if (gDisableStructs[bankAtk].protectUses >= 2)
+				{
+					DECREASE_VIABILITY(10);
+				}
+				else if (move == MOVE_KINGSSHIELD && gDisableStructs[bankAtk].protectUses > 0)
+				{
+					DECREASE_VIABILITY(9); //Pretty much never use King's Shield more than once in a row
+				}
+				else if (gDisableStructs[bankAtk].protectUses == 1 && Random() & 1) //50% chance of using two Protects in a row
 				{
 					if (IS_SINGLE_BATTLE)
 						DECREASE_VIABILITY(6);
 					else
 						DECREASE_VIABILITY(10); //Don't try double protecting in doubles
 				}
-				else if (gDisableStructs[bankAtk].protectUses >= 2)
-					DECREASE_VIABILITY(10);
 			}
 
 			if (AI_THINKING_STRUCT->aiFlags == AI_SCRIPT_CHECK_BAD_MOVE //Only basic AI
@@ -1697,7 +1714,14 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 			break;
 
 		case EFFECT_SPIKES:
-			if (IS_DOUBLE_BATTLE)
+			if (AI_THINKING_STRUCT->aiFlags > AI_SCRIPT_SEMI_SMART //Only smart AI
+			&& !IsBankIncapacitated(bankDef) //Enemy can attack
+			&& (HasUsedMoveWithEffect(bankDef, EFFECT_RAPID_SPIN))) //Has used a move that removed hazards before
+			{
+				DECREASE_VIABILITY(9); //Better not to use hazard since player will probably try to cheese AI
+				break;
+			}
+			else if (IS_DOUBLE_BATTLE)
 			{
 				if (ViableMonCountFromBank(bankDef) <= 2)
 				{
@@ -2664,10 +2688,13 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 				case MOVE_GRAVITY:
 					if ((IsGravityActive()
 					&&  !IsOfType(bankAtk, TYPE_FLYING)
+					&&  !IsFloatingWithMagnetism(bankAtk) //Should revert Gravity in this case
 					&&  data->atkItemEffect != ITEM_EFFECT_AIR_BALLOON) //Should revert Gravity in this case
 					|| PARTNER_MOVE_IS_SAME_NO_TARGET
 					|| PARTNER_MOVE_IS_MAX_MOVE_WITH_EFFECT(MAX_EFFECT_GRAVITY))
 						DECREASE_VIABILITY(10);
+					else if (!IsGravityActive() && IsFloatingWithMagnetism(bankAtk))
+						DECREASE_VIABILITY(10); //Has Gravity to revert it if set by someone else
 					break;
 
 				case MOVE_IONDELUGE:
@@ -2961,7 +2988,7 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 		case EFFECT_TEAM_EFFECTS:
 			switch (move) {
 				case MOVE_TAILWIND:
-					if (gNewBS->TailwindTimers[SIDE(bankAtk)] != 0
+					if (BankSideHasTailwind(bankAtk)
 					||  PARTNER_MOVE_IS_TAILWIND_TRICKROOM
 					||  (IsTrickRoomActive() && gNewBS->TrickRoomTimer != 1)) //Trick Room active and not ending this turn
 						DECREASE_VIABILITY(10);

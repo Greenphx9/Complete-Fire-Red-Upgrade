@@ -86,7 +86,7 @@ const u8* ItemId_GetName(u16 itemId)
 {
 	u8* name = gItems[SanitizeItemId(itemId)].name;
 
-	if (name[3] == 0x8) //Expanded Item Names
+	if (name[3] == 0x8 || name[3] == 0x9) //Expanded Item Names
 		name = T1_READ_PTR(name);
 
 	return name;
@@ -828,59 +828,67 @@ void CheckTmPurchase(u16 item, u8 taskId)
 extern const u8 gText_AlreadyOwnTM[];
 bool8 CheckBuyableTm(u16 item, u8 taskId)
 {
-#ifdef REUSABLE_TMS
-	if (GetPocketByItemId(item) == POCKET_TM_HM && CheckBagHasItem(item, 1))
-	{
-		BuyMenuDisplayMessage(taskId, &gText_AlreadyOwnTM[0], BuyMenuReturnToItemList);
-		return TRUE;
-	}
-	else
-	{
+	#ifdef REUSABLE_TMS
+		if (GetPocketByItemId(item) == POCKET_TM_HM && CheckBagHasItem(item, 1))
+		{
+			BuyMenuDisplayMessage(taskId, &gText_AlreadyOwnTM[0], BuyMenuReturnToItemList);
+			return TRUE;
+		}
+		else
+		{
+			u32 price = ItemId_GetPrice(item);
+			gShopData.itemPrice = price;
+			if (IsEnoughMoney(&gSaveBlock1->money, price))
+				return FALSE;
+			else
+			{
+				BuyMenuDisplayMessage(taskId, (void*) 0x8416842, BuyMenuReturnToItemList);
+				return TRUE;
+			}
+		}
+	#else
 		u32 price = ItemId_GetPrice(item);
-		gShopDataPtr->itemPrice = price;
+		gShopData.itemPrice = price;
 		if (IsEnoughMoney(&gSaveBlock1->money, price))
 			return FALSE;
 		else
 		{
-			BuyMenuDisplayMessage(taskId, (void*)0x8416842, BuyMenuReturnToItemList);
+			BuyMenuDisplayMessage(taskId, (void*) 0x8416842, BuyMenuReturnToItemList);
 			return TRUE;
 		}
-	}
-#else
-	u32 price = ItemId_GetPrice(item);
-	gShopDataPtr->itemPrice = price;
-	if (IsEnoughMoney(&gSaveBlock1->money, price))
-		return FALSE;
-	else
-	{
-		BuyMenuDisplayMessage(taskId, (void*)0x8416842, BuyMenuReturnToItemList);
-		return TRUE;
-	}
-#endif
+	#endif
 }
 
 extern const u8 gText_Purchased[];
 void PrintTmPriceOrPurchased(u8 windowId, u16 item, u8 y)
 {
 	s32 x;
-	u8* loc;
-
-#ifdef REUSABLE_TMS
-	if (GetPocketByItemId(item) == POCKET_TM_CASE && CheckBagHasItem(item, 1))
-	{
-		BuyMenuPrint(windowId, 0, gText_Purchased, 0x58, y, 0, 0, 0xFF, 1);
-		return;
-	}
-#endif
-
+	u8 *loc;
+	
+	#ifdef REUSABLE_TMS
+		if (GetPocketByItemId(item) == POCKET_TM_CASE && CheckBagHasItem(item, 1))
+		{
+			#ifdef UNBOUND
+			BuyMenuPrint(windowId, 0, gText_Purchased, 0x58, y, 0, 0, 0xFF, 0);
+			#else
+			BuyMenuPrint(windowId, 0, gText_Purchased, 0x58, y, 0, 0, 0xFF, 1);
+			#endif
+			return;
+		}
+	#endif
+	
 	ConvertIntToDecimalStringN(gStringVar1, ItemId_GetPrice(item), 0, 5);
 	x = 5 - StringLength(gStringVar1);
 	loc = gStringVar4;
 	while (x-- != 0)
 		*loc++ = 0;
-
-	StringExpandPlaceholders(loc, (void*)0x841697A);
+	
+	StringExpandPlaceholders(loc, (void*) 0x841697A);
+	#ifdef UNBOUND
+	BuyMenuPrint(windowId, 0, gStringVar4, 0x66, y, 0, 0, 0xFF, 0);
+	#else
 	BuyMenuPrint(windowId, 0, gStringVar4, 0x66, y, 0, 0, 0xFF, 1);
+	#endif
 }
 
 u8 CheckSingleBagTm(unusedArg u16 item)
@@ -953,7 +961,7 @@ void Task_ReturnToSellListAfterTmPurchase(u8 taskId)
 	if (gMain.newKeys & (A_BUTTON | B_BUTTON))
 	{
 		IncrementGameStat(GAME_STAT_SHOPPED);
-		RemoveMoney(&gSaveBlock1->money, gShopDataPtr->itemPrice);
+		RemoveMoney(&gSaveBlock1->money, gShopData.itemPrice);
 		PlaySE(SE_MONEY);
 		PrintMoneyAmountInMoneyBox(0, GetMoney(&gSaveBlock1->money), 0);
 		RedrawListMenu(tListTaskId);
@@ -1675,7 +1683,11 @@ static void BagMenu_CancelSort(u8 taskId)
 	HideBagWindow(6);
 	PutWindowTilemap(1);
 	ScheduleBgCopyTilemapToVram(0);
+	#ifdef UNBOUND
+	BagMenu_PrintCursor_(data[0], 0);
+	#else
 	BagMenu_PrintCursor_(data[0], 1);
+	#endif
 	Task_RedrawArrowsAndReturnToBagMenuSelect(taskId);
 }
 
@@ -1709,7 +1721,11 @@ static void Task_SortFinish(u8 taskId)
 		HideBagWindow(6);
 		PutWindowTilemap(1);
 		ScheduleBgCopyTilemapToVram(0);
+		#ifdef UNBOUND
+		BagMenu_PrintCursor_(data[0], 0);
+		#else
 		BagMenu_PrintCursor_(data[0], 1);
+		#endif
 		Task_RedrawArrowsAndReturnToBagMenuSelect(taskId);
 	}
 }
@@ -2238,4 +2254,12 @@ bool8 HasItemsRequiredToLevelUpPowerItem(void)
 	}
 	gSpecialVar_LastResult = FALSE;
 	return FALSE;
+}
+
+void FixCubeCursorDefaultColour(void)
+{
+	#ifdef UNBOUND
+	gMultiuseListMenuTemplate->cursorPal = 1;
+	gMultiuseListMenuTemplate->cursorShadowPal = 2;
+	#endif
 }

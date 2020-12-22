@@ -25,6 +25,10 @@
 #include "../include/new/move_tables.h"
 #include "../include/new/text.h"
 #include "../include/new/cmd49_battle_scripts.h"
+#include "../include/new/move_battle_scripts.h"
+#include "../include/new/move_tables.h"
+#include "../include/new/util.h"
+
 /*
 ability_battle_effects.c
 	-functions that introduce or moodify battle effects via abilities or otherwise.
@@ -470,6 +474,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 						gBattleWeather = (WEATHER_RAIN_DOWNPOUR | WEATHER_RAIN_PERMANENT);
 						gBattleScripting.animArg1 = B_ANIM_RAIN_CONTINUES;
 						effect++;
+
+						#ifdef FLAG_PRIMORDIAL_SEA_BATTLE
+						if (FlagGet(FLAG_PRIMORDIAL_SEA_BATTLE))
+							gBattleWeather |= WEATHER_RAIN_PRIMAL;
+						#endif
 					}
 					break;
 				case WEATHER_SANDSTORM:
@@ -529,6 +538,15 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 			#endif
 			}
 
+			#ifdef FLAG_DELTA_STREAM_BATTLE
+			if (FlagGet(FLAG_DELTA_STREAM_BATTLE))
+			{
+				gBattleWeather = WEATHER_AIR_CURRENT_PRIMAL;
+				gBattleScripting.animArg1 = B_ANIM_STRONG_WINDS_CONTINUE;	
+				effect++;
+			}
+			#endif
+
 			if (effect)
 			{
 				if (gBattleTypeFlags & BATTLE_TYPE_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_WEATHER)
@@ -537,7 +555,17 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				if (gBattleWeather & WEATHER_SANDSTORM_PRIMAL)
 				{
 					gBattleStringLoader = gText_ViciousSandstormBrewed;
-					gBattleCommunication[MULTISTRING_CHOOSER] = NELEMS(gWeatherContinuesStringIds) - 1;
+					gBattleCommunication[MULTISTRING_CHOOSER] = NELEMS(gWeatherContinuesStringIds) - 1; //Custom string
+				}
+				else if (gBattleWeather & WEATHER_RAIN_PRIMAL)
+				{			
+					gBattleStringLoader = gText_PrimordialSeaActivate;
+					gBattleCommunication[MULTISTRING_CHOOSER] = NELEMS(gWeatherContinuesStringIds) - 1; //Custom string
+				}
+				else if (gBattleWeather & WEATHER_AIR_CURRENT_PRIMAL)
+				{			
+					gBattleStringLoader = gText_DeltaStream;
+					gBattleCommunication[MULTISTRING_CHOOSER] = NELEMS(gWeatherContinuesStringIds) - 1; //Custom string
 				}
 				else
 					gBattleCommunication[MULTISTRING_CHOOSER] = GetCurrentWeather();
@@ -1013,8 +1041,18 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 			{
 				gBankAttacker = bank;
 				gBankTarget = transformBank;
-				TransformPokemon(bank, gBankTarget);
-				BattleScriptPushCursorAndCallback(BattleScript_ImposterActivates);
+
+				if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) && VarGet(VAR_TOTEM + gBankTarget) != 0) //Wild boss
+				{
+					//So you can't cheese the wild bosses
+					gBattleStringLoader = gText_TransformFailsOnWildBosses;
+					BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+				}
+				else
+				{
+					TransformPokemon(bank, gBankTarget);
+					BattleScriptPushCursorAndCallback(BattleScript_ImposterActivates);
+				}
 				effect++;
 			}
 			break;

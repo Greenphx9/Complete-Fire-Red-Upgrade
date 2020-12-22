@@ -103,3 +103,8 @@ bool8 SpeciesHasEarthilate(u16 species)
 {
 	return gSpecialReplaceAbilityFlags[species].hasEarthilate;
 }
+
+bool8 AbilityIncreasesWildItemChance(u8 ability)
+{
+	return ability == ABILITY_COMPOUNDEYES || ability == ABILITY_SUPERLUCK;
+}

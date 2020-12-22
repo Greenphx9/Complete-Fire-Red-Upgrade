@@ -20,6 +20,8 @@ bool8 SpeciesHasTeravolt(u16 species);
 bool8 SpeciesHasStrongBeak(u16 species);
 bool8 SpeciesHasEarthilate(u16 species);
 
+bool8 AbilityIncreasesWildItemChance(u8 ability);
+
 struct SpecialReplaceAbilityFlags
 {
 	bool8 hasTurboblaze : 1;

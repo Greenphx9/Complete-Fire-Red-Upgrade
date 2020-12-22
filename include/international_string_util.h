@@ -2,6 +2,7 @@
 #define GUARD_INTERNATIONAL_STRING_UTIL_H
 
 #include "global.h"
+#include "string_util.h"
 
 #include "menu.h"
 

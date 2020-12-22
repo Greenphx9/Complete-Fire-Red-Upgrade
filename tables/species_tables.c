@@ -4546,6 +4546,13 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.randomizerBan = TRUE,
 	},
 #endif
+#ifdef SPECIES_RAYQUAZA_MEGA
+	[SPECIES_RAYQUAZA_MEGA] =
+	{
+		.setPerfectXIVs = TRUE,
+		.randomizerBan = TRUE,
+	},
+#endif
 #ifdef SPECIES_MESPRIT
 	[SPECIES_MESPRIT] =
 	{
@@ -5250,12 +5257,6 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 #endif
 #ifdef SPECIES_LATIOS_MEGA
 	[SPECIES_LATIOS_MEGA] =
-	{
-		.randomizerBan = TRUE,
-	},
-#endif
-#ifdef SPECIES_RAYQUAZA_MEGA
-	[SPECIES_RAYQUAZA_MEGA] =
 	{
 		.randomizerBan = TRUE,
 	},

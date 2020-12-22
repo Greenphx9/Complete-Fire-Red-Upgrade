@@ -7837,7 +7837,7 @@ const struct BattleMove gBattleMoves[] =
 	[MOVE_PUNISHMENT] =
 	{
 		.effect = EFFECT_HIT,
-		.power = 1,
+		.power = 60, //Starts at 60 so best to show it to the player
 		.type = TYPE_DARK,
 		.accuracy = 100,
 		.pp = 5,
@@ -11871,7 +11871,7 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_SURGINGSTRIKES] =
-	{	//ANIM TODO
+	{
 		.effect = EFFECT_MULTI_HIT,
 		.power = 25,
 		.type = TYPE_WATER,
@@ -11941,9 +11941,9 @@ const struct BattleMove gBattleMoves[] =
 	[MOVE_EERIESPELL] =
 	{	//ANIM TODO
 		.effect = EFFECT_SPITE,
-		.power = 80,
+		.power = 95,
 		.type = TYPE_PSYCHIC,
-		.accuracy = 90,
+		.accuracy = 100,
 		.pp = 15,
 		.secondaryEffectChance = 0,
 		.target = MOVE_TARGET_SELECTED,
@@ -11956,7 +11956,7 @@ const struct BattleMove gBattleMoves[] =
 	
 	[MOVE_THUNDERCAGE] =
 	{	//ANIM TODO
-		.effect = EFFECT_TRAP, //EFFECT TODO?
+		.effect = EFFECT_TRAP,
 		.power = 80,
 		.type = TYPE_ELECTRIC,
 		.accuracy = 90,
@@ -13460,7 +13460,7 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_G_MAX_VINE_LASH_P] =
-	{	//ANIM TODO
+	{
 		.effect = EFFECT_MAX_MOVE,
 		.power = 10,
 		.type = TYPE_GRASS,
@@ -13476,7 +13476,7 @@ const struct BattleMove gBattleMoves[] =
 	},
 	
 	[MOVE_G_MAX_VINE_LASH_S] =
-	{	//ANIM TODO
+	{
 		.effect = EFFECT_MAX_MOVE,
 		.power = 10,
 		.type = TYPE_GRASS,
@@ -13524,7 +13524,7 @@ const struct BattleMove gBattleMoves[] =
 	},
 	
 	[MOVE_G_MAX_CANNONADE_P] =
-	{	//ANIM TODO
+	{
 		.effect = EFFECT_MAX_MOVE,
 		.power = 10,
 		.type = TYPE_WATER,
@@ -14514,21 +14514,6 @@ const struct BattleMove gBattleMoves[] =
 		.split = SPLIT_SPECIAL,
 		.z_move_power = 0,
 		.z_move_effect = MAX_EFFECT_TORMENT_FOES, //EFFECT TODO
-	},
-	[MOVE_EERIESPELL] =
-	{
-		.effect = EFFECT_SPITE,
-		.power = 95,
-		.type = TYPE_PSYCHIC,
-		.accuracy = 100,
-		.pp = 5,
-		.secondaryEffectChance = 100,
-		.target = MOVE_TARGET_SELECTED,
-		.priority = 0,
-		.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
-		.z_move_power = 100,
-		.split = SPLIT_SPECIAL,
-		.z_move_effect = 0
 	},
 			[MOVE_ZIPPYZAP] =
 		{

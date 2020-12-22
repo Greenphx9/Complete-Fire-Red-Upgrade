@@ -184,7 +184,8 @@ static u8 BuildFrontierParty(struct Pokemon* const party, const u16 trainerNum, 
 static void BuildFrontierMultiParty(u8 multiId);
 static void BuildRaidMultiParty(void);
 static void CreateFrontierMon(struct Pokemon* mon, const u8 level, const struct BattleTowerSpread* spread, const u16 trainerId, const u8 trainerNum, const u8 trainerGender, const bool8 forPlayer);
-void SetWildMonHeldItem(void);
+static void TryFixMiniorForm(struct Pokemon* mon);
+static void SetWildMonHeldItem(void);
 static u8 ConvertFrontierAbilityNumToAbility(const u8 abilityNum, const u16 species);
 static bool8 BaseStatsTotalGEAlreadyOnTeam(const u16 toCheck, const u8 partySize, u16* speciesArray);
 static bool8 SpeciesAlreadyOnTeam(const u16 species, const u8 partySize, const species_t* const speciesArray);
@@ -206,6 +207,9 @@ static u8 GetPartyIdFromPartyData(struct Pokemon* mon);
 static u8 GetHighestMonLevel(const struct Pokemon* const party);
 static u16 ScaleLevel(u16 lvl);
 void PokeSum_PrintAbilityNameAndDesc();
+#ifdef UNBOUND
+static u8 GetEVSpreadNumForUnboundRivalChallenge(struct Pokemon* mon, u32 aiFlags);
+#endif
 
 #ifdef OPEN_WORLD_TRAINERS
 
@@ -789,7 +793,11 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 		#if (defined SCALED_TRAINERS && !defined  DEBUG_NO_LEVEL_SCALING)
 		#ifdef VAR_GAME_DIFFICULTY
 		levelScaling = gameDifficulty != OPTIONS_EASY_DIFFICULTY //Don't scale Trainers on easy mode
-					|| trainer->trainerClass == CLASS_ELITE_4 || trainer->trainerClass == CLASS_CHAMPION; //Unless you're facing the final bosses
+					|| trainer->trainerClass == CLASS_ELITE_4 || trainer->trainerClass == CLASS_CHAMPION || trainer->trainerClass == CLASS_RIVAL_2 //Unless you're facing the final bosses
+					#ifdef UNBOUND
+					|| trainerId == 0x223 //Auburn Waterway Hiker needs to scale to confirm you're prepared to face the wild mons below
+					#endif
+					|| (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) && FlagGet(FLAG_SCALE_WILD_BOSS_LEVEL)); //Scale the partner up against a scaled wild boss
 		#else
 		levelScaling = TRUE;
 		#endif
@@ -930,6 +938,14 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 			//Give EVs
 #ifdef TRAINERS_WITH_EVS
 			u8 spreadNum = trainer->party.NoItemCustomMoves[i].iv;
+
+			#ifdef UNBOUND
+			if ((gTrainers[trainerId].trainerClass == CLASS_RIVAL
+			  || gTrainers[trainerId].trainerClass == CLASS_RIVAL_2)
+			&& gameDifficulty >= OPTIONS_HARD_DIFFICULTY)
+				spreadNum = GetEVSpreadNumForUnboundRivalChallenge(&party[i], trainer->aiFlags);
+			#endif
+
 			if (gTrainers[trainerId].partyFlags == (PARTY_FLAG_CUSTOM_MOVES | PARTY_FLAG_HAS_ITEM)
 				&& trainer->aiFlags > 1
 #ifdef VAR_GAME_DIFFICULTY
@@ -1128,8 +1144,12 @@ static void ModifySpeciesAndLevelForGenericBattle(unusedArg u16* species, unused
 	prevStartScalingAtLevel = (badgeCount == 0) ? 0 : sLevelScales[badgeCount - 1].startScalingAtLevel;
 	levelRange = *level - minEnemyTeamLevel; //The offset in the team
 	newLevel = minEnemyLevel + levelRange;
-
-	if (IsPseudoBossTrainerPartyForLevelScaling(trainerPartyFlags))
+	
+	if (IsPseudoBossTrainerPartyForLevelScaling(trainerPartyFlags)
+	#ifdef VAR_GAME_DIFFICULTY //Scale partners well in wild boss battles on easy
+	|| (VarGet(VAR_GAME_DIFFICULTY) == OPTIONS_EASY_DIFFICULTY && (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) && FlagGet(FLAG_SCALE_WILD_BOSS_LEVEL)))
+	#endif
+	)
 	{
 		levelSubtractor = 0; //Allow pseudo bosses to be closer to the player's average level (and maybe even surpass their max)
 	}
@@ -1198,7 +1218,10 @@ u8 GetScaledWildBossLevel(u8 level)
 
 	if (level < newLevel)
 		level = newLevel;
-#endif
+		
+	if (level > MAX_LEVEL)
+		level = MAX_LEVEL;
+	#endif
 
 	return level;
 }
@@ -2002,12 +2025,13 @@ static void CreateFrontierMon(struct Pokemon* mon, const u8 level, const struct 
 		SetMonData(mon, MON_DATA_OT_GENDER, &trainerGender);
 	}
 
-#ifdef UNBOUND
-	mon->metLocation = MAPSEC_BATTLE_FRONTIER;
-#else
-	mon->metLocation = MAPSEC_TRAINER_TOWER;
-#endif
-
+/*
+	#ifdef UNBOUND
+		mon->metLocation = MAPSEC_BATTLE_FRONTIER;
+	#else
+		mon->metLocation = MAPSEC_TRAINER_TOWER;
+	#endif
+*/
 	mon->metLevel = level;
 	mon->obedient = TRUE;
 	mon->friendship = 255;
@@ -2050,18 +2074,28 @@ static void CreateFrontierMon(struct Pokemon* mon, const u8 level, const struct 
 	HealMon(mon);
 }
 
+static void TryFixMiniorForm(struct Pokemon* mon)
+{
+	u16 species = GetMonData(mon, MON_DATA_SPECIES2, NULL);
+	if (species != SPECIES_NONE && species != SPECIES_EGG)
+	{
+		u16 dexNum = SpeciesToNationalPokedexNum(species);
+		if (dexNum == NATIONAL_DEX_MINIOR)
+			TryFormRevert(mon); //To fix form
+	}
+}
+
 u16 GenerateWildMonHeldItem(u16 species, u8 bonus)
 {
 	u16 rnd = Random() % 100;
 	u16 var1 = 45;
 	u16 var2 = 95;
-	u8 ability = GetMonAbility(&gPlayerParty[0]);
 
-	if (gBaseStats[species].item1 == gBaseStats[species].item2 && gBaseStats[species].item1 != ITEM_NONE)
-		return gBaseStats[species].item1; //100% chance
+	if (gBaseStats2[species].item1 == gBaseStats2[species].item2 && gBaseStats2[species].item1 != ITEM_NONE)
+		return gBaseStats2[species].item1; //100% chance
 
 	if (!GetMonData(&gPlayerParty[0], MON_DATA_IS_EGG, NULL)
-	&& (ability == ABILITY_COMPOUNDEYES || ability == ABILITY_SUPERLUCK)) //Increased chance of finding an item
+	&& AbilityIncreasesWildItemChance(GetMonAbility(&gPlayerParty[0]))) //Increased chance of finding an item
 	{
 		var1 = 20;
 		var2 = 80;
@@ -3746,7 +3780,7 @@ u8 GetOpenWorldBadgeCount(void)
 }
 
 //unused1 is used to hook in so don't use it for anything
-u8 ScriptGiveMon(u16 species, u8 level, u16 item, unusedArg u32 unused1, u32 customGivePokemon, u8 ballType)
+u8 ScriptGiveMon(u16 species, u8 level, u16 item, unusedArg u32 unused1, unusedArg u32 customGivePokemon, unusedArg u8 ballType)
 {
 	u8 sentToPc;
 	struct Pokemon mon;
@@ -3797,7 +3831,8 @@ u8 ScriptGiveMon(u16 species, u8 level, u16 item, unusedArg u32 unused1, u32 cus
 			nature = Random() % NUM_NATURES;
 
 		GiveMonNatureAndAbility(&mon, nature, GetMonData(&mon, MON_DATA_PERSONALITY, NULL) & 1, shiny, FALSE, FALSE);
-		MonRestorePP(&mon);
+		HealMon(&mon);
+		CalculateMonStats(&mon);
 	}
 #endif
 
@@ -3809,8 +3844,6 @@ u8 ScriptGiveMon(u16 species, u8 level, u16 item, unusedArg u32 unused1, u32 cus
 		SetMonPokedexFlags(&mon);
 		break;
 	}
-
-	unused1 += customGivePokemon + ballType; //So the compiler doesn't complain
 
 	return sentToPc;
 }
@@ -3974,23 +4007,68 @@ void CreateBoxMon(struct BoxPokemon* boxMon, u16 species, u8 level, u8 fixedIV, 
 	else
 	{
 		u32 iv;
+		u8 numPerfectStats = 0;
+		bool8 perfectStats[NUM_STATS] = {0};
+
+		//HP, Attack, Defense
 		value = Random();
 
+		//HP IV
 		iv = value & 0x1F;
 		SetBoxMonData(boxMon, MON_DATA_HP_IV, &iv);
+		if (iv >= 31)
+		{
+			++numPerfectStats;
+			perfectStats[STAT_HP] = TRUE;
+		}
+
+		//Attack IV
 		iv = (value & 0x3E0) >> 5;
 		SetBoxMonData(boxMon, MON_DATA_ATK_IV, &iv);
+		if (iv >= 31)
+		{
+			++numPerfectStats;
+			perfectStats[STAT_ATK] = TRUE;
+		}
+
+		//Defense IV
 		iv = (value & 0x7C00) >> 10;
 		SetBoxMonData(boxMon, MON_DATA_DEF_IV, &iv);
+		if (iv >= 31)
+		{
+			++numPerfectStats;
+			perfectStats[STAT_DEF] = TRUE;
+		}
 
+		//Speed, Sp. Atk, Sp. Def
 		value = Random();
 
+		//Speed IV
 		iv = value & 0x1F;
 		SetBoxMonData(boxMon, MON_DATA_SPEED_IV, &iv);
+		if (iv >= 31)
+		{
+			++numPerfectStats;
+			perfectStats[STAT_SPEED] = TRUE;
+		}
+
+		//Sp. Atk IV
 		iv = (value & 0x3E0) >> 5;
 		SetBoxMonData(boxMon, MON_DATA_SPATK_IV, &iv);
+		if (iv >= 31)
+		{
+			++numPerfectStats;
+			perfectStats[STAT_SPATK] = TRUE;
+		}
+
+		//Sp. Def IV
 		iv = (value & 0x7C00) >> 10;
 		SetBoxMonData(boxMon, MON_DATA_SPDEF_IV, &iv);
+		if (iv >= 31)
+		{
+			++numPerfectStats;
+			perfectStats[STAT_SPDEF] = TRUE;
+		}
 
 		if (FlagGet(FLAG_NO_GRINDING_IV)) {
 			u32 perfect = 31;
@@ -4006,11 +4084,10 @@ void CreateBoxMon(struct BoxPokemon* boxMon, u16 species, u8 level, u8 fixedIV, 
 		{
 			if (gSpecialSpeciesFlags[species].setPerfectXIVs)
 			{
-				u8 numPerfectStats = 0;
 				u8 perfect = 31;
-				bool8 perfectStats[NUM_STATS] = { 0 };
+				u8 perfectStatCount = MathMin(CREATE_WITH_X_PERFECT_IVS, NUM_STATS); //Error prevention
 
-				while (numPerfectStats < MathMin(CREATE_WITH_X_PERFECT_IVS, NUM_STATS)) //Error prevention
+				while (numPerfectStats < perfectStatCount) //Harder to get more than 3 perfect since perfect stats from before are already taken into account
 				{
 					u8 statId = Random() % NUM_STATS;
 					if (!perfectStats[statId]) //Must be unique

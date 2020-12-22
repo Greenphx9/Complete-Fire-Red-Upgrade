@@ -402,6 +402,19 @@ EventScript_RockClimb:
 	releaseall
 	end
 
+
+@;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+.global EventScript_UseADMRockClimb
+EventScript_UseADMRockClimb:
+	checkflag FLAG_AUTO_HMS
+	if SET _goto EventScript_RockClimb
+	msgbox gText_WantToScaleCliffWithADM MSG_YESNO
+	compare LASTRESULT NO
+	if equal _goto EventScript_RockClimbEnd
+	closeonkeypress
+	goto EventScript_RockClimb
+
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 .global EventScript_Defog
@@ -500,6 +513,24 @@ EventScript_WallOfWater:
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+.global EventScript_UseADMWaterfall
+EventScript_UseADMWaterfall:
+	checkflag FLAG_AUTO_HMS
+	if SET _goto EventScript_UseADMWaterfall_SkipAsk
+	msgbox gText_OfferADMWaterfall MSG_YESNO
+	compare LASTRESULT NO
+	if equal _goto EventScript_WaterfallEnd
+EventScript_UseADMWaterfall_SkipAsk:
+	lockall
+	call FollowerIntoPlayerScript
+	callasm HideFollower
+	callasm DoWaterfallWithNoShowMon
+	callasm FollowMe_WarpSetEnd
+	releaseall
+	end
+
+@;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 .global EventScript_UseSurf
 EventScript_UseSurf:
 	bufferpartypokemon 0x0 0x8004
@@ -511,7 +542,7 @@ EventScript_UseSurf:
 	if equal _goto EventScript_UseSurf_Ask
 
 EventScript_UseSurf_Ask:
-	callasm IsCurrentAreaSwampToVar
+	callasm IsPlayerFacingMurkyBrownWaterToVar
 	compare LASTRESULT 0x0
 	if notequal _goto EventScript_UseSurf_AskMurkyWater
 	msgbox 0x81A556E MSG_YESNO	
@@ -545,6 +576,35 @@ EventScript_WaterMurkyBrown:
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+.global EventScript_UseADMSurf
+EventScript_UseADMSurf:
+	callasm GetFirstNonEggIn8004
+	checkflag FLAG_AUTO_HMS
+	if SET _goto EventScript_UseADMSurf_SkipAsk
+	callasm IsPlayerFacingMurkyBrownWaterToVar
+	compare LASTRESULT 0x0
+	if notequal _goto EventScript_UseADMSurf_AskMurkyWater
+	msgbox gText_OfferSurfWithADM MSG_YESNO	
+EventScript_UseADMSurf_CheckAnswer:
+	compare LASTRESULT NO
+	if equal _goto EventScript_SurfEnd
+	lockall
+	bufferpartypokemon 0x0 0x8004
+	msgbox gText_ADMBlewUpInflatablePokemon MSG_KEEPOPEN
+
+EventScript_UseADMSurf_SkipAsk:
+	lockall
+	setanimation 0x0 0x8004
+	doanimation 0x9
+	releaseall
+	end
+
+EventScript_UseADMSurf_AskMurkyWater:
+	msgbox gText_WaterMurkyBrownUseADMSurf MSG_YESNO	
+	goto EventScript_UseADMSurf_CheckAnswer
+
+@;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 .equ FLDEFF_USE_DIVE, 44
 .global EventScript_UseDive
 EventScript_UseDive:
@@ -560,6 +620,7 @@ EventScript_UseDive_Ask:
 	msgbox gText_WantToDive MSG_YESNO
 	compare LASTRESULT NO
 	if equal _goto EventScript_EndDive
+EventScript_UseDive_SkipAsk:
 	lockall
 	call FollowerIntoPlayerScript
 	callasm HideFollower
@@ -568,6 +629,7 @@ EventScript_UseDive_Ask:
 	setanimation 0x1 1
 	doanimation FLDEFF_USE_DIVE
 	waitanimation FLDEFF_USE_DIVE
+	waitstate
 	goto EventScript_EndDive
 
 .global EventScript_CantDive
@@ -576,17 +638,7 @@ EventScript_CantDive:
 EventScript_EndDive:
 	releaseall
 	end
-
-EventScript_UseDive_SkipAsk:
-	lockall
-	call FollowerIntoPlayerScript
-	callasm HideFollower
-	setanimation 0x0 0x8004
-	setanimation 0x1 1
-	doanimation FLDEFF_USE_DIVE
-	waitanimation FLDEFF_USE_DIVE
-	goto EventScript_EndDive	
-
+	
 .global EventScript_UseDiveUnderwater
 EventScript_UseDiveUnderwater:
 	bufferpartypokemon 0x0 0x8004
@@ -615,6 +667,47 @@ EventScript_EndSurface:
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+.global EventScript_UseADMDive
+EventScript_UseADMDive:
+	checkflag FLAG_AUTO_HMS
+	if SET _goto EventScript_UseADMDive_SkipAsk
+
+EventScript_UseADMDive_Ask:
+	msgbox gText_WantToADMDive MSG_YESNO
+	compare LASTRESULT NO
+	if equal _goto EventScript_EndDive
+EventScript_UseADMDive_SkipAsk:
+	lockall
+	call FollowerIntoPlayerScript
+	callasm HideFollower
+	msgbox gText_UsedADMDive MSG_KEEPOPEN
+	closeonkeypress
+	callasm DoDiveWarpSkipShowMon
+	waitstate
+	goto EventScript_EndDive
+
+.global EventScript_UseADMDiveUnderwater
+EventScript_UseADMDiveUnderwater:
+	checkflag FLAG_AUTO_HMS
+	if SET _goto EventScript_UseADMDiveUnderwater_SkipAsk
+
+EventScript_UseADMDiveUnderwater_Ask:
+	msgbox gText_WantToADMSurface MSG_YESNO
+	compare LASTRESULT NO
+	if equal _goto EventScript_EndSurface
+EventScript_UseADMDiveUnderwater_SkipAsk:
+	lockall
+	call FollowerIntoPlayerScript
+	callasm HideFollower
+	msgbox gText_UsedADMDiveResurface MSG_KEEPOPEN
+	closeonkeypress
+	callasm DoDiveWarpSkipShowMon
+	callasm FollowMe_SetIndicatorToRecreateSurfBlob
+	waitstate
+	goto EventScript_EndSurface
+
+@;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 .equ FLAG_SYS_USE_FLASH, 0x806
 .global EventScript_UseFlash
 EventScript_UseFlash:
@@ -628,6 +721,16 @@ EventScript_UseFlash:
 	animateflash 0x0
 	setflashradius 0x0
 	releaseall
+	end
+
+@;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+.equ SPECIAL_BUFFER_SWARM_TEXT, 0x58
+
+.global EventScript_TVSwarm
+EventScript_TVSwarm:
+	special SPECIAL_BUFFER_SWARM_TEXT
+	msgbox gText_TVSwarm MSG_SIGN
 	end
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -758,7 +861,7 @@ EventScript_HeadbuttTree_SkipAsk:
 	setvar 0x8007 0x3 @This controls how long one screen shake lasts
 	special 0x136 @SPECIAL_SHAKE_SCREEN
 	waitstate
-	special 0xAB @Rock Smash wild mon special
+	callasm HeadbuttWildEncounter
 	compare LASTRESULT 0x0 @No data for this area
 	if equal _goto EventScript_HeadbuttTree_End
 	waitstate
@@ -785,6 +888,7 @@ EventScript_UndergroundMining:
 	switch LASTRESULT
 	case 0, EventScript_UndergroundMining_End
 	case 0xFF, EventScript_UnderwaterMining_Door
+	case 0xFE, EventScript_UnderwaterMining_Door2
 
 	@Update door tiles
 	sound 0x7C @Rock Smash
@@ -847,6 +951,33 @@ EventScript_UnderwaterMining_Door:
 	setmaptile 0x8004 0x8005 0x2C9 0x0
 	addvar 0x8004 1 @1 Right
 	setmaptile 0x8004 0x8005 0x2CA 0x0
+	goto EventScript_UndergroundMining_ReloadDoorTiles
+
+EventScript_UnderwaterMining_Door2:
+	@Update door tiles
+	sound 0x7C @Rock Smash
+	getplayerpos 0x8004 0x8005
+	subvar 0x8004 1 @1 Left
+	subvar 0x8005 2 @2 Up
+	setmaptile 0x8004 0x8005 0x2B8 0x1
+	addvar 0x8004 1 @1 Right
+	setmaptile 0x8004 0x8005 0x2B9 0x1
+	addvar 0x8004 1 @1 Right
+	setmaptile 0x8004 0x8005 0x2BA 0x1
+	subvar 0x8004 2 @2 Left
+	addvar 0x8005 1 @1 Down
+	setmaptile 0x8004 0x8005 0x2C0 0x1
+	addvar 0x8004 1 @1 Right
+	setmaptile 0x8004 0x8005 0x2C1 0x0
+	addvar 0x8004 1 @1 Right
+	setmaptile 0x8004 0x8005 0x2C2 0x1
+	subvar 0x8004 2 @2 Left
+	addvar 0x8005 1 @1 Down
+	setmaptile 0x8004 0x8005 0x2D4 0x0
+	addvar 0x8004 1 @1 Right
+	setmaptile 0x8004 0x8005 0x2D5 0x0
+	addvar 0x8004 1 @1 Right
+	setmaptile 0x8004 0x8005 0x2D6 0x0
 	goto EventScript_UndergroundMining_ReloadDoorTiles
 
 m_WalkUp1: .byte walk_up, end_m

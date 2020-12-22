@@ -28352,3 +28352,11 @@ SKILLSWAP_TEMPL: objtemplate ANIM_TAG_BLUEGREEN_ORB ANIM_TAG_ELECTRIC_ORBS OAM_N
 POWERSWAP_TEMPL: objtemplate ANIM_TAG_BLUEGREEN_ORB ANIM_TAG_RED_HEART OAM_NORMAL_16x16 gDummySpriteAnimTable 0x0 0x83E7104 0x80B3A35
 HEARTSWAP_TEMPL: objtemplate ANIM_TAG_BLUEGREEN_ORB ANIM_TAG_RED_HEART OAM_NORMAL_16x16 gDummySpriteAnimTable 0x0 0x83E7104 0x80B3A35
 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+.pool
+@0x8076DA8 with r2
+SetAverageBattlerPositionsHook:
+	mov r2, r9
+	bl SetAverageBattlerPositions
+	ldr r0, =0x8076E26 | 1
+	bx r0
