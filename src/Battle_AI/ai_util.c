@@ -2610,6 +2610,27 @@ bool8 SpecialMoveInMonMoveset(struct Pokemon* mon, u8 moveLimitations)
 	return FALSE;
 }
 
+bool8 PriorityMoveInMoveset(u8 bank)
+{
+	u16 move;
+	u8 moveLimitations = CheckMoveLimitations(bank, 0, 0xFF);
+
+	for (int i = 0; i < MAX_MON_MOVES; ++i)
+	{
+		move = GetBattleMonMove(bank, i);
+		if (move == MOVE_NONE)
+			break;
+
+		if (!(gBitTable[i] & moveLimitations))
+		{
+			if (PriorityCalc(bank, ACTION_USE_MOVE, move) > 0)
+				return TRUE;
+		}
+	}
+
+	return FALSE;	
+}
+
 bool8 MagicCoatableMovesInMoveset(u8 bank)
 {
 	u16 move;
@@ -2627,6 +2648,7 @@ bool8 MagicCoatableMovesInMoveset(u8 bank)
 				return TRUE;
 		}
 	}
+
 	return FALSE;
 }
 
@@ -3103,6 +3125,29 @@ bool8 SleepMoveInMovesetWithLowAccuracy(u8 bankAtk, u8 bankDef)
 	return FALSE;
 }
 
+bool8 PivotingMoveInMoveset(u8 bank)
+{
+	u8 moveLimitations = CheckMoveLimitations(bank, 0, 0xFF);
+
+	for (int i = 0; i < MAX_MON_MOVES; ++i)
+	{
+		u16 move = GetBattleMonMove(bank, i);
+
+		if (move == MOVE_NONE)
+			break;
+
+		if (!(gBitTable[i] & moveLimitations))
+		{
+			if (move != MOVE_BATONPASS //Passing stats isn't considering pivoting
+			&& (gBattleMoves[move].effect == EFFECT_BATON_PASS
+			 || gBattleMoves[move].effect == EFFECT_TELEPORT))
+				return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
 bool8 HasUsedMove(u8 bank, u16 move)
 {
     u32 i;
@@ -3244,7 +3289,7 @@ static bool8 CalcOnlyBadMovesLeftInMoveset(u8 bankAtk, u8 bankDef)
 		{
 			return FALSE; //Don't switch if hiding legitimately behind substitute
 		}
-		else if (!MoveEffectInMoveset(EFFECT_BATON_PASS, bankAtk) //U-Turn/Volt Switch switch on their own
+		else if (!PivotingMoveInMoveset(bankAtk) //U-Turn/Volt Switch switch on their own
 		&& (ABILITY(bankDef) == ABILITY_MAGICGUARD || !(gBattleMons[bankDef].status2 & STATUS2_WRAPPED)) //Only switch if the enemy isn't taking trap damage
 		&& (!IsTrapped(bankDef, TRUE) || !(gStatuses3[bankDef] & STATUS3_PERISH_SONG) || gDisableStructs[bankDef].perishSongTimer == 0) //Don't let a trapped foe escape from Perish Song
 		/*&& numDamageMoves == 1*/) //Only 1 viable damaging move left
@@ -3280,22 +3325,23 @@ static bool8 CalcOnlyBadMovesLeftInMoveset(u8 bankAtk, u8 bankDef)
 
 				u8 backupActiveBattler = gActiveBattler;
 				gActiveBattler = bankAtk;
-				if (GetMostSuitableMonToSwitchIntoScore() & SWITCHING_INCREASE_HAS_SUPER_EFFECTIVE_MOVE)
+				u8 switchFlags = GetMostSuitableMonToSwitchIntoFlags();
+				if (switchFlags & SWITCHING_FLAG_HAS_SUPER_EFFECTIVE_MOVE)
 				{
 					gActiveBattler = backupActiveBattler;
 					if (hasSuperEffectiveMove)
 						return FALSE; //Don't switch to another Pokemon just because they have a Super-Effective move if you have one too.
 
-					if (GetMostSuitableMonToSwitchIntoScore() == SWITCHING_INCREASE_HAS_SUPER_EFFECTIVE_MOVE
+					if ((switchFlags & SWITCHING_FLAG_HAS_SUPER_EFFECTIVE_MOVE) == SWITCHING_FLAG_HAS_SUPER_EFFECTIVE_MOVE //Only a single flag set
 					&& WallsFoe(bankAtk, bankDef))
 						return FALSE; //Tough it out
 				}
-				else if (GetMostSuitableMonToSwitchIntoScore() < SWITCHING_INCREASE_HAS_SUPER_EFFECTIVE_MOVE)
+				else if (switchFlags == 0)
 				{
 					gActiveBattler = backupActiveBattler;
 					return FALSE;
 				}
-				else if (GetMostSuitableMonToSwitchIntoScore() == SWITCHING_INCREASE_WALLS_FOE)
+				else if (switchFlags & SWITCHING_FLAG_WALLS_FOE)
 				{
 					gActiveBattler = backupActiveBattler;
 					//Check if current mon can't wall
