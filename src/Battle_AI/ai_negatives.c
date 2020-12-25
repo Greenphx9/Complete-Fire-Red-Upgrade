@@ -2122,7 +2122,7 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 
 		case EFFECT_TAUNT:
 			if (IsTaunted(bankDef)
-			|| ABILITY(bankDef) == ABILITY_OBLIVIOUS
+			|| data->defAbility == ABILITY_OBLIVIOUS
 			|| PARTNER_MOVE_EFFECT_IS_SAME)
 				DECREASE_VIABILITY(10);
 			break;

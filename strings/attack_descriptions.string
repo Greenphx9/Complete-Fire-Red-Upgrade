@@ -68,6 +68,12 @@ The foe is hit with\nan enormous branch.\nThis move always\ngoes last.
 #org @DESC_DRILLPECK
 An attack that also\nbreaks any barrier\nlike Light Screen\nand Reflect.
 
+#org @DESC_RAPIDSPIN
+An attack that frees\nthe user from traps\nand hazards. Also\nraises Speed.
+
+#org @DESC_HOWL
+The user howls to\nraise its team's\nsprit and boost\ntheir Attack stats.
+
 #org @DESC_LEECHFANG
 An attack that\nabsorbs half the\ndamage it inflicted\nto restore HP.
 
@@ -1184,10 +1190,10 @@ The user skitters\nbehind the target to\nattack. It lowers the\nfoe's Evasion st
 Inflicts a burn\non targets who's stats\nwere boosted during the\nturn when it is used.
 
 #org @DESC_LASH_OUT
-The move's power\ndoubles if the user's\nstats have been\nlowered during the\nturn.
+The move's power\ndoubles if the user's\nstats have fallen\nduring the turn.
 
 #org @DESC_POLTERGEIST
-The user controls\nthe target's item to\nattack. Fails if\nthe target has no item.
+The user controls\nthe target's item to\nattack. Fails if the\ntarget has no item.
 
 #org @DESC_CORROSIVE_GAS
 The user cloaks\nitself in acidic gas.\nIt melts away the\ntarget's held item.

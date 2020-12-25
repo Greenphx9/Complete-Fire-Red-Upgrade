@@ -1748,6 +1748,7 @@ void BufferYearMonthDayFromVar(u16 var)
 	ConvertIntToDecimalStringN(gStringVar3, day, STR_CONV_MODE_LEFT_ALIGN, 2);
 }
 
+
 //@Details: Runs a daily event.
 //@Input: Var 0x8000: A var containing the daily event data.
 //					  The var after this one is used as well.
@@ -2451,7 +2452,6 @@ void HallOfFame_PrintWelcomeText(void)
 	PutWindowTilemap(0);
 	WindowPrint(0, 2, x, 1, &sHOFTextColors[0], 0, gText_WelcomeToHOF);
 
-	const u8* difficultyString = NULL;
 	StringAppend(gStringVar1, gText_ShrinkTextHOF);
 	if(FlagGet(FLAG_NO_GRINDING_IV) || FlagGet(FLAG_NO_GRINDING_EV))
 	{
@@ -3130,11 +3130,13 @@ static void ClearItemSpriteAfterFind(unusedArg u8 spriteId)
 	FreeSpriteOamMatrix(&gSprites[spriteId]);
 	DestroySprite(&gSprites[spriteId]);
 
+	#ifdef ITEM_DESCRIPTION_ACQUIRE
 	if (sHeaderBoxWindowId != 0xFF) //Description was shown
 	{
 		ClearDialogWindowAndFrame(sHeaderBoxWindowId, TRUE);
 		RemoveWindow(sHeaderBoxWindowId);
 	}
+	#endif
 	#endif
 }
 
@@ -4707,28 +4709,12 @@ u8 GetFontAttribute(u8 fontId, u8 attributeId)
     return 1;
 }
 */
-static const u8 sTextColors[][4] = {
-    { 0, 1, 2 },
-    { 0, 2, 3 },
-    { 4, 5, 0 }
-};
-
 void CheckSaveblockSizes(void)
 {
 	ConvertIntToDecimalStringN(gStringVar1, sizeof(struct SaveBlock1), STR_CONV_MODE_LEFT_ALIGN, 6);
     ConvertIntToDecimalStringN(gStringVar2, sizeof(struct SaveBlock2), STR_CONV_MODE_LEFT_ALIGN, 6);
     ConvertIntToDecimalStringN(gStringVar3, sizeof(struct PokemonStorage), STR_CONV_MODE_LEFT_ALIGN, 6);
 }
-
-static const struct WindowTemplate sNameBoxWindowTemplate = {
-	.bg = 0,
-	.tilemapLeft = 1,
-	.tilemapTop = 11,
-	.width = 10,
-	.height = 2,
-	.paletteNum = 15,
-	.baseBlock = 0x008
-};
 
 s32 ListMenu_ProcessInput(u8 listTaskId)
 {

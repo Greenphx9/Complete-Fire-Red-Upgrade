@@ -96,15 +96,18 @@ ability_t GetRecordedAbility(u8 bank)
 	if (BATTLE_HISTORY->abilities[bank] != ABILITY_NONE)
 		return BATTLE_HISTORY->abilities[bank];
 
-	u16 species = species;
-	u8 ability1 = TryRandomizeAbility(gBaseStats2[species].ability1, species);
-	u8 ability2 = TryRandomizeAbility(gBaseStats2[species].ability2, species);
-	u8 hiddenAbility = TryRandomizeAbility(gBaseStats2[species].hiddenAbility, species);
+	u16 species = SPECIES(bank);
+	u8 ability1 = TryRandomizeAbility(gBaseStats[species].ability1, species);
+	u8 ability2 = TryRandomizeAbility(gBaseStats[species].ability2, species);
+	u8 hiddenAbility = TryRandomizeAbility(gBaseStats[species].hiddenAbility, species);
 
 	if (ability1 == ability2 && hiddenAbility == ABILITY_NONE)
 		return ability1;
 
 	if (ability1 == ability2 && ability1 == hiddenAbility)
+		return ability1;
+
+	if (ability2 == ABILITY_NONE && hiddenAbility == ABILITY_NONE)
 		return ability1;
 
 	return ABILITY_NONE; //We don't know which ability the target has

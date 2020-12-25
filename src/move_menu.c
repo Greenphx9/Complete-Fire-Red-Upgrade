@@ -378,6 +378,97 @@ void EmitChooseMove(u8 bufferId, bool8 isDoubleBattle, bool8 NoPpNumber, struct 
 	#endif
 
 	//Calculate Data for Mega Evolution
+	gBattleScripting.dmgMultiplier = 1;
+	for (i = 0; i < MAX_MON_MOVES; ++i)
+	{
+		u8 foe = (IS_DOUBLE_BATTLE && !BATTLER_ALIVE(FOE(gActiveBattler))) ? PARTNER(FOE(gActiveBattler)) : FOE(gActiveBattler);
+		u16 originalMove = gBattleMons[gActiveBattler].moves[i];
+		u16 move = (tempMoveStruct->dynamaxed) ? tempMoveStruct->possibleMaxMoves[i] : originalMove;
+
+		tempMoveStruct->moveTypes[i] = GetMoveTypeSpecial(gActiveBattler, move);
+
+		if (IS_DOUBLE_BATTLE && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE, gActiveBattler, foe) >= 2) //Because target can vary, display only attacker's modifiers
+		{
+			tempMoveStruct->movePowers[i] = CalcVisualBasePower(gActiveBattler, gActiveBattler, move, TRUE);
+			tempMoveStruct->moveAcc[i] = VisualAccuracyCalc_NoTarget(move, gActiveBattler);
+
+			if (tempMoveStruct->possibleMaxMoves[i] != MOVE_NONE)
+			{
+				gNewBS->ai.zMoveHelper = originalMove;
+				tempMoveStruct->maxMovePowers[i] = CalcVisualBasePower(gActiveBattler, gActiveBattler, tempMoveStruct->possibleMaxMoves[i], TRUE);
+				gNewBS->ai.zMoveHelper = MOVE_NONE;
+			}
+
+			for (j = 0; j < gBattlersCount; ++j)
+			{
+				if (j == gActiveBattler || j == PARTNER(gActiveBattler))
+				{
+					tempMoveStruct->moveResults[GetBattlerPosition(j)][i] = 0;
+					continue;
+				}
+
+				if (SPLIT(move) != SPLIT_STATUS
+				|| move == MOVE_THUNDERWAVE || gSpecialMoveFlags[move].gPowderMoves) //These status moves have immunities
+				{
+					u8 moveResult = VisualTypeCalc(move, gActiveBattler, j);
+
+					if (!(moveResult & MOVE_RESULT_NO_EFFECT)
+					&& (CheckTableForMovesEffect(move, gMoveEffectsThatIgnoreWeaknessResistance)
+					 || gBattleMoves[move].effect == EFFECT_0HKO
+					 || move == MOVE_THUNDERWAVE
+					 || gSpecialMoveFlags[move].gPowderMoves))
+						moveResult = 0; //These moves can have no effect, but are neither super nor not very effective
+					tempMoveStruct->moveResults[GetBattlerPosition(j)][i] = moveResult;
+				}
+				else
+					tempMoveStruct->moveResults[GetBattlerPosition(j)][i] = 0;
+
+				//Special type-based status immunities
+				if (gBattleMoves[move].effect == EFFECT_PARALYZE && IsOfType(j, TYPE_ELECTRIC))
+					tempMoveStruct->moveResults[GetBattlerPosition(j)][i] = MOVE_RESULT_NO_EFFECT;
+
+				if (gBattleMoves[move].effect == EFFECT_LEECH_SEED && IsOfType(j, TYPE_GRASS))
+					tempMoveStruct->moveResults[GetBattlerPosition(j)][i] = MOVE_RESULT_NO_EFFECT;
+			}
+		}
+		else //Single Battle or single target
+		{
+			tempMoveStruct->movePowers[i] = CalcVisualBasePower(gActiveBattler, foe, move, FALSE);
+			tempMoveStruct->moveAcc[i] = VisualAccuracyCalc(move, gActiveBattler, foe);
+
+			if (tempMoveStruct->possibleMaxMoves[i] != MOVE_NONE)
+			{
+				gNewBS->ai.zMoveHelper = originalMove;
+				tempMoveStruct->maxMovePowers[i] = CalcVisualBasePower(gActiveBattler, foe, tempMoveStruct->possibleMaxMoves[i], FALSE);
+				gNewBS->ai.zMoveHelper = MOVE_NONE;
+			}
+
+			if (SPLIT(move) != SPLIT_STATUS
+			|| move == MOVE_THUNDERWAVE || gSpecialMoveFlags[move].gPowderMoves) //These status moves have immunities
+			{
+				u8 moveResult = VisualTypeCalc(move, gActiveBattler, foe);
+
+				if (!(moveResult & MOVE_RESULT_NO_EFFECT)
+				&& (CheckTableForMovesEffect(move, gMoveEffectsThatIgnoreWeaknessResistance)
+				 || gBattleMoves[move].effect == EFFECT_0HKO
+				 || move == MOVE_THUNDERWAVE
+				 || gSpecialMoveFlags[move].gPowderMoves))
+					moveResult = 0; //These moves can have no effect, but are neither super nor not very effective
+
+				tempMoveStruct->moveResults[GetBattlerPosition(foe)][i] = moveResult;
+			}
+			else
+				tempMoveStruct->moveResults[GetBattlerPosition(foe)][i] = 0;
+
+			//Special type-based status immunities
+			if (gBattleMoves[move].effect == EFFECT_PARALYZE && IsOfType(foe, TYPE_ELECTRIC))
+				tempMoveStruct->moveResults[GetBattlerPosition(foe)][i] = MOVE_RESULT_NO_EFFECT;
+
+			if (gBattleMoves[move].effect == EFFECT_LEECH_SEED && IsOfType(foe, TYPE_GRASS))
+				tempMoveStruct->moveResults[GetBattlerPosition(foe)][i] = MOVE_RESULT_NO_EFFECT;
+		}
+	}
+
 	tempMoveStruct->megaDone = gNewBS->megaData.done[gActiveBattler];
 	tempMoveStruct->ultraDone = gNewBS->ultraData.done[gActiveBattler];
 	if (!IS_TRANSFORMED(gActiveBattler) && !tempMoveStruct->dynamaxed)
