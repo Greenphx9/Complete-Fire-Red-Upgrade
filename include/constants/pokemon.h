@@ -94,3 +94,5 @@
 #define FRIENDSHIP_EVENT_FAINT_OUTSIDE_BATTLE 0x7
 #define FRIENDSHIP_EVENT_FAINT_LARGE          0x8
 
+#define SHINY_ODDS 64 // Actual probability is SHINY_ODDS/65536
+

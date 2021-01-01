@@ -2327,8 +2327,7 @@ void TryFailSteelRoller(void)
 
 void PrintElectromagnetismFloatingStrings(void)
 {
-	#ifdef FLAG_MAGNET_RISE_BATTLE
-	if (FlagGet(FLAG_MAGNET_RISE_BATTLE))
+	if (IsMagnetRiseBattle())
 	{
 		for (; gBattleCommunication[0] < gBattlersCount; ++gBattleCommunication[0])
 		{
@@ -2344,5 +2343,4 @@ void PrintElectromagnetismFloatingStrings(void)
 			}
 		}
 	}
-	#endif
 }

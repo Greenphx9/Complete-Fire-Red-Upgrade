@@ -207,8 +207,10 @@ static u8 GetPartyIdFromPartyData(struct Pokemon* mon);
 static u8 GetHighestMonLevel(const struct Pokemon* const party);
 static u16 ScaleLevel(u16 lvl);
 void PokeSum_PrintAbilityNameAndDesc();
+static void CheckShinyMon(struct Pokemon* mon);
 #ifdef UNBOUND
-static u8 GetEVSpreadNumForUnboundRivalChallenge(struct Pokemon* mon, u32 aiFlags);
+extern u8 GetEVSpreadNumForUnboundRivalChallenge(struct Pokemon* mon, u32 aiFlags, u8 trainerClass);
+extern void TryGiveSpecialTrainerHiddenPower(u16 trainerId, struct Pokemon* mon);
 #endif
 
 #ifdef OPEN_WORLD_TRAINERS
@@ -690,7 +692,8 @@ static u8 BuildExpertBossParty(struct Pokemon* const party, const u16 trainerId,
 static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId, const bool8 firstTrainer, const bool8 side)
 {
 	u32 i, j, nameHash;
-	u8 monsCount, baseIV, setMonGender, trainerNameLengthOddness, minPartyLevel, maxPartyLevel, modifiedAveragePlayerLevel, highestPlayerLevel, canEvolveMon, levelScaling, setCustomMoves;
+	unusedArg u8 monsCount, baseIV, setMonGender, trainerNameLengthOddness, minPartyLevel, maxPartyLevel,
+	   modifiedAveragePlayerLevel, highestPlayerLevel, canEvolveMon, canEvolveMonBackup, levelScaling, setCustomMoves;
 	struct Trainer* trainer;
 	u32 otid = 0;
 	u8 otIdType = OT_ID_RANDOM_NO_SHINY;
@@ -907,13 +910,32 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 							SET_MOVES(trainer->party.NoItemCustomMoves);
 						break;
 
-				case PARTY_FLAG_HAS_ITEM:
-					MAKE_POKEMON(trainer->party.ItemDefaultMoves);
-					SetMonData(&party[i], MON_DATA_HELD_ITEM, &trainer->party.ItemDefaultMoves[i].heldItem);
-					break;
+					case PARTY_FLAG_HAS_ITEM: ;
+						#if (defined SCALED_TRAINERS && !defined  DEBUG_NO_LEVEL_SCALING)
+						canEvolveMonBackup = canEvolveMon;
+						if (trainer->party.ItemDefaultMoves[i].heldItem == ITEM_EVIOLITE)
+							canEvolveMon = FALSE; //Don't try to evolve mon holding Eviolite
+						MAKE_POKEMON(trainer->party.ItemDefaultMoves);
+						if (trainer->party.ItemDefaultMoves[i].heldItem == ITEM_EVIOLITE)
+							canEvolveMon = canEvolveMonBackup; //Restore original option for rest of team
+						#else
+						MAKE_POKEMON(trainer->party.ItemDefaultMoves);
+						#endif
+						SetMonData(&party[i], MON_DATA_HELD_ITEM, &trainer->party.ItemDefaultMoves[i].heldItem);
+						break;
 
 					case PARTY_FLAG_CUSTOM_MOVES | PARTY_FLAG_HAS_ITEM:
+						#if (defined SCALED_TRAINERS && !defined  DEBUG_NO_LEVEL_SCALING)
+						canEvolveMonBackup = canEvolveMon;
+						if (trainer->party.ItemCustomMoves[i].heldItem == ITEM_EVIOLITE)
+							canEvolveMon = FALSE; //Don't try to evolve mon holding Eviolite
 						MAKE_POKEMON(trainer->party.ItemCustomMoves);
+						if (trainer->party.ItemCustomMoves[i].heldItem == ITEM_EVIOLITE)
+							canEvolveMon = canEvolveMonBackup; //Restore original option for rest of team
+						#else
+						MAKE_POKEMON(trainer->party.ItemCustomMoves);
+						#endif
+
 						if (setCustomMoves)
 							SET_MOVES(trainer->party.ItemCustomMoves);
 						SetMonData(&party[i], MON_DATA_HELD_ITEM, &trainer->party.ItemCustomMoves[i].heldItem);
@@ -943,7 +965,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 			if ((gTrainers[trainerId].trainerClass == CLASS_RIVAL
 			  || gTrainers[trainerId].trainerClass == CLASS_RIVAL_2)
 			&& gameDifficulty >= OPTIONS_HARD_DIFFICULTY)
-				spreadNum = GetEVSpreadNumForUnboundRivalChallenge(&party[i], trainer->aiFlags);
+				spreadNum = GetEVSpreadNumForUnboundRivalChallenge(&party[i], trainer->aiFlags, gTrainers[trainerId].trainerClass);
 			#endif
 
 			if (gTrainers[trainerId].partyFlags == (PARTY_FLAG_CUSTOM_MOVES | PARTY_FLAG_HAS_ITEM)
@@ -998,6 +1020,10 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 
 					goto TRAINER_WITH_EV_GIVE_RANDOM_ABILITY;
 				}
+
+				#ifdef UNBOUND
+				TryGiveSpecialTrainerHiddenPower(trainerId, &party[i]);
+				#endif
 			}
 #endif
 
@@ -1119,14 +1145,15 @@ static bool8 IsBossTrainerClassForLevelScaling(u16 trainerId)
 	#endif
 
 	switch (gTrainers[trainerId].trainerClass) {
-	case CLASS_LEADER:
-	case CLASS_ELITE_4:
-	case CLASS_CHAMPION:
-	case CLASS_BOSS:
-#ifdef UNBOUND
-	case CLASS_LOR_LEADER:
-#endif
-		return TRUE;
+		case CLASS_LEADER:
+		case CLASS_ELITE_4:
+		case CLASS_CHAMPION:
+		case CLASS_RIVAL_2:
+		case CLASS_BOSS:
+		#ifdef UNBOUND
+		case CLASS_LOR_LEADER:
+		#endif
+			return TRUE;
 	}
 
 	return FALSE;
@@ -1156,7 +1183,7 @@ static void ModifySpeciesAndLevelForGenericBattle(unusedArg u16* species, unused
 	else
 	{
 		#ifdef VAR_GAME_DIFFICULTY
-		levelSubtractor = (VarGet(VAR_GAME_DIFFICULTY) >= OPTIONS_EXPERT_DIFFICULTY) ? 0 : 6; //In Expert mode, Trainers scale closer to your average level, other the average level - 6 at minimum
+		levelSubtractor = (VarGet(VAR_GAME_DIFFICULTY) >= OPTIONS_EXPERT_DIFFICULTY) ? 2 : 6; //In Expert mode, Trainers scale closer to your average level, other the average level - 6 at minimum
 		#else
 		levelSubtractor = 6;
 		#endif
@@ -1177,7 +1204,15 @@ static void ModifySpeciesAndLevelForGenericBattle(unusedArg u16* species, unused
 		//So scale normal enemies based on the average team level
 		newLevel = MathMin(averagePlayerTeamLevel + levelRange - levelSubtractor, MAX_LEVEL);
 		if (*level < newLevel)
+		{
 			*level = newLevel;
+			if (IsPseudoBossTrainerPartyForLevelScaling(trainerPartyFlags)
+			#ifdef VAR_GAME_DIFFICULTY
+			|| VarGet(VAR_GAME_DIFFICULTY) >= OPTIONS_EXPERT_DIFFICULTY //Or the game is on on a harder setting
+			#endif
+			)
+				levelChangedForEvolution = TRUE; //Always evolve Pseudobosses or regular trainers on Insane
+		}
 	}
 	else if (averagePlayerTeamLevel >= prevStartScalingAtLevel) //Team is stronger than prev Gym Leader
 	{
@@ -2161,7 +2196,7 @@ void GiveMonNatureAndAbility(struct Pokemon* mon, u8 nature, u8 abilityNum, bool
 		personality = Random32();
 		if (forceShiny)
 		{
-			u8 shinyRange = RandRange(0, 8);
+			u8 shinyRange = Random() % SHINY_ODDS;
 			personality = (((shinyRange ^ (sid ^ tid)) ^ LOHALF(personality)) << 16) | LOHALF(personality);
 		}
 
@@ -2380,22 +2415,9 @@ static bool8 PokemonTierBan(const u16 species, const u16 item, const struct Batt
 		case BATTLE_FACILITY_STANDARD:
 		case BATTLE_FACILITY_MEGA_BRAWL:
 		case BATTLE_FACILITY_DYNAMAX_STANDARD:
-			//Load correct ability
-			switch (checkFromLocationType) {
-				case CHECK_BATTLE_TOWER_SPREADS:
-					moveLoc = spread->moves;
-					LOAD_TIER_CHECKING_ABILITY;
-					break;
-				default:
-					moveLoc = mon->moves;
-					ability = GetMonAbility(mon);
-			}
-
 			if (gSpecialSpeciesFlags[species].battleTowerStandardBan
-			||  CheckTableForItem(item, gBattleTowerStandard_ItemBanList)
-			|| (ability == ABILITY_BATTLEBOND && tier != BATTLE_FACILITY_MEGA_BRAWL)) //Battle Bond is banned in Standard
+			||  CheckTableForItem(item, gBattleTowerStandard_ItemBanList))
 				return TRUE;
-
 			break;
 
 		case BATTLE_FACILITY_OU:
@@ -3851,63 +3873,91 @@ u8 ScriptGiveMon(u16 species, u8 level, u16 item, unusedArg u32 unused1, unusedA
 	return sentToPc;
 }
 
-u32 CheckShinyMon(struct Pokemon* mon)
+static void CheckShinyMon(struct Pokemon* mon)
 {
-	u16 chance = 1;
-	u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
+	bool8 forceShiny = FALSE;
+	u32 otId = GetMonData(mon, MON_DATA_OT_ID, NULL);
 
 #ifdef FLAG_SHINY_CREATION
 	if (FlagGet(FLAG_SHINY_CREATION))
 	{
-		chance = 4097;
+		forceShiny = TRUE;
 	}
 	else
 #endif
 	{
 #ifdef ITEM_SHINY_CHARM
 		if (CheckBagHasItem(ITEM_SHINY_CHARM, 1) > 0)
-			chance = 3; //Tries an extra two times
-#endif
-
-		if (gFishingByte) //Currently fishing
-			chance += (1 + 2 * MathMin(gFishingStreak, 20)); //Tries an extra 2 times per Pokemon in the streak up to 41 times
-	}
-
-	if (RandRange(0, 1025) < chance)		//Nominal 1/1024
-	{
-		//Force shiny
-		u32 otId = GetMonData(mon, MON_DATA_OT_ID, NULL);
-		u16 sid = HIHALF(otId);
-		u16 tid = LOHALF(otId);
-
-		u8 shinyRange = RandRange(0, 8);
-		u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
-		u8 ability = personality & 1;
-		u8 nature = GetNatureFromPersonality(personality);
-		u8 gender = GetGenderFromSpeciesAndPersonality(species, personality);
-		u8 letter = GetUnownLetterFromPersonality(personality);
-		bool8 abilityMatters = !mon->hiddenAbility;
-
-		do
 		{
-			personality = Random32();
-			personality = (((shinyRange ^ (sid ^ tid)) ^ LOHALF(personality)) << 16) | LOHALF(personality);
+			//Try an extra 2 times to generate shiny personality
+			if (IsShinyOtIdPersonality(otId, Random32())
+			||  IsShinyOtIdPersonality(otId, Random32()))
+				forceShiny = TRUE;
+		}
+		#endif
 
-			if (abilityMatters)
+		if (!forceShiny && gFishingByte) //Currently fishing
+		{
+			u32 i, numTries; //Tries an extra 2 times per Pokemon in the streak up to 40 times
+
+			for (i = 0, numTries = 2 * MathMin(gFishingStreak, 20); i < numTries; ++i)
 			{
-				personality &= ~(1);
-				personality |= ability; //Either 0 or 1
+				if (IsShinyOtIdPersonality(otId, Random32()))
+				{
+					forceShiny = TRUE;
+					break;
+				}
 			}
-		} while (GetNatureFromPersonality(personality) != nature || GetGenderFromSpeciesAndPersonality(species, personality) != gender
-#ifdef SPECIES_UNOWN
-			|| (species == SPECIES_UNOWN && GetUnownLetterFromPersonality(personality) != letter)
-#endif
-			); //Keep all other values the same
+		}
 	}
 
-	return personality;
-};
+	if (RandRange(0, 1025) < 1)		//Nominal 1/1024
+		forceShiny = TRUE;
+		
+	if (forceShiny)
+		ForceMonShiny(mon);
+}
 
+void ForceMonShiny(struct Pokemon* mon)
+{
+	if (IsMonShiny(mon))
+		return;
+
+	u32 trainerId = GetMonData(mon, MON_DATA_OT_ID, NULL);
+	u16 sid = HIHALF(trainerId);
+	u16 tid = LOHALF(trainerId);
+
+	u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+	u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
+	u8 ability = personality & 1;
+	u8 nature = GetNatureFromPersonality(personality);
+	bool8 abilityMatters = !mon->hiddenAbility;
+	u8 gender = GetGenderFromSpeciesAndPersonality(species, personality);
+	u8 letter = GetUnownLetterFromPersonality(personality);
+	bool8 isMinior = IsMinior(species);
+	u16 miniorCore = GetMiniorCoreFromPersonality(personality);
+
+	do
+	{
+		personality = Random32();
+
+		u8 shinyRange = Random() % SHINY_ODDS;
+		personality = (((shinyRange ^ (sid ^ tid)) ^ LOHALF(personality)) << 16) | LOHALF(personality);
+
+		if (abilityMatters)
+		{
+			personality &= ~(1);
+			personality |= ability; //Either 0 or 1
+		}
+
+	} while (GetNatureFromPersonality(personality) != nature || GetGenderFromSpeciesAndPersonality(species, personality) != gender
+	|| (species == SPECIES_UNOWN && GetUnownLetterFromPersonality(personality) != letter)
+	|| (isMinior && GetMiniorCoreFromPersonality(personality) != miniorCore));
+
+	SetMonData(mon, MON_DATA_PERSONALITY, &personality);
+	CalculateMonStats(mon);
+}
+ 
 void TryRandomizeSpecies(unusedArg u16* species)
 {
 #ifdef FLAG_POKEMON_RANDOMIZER
@@ -4105,13 +4155,11 @@ void CreateBoxMon(struct BoxPokemon* boxMon, u16 species, u8 level, u8 fixedIV, 
 #endif
 	}
 
-	((struct Pokemon*)boxMon)->hiddenAbility = FALSE; //Set base hidden ability to 0
+	((struct Pokemon*) boxMon)->hiddenAbility = FALSE; //Set base hidden ability to 0
+	SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality);
 
 	if (otIdType != OT_ID_RANDOM_NO_SHINY) //Pokemon can be shiny
-	{
-		personality = CheckShinyMon((struct Pokemon*)boxMon);	//Shiny charm
-		SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality);
-	}
+		CheckShinyMon((struct Pokemon*) boxMon); //Activate Shiny Charm or fishing chain
 
 	GiveBoxMonInitialMoveset(boxMon);
 }

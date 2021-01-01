@@ -18,6 +18,7 @@
 #include "../include/constants/songs.h"
 #include "../include/gba/io_reg.h"
 #include "defines_battle.h"
+#include "../include/mgba.h"
 
 #include "../include/new/build_pokemon.h"
 #include "../include/new/frontier.h"

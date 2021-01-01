@@ -27,6 +27,7 @@
 #include "../include/text.h"
 #include "../include/string_util.h"
 #include "../include/malloc.h"
+#include "../include/new/Vanilla_Functions.h"
 
 #define REG_DEBUG_ENABLE ((vu16*) (0x4FFF780))
 #define REG_DEBUG_FLAGS  ((vu16*) (0x4FFF700))

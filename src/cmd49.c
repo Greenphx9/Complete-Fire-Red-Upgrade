@@ -1544,6 +1544,7 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 			u8 bank = gNewBS->DancerTurnOrder[gNewBS->DancerBankCount];
 
 			if (ABILITY(bank) == ABILITY_DANCER
+			&& BATTLER_ALIVE(bank)
 			&& !(gAbsentBattlerFlags & gBitTable[bank])
 			&& bank != gNewBS->CurrentTurnAttacker)
 			{

@@ -601,13 +601,13 @@ static u8 AtkCanceller_UnableToUseMove(void)
 				if (IsConfused(gBankAttacker))
 				{
 					#ifdef OLD_CONFUSION_CHANCE
-					if (Random() & 1) //50 %
+					if (Random() % 100 < 50) //50 %
 					{
 						gBattleCommunication[MULTISTRING_CHOOSER] = 0;
 						BattleScriptPushCursor();
 					}
 					#else
-					if (umodsi(Random(), 100) > 33) //33 %
+					if (Random() % 100 > 33) //33 %
 					{
 						gBattleCommunication[MULTISTRING_CHOOSER] = 0;
 						BattleScriptPushCursor();
@@ -635,7 +635,7 @@ static u8 AtkCanceller_UnableToUseMove(void)
 			break;
 
 		case CANCELLER_PARALYSED: // paralysis
-			if ((gBattleMons[gBankAttacker].status1 & STATUS1_PARALYSIS) && umodsi(Random(), 4) == 0)
+			if ((gBattleMons[gBankAttacker].status1 & STATUS1_PARALYSIS) && Random() % 4 == 0)
 			{
 				gProtectStructs[gBankAttacker].prlzImmobility = 1;
 				CancelMultiTurnMoves(gBankAttacker);
@@ -666,7 +666,7 @@ static u8 AtkCanceller_UnableToUseMove(void)
 			if (gBattleMons[gBankAttacker].status2 & STATUS2_INFATUATION)
 			{
 				gBattleScripting.bank = CountTrailingZeroBits((gBattleMons[gBankAttacker].status2 & STATUS2_INFATUATION) >> 0x10);
-				if (Random() & 1)
+				if (Random() % 100 < 50) //Use % to help increase randomness
 				{
 					BattleScriptPushCursor();
 				}

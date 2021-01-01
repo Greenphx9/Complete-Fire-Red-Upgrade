@@ -18,6 +18,8 @@
 #include "../include/new/move_tables.h"
 #include "../include/new/util2.h"
 #include "../include/base_stats.h"
+#include "../include/new/multi.h"
+#include "../include/new/util.h"
 
 /*
 battle_util.c
@@ -360,22 +362,16 @@ bool8 IsMonAffectedByHazardsByItemEffect(struct Pokemon* mon, u8 itemEffect)
 	return !ItemEffectPreventsHazards(itemEffect);
 }
 
-bool8 IsFloatingWithMagnetism(unusedArg u8 bank)
+bool8 IsFloatingWithMagnetism(u8 bank)
 {
-	#ifdef FLAG_MAGNET_RISE_BATTLE
-	return FlagGet(FLAG_MAGNET_RISE_BATTLE) && (IsOfType(bank, TYPE_ELECTRIC) || IsOfType(bank, TYPE_STEEL));
-	#else
-	return FALSE;
-	#endif
+	return IsMagnetRiseBattle()
+		&& (IsOfType(bank, TYPE_ELECTRIC) || IsOfType(bank, TYPE_STEEL));
 }
 
 bool8 IsMonFloatingWithMagnetism(unusedArg struct Pokemon* mon)
 {
-	#ifdef FLAG_MAGNET_RISE_BATTLE
-	return FlagGet(FLAG_MAGNET_RISE_BATTLE) && (IsMonOfType(mon, TYPE_ELECTRIC) || IsMonOfType(mon, TYPE_STEEL));
-	#else
-	return FALSE;
-	#endif
+	return IsMagnetRiseBattle()
+		&& (IsMonOfType(mon, TYPE_ELECTRIC) || IsMonOfType(mon, TYPE_STEEL));
 }
 
 u8 ViableMonCountFromBank(u8 bank)
@@ -1327,6 +1323,17 @@ bool8 IsMockBattle(void)
 	return (gBattleTypeFlags & BATTLE_TYPE_MOCK_BATTLE) != 0;
 }
 
+bool8 IsPlayerInControl(u8 bank)
+{
+	if (SIDE(bank) == B_SIDE_OPPONENT || IsMockBattle()) //AI side or AI controls everyone
+		return FALSE;
+
+	if (IsTagBattle() && GetBattlerPosition(bank) == B_POSITION_PLAYER_RIGHT)
+		return FALSE;
+
+	return TRUE;
+}
+
 bool8 IsMoveAffectedByParentalBond(u16 move, u8 bankAtk)
 {
 	if (SPLIT(move) != SPLIT_STATUS
@@ -1599,17 +1606,6 @@ bool8 ImposterWorks(u8 bankAtk, bool8 checkingMonAtk) //bankAtk here is mainly u
 		&& !ABILITY_ON_FIELD(ABILITY_NEUTRALIZINGGAS);
 }
 
-bool8 IsPlayerInControl(u8 bank)
-{
-	if (SIDE(bank) == B_SIDE_OPPONENT || IsMockBattle()) //AI side or AI controls everyone
-		return FALSE;
-
-	if (IsTagBattle() && GetBattlerPosition(bank) == B_POSITION_PLAYER_RIGHT)
-		return FALSE;
-
-	return TRUE;
-}
-
 void ClearBankStatus(u8 bank)
 {
 	if (gBattleMons[bank].status1 & (STATUS_POISON | STATUS_TOXIC_POISON))
@@ -1668,27 +1664,29 @@ bool8 DoesSleepClausePrevent(u8 bank)
 
 bool8 CanBeGeneralStatused(u8 bank, bool8 checkFlowerVeil)
 {
-	#ifdef SPECIES_MINIOR_SHIELD
-	if (ABILITY(bank) == ABILITY_SHIELDSDOWN
-	&&  GetBankPartyData(bank)->species == SPECIES_MINIOR_SHIELD) //Prevents Ditto from getting this benefit
-		return FALSE;
-	#endif
-
 	switch (ABILITY(bank)) {
 		case ABILITY_COMATOSE:
 			return FALSE;
 
 		case ABILITY_LEAFGUARD:
-			if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY && ITEM_EFFECT(bank) != ITEM_EFFECT_UTILITY_UMBRELLA)
+			if (gBattleWeather & WEATHER_SUN_ANY && WEATHER_HAS_EFFECT && ITEM_EFFECT(bank) != ITEM_EFFECT_UTILITY_UMBRELLA)
 				return FALSE;
 			break;
 
 		case ABILITY_FLOWERVEIL:
 			if (checkFlowerVeil && IsOfType(bank, TYPE_GRASS))
 				return FALSE;
+			break;
+
+		#ifdef SPECIES_MINIOR_SHIELD
+		case ABILITY_SHIELDSDOWN:
+			if (GetBankPartyData(bank)->species == SPECIES_MINIOR_SHIELD) //Prevents Ditto from getting this benefit
+				return FALSE;
+			break;
+		#endif
 	}
 
-	if (checkFlowerVeil && ABILITY(PARTNER(bank)) == ABILITY_FLOWERVEIL && IsOfType(bank, TYPE_GRASS) && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD))
+	if (checkFlowerVeil && IS_DOUBLE_BATTLE && ABILITY(PARTNER(bank)) == ABILITY_FLOWERVEIL && IsOfType(bank, TYPE_GRASS) && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD))
 		return FALSE;
 
 	if (gTerrainType == MISTY_TERRAIN && CheckGrounding(bank))
@@ -1718,6 +1716,9 @@ bool8 CanBePutToSleep(u8 bank, bool8 checkFlowerVeil)
 	if (gTerrainType == ELECTRIC_TERRAIN && CheckGrounding(bank))
 		return FALSE;
 
+	if (IS_DOUBLE_BATTLE && ABILITY(PARTNER(bank)) == ABILITY_SWEETVEIL)
+		return FALSE;
+
 	if (DoesSleepClausePrevent(bank))
 		return FALSE;
 
@@ -1729,15 +1730,6 @@ bool8 CanBePutToSleep(u8 bank, bool8 checkFlowerVeil)
 
 bool8 CanBeYawned(u8 bank)
 {
-	#ifdef SPECIES_MINIOR_SHIELD
-	if (ABILITY(bank) == ABILITY_SHIELDSDOWN
-	&&  GetBankPartyData(bank)->species == SPECIES_MINIOR_SHIELD) //Prevents Ditto from getting this benefit
-		return FALSE;
-	#endif
-
-	if (ABILITY(PARTNER(bank)) == ABILITY_FLOWERVEIL && IsOfType(bank, TYPE_GRASS) && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD))
-		return FALSE;
-
 	if (gTerrainType == ELECTRIC_TERRAIN && CheckGrounding(bank))
 		return FALSE;
 
@@ -1747,6 +1739,18 @@ bool8 CanBeYawned(u8 bank)
 	if (gSideStatuses[SIDE(bank)] & SIDE_STATUS_SAFEGUARD && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD))
 		return FALSE;
 
+	if (IS_DOUBLE_BATTLE)
+	{
+		switch (ABILITY(PARTNER(bank))) {
+			case ABILITY_SWEETVEIL:
+				return TRUE;
+			case ABILITY_FLOWERVEIL:
+				if (IsOfType(bank, TYPE_GRASS) && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD))
+					return TRUE;
+				break;
+		}
+	}
+
 	switch (ABILITY(bank)) {
 		case ABILITY_INSOMNIA:
 		case ABILITY_VITALSPIRIT:
@@ -1754,13 +1758,74 @@ bool8 CanBeYawned(u8 bank)
 		case ABILITY_COMATOSE:
 			return FALSE;
 		case ABILITY_LEAFGUARD:
-			if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY && ITEM_EFFECT(bank) != ITEM_EFFECT_UTILITY_UMBRELLA)
+			if (gBattleWeather & WEATHER_SUN_ANY && WEATHER_HAS_EFFECT && ITEM_EFFECT(bank) != ITEM_EFFECT_UTILITY_UMBRELLA)
 				return FALSE;
 			break;
 		case ABILITY_FLOWERVEIL:
 			if (IsOfType(bank, TYPE_GRASS))
 				return FALSE;
 			break;
+		#ifdef SPECIES_MINIOR_SHIELD
+		case ABILITY_SHIELDSDOWN:
+			if (GetBankPartyData(bank)->species == SPECIES_MINIOR_SHIELD) //Prevents Ditto from getting this benefit
+				return FALSE;
+			break;
+		#endif
+	}
+
+	return TRUE;
+}
+
+bool8 CanRest(u8 bank)
+{
+	if (BATTLER_MAX_HP(bank))
+		return FALSE;
+
+	if ((gTerrainType == ELECTRIC_TERRAIN || gTerrainType == MISTY_TERRAIN)
+	&& CheckGrounding(bank))
+		return FALSE;
+
+	if (gBattleMons[bank].status1 & STATUS1_SLEEP)
+		return FALSE;
+
+	if (DoesSleepClausePrevent(bank))
+		return FALSE;
+
+	if (IsUproarBeingMade())
+		return FALSE;
+
+	if (IS_DOUBLE_BATTLE)
+	{
+		switch (ABILITY(PARTNER(bank))) {
+			case ABILITY_SWEETVEIL:
+				return TRUE;
+			case ABILITY_FLOWERVEIL:
+				if (IsOfType(bank, TYPE_GRASS))
+					return TRUE;
+				break;
+		}
+	}
+
+	switch (ABILITY(bank)) {
+		case ABILITY_INSOMNIA:
+		case ABILITY_VITALSPIRIT:
+		case ABILITY_SWEETVEIL:
+		case ABILITY_COMATOSE:
+			return FALSE;
+		case ABILITY_LEAFGUARD:
+			if (gBattleWeather & WEATHER_SUN_ANY && WEATHER_HAS_EFFECT && ITEM_EFFECT(bank) != ITEM_EFFECT_UTILITY_UMBRELLA)
+				return FALSE;
+			break;
+		case ABILITY_FLOWERVEIL:
+			if (IsOfType(bank, TYPE_GRASS))
+				return FALSE;
+			break;
+		#ifdef SPECIES_MINIOR_SHIELD
+		case ABILITY_SHIELDSDOWN:
+			if (GetBankPartyData(bank)->species == SPECIES_MINIOR_SHIELD) //Prevents Ditto from getting this benefit
+				return FALSE;
+			break;
+		#endif
 	}
 
 	return TRUE;
@@ -1835,7 +1900,7 @@ bool8 CanBeFrozen(u8 bank, bool8 checkFlowerVeil)
 			return FALSE;
 	}
 
-	if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY && ITEM_EFFECT(bank) != ITEM_EFFECT_UTILITY_UMBRELLA)
+	if (gBattleWeather & WEATHER_SUN_ANY && WEATHER_HAS_EFFECT && ITEM_EFFECT(bank) != ITEM_EFFECT_UTILITY_UMBRELLA)
 		return FALSE;
 
 	return TRUE;
@@ -1890,6 +1955,9 @@ bool8 CanBeInfatuated(u8 bankDef, u8 bankAtk)
 bool8 IsTrickRoomActive(void)
 {
 	return gNewBS->TrickRoomTimer > 0
+		#ifdef FLAG_TRICK_ROOM_BATTLE
+		|| FlagGet(FLAG_TRICK_ROOM_BATTLE)
+		#endif
 		|| (IS_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_TRICK_ROOM);
 }
 
@@ -1913,8 +1981,7 @@ bool8 IsGravityActive(void)
 
 bool8 IsIonDelugeActive(void)
 {
-	return gNewBS->IonDelugeTimer > 0
-		|| (IS_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_ION_DELUGE);
+	return gNewBS->IonDelugeTimer > 0;
 }
 
 bool8 IsFairyLockActive(void)
@@ -1925,14 +1992,57 @@ bool8 IsFairyLockActive(void)
 
 bool8 IsMudSportActive(void)
 {
-	return gNewBS->MudSportTimer > 0
-		|| (IS_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_MUD_SPORT);
+	return gNewBS->MudSportTimer > 0;
 }
 
 bool8 IsWaterSportActive(void)
 {
-	return gNewBS->WaterSportTimer > 0
-		|| (IS_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_WATER_SPORT);
+	return gNewBS->WaterSportTimer > 0;
+}
+
+bool8 IsDeltaStreamBattle(void)
+{
+	return 
+		#ifdef FLAG_DELTA_STREAM_BATTLE
+		FlagGet(FLAG_DELTA_STREAM_BATTLE) ||
+		#endif
+		(IS_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_DELTA_STREAM);
+}
+
+bool8 IsMagnetRiseBattle(void)
+{
+	return 
+		#ifdef FLAG_MAGNET_RISE_BATTLE
+		FlagGet(FLAG_MAGNET_RISE_BATTLE) ||
+		#endif
+		(IS_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_MAGNET_RISE);
+}
+
+bool8 IsBadThoughtsBattle(void)
+{
+	return
+		#ifdef FLAG_BAD_THOUGHTS_BATTLE
+		FlagGet(FLAG_BAD_THOUGHTS_BATTLE) ||
+		#endif
+		(IS_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_BAD_THOUGHTS);
+}
+
+bool8 IsShadowShieldBattle(void)
+{
+	#ifdef FLAG_SHADOW_SHIELD_BATTLE
+	return FlagGet(FLAG_SHADOW_SHIELD_BATTLE);
+	#else
+	return FALSE;
+	#endif
+}
+
+bool8 IsPixieBattle(void)
+{
+	return
+		#ifdef FLAG_PIXIE_BATTLE
+		FlagGet(FLAG_PIXIE_BATTLE) ||
+		#endif
+		(IS_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_PIXIES);
 }
 
 bool8 IsInverseBattle(void)
