@@ -5,6 +5,7 @@
 #include "../include/constants/abilities.h"
 
 #include "../include/new/build_pokemon.h"
+#include "../include/new/ability_tables.h"
 #include "../include/new/damage_calc.h"
 #include "../include/new/evolution.h"
 #include "../include/new/util2.h"
@@ -240,6 +241,59 @@ u32 GetBaseStatsTotal(const u16 species)
 		sum += ptr[i];
 
 	return sum;
+}
+
+u8 TryRandomizeAbility(u8 ability, unusedArg u16 species)
+{
+	u32 newAbility = ability;
+
+	#ifdef FLAG_ABILITY_RANDOMIZER
+	if (FlagGet(FLAG_ABILITY_RANDOMIZER) && !FlagGet(FLAG_BATTLE_FACILITY)
+	&& !gSpecialAbilityFlags[ability].gRandomizerBannedOriginalAbilities) //This Ability can be changed
+	{
+		u32 id = T1_READ_32(gSaveBlock2->playerTrainerId);
+		u16 startAt = (id & 0xFFFF) % (u32) ABILITIES_COUNT;
+		u16 xorVal = (id >> 16) % (u32) 0xFF; //Only set the bits likely to be in the ability
+		u32 numAttempts = 0;
+
+		newAbility = ability + startAt;
+		if (newAbility >= ABILITIES_COUNT)
+		{
+			u16 overflow = newAbility - (ABILITIES_COUNT - 2);
+			newAbility = overflow;
+		}
+
+		newAbility ^= xorVal;
+		newAbility %= (u32) ABILITIES_COUNT; //Prevent overflow
+
+		while (gSpecialAbilityFlags[newAbility].gRandomizerBannedNewAbilities && numAttempts < 100)
+		{
+			newAbility *= xorVal; //Multiply this time
+			newAbility %= (u32) ABILITIES_COUNT;
+			++numAttempts;
+		}
+
+		if (numAttempts >= 100 && gSpecialAbilityFlags[newAbility].gRandomizerBannedNewAbilities) //If the Ability is still banned
+			newAbility = ABILITY_ILLUMINATE; //An Ability that has no beneficial effect
+	}
+	#endif
+
+	return newAbility;
+}
+
+u8 GetAbility1(const u16 species)
+{
+	return TryRandomizeAbility(gBaseStats[species].ability1, species);
+}
+
+u8 GetAbility2(const u16 species)
+{
+	return TryRandomizeAbility(gBaseStats[species].ability2, species);
+}
+
+u8 GetHiddenAbility(const u16 species)
+{
+	return TryRandomizeAbility(gBaseStats[species].hiddenAbility, species);
 }
 
 u8 FindMovePositionInMonMoveset(u16 move, struct Pokemon* mon)

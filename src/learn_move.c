@@ -10,6 +10,7 @@
 #include "../include/new/item.h"
 #include "../include/new/learn_move.h"
 #include "../include/new/move_reminder_data.h"
+#include "../include/new/move_tables.h"
 /*
 learn_move.c
 	handles functions for pokemon trying to learn moves
@@ -220,15 +221,38 @@ u8 GetNumberOfRelearnableMoves(struct Pokemon* mon)
 }
 
 #ifdef FLAG_POKEMON_LEARNSET_RANDOMIZER
-static move_t RandomizeMove(u16 move)
+move_t RandomizeMove(u16 move)
 {
-	move = (move * T1_READ_32(gSaveBlock2->playerTrainerId));
-	move %= NON_Z_MOVE_COUNT;
+	if (move == MOVE_NONE)
+		return move;
 
-	if (move == MOVE_NONE || move == MOVE_STRUGGLE)
-		return move + 1;
+	u16 newMove;
+	u32 id = T1_READ_32(gSaveBlock2->playerTrainerId);
+	u16 startAt = (id & 0xFFFF) % (u32) NON_Z_MOVE_COUNT;
+	u16 xorVal = (id >> 16) % (u32) 0x300; //Only set the bits likely to be in the move
+	u32 numAttempts = 0;
 
-	return move;
+	newMove = move + startAt;
+	if (newMove >= NON_Z_MOVE_COUNT)
+	{
+		u16 overflow = newMove - (NON_Z_MOVE_COUNT - 2);
+		newMove = overflow;
+	}
+
+	newMove ^= xorVal;
+	newMove %= (u32) NON_Z_MOVE_COUNT; //Prevent overflow
+
+	while (gSpecialMoveFlags[newMove].gRandomizerBanTable && numAttempts < 100)
+	{
+		newMove *= xorVal; //Multiply this time
+		newMove %= (u32) NON_Z_MOVE_COUNT;
+		++numAttempts;
+	}
+
+	if (numAttempts >= 100 && gSpecialMoveFlags[newMove].gRandomizerBanTable) //Tried 100 times to change move but can't find a legal one
+		newMove = MOVE_TACKLE; //Just replace the move with tackle
+
+	return newMove;
 }
 #endif
 

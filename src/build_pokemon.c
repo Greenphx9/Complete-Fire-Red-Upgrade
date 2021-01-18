@@ -3959,26 +3959,6 @@ void CalculateMonStatsNew(struct Pokemon* mon)
 	SetMonData(mon, MON_DATA_HP, &currentHP);
 }
 
-u8 TryRandomizeAbility(u8 ability, unusedArg u16 species)
-{
-	u32 newAbility = ability;
-
-#ifdef FLAG_ABILITY_RANDOMIZER
-	if (FlagGet(FLAG_ABILITY_RANDOMIZER) && !FlagGet(FLAG_BATTLE_FACILITY))
-	{
-		u32 id = MathMax(1, T1_READ_32(gSaveBlock2->playerTrainerId)); //0 id would mean Pokemon wouldn't have ability
-
-		do
-		{
-			newAbility = newAbility * id * species;
-			newAbility = MathMax(1, newAbility % ABILITIES_COUNT);
-		} while (CheckTableForAbility(newAbility, gRandomizerAbilityBanList));
-	}
-#endif
-
-	return newAbility;
-}
-
 
 u8 GetMonAbility(const struct Pokemon* mon)
 {

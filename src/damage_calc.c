@@ -76,7 +76,8 @@ void atk04_critcalc(void)
 	bool8 confirmedCrit;
 	u8 atkAbility = ABILITY(gBankAttacker);
 	u8 atkEffect = ITEM_EFFECT(gBankAttacker);
-	bool8 calcSpreadMove = IS_DOUBLE_BATTLE && gBattleMoves[gCurrentMove].target & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL);
+	u8 moveTarget = GetBaseMoveTarget(gCurrentMove, gBankAttacker);
+	bool8 calcSpreadMove = IS_DOUBLE_BATTLE && moveTarget & (MOVE_TARGET_BOTH | MOVE_TARGET_ALL);
 
 	gStringBank = gBankAttacker;
 
@@ -90,23 +91,22 @@ void atk04_critcalc(void)
 		else if (gNewBS->calculatedSpreadMoveData)
 			break; //Already calculated crit chance
 		else if (!BATTLER_ALIVE(bankDef) || bankDef == gBankAttacker
-		|| (bankDef == PARTNER(gBankAttacker) && !(gBattleMoves[gCurrentMove].target & MOVE_TARGET_ALL))
+		|| (bankDef == PARTNER(gBankAttacker) && !(moveTarget & MOVE_TARGET_ALL))
 		|| gNewBS->ResultFlags[bankDef] & MOVE_RESULT_NO_EFFECT
 		|| gNewBS->noResultString[bankDef])
 			continue; //Don't bother with this target
 
 		u8 defAbility = ABILITY(bankDef);
 
-		//if (defAbility == ABILITY_BATTLEARMOR
-		if  (defAbility == ABILITY_SHELLARMOR
+		if (defAbility == ABILITY_SHELLARMOR
 		||  CantScoreACrit(gBankAttacker, NULL)
 		||  gBattleTypeFlags & (BATTLE_TYPE_OLD_MAN | BATTLE_TYPE_OAK_TUTORIAL | BATTLE_TYPE_POKE_DUDE)
 		||  gNewBS->LuckyChantTimers[SIDE(bankDef)])
 		{
 			confirmedCrit = FALSE;
 		}
-		else if ((atkAbility == ABILITY_MERCILESS && (gBattleMons[bankDef].status1 & STATUS_PSN_ANY))
-		|| IsLaserFocused(gBankAttacker)
+		else if (IsLaserFocused(gBankAttacker)
+		|| (atkAbility == ABILITY_MERCILESS && (gBattleMons[bankDef].status1 & STATUS_PSN_ANY))
 		|| gSpecialMoveFlags[gCurrentMove].gAlwaysCriticalMoves)
 		{
 			confirmedCrit = TRUE;
@@ -118,11 +118,15 @@ void atk04_critcalc(void)
 						+ (gSpecialMoveFlags[gCurrentMove].gHighCriticalChanceMoves)
 						+ (atkEffect == ITEM_EFFECT_SCOPE_LENS)
 						+ (atkAbility == ABILITY_SUPERLUCK)
-						#ifdef SPECIES_CHANSEY
-						+ 2 * (atkEffect == ITEM_EFFECT_LUCKY_PUNCH && gBattleMons[gBankAttacker].species == SPECIES_CHANSEY)
+						#ifdef NATIONAL_DEX_CHANSEY
+						+ 2 * (atkEffect == ITEM_EFFECT_LUCKY_PUNCH && SpeciesToNationalPokedexNum(SPECIES(gBankAttacker)) == NATIONAL_DEX_CHANSEY)
 						#endif
-						#ifdef SPECIES_FARFETCHD
-						+ 2 * (atkEffect == ITEM_EFFECT_STICK && gBattleMons[gBankAttacker].species == SPECIES_FARFETCHD)
+						#if (defined NATIONAL_DEX_FARFETCHD && defined NATIONAL_DEX_SIRFETCHD)
+						+ 2 * (atkEffect == ITEM_EFFECT_STICK && (SpeciesToNationalPokedexNum(SPECIES(gBankAttacker)) == NATIONAL_DEX_FARFETCHD
+						                                       || SpeciesToNationalPokedexNum(SPECIES(gBankAttacker)) == NATIONAL_DEX_SIRFETCHD))
+						#endif
+						#ifdef SPECIES_PALKIA_ORIGIN
+						+ 2 * (gCurrentMove == MOVE_SPACIALREND && SPECIES(gBankAttacker) == SPECIES_PALKIA_ORIGIN)
 						#endif
 						+ 2 * (gCurrentMove == MOVE_10000000_VOLT_THUNDERBOLT);
 

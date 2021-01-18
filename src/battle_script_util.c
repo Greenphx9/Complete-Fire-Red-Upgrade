@@ -241,7 +241,7 @@ void MoldBreakerRemoveAbilitiesOnForceSwitchIn(void)
 		|| ABILITY(bank) == ABILITY_TURBOBLAZE
 		|| ABILITY(bank) == ABILITY_TERAVOLT)
 	{
-		if (gMoldBreakerIgnoredAbilities[ABILITY(gBankSwitching)])
+		if (gSpecialAbilityFlags[ABILITY(gBankSwitching)].gMoldBreakerIgnoredAbilities)
 		{
 			gNewBS->DisabledMoldBreakerAbilities[gBankSwitching] = gBattleMons[gBankSwitching].ability;
 			gBattleMons[gBankSwitching].ability = 0;
@@ -1107,7 +1107,6 @@ void TryExecuteInstruct(void)
 	u16 move = gLastPrintedMoves[gBankTarget];
 
 	if (gSpecialMoveFlags[move].gInstructBannedMoves
-	||  gSpecialMoveFlags[move].gMovesThatRequireRecharging
 	||  gSpecialMoveFlags[move].gMovesThatCallOtherMoves
 	|| IsZMove(move)
 	|| IsAnyMaxMove(move)
@@ -1264,71 +1263,65 @@ void AbilityChangeBSFunc(void)
 	gNewBS->backupAbility = *defAbilityLoc;
 
 	switch (gCurrentMove) {
-	case MOVE_WORRYSEED:
-		if (CheckTableForAbility(defAbility, gWorrySeedBannedAbilities))
-			gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
-		else
-		{
-			*defAbilityLoc = ABILITY_INSOMNIA;
-			gLastUsedAbility = defAbility; //Original ability
-			gLastUsedSpecies = SPECIES(gBankTarget);
-			ResetVarsForAbilityChange(gBankTarget);
-			gBattleStringLoader = WorrySeedString;
-		}
-		break;
+		case MOVE_WORRYSEED:
+			if (gSpecialAbilityFlags[defAbility].gWorrySeedBannedAbilities)
+				gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
+			else
+			{
+				*defAbilityLoc = ABILITY_INSOMNIA;
+				gLastUsedAbility = defAbility; //Original ability
+				ResetVarsForAbilityChange(gBankTarget);
+				gBattleStringLoader = WorrySeedString;
+			}
+			break;
 
-	case MOVE_GASTROACID:
-		if (CheckTableForAbility(defAbility, gGastroAcidBannedAbilities)
+		case MOVE_GASTROACID:
+			if (gSpecialAbilityFlags[defAbility].gGastroAcidBannedAbilities
 			|| gStatuses3[gBankTarget] & STATUS3_ABILITY_SUPPRESS)
-		{
-			gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
-		}
-		else
-		{
-			gStatuses3[gBankTarget] |= STATUS3_ABILITY_SUPPRESS;
-			gNewBS->SuppressedAbilities[gBankTarget] = defAbility;
-			*defAbilityLoc = ABILITY_NONE;
-			gNewBS->SlowStartTimers[gBankTarget] = 0;
-			gDisableStructs[gBankTarget].truantCounter = 0;
-			gBattleScripting.bank = gBankTarget;
-			gBattleStringLoader = AbilitySuppressedString;
-			return; //No transfer needed
-		}
-		break;
+			{
+				gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
+			}
+			else
+			{
+				gStatuses3[gBankTarget] |= STATUS3_ABILITY_SUPPRESS;
+				gNewBS->SuppressedAbilities[gBankTarget] = defAbility;
+				*defAbilityLoc = ABILITY_NONE;
+				gNewBS->SlowStartTimers[gBankTarget] = 0;
+				gDisableStructs[gBankTarget].truantCounter = 0;
+				gBattleScripting.bank = gBankTarget;
+				gBattleStringLoader = AbilitySuppressedString;
+				return; //No transfer needed
+			}
+			break;
 
-	case MOVE_ENTRAINMENT:
-		if (atkAbility == ABILITY_NONE
-			|| IsDynamaxed(gBankTarget)
-			|| CheckTableForAbility(atkAbility, gEntrainmentBannedAbilitiesAttacker)
-			|| CheckTableForAbility(defAbility, gEntrainmentBannedAbilitiesTarget))
-			gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
-		else
-		{
-			*defAbilityLoc = atkAbility;
-			gLastUsedAbility = defAbility; //Original ability
-			gLastUsedSpecies = SPECIES(gBankTarget);
-			ResetVarsForAbilityChange(gBankTarget);
-			gBattleStringLoader = EntrainmentString;
+		case MOVE_ENTRAINMENT:
+			if (atkAbility == ABILITY_NONE
+			||  IsDynamaxed(gBankTarget)
+			||  gSpecialAbilityFlags[atkAbility].gEntrainmentBannedAbilitiesAttacker
+			||  gSpecialAbilityFlags[defAbility].gEntrainmentBannedAbilitiesTarget)
+				gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
+			else
+			{
+				*defAbilityLoc = atkAbility;
+				gLastUsedAbility = defAbility; //Original ability
+				ResetVarsForAbilityChange(gBankTarget);
+				gBattleStringLoader = EntrainmentString;
+			}
+			break;
 
-			if (gLastUsedAbility == ABILITY_TRUANT)
-				gDisableStructs[gBankTarget].truantCounter = 0; //Reset counter
-		}
-		break;
-
-	case MOVE_SIMPLEBEAM:
-		if (CheckTableForAbility(defAbility, gSimpleBeamBannedAbilities))
-		{
-			gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
-		}
-		else
-		{
-			*defAbilityLoc = ABILITY_SIMPLE;
-			gLastUsedAbility = defAbility; //Original ability
-			gLastUsedSpecies = SPECIES(gBankTarget);
-			ResetVarsForAbilityChange(gBankTarget);
-			gBattleStringLoader = SimpleBeamString;
-		}
-		break;
+		case MOVE_SIMPLEBEAM:
+			if (gSpecialAbilityFlags[defAbility].gSimpleBeamBannedAbilities)
+			{
+				gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
+			}
+			else
+			{
+				*defAbilityLoc = ABILITY_SIMPLE;
+				gLastUsedAbility = defAbility; //Original ability
+				ResetVarsForAbilityChange(gBankTarget);
+				gBattleStringLoader = SimpleBeamString;
+			}
+			break;
 	}
 
 	if (gBattlescriptCurrInstr != BattleScript_ButItFailed - 5)

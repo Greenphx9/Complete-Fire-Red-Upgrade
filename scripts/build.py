@@ -254,7 +254,7 @@ def ProcessSpecialFlagFile(flagFile: str) -> str:
         tableHeader = "const struct SpecialSpeciesFlags gSpecialSpeciesFlags[SPECIES_COUNT] =\n{\n"
     elif "ability_tables" in cFile:
         includes = '#include "../../include/constants/abilities.h"\n#include "../../include/new/ability_tables.h"\n\n'
-        tableHeader = "const struct SpecialAbilityFlags gSpecialAbilityFlags[SPECIES_COUNT] =\n{\n"
+        tableHeader = "const struct SpecialAbilityFlags gSpecialAbilityFlags[ABILITIES_COUNT] =\n{\n"
     else:
         print("Error! Can't compile JSON file \"{}\"".format(flagFile))
         sys.exit(1)
@@ -287,7 +287,12 @@ def ProcessSpecialFlagFile(flagFile: str) -> str:
 
     objectFile = ProcessC(cFile)
     #Not necessary, I just like it:
-    newPath = r'D:\Modding\Complete-Fire-Red-Upgrade\tables\move_tables.c';
+    if cFile == './assembly\data\ability_tables.c':
+        newPath = r'D:\Modding\Complete-Fire-Red-Upgrade\tables\ability_tables.c';
+    elif cFile == './assembly\data\move_tables.c':
+        newPath = r'D:\Modding\Complete-Fire-Red-Upgrade\tables\move_tables.c';
+    else:
+        newPath = r'D:\Modding\Complete-Fire-Red-Upgrade\tables\species_tables.c';
     shutil.copyfile(cFile, newPath)
     os.remove(cFile)  # Remove the generated C file
     return objectFile

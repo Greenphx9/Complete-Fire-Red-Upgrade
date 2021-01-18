@@ -6,6 +6,7 @@
 #include "../include/constants/trainer_classes.h"
 
 #include "../include/new/ability_battle_scripts.h"
+#include "../include/new/ability_tables.h"
 #include "../include/new/ai_master.h"
 #include "../include/new/battle_indicators.h"
 #include "../include/new/battle_script_util.h"
@@ -37,6 +38,7 @@ enum SwitchInStates
 {
 	SwitchIn_HandleAICooldown,
 	SwitchIn_CamomonsReveal,
+	SwitchIn_NeutralizingGasRemoveAbility,
 	SwitchIn_HealingWish,
 	SwitchIn_ZHealingWish,
 	SwitchIn_Spikes,
@@ -561,12 +563,40 @@ void atk52_switchineffects(void)
 				BattleScriptPushCursor();
 				gBattlescriptCurrInstr = BattleScript_CamomonsTypeRevealRet;
 
-				if (gBattleMons[gActiveBattler].type1 == gBattleMons[gActiveBattler].type2)
+				u8 type1, type2;
+				struct Pokemon* monIllusion = GetIllusionPartyData(gActiveBattler);
+				if (monIllusion != GetBankPartyData(gActiveBattler)) //Under Illusion
+				{
+					type1 = GetMonType(monIllusion, 0);
+					type2 = GetMonType(monIllusion, 1);
+				}
+				else
+				{
+					type1 = gBattleMons[gActiveBattler].type1;
+					type2 = gBattleMons[gActiveBattler].type2;
+				}
+
+				if (type1 == type2)
 					gBattleStringLoader = gText_CamomonsTypeReveal;
 				else
 					gBattleStringLoader = gText_CamomonsTypeRevealDualType;
-				PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMons[gActiveBattler].type1);
-				PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[gActiveBattler].type2);
+
+				PREPARE_TYPE_BUFFER(gBattleTextBuff1, type1);
+				PREPARE_TYPE_BUFFER(gBattleTextBuff2, type2);
+			}
+			++gNewBS->switchInEffectsState;
+			break;
+
+		case SwitchIn_NeutralizingGasRemoveAbility:
+			if (!IsAbilitySuppressed(gActiveBattler) //Gastro Acid has higher priority
+			&& ABILITY(gActiveBattler) != ABILITY_NONE
+			&& !gSpecialAbilityFlags[ABILITY(gActiveBattler)].gNeutralizingGasBannedAbilities
+			&& AbilityBattleEffects(ABILITYEFFECT_CHECK_FIELD_EXCEPT_BANK, gActiveBattler, ABILITY_NEUTRALIZINGGAS, 0, 0))
+			{
+				u8* abilityLoc = GetAbilityLocation(gActiveBattler);
+				gNewBS->neutralizingGasBlockedAbilities[gActiveBattler] = *abilityLoc;
+				*abilityLoc = 0;
+				gNewBS->SlowStartTimers[gActiveBattler] = 0;
 			}
 			++gNewBS->switchInEffectsState;
 			break;

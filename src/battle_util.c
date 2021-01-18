@@ -855,6 +855,17 @@ u8 GetMoveTarget(u16 move, u8 useMoveTarget)
 	return bankDef;
 }
 
+u8 GetBaseMoveTarget(u16 move, u8 bankAtk)
+{
+	if (move == MOVE_EXPANDINGFORCE
+	&& IS_DOUBLE_BATTLE
+	&& gTerrainType == PSYCHIC_TERRAIN
+	&& CheckGrounding(bankAtk))
+		return MOVE_TARGET_BOTH; //Special property of Expanding Force in Doubles
+	
+	return gBattleMoves[move].target;
+}
+
 u8 GetBaseMoveTargetByGrounding(u16 move, bool8 atkIsGrounded)
 {
 	if (move == MOVE_EXPANDINGFORCE

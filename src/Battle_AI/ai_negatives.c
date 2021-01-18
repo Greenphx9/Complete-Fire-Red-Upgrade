@@ -105,13 +105,15 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 	u16 predictedMove = IsValidMovePrediction(bankDef, bankAtk); //The move the target is likely to make against the attacker
 	u8 decreased;
 	u32 i;
+	u8 atkAbility2, defAbility2;
 
 	u16 move = TryReplaceMoveWithZMove(bankAtk, bankDef, originalMove);
 
 	data->atkAbility = GetAIAbility(bankAtk, bankDef, move);
 	data->defAbility = GetAIAbility(bankDef, bankAtk, predictedMove);
 
-	if (!NO_MOLD_BREAKERS(data->atkAbility, move) && gMoldBreakerIgnoredAbilities[data->defAbility])
+	if (!NO_MOLD_BREAKERS(data->atkAbility, move)
+	&& gSpecialAbilityFlags[data->defAbility].gMoldBreakerIgnoredAbilities)
 		data->defAbility = ABILITY_NONE;
 
 	u8 moveEffect = gBattleMoves[move].effect;
@@ -1167,12 +1169,6 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 				dmg = MathMax(1, dmg / 3);
 			else if (gSpecialMoveFlags[move].gPercent50RecoilMoves)
 				dmg = MathMax(1, dmg / 2);
-			else if (gSpecialMoveFlags[move].gPercent66RecoilMoves)
-				dmg = MathMax(1, (dmg * 2) / 3);
-			else if (gSpecialMoveFlags[move].gPercent75RecoilMoves)
-				dmg = MathMax(1, (dmg * 3) / 4);
-			else if (gSpecialMoveFlags[move].gPercent100RecoilMoves)
-				dmg = MathMax(1, dmg);
 			else if (move == MOVE_MINDBLOWN || move == MOVE_STEELBEAM)
 			{
 				if (MoveBlockedBySubstitute(move, bankAtk, bankDef))
@@ -1983,11 +1979,13 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 		case EFFECT_ROLE_PLAY:
 			data->atkAbility = *GetAbilityLocation(bankAtk);
 			data->defAbility = *GetAbilityLocation(bankDef);
+			u8 atkAbility = *GetAbilityLocation(bankAtk);
+			u8 defAbility = *GetAbilityLocation(bankDef);
 
-			if (data->atkAbility == data->defAbility
-			||  data->defAbility == ABILITY_NONE
-			||  CheckTableForAbility(data->atkAbility, gRolePlayAttackerBannedAbilities)
-			||  CheckTableForAbility(data->defAbility, gRolePlayBannedAbilities))
+			if (atkAbility == defAbility
+			||  defAbility == ABILITY_NONE
+			||  gSpecialAbilityFlags[atkAbility].gRolePlayAttackerBannedAbilities
+			||  gSpecialAbilityFlags[defAbility].gRolePlayBannedAbilities)
 				DECREASE_VIABILITY(10);
 			break;
 
@@ -2067,20 +2065,20 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 			break;
 
 		case EFFECT_SKILL_SWAP:
-			data->atkAbility = *GetAbilityLocation(bankAtk); //Get actual abilities
-			data->defAbility = *GetAbilityLocation(bankDef);
+			atkAbility2 = *GetAbilityLocation(bankAtk); //Get actual abilities
+			defAbility2 = *GetAbilityLocation(bankDef);
 
 			switch (move) {
 				case MOVE_WORRYSEED:
-					if (data->defAbility == ABILITY_INSOMNIA
-					|| CheckTableForAbility(data->defAbility, gWorrySeedBannedAbilities)
+					if (defAbility2 == ABILITY_INSOMNIA
+					|| gSpecialAbilityFlags[defAbility2].gWorrySeedBannedAbilities
 					|| MoveBlockedBySubstitute(move, bankAtk, bankDef))
 						DECREASE_VIABILITY(10);
 					break;
 
 				case MOVE_GASTROACID:
 					if (IsAbilitySuppressed(bankDef)
-					||  CheckTableForAbility(data->defAbility, gGastroAcidBannedAbilities)
+					||  gSpecialAbilityFlags[defAbility2].gGastroAcidBannedAbilities
 					||  MoveBlockedBySubstitute(move, bankAtk, bankDef))
 						DECREASE_VIABILITY(10);
 					break;
@@ -2088,8 +2086,8 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 				case MOVE_ENTRAINMENT:
 					if (data->atkAbility == ABILITY_NONE
 					||  IsDynamaxed(bankDef)
-					||  CheckTableForAbility(data->atkAbility, gEntrainmentBannedAbilitiesAttacker)
-					||  CheckTableForAbility(data->defAbility, gEntrainmentBannedAbilitiesTarget)
+					||  gSpecialAbilityFlags[atkAbility2].gEntrainmentBannedAbilitiesAttacker
+					||  gSpecialAbilityFlags[defAbility2].gEntrainmentBannedAbilitiesTarget
 					||  MoveBlockedBySubstitute(move, bankAtk, bankDef))
 						DECREASE_VIABILITY(10);
 					else
@@ -2100,8 +2098,8 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 					goto AI_STANDARD_DAMAGE;
 
 				case MOVE_SIMPLEBEAM:
-					if (data->defAbility == ABILITY_SIMPLE
-					||  CheckTableForAbility(data->defAbility, gSimpleBeamBannedAbilities)
+					if (defAbility2 == ABILITY_SIMPLE
+					||  gSpecialAbilityFlags[defAbility2].gSimpleBeamBannedAbilities
 					||  MoveBlockedBySubstitute(move, bankAtk, bankDef))
 						DECREASE_VIABILITY(10);
 					break;
@@ -2110,8 +2108,8 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 					if (data->atkAbility == ABILITY_NONE || data->defAbility == ABILITY_NONE
 					|| IsDynamaxed(bankAtk)
 					|| IsDynamaxed(bankDef)
-					|| CheckTableForAbility(data->atkAbility, gSkillSwapBannedAbilities)
-					|| CheckTableForAbility(data->defAbility, gSkillSwapBannedAbilities))
+					|| gSpecialAbilityFlags[atkAbility2].gSkillSwapBannedAbilities
+					|| gSpecialAbilityFlags[defAbility2].gSkillSwapBannedAbilities)
 						DECREASE_VIABILITY(10);
 			}
 			break;
@@ -2699,7 +2697,6 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 					if (instructedMove == MOVE_NONE
 					||  IsDynamaxed(bankDef)
 					||  gSpecialMoveFlags[instructedMove].gInstructBannedMoves
-					||  gSpecialMoveFlags[instructedMove].gMovesThatRequireRecharging
 					||  gSpecialMoveFlags[instructedMove].gMovesThatCallOtherMoves
 					|| (IsZMove(instructedMove))
 					|| (gLockedMoves[bankDef] != 0 && gLockedMoves[bankDef] != 0xFFFF)
