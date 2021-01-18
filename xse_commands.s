@@ -1132,10 +1132,10 @@ map \map
 	hidepokepic
 .endm
 
-@ Draws an image of the winner of the contest. In FireRed, this command is a nop. (The argument is discarded.)
-.macro drawcontestwinner a:req
+@ Same as fadescreen but works properly in rain
+.macro fadescreenswapbuffers effect:req
 .byte 0x77
-.byte \a
+.byte \effect
 .endm
 
 @ Displays the given string as braille text in a standard message box. The string should use the .braille directive

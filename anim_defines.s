@@ -456,6 +456,9 @@
 .equ AnimTask_TranslateMonElliptical, 0x8098f85
 .equ AnimTask_TranslateMonEllipticalRespectSide, 0x809907D
 .equ AnimTask_AttackerFadeToInvisible, 0x80B78E1
+.equ AnimTask_SetAttackerInvisibleWaitForSignal, 0x80bc12d
+.equ AnimTask_InitAttackerFadeFromInvisible, 0x80b7a81
+.equ AnimTask_AttackerFadeFromInvisible, 0x80b79dd
 .equ AnimTask_StretchTargetUp, 0x80A9A21
 .equ AnimTask_StretchAttackerUp, 0x80a9ab1
 .equ AnimTask_PositionFissureBgOnBattler, 0x80b9801
@@ -481,7 +484,10 @@
 .equ AnimTask_AlphaFadeIn, 0x8076049
 .equ AnimTask_FadeScreenBlue, 0x80A5FC1
 .equ AnimTask_FrozenIceCube, 0x80783FD
-
+.equ AnimTask_GlareEyeDots, 0x80e21cd
+.equ AnimTask_ScaryFace, 0x80a9f11
+.equ AnimTask_ShakeTargetInPattern, 0x80adad9
+ 
 @launchtemplate
 
 .equ Template_Hit, 0x83E7C08
@@ -568,6 +574,9 @@
 .equ Template_GoldRing, 0x83E6EEC
 .equ Template_ComplexPaletteBlend, 0x83e7b3c
 .equ Template_KnockOffStrike, 0x83ff764
+.equ Template_CrossImpact, 0x83e7c80
+.equ Template_EyeSparkle, 0x83e42fc
+.equ Template_MegaPunchKick, 0x83e67c0
 
 .equ SpriteCB_AnimSpriteOnMonPos, 0x8075D9D
 .equ Callback_TranslateAnimSpriteToTargetMonLocation, 0x8075DF5

@@ -40,7 +40,7 @@
 #include "../include/new/item.h"
 #include "../include/new/overworld.h"
 #include "../include/new/party_menu.h"
-#include "../include/new/util2.h"
+#include "../include/new/util.h"
 #include "../include/base_stats.h"
 #include "../include/new/exp.h"
 
@@ -960,6 +960,8 @@ const u8 gFieldMoveBadgeRequirements[FIELD_MOVE_COUNT] =
 void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 {
 	u8 i, j, k;
+	bool8 knowsFly = FALSE;
+	bool8 knowsDig = FALSE;
 
 	sPartyMenuInternal->numActions = 0;
 	AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUMMARY);
@@ -969,21 +971,22 @@ void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 	{
 		for (j = 0; j < NELEMS(gFieldMoves); ++j)
 		{
-			if (GetMonData(&mons[slotId], i + MON_DATA_MOVE1, NULL) == gFieldMoves[j])
+			if (GetMonData(&mons[slotId], MON_DATA_MOVE1 + i, NULL) == gFieldMoves[j])
 			{
 				AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
 				++k;
 
 				if (gFieldMoves[j] == MOVE_FLY)
-					k = MAX_MON_MOVES; //No point in appending Fly if it is already there
-				break;
+					knowsFly = TRUE; //No point in appending Fly if it is already there
+				else if (gFieldMoves[j] == MOVE_DIG)
+					knowsDig = TRUE;
 			}
 		}
 	}
 
 	//Try to give the mon fly
 	#ifdef ONLY_CHECK_ITEM_FOR_HM_USAGE
-	if (k < MAX_MON_MOVES) //Doesn't know 4 field moves
+	if (k < MAX_MON_MOVES && !knowsFly) //Doesn't know 4 field moves
 	{
 		u16 species = GetMonData(&mons[slotId], MON_DATA_SPECIES2, NULL);
 		
@@ -1005,7 +1008,7 @@ void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 		}
 	}
 
-	if (k < MAX_MON_MOVES) //Doesn't know 4 field moves
+	if (k < MAX_MON_MOVES && !knowsDig) //Doesn't know 4 field moves
 	{
 		u16 species = GetMonData(&mons[slotId], MON_DATA_SPECIES2, NULL);
 
@@ -2410,33 +2413,35 @@ static u8 GetAbilityCapsuleNewAbility(struct Pokemon* mon)
 	u8 abilityType = ItemId_GetHoldEffectParam(item);
 	u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
 	u8 ability = GetMonAbility(mon);
+	u8 ability1 = GetAbility1(species);
+	u8 ability2 = GetAbility2(species);
+	u8 hiddenAbility = GetHiddenAbility(species);
 	u8 changeTo = ABILITY_NONE;
 
 	if (abilityType != 0) //Hidden Ability Capsule
 	{
-		if (ability != gBaseStats[species].hiddenAbility
-		&& gBaseStats[species].hiddenAbility != ABILITY_NONE
+		if (ability != hiddenAbility
+		&& hiddenAbility != ABILITY_NONE
 		#ifdef UNBOUND
 		&& SpeciesToNationalPokedexNum(species) != NATIONAL_DEX_ZYGARDE //Must be given with Power Construct
 		#endif
 		)
-			changeTo = gBaseStats[species].hiddenAbility;
+			changeTo = hiddenAbility;
 	}
 	else //Regular ability capsule
 	{
-		if (ability == gBaseStats2[species].ability1)
+		if (ability == ability1)
 		{
-			if (ability != gBaseStats2[species].ability2
-			&& gBaseStats2[species].ability2 != ABILITY_NONE)
-				changeTo = gBaseStats2[species].ability2;
+			if (ability != ability2 && ability2 != ABILITY_NONE)
+				changeTo = ability2;
 		}
-		else if (ability == gBaseStats2[species].ability2) //Explicit check just in case the Pokemon has its Hidden Ability
+		else if (ability == ability2) //Explicit check just in case the Pokemon has its Hidden Ability
 		{
-			if (gBaseStats2[species].ability1 != ABILITY_NONE)
-				changeTo = gBaseStats2[species].ability1;
+			if (ability1 != ABILITY_NONE)
+				changeTo = ability1;
 		}
 	}
-	
+
 	return changeTo;
 }
 

@@ -261,7 +261,7 @@ void HandleInputChooseMove(void)
 	}
 	else if (gMain.newKeys & SELECT_BUTTON)
 	{
-		if (gNumberOfMovesToChoose > 1 && !(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_FRONTIER))
+		if (gNumberOfMovesToChoose > 1 && !(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_CAMOMONS))
 		&& !gNewBS->dynamaxData.viewing
 		&& !gNewBS->zMoveData.viewing
 		&& !gNewBS->zMoveData.viewingDetails)
@@ -427,7 +427,14 @@ void EmitChooseMove(u8 bufferId, bool8 isDoubleBattle, bool8 NoPpNumber, struct 
 				if (gBattleMoves[move].effect == EFFECT_PARALYZE && IsOfType(j, TYPE_ELECTRIC))
 					tempMoveStruct->moveResults[GetBattlerPosition(j)][i] = MOVE_RESULT_NO_EFFECT;
 
+				if (gBattleMoves[move].effect == EFFECT_WILL_O_WISP && IsOfType(j, TYPE_FIRE))
+					tempMoveStruct->moveResults[GetBattlerPosition(j)][i] = MOVE_RESULT_NO_EFFECT;
+
 				if (gBattleMoves[move].effect == EFFECT_LEECH_SEED && IsOfType(j, TYPE_GRASS))
+					tempMoveStruct->moveResults[GetBattlerPosition(j)][i] = MOVE_RESULT_NO_EFFECT;
+
+				if ((gBattleMoves[move].effect == EFFECT_POISON || gBattleMoves[move].effect == EFFECT_TOXIC)
+				&& (IsOfType(j, TYPE_POISON) || IsOfType(j, TYPE_STEEL)))
 					tempMoveStruct->moveResults[GetBattlerPosition(j)][i] = MOVE_RESULT_NO_EFFECT;
 			}
 		}
@@ -463,8 +470,15 @@ void EmitChooseMove(u8 bufferId, bool8 isDoubleBattle, bool8 NoPpNumber, struct 
 			//Special type-based status immunities
 			if (gBattleMoves[move].effect == EFFECT_PARALYZE && IsOfType(foe, TYPE_ELECTRIC))
 				tempMoveStruct->moveResults[GetBattlerPosition(foe)][i] = MOVE_RESULT_NO_EFFECT;
-
+	
+			if (gBattleMoves[move].effect == EFFECT_WILL_O_WISP && IsOfType(foe, TYPE_FIRE))
+				tempMoveStruct->moveResults[GetBattlerPosition(foe)][i] = MOVE_RESULT_NO_EFFECT;
+	
 			if (gBattleMoves[move].effect == EFFECT_LEECH_SEED && IsOfType(foe, TYPE_GRASS))
+				tempMoveStruct->moveResults[GetBattlerPosition(foe)][i] = MOVE_RESULT_NO_EFFECT;
+
+			if ((gBattleMoves[move].effect == EFFECT_POISON || gBattleMoves[move].effect == EFFECT_TOXIC)
+			&& (IsOfType(foe, TYPE_POISON) || IsOfType(foe, TYPE_STEEL)))
 				tempMoveStruct->moveResults[GetBattlerPosition(foe)][i] = MOVE_RESULT_NO_EFFECT;
 		}
 	}
@@ -1859,6 +1873,14 @@ u8 TrySetCantSelectMoveBattleScript(void)
 		gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedHealBlock;
 		++limitations;
 	}
+	#ifdef VAR_GAME_DIFFICULTY
+	else if (!isAnyMaxMove && (gBattleMoves[move].effect == EFFECT_MINIMIZE || gBattleMoves[move].effect == EFFECT_EVASION_UP_2)
+	&& VarGet(VAR_GAME_DIFFICULTY) >= OPTIONS_EXPERT_DIFFICULTY && !(gBattleTypeFlags & BATTLE_TYPE_FRONTIER))
+	{
+		gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedMinimize;
+		++limitations;
+	}
+	#endif
 	else if (gBattleMons[gActiveBattler].pp[gBattleBufferB[gActiveBattler][2]] == 0)
 	{
 		gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingMoveWithNoPP;
@@ -2086,6 +2108,7 @@ void HandleInputChooseAction(void)
 				return;
 
 			PlaySE(SE_SELECT);
+			gNewBS->dynamaxData.toBeUsed[PARTNER(gActiveBattler)] = FALSE; //Cancel's Dynamax if partner selected it
 			EmitTwoReturnValues(1, ACTION_CANCEL_PARTNER, 0);
 			PlayerBufferExecCompleted();
 		}
@@ -2160,6 +2183,14 @@ bool8 IsBagDisabled(void)
 				return TRUE;
 		}
 		if (difficulty >= OPTIONS_EXPERT_DIFFICULTY) //No items in battles for Experts
+			return TRUE;
+	}
+	else
+	{
+		if (!IsRaidBattle()
+		&& !FlagGet(FLAG_SYS_GAME_CLEAR) //Otherwise they can't catch Legendaries
+		&& VarGet(VAR_TOTEM + GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)) != 0 //Wild boss
+		&& difficulty >= OPTIONS_EXPERT_DIFFICULTY) //No items in battles for Experts
 			return TRUE;
 	}
 	#endif

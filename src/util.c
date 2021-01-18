@@ -15,10 +15,15 @@
 #include "../include/constants/items.h"
 #include "../include/constants/moves.h"
 #include "../include/base_stats.h"
+#include "../include/new/util.h"
+
 /*
 util2.c
 	general utility functions
 */
+
+//This file's functions:
+static u8 TryRandomizeAbility(u8 ability, unusedArg u16 species);
 
 u32 MathMax(u32 num1, u32 num2)
 {
@@ -265,18 +270,16 @@ u32 GetBaseStatsTotal(const u16 species)
 	return sum;
 }
 
-u8 TryRandomizeAbility(u8 ability, unusedArg u16 species)
+static u8 TryRandomizeAbility(u8 ability, unusedArg u16 species)
 {
 	u32 newAbility = ability;
 
 	#ifdef FLAG_ABILITY_RANDOMIZER
-	if (FlagGet(FLAG_ABILITY_RANDOMIZER) && !FlagGet(FLAG_BATTLE_FACILITY)
-	&& !gSpecialAbilityFlags[ability].gRandomizerBannedOriginalAbilities) //This Ability can be changed
+	if (FlagGet(FLAG_ABILITY_RANDOMIZER) && !FlagGet(FLAG_BATTLE_FACILITY))
 	{
 		u32 id = T1_READ_32(gSaveBlock2->playerTrainerId);
 		u16 startAt = (id & 0xFFFF) % (u32) ABILITIES_COUNT;
 		u16 xorVal = (id >> 16) % (u32) 0xFF; //Only set the bits likely to be in the ability
-		u32 numAttempts = 0;
 
 		newAbility = ability + startAt;
 		if (newAbility >= ABILITIES_COUNT)
@@ -288,14 +291,13 @@ u8 TryRandomizeAbility(u8 ability, unusedArg u16 species)
 		newAbility ^= xorVal;
 		newAbility %= (u32) ABILITIES_COUNT; //Prevent overflow
 
-		while (gSpecialAbilityFlags[newAbility].gRandomizerBannedNewAbilities && numAttempts < 100)
+		if (newAbility == ABILITY_NONE) //Ability got randomized down to 0
 		{
-			newAbility *= xorVal; //Multiply this time
+			newAbility *= xorVal; //So pick another ability
 			newAbility %= (u32) ABILITIES_COUNT;
-			++numAttempts;
 		}
 
-		if (numAttempts >= 100 && gSpecialAbilityFlags[newAbility].gRandomizerBannedNewAbilities) //If the Ability is still banned
+		if (newAbility == ABILITY_NONE) //If the Ability is still 0
 			newAbility = ABILITY_ILLUMINATE; //An Ability that has no beneficial effect
 	}
 	#endif

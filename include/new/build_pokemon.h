@@ -39,8 +39,8 @@ u8 GetOpenWorldBadgeCount(void);
 u8 GetScaledWildBossLevel(u8 level);
 void TryRandomizeSpecies(u16* species);
 u16 GenerateWildMonHeldItem(u16 species, u8 bonus);
-u8 TryRandomizeAbility(u8 ability, u16 species);
 void PokeSum_PrintAbilityNameAndDesc();
+void SetWildMonHeldItem(void);
 
 //Functions Hooked In
 void BuildTrainerPartySetup(void);

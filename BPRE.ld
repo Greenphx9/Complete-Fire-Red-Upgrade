@@ -9,6 +9,7 @@ gBattleCircusStreaks = 0x2026B50;
 gFollowerState = 0x203B818;
 gLastUsedBall = 0x203B774;
 gDontFadeWhite = 0x203C756;
+gDexNavSearchLevels = 0x203C75C;
 gNewBS = 0x203E038;
 gInShop = 0x203E043;
 gDexNavSearchLevels = 0x203C75C;
@@ -235,6 +236,7 @@ gRamSaveSectionLocations = 0x30053B0;
 
 /* Palette RAM */
 gPaletteFade = 0x2037AB8;
+gPaletteDecompressionBuffer = 0x2037ACC;
 
 /* Map/Overworld RAM */
 gMapHeader = 0x2036DFC;
@@ -1161,6 +1163,7 @@ SetTextboxSignpostDesign = 0x8069A20 | 1;
 ScriptContext1_IsScriptSetUp = 0x8069A64 | 1;
 ScriptContext1_SetupScript = 0x8069AE4 | 1;
 ScriptContext1_Stop = 0x8069B28 | 1;
+IsPaletteNotActive = 0x806A918 | 1;
 GetVarPointer = 0x806E454 | 1;
 VarGet = 0x806E568 | 1;
 VarSet = 0x806E584 | 1;
@@ -1225,6 +1228,8 @@ ShowFieldMessage = 0x806943C | 1;
 HideFieldMessageBox = 0x80694F4 | 1;
 ReturnEmptyStringIfNull = 0x80806C8 | 1;
 RunTextPrinters_CheckPrinter0Active = 0x80F6CBC | 1;
+RunTextPrinters_CheckActive = 0x80BF518 | 1;
+RunTextPrintersAndIsPrinter0Active = 0x80F6CBC | 1;
 DrawHelpMessageWindowWithText = 0x80F7974 | 1;
 AddTextPrinterForMessage = 0x80F6D5C | 1;
 DisplayItemMessageOnField = 0x80F7808 | 1;
@@ -1279,6 +1284,7 @@ EventObjectClearHeldMovement = 0x8063D34 | 1;
 EventObjectCheckHeldMovementStatus = 0x8063D68 | 1;
 EventObjectClearHeldMovementIfFinished = 0x8063D7C | 1;
 GetFaceDirectionMovementAction = 0x8063EB8 | 1;
+GetJump2MovementAction = 0x8064110 | 1;
 GetJumpMovementAction = 0x8064194 | 1;
 GetJumpSpecialMovementAction = 0x80641C0 | 1;
 GetWalkInPlaceNormalMovementAction = 0x8064244 | 1;
@@ -1448,6 +1454,9 @@ some_other_kind_of_link_test = 0x80BF748 |1;
 /* Evolution Functions */
 CB2_BeginEvolutionScene = 0x80CDD18 | 1;
 BeginEvolutionScene = 0x80CDDA8 | 1;
+CB2_EvolutionSceneLoadGraphics = 0x80CE0E8 | 1;
+CB2_EvolutionSceneUpdate = 0x80CE710 | 1;
+CB2_TradeEvolutionSceneUpdate = 0x80CE72C | 1;
 
 /* Window Functions */
 InitWindows = 0x8003B24 | 1;
@@ -1823,6 +1832,7 @@ GetTrainerEncounterMusicId = 0x804367C | 1;
 ResetMapMusic = 0x8071A44 | 1;
 GetCurrentMapMusic = 0x8071A68 | 1;
 PlayNewMapMusic = 0x8071A74 | 1;
+IsNotWaitingForBGMStop = 0x8071BA0 | 1;
 PlayFanfare = 0x8071C60 | 1;
 IsFanfareTaskInactive = 0x8071C9C | 1;
 FadeInNewBGM = 0x8071D10 | 1;

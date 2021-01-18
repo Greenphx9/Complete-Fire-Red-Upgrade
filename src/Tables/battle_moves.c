@@ -8640,7 +8640,7 @@ const struct BattleMove gBattleMoves[] =
 
 	[MOVE_SYNCHRONOISE] =
 	{
-		.effect = EFFECT_SYNCHRONOISE,
+		.effect = EFFECT_HIT,
 		.power = 120,
 		.type = TYPE_PSYCHIC,
 		.accuracy = 100,
@@ -11099,8 +11099,8 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_TEATIME] =
-	{	//TODO
-		.effect = EFFECT_TEATIME,
+	{	//ANIM TODO
+		.effect = EFFECT_TEATIME, //EFFECT TODO
 		.power = 0,
 		.type = TYPE_NORMAL,
 		.accuracy = 0,
@@ -11163,8 +11163,8 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_COURTCHANGE] =
-	{	//TODO
-		.effect = EFFECT_FIELD_EFFECTS,
+	{	//ANIM TOOD
+		.effect = EFFECT_FIELD_EFFECTS, //EFFECT TODO
 		.power = 0,
 		.type = TYPE_NORMAL,
 		.accuracy = 100,
@@ -11211,8 +11211,8 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_DECORATE] =
-	{	//ANIM TODO
-		.effect = EFFECT_DECORATE,
+	{
+		.effect = EFFECT_HELPING_HAND,
 		.power = 0,
 		.type = TYPE_FAIRY,
 		.accuracy = 0,
@@ -11243,7 +11243,7 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_SNAPTRAP] =
-	{	//ANIM TODO
+	{
 		.effect = EFFECT_TRAP,
 		.power = 35,
 		.type = TYPE_GRASS,
@@ -11467,7 +11467,7 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_FALSESURRENDER] =
-	{	//ANIM TODO
+	{
 		.effect = 0,
 		.power = 80,
 		.type = TYPE_DARK,
@@ -11563,7 +11563,7 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_SCALESHOT] =
-	{	//ANIM TODO
+	{
 		.effect = EFFECT_MULTI_HIT,
 		.power = 25,
 		.type = TYPE_DRAGON,
@@ -11579,7 +11579,7 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_METEORBEAM] =
-	{	//ANIM TODO
+	{
 		.effect = EFFECT_SKULL_BASH,
 		.power = 120,
 		.type = TYPE_ROCK,
@@ -11887,7 +11887,7 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_FREEZINGGLARE] =
-	{	//ANIM TODO
+	{
 		.effect = EFFECT_FREEZE_HIT,
 		.power = 95, //PLACEHOLDERS
 		.type = TYPE_PSYCHIC,
@@ -11907,7 +11907,7 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_THUNDEROUSKICK] =
-	{	//ANIM TODO
+	{
 		.effect = EFFECT_DEFENSE_DOWN_HIT,
 		.power = 90,
 		.type = TYPE_FIGHTING,

@@ -4609,6 +4609,12 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smartWild = TRUE,
 	},
 #endif
+#ifdef SPECIES_NONE
+	[SPECIES_NONE] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
 	[0xFC] =
 	{
 		.randomizerBan = TRUE,

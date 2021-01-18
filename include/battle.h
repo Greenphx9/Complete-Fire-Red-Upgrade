@@ -198,6 +198,8 @@ enum
 #define MOVE_TARGET_ALL   			0x20
 #define MOVE_TARGET_OPPONENTS_FIELD 0x40
 
+#define MOVE_TARGET_SPREAD (MOVE_TARGET_BOTH | MOVE_TARGET_ALL)
+
 // defines for the u8 array gTypeEffectiveness
 #define TYPE_EFFECT_ATK_TYPE(i)((gTypeEffectiveness[i + 0]))
 #define TYPE_EFFECT_DEF_TYPE(i)((gTypeEffectiveness[i + 1]))
@@ -975,8 +977,10 @@ struct NewBattleStruct
 		u16 zMoveHelper;
 		bool8 sideSwitchedThisRound;
 		u32 randSeed; //Seeded every frame regardless of whether or not the Random seed is normally
-		bool8 suckerPunchOkay[MAX_BATTLERS_COUNT];
-		u8 switchingCooldown[MAX_BATTLERS_COUNT]; //~0x2017B5B
+		u8 playerSwitchedCount; //~0x2017B6B
+		u8 switchingCooldown[MAX_BATTLERS_COUNT]; //~0x2017B6C - Used for anti-AI cheesing
+		u8 switchesInARow[MAX_BATTLERS_COUNT]; //~0x2017B70
+		bool8 suckerPunchOkay[MAX_BATTLERS_COUNT]; 
 		u8 itemEffects[MAX_BATTLERS_COUNT];
 		u16 movePredictions[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT]; //movePredictions[bankAtk][bankDef]
 		u16 strongestMove[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT]; //strongestMove[bankAtk][bankDef]

@@ -144,15 +144,11 @@ ability_t GetBankMegaFormAbility(u8 bank)
 	{
 		evos = CanMegaEvolve(bank, FALSE);
 		if (evos != NULL)
-		{
-			return TryRandomizeAbility(gBaseStats2[evos->targetSpecies].ability1, evos->targetSpecies); //Megas can only have 1 ability
-		}
+			return GetAbility1(evos->targetSpecies); //Megas can only have 1 ability
 
 		evos = CanMegaEvolve(bank, TRUE);
 		if (evos != NULL)
-		{
-			return TryRandomizeAbility(gBaseStats2[evos->targetSpecies].ability1, evos->targetSpecies); //Ultra Necrozma only has 1 ability
-		}
+			return GetAbility1(evos->targetSpecies); //Ultra Necrozma only has 1 ability
 	}
 
 	return ABILITY_NONE;

@@ -269,8 +269,8 @@ typedef u32 TM_HM_T[4]; //extern const u32 gTMHMLearnsets[NUM_SPECIES][4];
 typedef u32 TM_HM_T[2]; //extern const u32 gTMHMLearnsets[NUM_SPECIES][2];
 #endif
 
-#if (NUM_MOVE_TUTORS > 64)
-typedef u32 ExpandedTutor_T[5]; //extern const u32 gTutorMoves[NUM_SPECIES][4];
+#if (NUM_MOVE_TUTORS > 64) //Round up to the nearest multiple of 32
+	typedef u32 ExpandedTutor_T[(NUM_MOVE_TUTORS % 32 != 0) ? NUM_MOVE_TUTORS / 32 + 1 : NUM_MOVE_TUTORS / 32]; //extern const u32 gTutorMoves[NUM_SPECIES][];
 #else
 typedef u32 ExpandedTutor_T[2]; //extern const u32 gTutorMoves[NUM_SPECIES][2];
 #endif
@@ -393,58 +393,72 @@ bool8 CanMonLearnTutorMove(struct Pokemon* mon, u8 tutorId)
 			mask = 1 << (tutorId - 64);
 			return (gTutorLearnsets[species][2] & mask) != 0 ? TRUE : FALSE;
 		}
+	#endif
+	#if (NUM_MOVE_TUTORS > 96)
 		else if (tutorId >= 96 && tutorId < 128)
 		{
 			mask = 1 << (tutorId - 96);
 			return (gTutorLearnsets[species][3] & mask) != 0 ? TRUE : FALSE;
 		}
+	#endif
+	#if (NUM_MOVE_TUTORS > 128)
 		else if (tutorId >= 128 && tutorId < 160)
 		{
 			mask = 1 << (tutorId - 128);
 			return (gTutorLearnsets[species][4] & mask) != 0 ? TRUE : FALSE;
 		}
-#endif
+	#endif
+	#if (NUM_MOVE_TUTORS > 160)
+		else if (tutorId >= 160 && tutorId < 192)
+		{
+			mask = 1 << (tutorId - 128);
+			return (gTutorLearnsets[species][5] & mask) != 0 ? TRUE : FALSE;
+		}
+	#endif
 	}
 
 	//Special move tutors not stored in a table
 	u16 dexNum = SpeciesToNationalPokedexNum(species);
 	switch (tutorId) {
-	case TUTOR_SPECIAL_DRACO_METEOR:
-		//return GetMonData(mon, MON_DATA_FRIENDSHIP, NULL) >= MAX_FRIENDSHIP
-			return (gBaseStats2[species].type1 == TYPE_DRAGON
-				|| gBaseStats2[species].type2 == TYPE_DRAGON);
-#ifdef NATIONAL_DEX_KELDEO
-	case TUTOR_SPECIAL_SECRET_SWORD:
-		return dexNum == NATIONAL_DEX_KELDEO;
-#endif
-#ifdef NATIONAL_DEX_MELOETTA
-	case TUTOR_SPECIAL_RELIC_SONG:
-		return dexNum == NATIONAL_DEX_MELOETTA;
-#endif
-#ifdef NATIONAL_DEX_PIKACHU
-	case TUTOR_SPECIAL_VOLT_TACKLE:
-		return dexNum == NATIONAL_DEX_PIKACHU;
-#endif
-#ifdef NATIONAL_DEX_RAYQUAZA
-	case TUTOR_SPECIAL_DRAGON_ASCENT:
-		return dexNum == NATIONAL_DEX_RAYQUAZA;
-#endif
-#ifdef NATIONAL_DEX_ZYGARDE
-	case TUTOR_SPECIAL_THOUSAND_ARROWS:
-	case TUTOR_SPECIAL_THOUSAND_WAVES:
-	case TUTOR_SPECIAL_CORE_ENFORCER:
-		return dexNum == NATIONAL_DEX_ZYGARDE;
-#endif
-	case TUTOR_SPECIAL_STEEL_BEAM:
-		return gBaseStats2[species].type1 == TYPE_STEEL
-			|| gBaseStats2[species].type2 == TYPE_STEEL
-#ifdef NATIONAL_DEX_ZACIAN
-			|| dexNum == NATIONAL_DEX_ZACIAN
-#endif
-#ifdef NATIONAL_DEX_ZAMAZENTA
-			|| dexNum == NATIONAL_DEX_ZAMAZENTA
-#endif
-			;
+		case TUTOR_SPECIAL_DRACO_METEOR:
+			return GetMonData(mon, MON_DATA_FRIENDSHIP, NULL) >= MAX_FRIENDSHIP
+				&& (gBaseStats2[species].type1 == TYPE_DRAGON
+				 || gBaseStats2[species].type2 == TYPE_DRAGON);
+		#ifdef NATIONAL_DEX_KELDEO
+		case TUTOR_SPECIAL_SECRET_SWORD:
+			return dexNum == NATIONAL_DEX_KELDEO;
+		#endif
+		#ifdef NATIONAL_DEX_MELOETTA
+		case TUTOR_SPECIAL_RELIC_SONG:
+			return dexNum == NATIONAL_DEX_MELOETTA;
+		#endif
+		#ifdef NATIONAL_DEX_PIKACHU
+		case TUTOR_SPECIAL_VOLT_TACKLE:
+			return dexNum == NATIONAL_DEX_PIKACHU;
+		#endif
+		#ifdef NATIONAL_DEX_RAYQUAZA
+		case TUTOR_SPECIAL_DRAGON_ASCENT:
+			return dexNum == NATIONAL_DEX_RAYQUAZA;
+		#endif
+		#ifdef NATIONAL_DEX_ZYGARDE
+		case TUTOR_SPECIAL_THOUSAND_ARROWS:
+		case TUTOR_SPECIAL_THOUSAND_WAVES:
+		case TUTOR_SPECIAL_CORE_ENFORCER:
+			return dexNum == NATIONAL_DEX_ZYGARDE;
+		#endif
+		case TUTOR_SPECIAL_STEEL_BEAM:
+			return gBaseStats2[species].type1 == TYPE_STEEL
+				|| gBaseStats2[species].type2 == TYPE_STEEL
+			#ifdef NATIONAL_DEX_SILVALLY
+				|| dexNum == NATIONAL_DEX_SILVALLY
+			#endif
+			#ifdef NATIONAL_DEX_ZACIAN
+				|| dexNum == NATIONAL_DEX_ZACIAN
+			#endif
+			#ifdef NATIONAL_DEX_ZAMAZENTA
+				|| dexNum == NATIONAL_DEX_ZAMAZENTA
+			#endif
+				;
 	}
 
 	return FALSE;

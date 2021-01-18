@@ -259,8 +259,8 @@ gBattleScriptsForMoveEffects:
 .word BS_241_FlameBurst
 .word BS_242_LastResortSkyDrop
 .word BS_243_DamageSetTerrain
-.word BS_244_Blank
-.word BS_245_Blank
+.word BS_244_Teatime
+.word BS_245_Poltergeist
 .word BS_246_Blank
 .word BS_247_Blank
 .word BS_248_Blank
@@ -269,7 +269,7 @@ gBattleScriptsForMoveEffects:
 .word BS_251_Blank
 .word BS_252_Blank
 .word BS_253_MaxMove
-.word BS_254_Synchronoise
+.word BS_254_Blank
 .word BS_255_Blank
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

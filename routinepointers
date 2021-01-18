@@ -5,6 +5,7 @@ TagTeamExecutionCompleteHook 802E384
 
 ##Script Commands
 ScrCmd_message 815FB50
+ScrCmd_fadescreenswapbuffers 815FB90
 ScrCmd_hidemappopup 815FC78
 CreateSpriteLoadTable 0815fc5c
 
@@ -42,6 +43,9 @@ sp01B_SwapPartyAndBoxData 0815FDCC
 
 sp024_AddTextByVariable 0815FDF0
 sp025_AddTextByPointer 0815FDF4
+#ifdef UNBOUND
+sp026_RandomizerNewGamePlusTeam 0815FDF8
+#endif
 
 sp02B_CheckABButtons 0815FE0C
 sp02C_CheckDPad 0815FE10

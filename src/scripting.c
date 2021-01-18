@@ -571,37 +571,26 @@ void sp016_ChangePokemonSpecies(void) {
 //		Var8006: move to replace (0 to delete)
 //
 // Unavailable for pc selection
-void sp017_ChangePokemonAttacks(void) {
-	u16 mon = Var8004;
+void sp017_ChangePokemonAttacks(void)
+{
+	u16 partyId = Var8004;
 	u16 moveSlot = Var8005;
 	u16 move = Var8006;
 
-	u8 i;
-	if (mon >= 6)
-		return;
-	else if (move > LAST_MOVE_INDEX)
-		return;
-	else if (moveSlot > MAX_MON_MOVES)
+	if (partyId >= PARTY_SIZE || move > LAST_MOVE_INDEX || moveSlot > MAX_MON_MOVES)
 		return;
 
-	// check empty move slots, if not deleting
-	if (move != 0)
+	//Check empty move slots first, if not deleting
+	if (move != MOVE_NONE)
 	{
-		for (i = 0; i < MAX_MON_MOVES-1; ++i)
-		{
-			if (gPlayerParty[mon].moves[i] == 0)
-			{
-				gPlayerParty[mon].moves[i] = move;
-				gPlayerParty[mon].pp[i] = gBattleMoves[move].pp;
-				return;
-			}
-		}
-		// otherwise, replace given slot
-		gPlayerParty[mon].moves[moveSlot] = move;
-		gPlayerParty[mon].pp[moveSlot] = gBattleMoves[move].pp;
-		gPlayerParty[mon].pp_bonuses &= ~(gBitTable[moveSlot * 2] | gBitTable[moveSlot * 2 + 1]);	//reset pp bonuses
+		if (GiveMoveToMon(&gPlayerParty[partyId], move) != 0xFFFF)
+			return; //Had an empty slot
+
+		//Otherwise, replace given slot
+		SetMonMoveSlot(&gPlayerParty[partyId], move, moveSlot);
+		RemoveMonPPBonus(&gPlayerParty[partyId], moveSlot);
 	}
-	else if (move == 0)
+	else
 		Special_0DD_DeleteMove();
 }
 
@@ -2139,6 +2128,71 @@ u8 sp0D0_PokemonInPartyThatCanLearnTMHM(void)
 	}
 
 	return PARTY_SIZE;
+}
+
+//Fix fadescreens in rain
+bool8 __attribute__((long_call)) IsPaletteNotActive(void);
+static bool8 ClearRainFadeHelperWhenPalFadeDone(void)
+{
+	if (!gPaletteFade->active)
+	{
+		u8 currWeather = GetCurrentWeather(); 
+
+		if (currWeather == WEATHER_RAIN_LIGHT
+		|| currWeather == WEATHER_RAIN_MED
+		|| currWeather == WEATHER_RAIN_HEAVY
+		|| currWeather == WEATHER_SHADE)
+		{
+			if (gRainFadeHelper == 2)
+			{
+				gRainFadeHelper = 0; //Reset for later
+				return TRUE;
+			}
+		}
+		else
+		{
+			gRainFadeHelper = 0; //Reset for later
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+bool8 ScrCmd_fadescreenswapbuffers(struct ScriptContext *ctx)
+{
+	u8 mode = ScriptReadByte(ctx);
+
+	switch (mode)
+	{
+		case FADE_TO_BLACK:
+		case FADE_TO_WHITE:
+		default:
+			//CpuCopy32(gPlttBufferUnfaded, gPaletteDecompressionBuffer, PLTT_DECOMP_BUFFER_SIZE); //Issue with EM version is you can't show new sprites during fadescreen
+			FadeScreen(mode, 0);
+			SetupNativeScript(ctx, IsPaletteNotActive);
+			break;
+		case FADE_FROM_BLACK:
+		case FADE_FROM_WHITE:
+			//CpuCopy32(gPaletteDecompressionBuffer, gPlttBufferUnfaded, PLTT_DECOMP_BUFFER_SIZE);
+			gRainFadeHelper = 1;
+			FadeScreen(mode, 0);
+			SetupNativeScript(ctx, ClearRainFadeHelperWhenPalFadeDone);
+			break;
+	}
+
+	return TRUE;
+}
+
+void ApplyGammaShiftOnRainFadeIn(void)
+{
+	if (gRainFadeHelper == 1)
+	{
+		ApplyGammaShift(0, 32, 0);
+		gRainFadeHelper = 2;
+	}
+	else
+		ApplyGammaShift(0, 32, 3);
 }
 
 // Hall of Fame Fix for Expanded Pokemon

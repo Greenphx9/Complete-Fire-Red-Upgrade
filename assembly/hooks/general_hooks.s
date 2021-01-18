@@ -1383,3 +1383,10 @@ RemoveShopModifierCheats:
 FreeShopMemoryReturn:
 	ldr r0, =0x809B1B2 | 1
 	bx r0
+
+.pool
+@0x807A1E4 with r0
+RainFadeInHook:
+	bl ApplyGammaShiftOnRainFadeIn
+	ldr r0, =0x807A1EE | 1
+	bx r0

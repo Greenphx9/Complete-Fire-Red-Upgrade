@@ -879,115 +879,128 @@ u8 ItemBattleEffects(u8 caseID, u8 bank, bool8 moveTurn, bool8 doPluck)
 
 	case ItemEffects_ContactAttacker:
 		//These item effects must explicitly be listed in CMD49.c in order to work!
-		if (!SheerForceCheck() || atkHoldEffect == ITEM_EFFECT_THROAT_SPRAY || atkHoldEffect == ITEM_EFFECT_BLUNDER_POLICY)
+		switch (atkHoldEffect)
 		{
-			switch (atkHoldEffect)
-			{
-				case ITEM_EFFECT_FLINCH:
-					if (ABILITY(gBankAttacker) == ABILITY_SERENEGRACE || BankSideHasRainbow(gBankAttacker))
-						bankQuality *= 2;
-					if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-					&& ABILITY(gBankTarget) != ABILITY_STENCH
-					&& TOOK_DAMAGE(gBankTarget)
-					&& MOVE_HAD_EFFECT
-					&& (umodsi(Random(), 100)) < bankQuality
-					&& !gSpecialMoveFlags[gCurrentMove].gFlinchChanceMoves
-					&& gBattleMons[gBankTarget].hp)
+			case ITEM_EFFECT_FLINCH:
+				if (ABILITY(gBankAttacker) == ABILITY_SERENEGRACE || BankHasRainbow(gBankAttacker)) //NO STACKING!
+					bankQuality *= 2;
+				if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+				&& ABILITY(gBankTarget) != ABILITY_STENCH
+				&& TOOK_DAMAGE(gBankTarget)
+				&& MOVE_HAD_EFFECT
+				&& (umodsi(Random(), 100)) < bankQuality
+				&& !gSpecialMoveFlags[gCurrentMove].gFlinchChanceMoves
+				&& BATTLER_ALIVE(gBankTarget)
+				&& !SheerForceCheck())
+				{
+					gBattleMons[gBankTarget].status2 |= STATUS2_FLINCHED;
+				}
+				break;
+			case ITEM_EFFECT_SHELL_BELL:
+				if (gNewBS->totalDamageGiven > 0
+				&& bank != gBankTarget
+				&& BATTLER_ALIVE(bank)
+				&& !BATTLER_MAX_HP(bank)
+				&& !IsHealBlocked(bank)
+				&& !SheerForceCheck())
+				{
+					if (gBattleMons[bank].hp <= gBattleMons[bank].maxHP / 2)
+						gNewBS->lessThanHalfHPBeforeShellBell = TRUE; //For Emergency Exit
+
+					gStringBank = bank;
+					gBattleScripting.bank = bank;
+					gBattleMoveDamage = MathMax(1, udivsi(gNewBS->totalDamageGiven, atkQuality)) * - 1;
+					BattleScriptPushCursor();
+					gBattlescriptCurrInstr = BattleScript_ItemHealHP_Ret;
+					effect++;
+				}
+				break;
+			case ITEM_EFFECT_LIFE_ORB: ;
+				u8 moveEffect = gBattleMoves[gCurrentMove].effect;
+
+				if (gNewBS->AttackerDidDamageAtLeastOnce
+				&& moveEffect != EFFECT_BIDE //Moves that deal direct damage aren't included
+				&& moveEffect != EFFECT_COUNTER
+				&& moveEffect != EFFECT_MIRROR_COAT
+				&& moveEffect != EFFECT_ENDEAVOR
+				&& moveEffect != EFFECT_SUPER_FANG
+				&& moveEffect != EFFECT_LEVEL_DAMAGE
+				&& moveEffect != EFFECT_PSYWAVE
+				&& gCurrentMove != MOVE_FINALGAMBIT
+				&& ABILITY(bank) != ABILITY_MAGICGUARD
+				&& BATTLER_ALIVE(bank)
+				&& !SheerForceCheck())
+				{
+					gBattleMoveDamage = MathMax(1, GetBaseMaxHP(bank) / 10);
+					gNewBS->selfInflictedDamage += gBattleMoveDamage; //For Emergency Exit
+					BattleScriptPushCursor();
+					gBattlescriptCurrInstr = BattleScript_LifeOrbDamage;
+					effect++;
+				}
+				break;
+			case ITEM_EFFECT_THROAT_SPRAY: ;
+				bool8 throatSprayWork = FALSE;
+
+				if (SPLIT(gCurrentMove) == SPLIT_STATUS)
+				{
+					if (IS_DOUBLE_BATTLE)
 					{
-						gBattleMons[gBankTarget].status2 |= STATUS2_FLINCHED;
+						if (gBattleMoves[gCurrentMove].target & MOVE_TARGET_SPREAD)
+						{
+							//Check affected at least one target
+							//Assumes the status move doesn't do damage (which it shouldn't)
+							throatSprayWork = (BATTLER_ALIVE(gBankTarget) && !(gNewBS->ResultFlags[gBankTarget] & MOVE_RESULT_NO_EFFECT))
+											|| (BATTLER_ALIVE(PARTNER(gBankTarget)) && !(gNewBS->ResultFlags[PARTNER(gBankTarget)] & MOVE_RESULT_NO_EFFECT));
+
+							if (gBattleMoves[gCurrentMove].target & MOVE_TARGET_ALL)
+								throatSprayWork |= (BATTLER_ALIVE(PARTNER(gBankAttacker)) && !(gNewBS->ResultFlags[PARTNER(gBankAttacker)] & MOVE_RESULT_NO_EFFECT));
+						}
 					}
-					break;
-				case ITEM_EFFECT_SHELL_BELL:
-					if (gNewBS->totalDamageGiven > 0
-					&& bank != gBankTarget
-					&& BATTLER_ALIVE(bank)
-					&& !BATTLER_MAX_HP(bank)
-					&& !SheerForceCheck())
-					{
-						if (gBattleMons[bank].hp <= gBattleMons[bank].maxHP / 2)
-							gNewBS->lessThanHalfHPBeforeShellBell = TRUE; //For Emergency Exit
+					else if (MOVE_HAD_EFFECT)
+						throatSprayWork = TRUE;
+				}
+				else //Damaging move
+				{
+					if (gNewBS->AttackerDidDamageAtLeastOnce)
+						throatSprayWork = TRUE;
+				}
 
-						gStringBank = bank;
-						gBattleScripting.bank = bank;
-						gBattleMoveDamage = MathMax(1, udivsi(gNewBS->totalDamageGiven, atkQuality)) * - 1;
-						BattleScriptPushCursor();
-						gBattlescriptCurrInstr = BattleScript_ItemHealHP_Ret;
-						effect++;
-					}
-					break;
-				case ITEM_EFFECT_LIFE_ORB: ;
-					u8 moveEffect = gBattleMoves[gCurrentMove].effect;
+				if (throatSprayWork
+				&& BATTLER_ALIVE(gBankAttacker)
+				&& !(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE)
+				&& CheckSoundMove(gCurrentMove)
+				&& !ChangeStatBuffs(SET_STAT_BUFF_VALUE(1), STAT_STAGE_SPATK, MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN, 0))
+				{
+					PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_STAGE_SPATK);
 
-					if (gNewBS->AttackerDidDamageAtLeastOnce
-					&& moveEffect != EFFECT_BIDE //Moves that deal direct damage aren't included
-					&& moveEffect != EFFECT_COUNTER
-					&& moveEffect != EFFECT_MIRROR_COAT
-					&& moveEffect != EFFECT_ENDEAVOR
-					&& moveEffect != EFFECT_SUPER_FANG
-					&& moveEffect != EFFECT_LEVEL_DAMAGE
-					&& moveEffect != EFFECT_PSYWAVE
-					&& gCurrentMove != MOVE_FINALGAMBIT
-					&& ABILITY(bank) != ABILITY_MAGICGUARD
-					&& BATTLER_ALIVE(bank))
-					{
-						gBattleMoveDamage = MathMax(1, GetBaseMaxHP(bank) / 10);
-						gNewBS->selfInflictedDamage += gBattleMoveDamage; //For Emergency Exit
-						BattleScriptPushCursor();
-						gBattlescriptCurrInstr = BattleScript_LifeOrbDamage;
-						effect++;
-					}
-					break;
-				case ITEM_EFFECT_THROAT_SPRAY: ;
-					bool8 throatSprayWork = FALSE;
+					gEffectBank = bank;
+					gBattleScripting.animArg1 = STAT_ANIM_PLUS1 + STAT_STAGE_SPATK - 1;
+					gBattleScripting.animArg2 = 0;
 
-					if (SPLIT(gCurrentMove) == SPLIT_STATUS)
-					{
-						if (MOVE_HAD_EFFECT)
-							throatSprayWork = TRUE;
-					}
-					else //Damaging move
-					{
-						if (gNewBS->AttackerDidDamageAtLeastOnce && !SheerForceCheck())
-							throatSprayWork = TRUE;
-					}
+					BattleScriptPushCursor();
+					gBattlescriptCurrInstr = BattleScript_RaiseStatsItem;
+					effect = ITEM_STATS_CHANGE;
+				}
+				break;
+			case ITEM_EFFECT_BLUNDER_POLICY:
+				if (gNewBS->activateBlunderPolicy
+				&& BATTLER_ALIVE(gBankAttacker)
+				&& !ChangeStatBuffs(SET_STAT_BUFF_VALUE(2), STAT_STAGE_SPEED, MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN, 0))
+				{
+					PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_STAGE_SPEED);
 
-					if (throatSprayWork
-					&& BATTLER_ALIVE(gBankAttacker)
-					&& !(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE)
-					&& CheckSoundMove(gCurrentMove)
-					&& !ChangeStatBuffs(SET_STAT_BUFF_VALUE(1), STAT_STAGE_SPATK, MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN, 0))
-					{
-						PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_STAGE_SPATK);
+					gEffectBank = gBankAttacker;
+					gBattleScripting.animArg1 = STAT_ANIM_PLUS2 + STAT_STAGE_SPEED - 1;
+					gBattleScripting.animArg2 = 0;
 
-						gEffectBank = bank;
-						gBattleScripting.animArg1 = STAT_ANIM_PLUS1 + STAT_STAGE_SPATK - 1;
-						gBattleScripting.animArg2 = 0;
+					BattleScriptPushCursor();
+					gBattlescriptCurrInstr = BattleScript_RaiseStatsItem;
+					effect = ITEM_STATS_CHANGE;
+				}
 
-						BattleScriptPushCursor();
-						gBattlescriptCurrInstr = BattleScript_RaiseStatsItem;
-						effect = ITEM_STATS_CHANGE;
-					}
-					break;
-				case ITEM_EFFECT_BLUNDER_POLICY:
-					if (gNewBS->activateBlunderPolicy
-					&& BATTLER_ALIVE(gBankAttacker)
-					&& !ChangeStatBuffs(SET_STAT_BUFF_VALUE(2), STAT_STAGE_SPEED, MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN, 0))
-					{
-						PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_STAGE_SPEED);
-
-						gEffectBank = gBankAttacker;
-						gBattleScripting.animArg1 = STAT_ANIM_PLUS2 + STAT_STAGE_SPEED - 1;
-						gBattleScripting.animArg2 = 0;
-
-						BattleScriptPushCursor();
-						gBattlescriptCurrInstr = BattleScript_RaiseStatsItem;
-						effect = ITEM_STATS_CHANGE;
-					}
-
-					gNewBS->activateBlunderPolicy = FALSE;
-					break;
+				gNewBS->activateBlunderPolicy = FALSE;
+				break;
 			}
-		}
 		break;
 	}
 

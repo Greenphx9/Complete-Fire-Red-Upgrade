@@ -131,6 +131,7 @@ enum BattleTowerFormats
 	BATTLE_MINE_FORMAT_1, //OU, Camomons, Benjamin Butterfree
 	BATTLE_MINE_FORMAT_2, //Scalemons, 350 Cup, Averagemons
 	BATTLE_MINE_FORMAT_3, //Little Cup, Little Cup Camomons
+	BATTLE_MINE_FORMAT_4, //Ubers, Ubers Camomons
 	NUM_TIERS
 };
 

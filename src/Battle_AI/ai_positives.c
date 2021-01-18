@@ -87,18 +87,18 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			break;
 
 		case EFFECT_PARALYZE_HIT:
-			if (CalcSecondaryEffectChance(bankAtk, move) >= 75)
+			if (CalcSecondaryEffectChance(bankAtk, move) >= 75 && !MoveBlockedBySubstitute(move, bankAtk, bankDef))
 				goto AI_PARALYZE_CHECKS;
 			break;
 
 		case EFFECT_BURN_HIT:
-			if (CalcSecondaryEffectChance(bankAtk, move) >= 75)
+			if (CalcSecondaryEffectChance(bankAtk, move) >= 75 && !MoveBlockedBySubstitute(move, bankAtk, bankDef))
 				goto AI_BURN_CHECKS;
 			break;
 
 		case EFFECT_POISON_HIT:
 		case EFFECT_BAD_POISON_HIT:
-			if (CalcSecondaryEffectChance(bankAtk, move) >= 75)
+			if (CalcSecondaryEffectChance(bankAtk, move) >= 75 && !MoveBlockedBySubstitute(move, bankAtk, bankDef))
 				goto AI_POISON_CHECKS;
 			break;
 
@@ -186,7 +186,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 				default:
 				AI_ATTACK_PLUS:
-					if (IsMovePredictionPhazingMove(bankDef, bankAtk))
+					if (IsMovePredictionPhazingMove(bankDef, bankAtk) || HasUsedMoveWithEffect(bankDef, EFFECT_ATTACK_DOWN_2))
 						break;
 
 					else if (move == MOVE_POWERUPPUNCH && STAT_STAGE(bankAtk, STAT_STAGE_ATK) < STAT_STAGE_MAX && atkAbility != ABILITY_CONTRARY ) //added for poweruppunch
@@ -218,7 +218,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 		case EFFECT_DEFENSE_UP:
 		case EFFECT_DEFENSE_UP_2:
 		AI_DEFENSE_PLUS:
-			if (IsMovePredictionPhazingMove(bankDef, bankAtk))
+			if (IsMovePredictionPhazingMove(bankDef, bankAtk) || HasUsedMoveWithEffect(bankDef, EFFECT_DEFENSE_DOWN_2))
 				break;
 
 			/*
@@ -266,7 +266,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 		case EFFECT_SPEED_UP:
 		case EFFECT_SPEED_UP_2:
 		AI_SPEED_PLUS:
-			if (IsMovePredictionPhazingMove(bankDef, bankAtk))
+			if (IsMovePredictionPhazingMove(bankDef, bankAtk) || HasUsedMoveWithEffect(bankDef, EFFECT_SPEED_DOWN_2))
 				break;
 			if (!IsTrickRoomActive() && atkAbility != ABILITY_CONTRARY)
 				INCREASE_STAT_VIABILITY(STAT_STAGE_SPEED, 8, 3);
@@ -286,7 +286,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 		case EFFECT_SPECIAL_ATTACK_UP:
 		case EFFECT_SPECIAL_ATTACK_UP_2:
-			if (IsMovePredictionPhazingMove(bankDef, bankAtk))
+			if (IsMovePredictionPhazingMove(bankDef, bankAtk) || HasUsedMoveWithEffect(bankDef, EFFECT_SPECIAL_ATTACK_DOWN_2))
 				break;
 			switch (move)
 			{
@@ -333,7 +333,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 		case EFFECT_SPECIAL_DEFENSE_UP:
 		case EFFECT_SPECIAL_DEFENSE_UP_2:
 		AI_SPECIAL_DEFENSE_PLUS: ;
-			if (IsMovePredictionPhazingMove(bankDef, bankAtk))
+			if (IsMovePredictionPhazingMove(bankDef, bankAtk) || HasUsedMoveWithEffect(bankDef, EFFECT_SPECIAL_DEFENSE_DOWN_2))
 				break;
 			if (BankLikelyToUseMoveSplit(bankDef, class) == SPLIT_SPECIAL && atkAbility != ABILITY_CONTRARY)
 				INCREASE_STAT_VIABILITY(STAT_STAGE_SPDEF, 10, 1);
@@ -379,7 +379,6 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 		case EFFECT_SPEED_DOWN:
 		case EFFECT_SPEED_DOWN_2:
-		AI_SPEED_MINUS:
 			if (GoodIdeaToLowerSpeed(bankDef, bankAtk, move))
 				INCREASE_STATUS_VIABILITY(2);
 			break;
@@ -513,7 +512,10 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			if (ResistsAllMovesAtFullHealth(bankDef, bankAtk) //Can tank hits while sitting there useless
 			&& !OffensiveSetupMoveInMoveset(bankDef, bankAtk)) //Foe can't set up while AI is asleep
 			{
-				goto AI_RECOVER_VIABILITY_INCREASE; //Go right to the recovery increase
+				if (!BATTLER_MAX_HP(bankAtk) && IsTakingSecondaryDamage(bankDef))
+					goto AI_RECOVER_VIABILITY_INCREASE; //Go right to the recovery increase
+				else
+					goto AI_RECOVER; //Treat like Recover
 			}
 			else if (data->atkItemEffect == ITEM_EFFECT_CURE_SLP //Chesto Berry
 			|| data->atkItemEffect == ITEM_EFFECT_CURE_STATUS //Lum Berry
@@ -655,18 +657,19 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 		//For the stat down hit, only rely on these gimmicks in Single battles
 		case EFFECT_ATTACK_DOWN_HIT:
-			if (IS_SINGLE_BATTLE && CalcSecondaryEffectChance(bankAtk, move) >= 50)
+			if (IS_SINGLE_BATTLE && CalcSecondaryEffectChance(bankAtk, move) >= 50 && !MoveBlockedBySubstitute(move, bankAtk, bankDef))
 				goto AI_ATTACK_MINUS;
 			break;
 
 		case EFFECT_DEFENSE_DOWN_HIT:
-			if (IS_SINGLE_BATTLE && CalcSecondaryEffectChance(bankAtk, move) >= 50)
+			if (IS_SINGLE_BATTLE && CalcSecondaryEffectChance(bankAtk, move) >= 50 && !MoveBlockedBySubstitute(move, bankAtk, bankDef))
 				goto AI_DEFENSE_MINUS;
 			break;
 
 		case EFFECT_SPEED_DOWN_HIT:
-			if (CalcSecondaryEffectChance(bankAtk, move) >= 50)
+			if (CalcSecondaryEffectChance(bankAtk, move) >= 50 && !MoveBlockedBySubstitute(move, bankAtk, bankDef))
 			{
+				AI_SPEED_MINUS:
 				if (IS_SINGLE_BATTLE)
 					goto AI_SPEED_MINUS;
 				else //Double Battle
@@ -681,28 +684,29 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			break;
 
 		case EFFECT_SPECIAL_ATTACK_DOWN_HIT:
-			if (IS_SINGLE_BATTLE && CalcSecondaryEffectChance(bankAtk, move) >= 50)
+			if (IS_SINGLE_BATTLE && CalcSecondaryEffectChance(bankAtk, move) >= 50 && !MoveBlockedBySubstitute(move, bankAtk, bankDef))
 				goto AI_SPECIAL_ATTACK_MINUS;
 			break;
 
 		case EFFECT_SPECIAL_DEFENSE_DOWN_HIT:
-			if (IS_SINGLE_BATTLE && CalcSecondaryEffectChance(bankAtk, move) >= 50)
+			if (IS_SINGLE_BATTLE && CalcSecondaryEffectChance(bankAtk, move) >= 50 && !MoveBlockedBySubstitute(move, bankAtk, bankDef))
 				goto AI_SPECIAL_DEFENSE_MINUS;
 			break;
 
 		case EFFECT_ACCURACY_DOWN_HIT:
-			if (IS_SINGLE_BATTLE && CalcSecondaryEffectChance(bankAtk, move) >= 50)
+			if (IS_SINGLE_BATTLE && CalcSecondaryEffectChance(bankAtk, move) >= 50 && !MoveBlockedBySubstitute(move, bankAtk, bankDef))
 				goto AI_ACCURACY_MINUS;
 			break;
 
 		case EFFECT_EVASION_DOWN_HIT:
-			if (IS_SINGLE_BATTLE && CalcSecondaryEffectChance(bankAtk, move) >= 50)
+			if (IS_SINGLE_BATTLE && CalcSecondaryEffectChance(bankAtk, move) >= 50 && !MoveBlockedBySubstitute(move, bankAtk, bankDef))
 				goto AI_EVASION_MINUS;
 			break;
 
 		case EFFECT_CONFUSE_HIT:
 			if (CalcSecondaryEffectChance(bankAtk, move) >= 75
-			&&  MoveWillHit(move, bankAtk, bankDef))
+			&& !MoveBlockedBySubstitute(move, bankAtk, bankDef)
+			&& MoveWillHit(move, bankAtk, bankDef))
 				goto AI_CONFUSE_CHECK;
 			break;
 
@@ -746,7 +750,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			break;
 
 		case EFFECT_SPLASH:
-			if (IsTypeZCrystal(data->atkItem, moveType) && !IsMegaZMoveBannedBattle() && !gNewBS->zMoveData.used[bankAtk])
+			if (IsTypeZCrystal(data->atkItem, gBattleMoves[move].type) && !IsMegaZMoveBannedBattle() && !gNewBS->zMoveData.used[bankAtk])
 				INCREASE_VIABILITY(9); //Z-Splash!
 			break;
 		
@@ -1073,7 +1077,25 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 						break;
 					}
 					#endif
-					__attribute__ ((fallthrough));
+					goto PROTECT_CHECKS;
+
+				case MOVE_BANEFULBUNKER:
+					if (predictedMove != MOVE_NONE 
+					 && CheckContact(predictedMove, bankDef) //Enemy will hit with a contact move
+					 && CanBePoisoned(bankDef, bankAtk, TRUE))
+					{
+						if (IsClassStall(class))
+						{
+							INCREASE_VIABILITY(8);
+							break;
+						}
+						else if (IS_DOUBLE_BATTLE)
+						{
+							INCREASE_VIABILITY(19);
+							break;
+						}
+					}
+					//Fallthrough
 
 				default:
 				PROTECT_CHECKS: ;
@@ -1216,7 +1238,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 		case EFFECT_SANDSTORM:
 			if (IsClassDoublesSetupAttacker(class)
-			&& IsTypeZCrystal(data->atkItem, moveType)
+			&& IsTypeZCrystal(data->atkItem, gBattleMoves[move].type)
 			&& !gNewBS->zMoveData.used[bankAtk] //Z-Crystal provides speed up
 			&& !IsMegaZMoveBannedBattle()
 			&& atkAbility != ABILITY_CONTRARY)
@@ -1418,7 +1440,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 		case EFFECT_RAIN_DANCE:
 			if (IsClassDoublesSetupAttacker(class)
-			&& IsTypeZCrystal(data->atkItem, moveType)
+			&& IsTypeZCrystal(data->atkItem, gBattleMoves[move].type)
 			&& !gNewBS->zMoveData.used[bankAtk] //Z-Crystal provides speed up
 			&& !IsMegaZMoveBannedBattle()
 			&& atkAbility != ABILITY_CONTRARY)
@@ -1450,7 +1472,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 		case EFFECT_SUNNY_DAY:
 			if (IsClassDoublesSetupAttacker(class)
-			&& IsTypeZCrystal(data->atkItem, moveType)
+			&& IsTypeZCrystal(data->atkItem, gBattleMoves[move].type)
 			&& !gNewBS->zMoveData.used[bankAtk] //Z-Crystal provides speed up
 			&& !IsMegaZMoveBannedBattle()
 			&& atkAbility != ABILITY_CONTRARY)
@@ -1512,7 +1534,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				if (IsMovePredictionPhazingMove(bankDef, bankAtk))
 					break;
 
-				if (IsTypeZCrystal(data->atkItem, moveType) && !IsMegaZMoveBannedBattle())
+				if (IsTypeZCrystal(data->atkItem, gBattleMoves[move].type) && !IsMegaZMoveBannedBattle())
 					INCREASE_STAT_VIABILITY(STAT_STAGE_ATK, STAT_STAGE_MAX, 5);
 				else
 					INCREASE_STAT_VIABILITY(STAT_STAGE_ATK, 8, 2);
@@ -1548,6 +1570,29 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 							break;
 						}
 					}
+				}
+			}
+			else if (atkAbility != ABILITY_CONTRARY) //Spectral Thief
+			{
+				bool8 hasHigherStat = FALSE;
+
+				//Use if the target has +2 in anything
+				//Basically to prevent set ups
+				for (i = STAT_STAGE_ATK; i < BATTLE_STATS_NO; ++i)
+				{
+					if (STAT_STAGE(bankDef, i) >= 6 + 2) //Target is at a +2 set-up
+					{
+						hasHigherStat = TRUE;
+						break;
+					}
+				}
+
+				if (hasHigherStat)
+				{
+					if (IsClassDamager(class))
+						INCREASE_STAT_VIABILITY(0xFF, STAT_STAGE_MAX, 3); //Treat like high-priority status setup
+					else
+						INCREASE_VIABILITY(3); //Increase past strongest move
 				}
 			}
 			break;
@@ -1607,7 +1652,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				}
 			}
 			else if (IsClassDoublesSetupAttacker(class)
-			&& IsTypeZCrystal(data->atkItem, moveType)
+			&& IsTypeZCrystal(data->atkItem, gBattleMoves[move].type)
 			&& !gNewBS->zMoveData.used[bankAtk] //Z-Crystal provides speed up
 			&& !IsMegaZMoveBannedBattle()
 			&& atkAbility != ABILITY_CONTRARY)
@@ -1973,6 +2018,66 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				INCREASE_STATUS_VIABILITY(3); //Steal move
 			break;
 
+		case EFFECT_SECRET_POWER:
+			if (CalcSecondaryEffectChance(bankAtk, move) < 60 || MoveBlockedBySubstitute(move, bankAtk, bankDef))
+				break;
+
+			u8 secretPowerEffect = GetSecretPowerEffect() & ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);
+			switch (secretPowerEffect) {
+				case MOVE_EFFECT_SLEEP:
+					goto AI_SLEEP_CHECKS;
+				case MOVE_EFFECT_POISON:
+					goto AI_POISON_CHECKS;
+				case MOVE_EFFECT_BURN:
+					goto AI_BURN_CHECKS;
+				case MOVE_EFFECT_FREEZE:
+					goto AI_FREEZE_CHECKS;
+				case MOVE_EFFECT_PARALYSIS:
+					goto AI_PARALYZE_CHECKS;
+				case MOVE_EFFECT_CONFUSION:
+					goto AI_CONFUSE_CHECK;
+				case MOVE_EFFECT_FLINCH:
+					goto AI_FLINCH_CHECKS;
+				case MOVE_EFFECT_ATK_MINUS_1:
+					goto AI_ATTACK_MINUS;
+				case MOVE_EFFECT_DEF_MINUS_1:
+					goto AI_DEFENSE_MINUS;
+				case MOVE_EFFECT_SPD_MINUS_1:
+					goto AI_SPEED_MINUS;
+				case MOVE_EFFECT_SP_ATK_MINUS_1:
+					goto AI_SPECIAL_ATTACK_MINUS;
+				case MOVE_EFFECT_SP_DEF_MINUS_1:
+					goto AI_SPECIAL_DEFENSE_MINUS;
+				case MOVE_EFFECT_ACC_MINUS_1:
+					goto AI_ACCURACY_MINUS;
+				case MOVE_EFFECT_EVS_MINUS_1:
+					goto AI_EVASION_MINUS;
+				case MOVE_EFFECT_ALL_STATS_UP:
+					if (atkAbility == ABILITY_CONTRARY)
+						break;
+
+					//Try to boost either Attack, Sp. Attack, or Speed
+					u8 oldViability = viability;
+					if (PhysicalMoveInMoveset(bankAtk) && STAT_STAGE(bankAtk, STAT_STAGE_ATK) < 7)
+					{
+						INCREASE_STAT_VIABILITY(0xFE, 7, 3);
+						if (viability != oldViability) //Viability was increased
+							break;
+					}
+
+					if (SpecialMoveInMoveset(bankAtk) && STAT_STAGE(bankAtk, STAT_STAGE_SPATK) < 7)
+					{
+						INCREASE_STAT_VIABILITY(0xFE, 7, 3);
+						if (viability != oldViability) //Viability was increased
+							break;
+					}
+
+					if (STAT_STAGE(bankAtk, STAT_STAGE_SPEED) < 7)
+						INCREASE_STAT_VIABILITY(0xFE, 7, 3); //At least try to boost Speed
+					break;
+			}
+			break;
+
 		case EFFECT_MUD_SPORT:
 			if (!MoveTypeInMoveset(TYPE_ELECTRIC, bankAtk) && MoveTypeInMoveset(TYPE_ELECTRIC, bankDef))
 				INCREASE_STATUS_VIABILITY(1);
@@ -2152,7 +2257,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 						if (STAT_STAGE(bankDef, i) >= 6 + 2) //Target is at a +2 set-up
 							hasHigherStat = TRUE;
-					}	
+					}
 
 					if (hasHigherStat && i == BATTLE_STATS_NO) //Attacker has no buffs and target has at least one +2 buff
 					{
@@ -2229,7 +2334,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			break;
 
 		case EFFECT_REMOVE_TARGET_STAT_CHANGES:
-			if (ShouldPhaze(bankAtk, bankDef, move, class))
+			if (!MoveBlockedBySubstitute(move, bankAtk, bankDef) && ShouldPhaze(bankAtk, bankDef, move, class))
 				INCREASE_VIABILITY(8);
 			break;
 
@@ -2339,21 +2444,23 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			break;
 
 		case EFFECT_FLING: ;
-			u8 effect = gFlingTable[data->atkItem].effect;
+			if (!MoveBlockedBySubstitute(move, bankAtk, bankDef))
+			{
+				u8 effect = gFlingTable[data->atkItem].effect;
 
-			switch (effect) {
-				case MOVE_EFFECT_BURN:
-					goto AI_BURN_CHECKS;
+				switch (effect) {
+					case MOVE_EFFECT_BURN:
+						goto AI_BURN_CHECKS;
 
-				case MOVE_EFFECT_FLINCH:
-					goto AI_FLINCH_CHECKS;
+					case MOVE_EFFECT_FLINCH:
+						goto AI_FLINCH_CHECKS;
 
-				case MOVE_EFFECT_PARALYSIS:
-					goto AI_PARALYZE_CHECKS;
+					case MOVE_EFFECT_PARALYSIS:
+						goto AI_PARALYZE_CHECKS;
 
-				case MOVE_EFFECT_POISON:
-				case MOVE_EFFECT_TOXIC:
-					goto AI_POISON_CHECKS;
+					case MOVE_EFFECT_POISON:
+					case MOVE_EFFECT_TOXIC:
+						goto AI_POISON_CHECKS;
 
 					case MOVE_EFFECT_FREEZE:
 					AI_FREEZE_CHECKS:
@@ -2384,6 +2491,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 						}
 					#endif
 						break;
+				}
 			}
 			break;
 
@@ -2484,7 +2592,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				case MOVE_CELEBRATE:
 				case MOVE_HOLDHANDS:
 				case MOVE_HAPPYHOUR:
-					if (!gNewBS->zMoveData.used[bankAtk] && IsTypeZCrystal(data->atkItem, moveType) && !IsMegaZMoveBannedBattle())
+					if (!gNewBS->zMoveData.used[bankAtk] && IsTypeZCrystal(data->atkItem, gBattleMoves[move].type) && !IsMegaZMoveBannedBattle() && !IsMovePredictionPhazingMove(bankDef, bankAtk))
 						INCREASE_VIABILITY(9); //Z-Happy Hour! / Z-Celebrate
 					break;
 			}
@@ -2594,7 +2702,11 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			 || !MoveThatCanHelpAttacksHitInMoveset(bankAtk) //try to make it's chance of hitting higher.
 			 || CanKnockOut(bankDef, bankAtk))) //Just use the move if you'll die anyways
 			{
-				INCREASE_VIABILITY(9);
+				if (gBattleMoves[predictedMove].effect != EFFECT_SUCKER_PUNCH //AI shouldn't prioritize damaging move if foe is going to try to KO with Sucker Punch
+				|| PriorityCalc(bankAtk, ACTION_USE_MOVE, move) > 0) //Unless the move would go before Sucker Punch
+				{
+					INCREASE_VIABILITY(9);
+				}
 			}
 			else if (!MoveEffectInMoveset(EFFECT_PROTECT, bankAtk)
 			&& !MoveWouldHitFirst(move, bankAtk, bankDef) //Attacker wouldn't hit first
@@ -2609,7 +2721,11 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			&& StrongestMoveGoesFirst(move, bankAtk, bankDef) //Then use the strongest fast move
 			&& (!MoveInMovesetAndUsable(MOVE_FAKEOUT, bankAtk) || !ShouldUseFakeOut(bankAtk, bankDef))) //Prefer Fake Out if it'll do something
 			{
-				INCREASE_VIABILITY(9);
+				if (gBattleMoves[predictedMove].effect != EFFECT_SUCKER_PUNCH //AI shouldn't prioritize damaging move if foe is going to try to KO with Sucker Punch
+				|| PriorityCalc(bankAtk, ACTION_USE_MOVE, move) > 0) //Unless the move would go before Sucker Punch
+				{
+					INCREASE_VIABILITY(9);
+				}
 			}
 			else if (IsStrongestMove(move, bankAtk, bankDef))
 			{
@@ -2751,7 +2867,11 @@ u8 AIScript_SemiSmart(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			 || !MoveThatCanHelpAttacksHitInMoveset(bankAtk) //try to make it's chance of hitting higher.
 			 || CanKnockOut(bankDef, bankAtk))) //Just use the move if you'll die anyways
 			{
-				INCREASE_VIABILITY(9);
+				if (gBattleMoves[predictedMove].effect != EFFECT_SUCKER_PUNCH //AI shouldn't prioritize damaging move if foe is going to try to KO with Sucker Punch
+				|| PriorityCalc(bankAtk, ACTION_USE_MOVE, move) > 0) //Unless the move would go before Sucker Punch
+				{
+					INCREASE_VIABILITY(9);
+				}
 			}
 			else if (!MoveEffectInMoveset(EFFECT_PROTECT, bankAtk)
 			&& !MoveWouldHitFirst(move, bankAtk, bankDef) //Attacker wouldn't hit first
@@ -2760,12 +2880,17 @@ u8 AIScript_SemiSmart(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			{
 				INCREASE_VIABILITY(8); //Use the killing move with the best accuracy
 			}
-			else if (!MoveEffectInMoveset(EFFECT_PROTECT, bankAtk)
+			else if (!(gBattleTypeFlags & BATTLE_TYPE_BENJAMIN_BUTTERFREE) //This rule doesn't apply in these battles
+			&& !MoveEffectInMoveset(EFFECT_PROTECT, bankAtk)
 			&& MoveKnocksOutXHits(predictedMove, bankDef, bankAtk, 1) //Foe can kill attacker
 			&& StrongestMoveGoesFirst(move, bankAtk, bankDef) //Use strongest fast move
 			&& (!MoveInMovesetAndUsable(MOVE_FAKEOUT, bankAtk) || !ShouldUseFakeOut(bankAtk, bankDef))) //Prefer Fake Out if it'll do something
 			{
-				INCREASE_VIABILITY(9);
+				if (gBattleMoves[predictedMove].effect != EFFECT_SUCKER_PUNCH //AI shouldn't prioritize damaging move if foe is going to try to KO with Sucker Punch
+				|| PriorityCalc(bankAtk, ACTION_USE_MOVE, move) > 0) //Unless the move would go before Sucker Punch
+				{
+					INCREASE_VIABILITY(9);
+				}
 			}
 			else if (IsStrongestMove(move, bankAtk, bankDef))
 			{
@@ -2803,6 +2928,7 @@ u8 AIScript_SemiSmart(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 		}
 		#endif
 		
+
 		return viability;
 	}
 

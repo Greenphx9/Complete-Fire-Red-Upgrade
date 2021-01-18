@@ -444,7 +444,7 @@ BattleScript_MagneticFluxDidntWork:
 RaiseUserDef1_AromaticMist:
 	jumpifbyte NOTANDS BATTLE_TYPE BATTLE_DOUBLE FAILED
 	callasm SetTargetPartner
-	jumpifspecialstatusflag EQUALS STATUS3_SEMI_INVULNERABLE 0x0 FAILED
+	jumpifspecialstatusflag BANK_TARGET STATUS3_SEMI_INVULNERABLE 0x0 FAILED
 	jumpiffainted BANK_TARGET FAILED
 	jumpifprotectedbycraftyshield BANK_TARGET FAILED
 	setbyte STAT_ANIM_PLAYED 0x0
@@ -1153,7 +1153,6 @@ BS_034_PayDay:
 BS_035_LightScreen:
 	jumpifmove MOVE_GLITZYGLOW GlitzyGlowBS
 	attackcanceler
-	jumpifsideaffecting BANK_ATTACKER SIDE_LIGHTSCREEN FAILED_PRE
 	attackstring
 	ppreduce
 	setlightscreen
@@ -1303,7 +1302,6 @@ HighJumpKickMiss:
 .global BS_046_Mist
 BS_046_Mist:
 	attackcanceler
-	jumpifsideaffecting BANK_ATTACKER SIDE_MIST FAILED_PRE
 	attackstring
 	ppreduce
 	setmisteffect
@@ -1558,7 +1556,6 @@ BS_065_Reflect:
 	jumpifmove MOVE_BADDYBAD BaddyBadBS
 	attackcanceler
 	jumpifmove MOVE_AURORAVEIL AuroraVeilBS
-	jumpifsideaffecting BANK_ATTACKER SIDE_REFLECT FAILED_PRE
 	attackstring
 	ppreduce
 	setreflect
@@ -2650,11 +2647,14 @@ BS_123_Blank:
 .global BS_124_Safeguard
 BS_124_Safeguard:
 	attackcanceler
-	jumpifsideaffecting BANK_ATTACKER SIDE_SAFEGUARD FAILED_PRE
 	attackstring
 	ppreduce
 	setsafeguard
-	goto 0x81D7172
+	attackanimation
+	waitanimation
+	printfromtable 0x83FE54C
+	waitmessage DELAY_1SECOND
+	goto BS_MOVE_END
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -5609,7 +5609,7 @@ BS_242_LastResortSkyDrop:
 	
 	attackcanceler
 	jumpifbehindsubstitute BANK_TARGET FAILED_PRE
-	jumpifspecialstatusflag EQUALS STATUS3_SEMI_INVULNERABLE 0x0 FAILED_PRE
+	jumpifspecialstatusflag BANK_TARGET STATUS3_SEMI_INVULNERABLE 0x0 FAILED_PRE
 	jumpifweight BANK_TARGET GREATERTHAN 1999 FAILED_PRE @;199.9 kg
 	accuracycheck BS_MOVE_MISSED 0x0
 	attackstring
@@ -5678,15 +5678,25 @@ BattleScript_SetTerrainReturn:
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-.global BS_244_Blank
-BS_244_Blank:
+.global BS_244_Teatime
+BS_244_Teatime:
 	goto BS_STANDARD_HIT
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-.global BS_245_Blank
-BS_245_Blank:
-	goto BS_STANDARD_HIT
+.global BS_245_Poltergeist
+BS_245_Poltergeist:
+	attackcanceler
+	callasm TryFailPoltergeist
+	accuracycheck BS_MOVE_MISSED 0x0
+	attackstring
+	ppreduce
+	pause DELAY_HALFSECOND
+	callasm TransferLastUsedItem
+	setword BATTLE_STRING_LOADER gText_PoltergeistWarn
+	printstring 0x184
+	waitmessage DELAY_HALFSECOND
+	goto BS_HIT_FROM_DAMAGE_CALC
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -5745,14 +5755,9 @@ BS_253_MaxMove:
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-.global BS_254_Synchronoise
-BS_254_Synchronoise:
-	attackcanceler
-	accuracycheck BS_MOVE_MISSED 0x0
-	attackstring
-	ppreduce
-	callasm SynchronoiseFunc
-	goto BS_HIT_FROM_DAMAGE_CALC
+.global BS_254_Blank
+BS_254_Blank:
+	goto BS_STANDARD_HIT
 	
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 

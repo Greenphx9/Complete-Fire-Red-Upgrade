@@ -1,3 +1,5 @@
+@;If some animation doesn't have credits, assume it's by Skeli
+
 .thumb
 .text
 .align 2
@@ -979,6 +981,7 @@ gMoveAnimations:
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_DOUBLESLAP:
 	loadparticle ANIM_TAG_IMPACT
 	loadparticle ANIM_TAG_QUICK_GUARD_HAND
@@ -1003,6 +1006,7 @@ DOUBLE_SLAP_PALM: objtemplate ANIM_TAG_QUICK_GUARD_HAND ANIM_TAG_QUICK_GUARD_HAN
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_SMOG:
 	loadparticle ANIM_TAG_BLACK_SMOKE
 	playsound2 0x98 SOUND_PAN_TARGET
@@ -1103,6 +1107,7 @@ CLAMP_SHELL_RIGHT: objtemplate ANIM_TAG_SHELL_RIGHT ANIM_TAG_SHELL_RIGHT OAM_NOR
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_WATERGUN:
 	loadparticle ANIM_TAG_WATER_GUN
 	playsoundpanchange 0x9d SOUND_PAN_ATTACKER SOUND_PAN_TARGET 0x2 0x0
@@ -1153,6 +1158,7 @@ PlayBulletSeedAudio:
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_THUNDERPUNCH:
 	loadparticle ANIM_TAG_IMPACT
 	loadparticle ANIM_TAG_HANDS_AND_FEET
@@ -1295,6 +1301,7 @@ SMASH_FLOATROCK: objtemplate ANIM_TAG_ROCKS ANIM_TAG_ROCKS OAM_OFF_32x32 0x83E73
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_ROCKSLIDE:
 	loadparticle ANIM_TAG_ROCKS
 	pokespritetoBG side_target
@@ -1320,6 +1327,7 @@ ANIM_ROCKSLIDE:
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_MACHPUNCH:
 	loadparticle ANIM_TAG_IMPACT
 	loadparticle ANIM_TAG_HANDS_AND_FEET
@@ -1345,6 +1353,7 @@ MACH_PUNCH_FIST: objtemplate ANIM_TAG_HANDS_AND_FEET ANIM_TAG_HANDS_AND_FEET OAM
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_RAINDANCE:
 	loadparticle ANIM_TAG_RAIN_DROPS
 	playsound2 0x78 SOUND_PAN_ATTACKER
@@ -1361,6 +1370,7 @@ ANIM_RAINDANCE:
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_LEECHLIFE:
 	loadparticle ANIM_TAG_NEEDLE
 	loadparticle ANIM_TAG_ORBS
@@ -1391,6 +1401,7 @@ LEECH_LIFE_NEEDLE: objtemplate ANIM_TAG_NEEDLE ANIM_TAG_NEEDLE OAM_NORMAL_32x32 
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_IRONTAIL:
 	loadparticle ANIM_TAG_ROCKS
 	loadparticle ANIM_TAG_SLAM_HIT_2
@@ -1433,6 +1444,7 @@ TAIL_WHACK_DOWN:
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_HYDROPUMP:
 	loadBG1 0x1c
 	waitbgfadeout
@@ -1475,6 +1487,7 @@ ANIM_HYDROPUMP:
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_ROCKTHROW:
 	loadparticle ANIM_TAG_ROCKS
 	loadparticle ANIM_TAG_SMALL_ROCK
@@ -1494,6 +1507,7 @@ SMALL_ROCK_SCATTER: objtemplate ANIM_TAG_SMALL_ROCK ANIM_TAG_ROCKS OAM_OFF_16x16
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_HYDROCANNON:
 	loadparticle ANIM_TAG_HYDRO_PUMP
 	loadparticle ANIM_TAG_WATER_IMPACT
@@ -1545,6 +1559,7 @@ HYDROCANNON_WATER: objtemplate ANIM_TAG_HYDRO_PUMP ANIM_TAG_HYDRO_PUMP OAM_DOUBL
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_BLASTBURN:
 	loadparticle ANIM_TAG_SMALL_EMBER
 	loadparticle ANIM_TAG_FIRE_PLUME
@@ -1594,6 +1609,7 @@ ANIM_BLASTBURN:
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_BRICKBREAK:
 	loadparticle ANIM_TAG_BLUE_LIGHT_WALL @Screen
 	loadparticle ANIM_TAG_IMPACT
@@ -1640,6 +1656,7 @@ BRICKBREAK_CHOP: objtemplate ANIM_TAG_CHOP ANIM_TAG_CHOP OAM_OFF_32x32 0x83E66CC
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_DOUBLEEDGE:
 	loadparticle ANIM_TAG_IMPACT
 	playsound2 0xba SOUND_PAN_ATTACKER
@@ -1674,6 +1691,7 @@ ANIM_DOUBLEEDGE:
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_DRAGONBREATH:
 	loadparticle ANIM_TAG_SMALL_EMBER
 	loadparticle ANIM_TAG_HYDRO_PUMP
@@ -1709,6 +1727,7 @@ DRAGONBREATH_BLUEFIRE: objtemplate ANIM_TAG_SMALL_EMBER ANIM_TAG_HYDRO_PUMP OAM_
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_DRAGONCLAW:
 	loadparticle ANIM_TAG_FOCUS_ENERGY @Buff
 	loadparticle ANIM_TAG_CLAW_SLASH @Claw
@@ -1740,6 +1759,7 @@ ANIM_DRAGONCLAW:
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_DRAGONDANCE:
 	loadparticle ANIM_TAG_PINK_CLOUD @smoke
 	loadparticle ANIM_TAG_HANDS_AND_FEET @black color
@@ -1775,6 +1795,7 @@ DRAGON_DANCE_SMOKE: objtemplate ANIM_TAG_PINK_CLOUD ANIM_TAG_HANDS_AND_FEET OAM_
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_FLAMETHROWER:
 	loadparticle ANIM_TAG_SMALL_EMBER
 	launchtask AnimTask_pal_fade 0xa 0x5 PAL_BG 0x1 0x0 0x8 0x043D
@@ -1815,6 +1836,7 @@ FLAMETHROWER_FIRE:
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_FRENZYPLANT:
 	loadparticle ANIM_TAG_ROOTS
 	loadparticle ANIM_TAG_IMPACT
@@ -1878,6 +1900,7 @@ ANIM_FRENZYPLANT:
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_SKILLSWAP:
 	loadparticle ANIM_TAG_BLUEGREEN_ORB
 	loadparticle ANIM_TAG_ELECTRIC_ORBS @Yellow Colour for Skill Swap
@@ -1899,6 +1922,7 @@ ANIM_SECRETPOWER:
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_LEECHFANG:
 	loadparticle ANIM_TAG_FANG_ATTACK
 	loadparticle ANIM_TAG_ORBS
@@ -2128,7 +2152,7 @@ BraveBirdHit:
 	launchtask AnimTask_move_bank_2 0x2 0x5 0x1 0xa 0x0 0x12 0x1
 	launchtask AnimTask_RapidWhackSound 0x5 0x2 0x86 SOUND_PAN_TARGET
 	pause 0x14
-	launchtask 0x80b79dd 0x5 0x1 0x1
+	launchtask AnimTask_AttackerFadeFromInvisible 0x5 0x1 0x1
 	pause 0x2
 	launchtask AnimTask_pal_fade 0xa 0x5 PAL_ATK 0x0 0xf 0x0 0x7fff
 	waitanimation
@@ -2344,7 +2368,7 @@ ANIM_CROSSPOISON:
 	pause 0x28
 	playsound2 0x81 SOUND_PAN_TARGET
 	launchtemplate Template_ComplexPaletteBlend 0x2 0x7 0x1f 0x3 0x1 0x7fff 0xa 0x0 0xa
-	launchtemplate 0x83e7c80 0x3 0x4 0x0 0x0 0x1 0x14
+	launchtemplate Template_CrossImpact 0x3 0x4 0x0 0x0 0x1 0x14
 	launchtask AnimTask_move_bank 0x5 0x5 0x1 0x7 0x0 0x9 0x1
 	pause 0x5
 	call POISON_BUBBLES
@@ -3278,7 +3302,7 @@ ANIM_ROCKCLIMB:
 	loadparticle ANIM_TAG_MUD_SAND
 	loadparticle ANIM_TAG_ROCKS
 	loadparticle ANIM_TAG_SMALL_ROCK @small rock
-	launchtask AnimTask_Splash 0x2 0x2 0x0 0x3
+	launchtask AnimTask_Splash 0x2 0x2 bank_attacker 0x3
 	pause 0x8
 	soundcomplex 0xa0 SOUND_PAN_ATTACKER 0x26 0x3
 	call ROCKCLIMB_ROCKY
@@ -3681,7 +3705,7 @@ ANIM_DRILLRUN:
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
 ANIM_BULLDOZE:
-	launchtask AnimTask_Splash 0x2 0x2 0x0 0x3
+	launchtask AnimTask_Splash 0x2 0x2 bank_attacker 0x3
 	pause 0x8
 	goto 0x81ca6d1 @ANIM_EARTHQUAKE
 
@@ -6326,31 +6350,35 @@ PURPLEHAND: objtemplate ANIM_TAG_ASSURANCE_HAND ANIM_TAG_ASSURANCE_HAND OAM_NORM
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+@Credits to Skeli
 ANIM_DRAGONRUSH:
-	loadparticle ANIM_TAG_ROUND_SHADOW
+	loadparticle ANIM_TAG_PURPLE_DRAKE
 	loadparticle ANIM_TAG_ROCKS
-	loadparticle ANIM_TAG_IMPACT
-	launchtask AnimTask_BlendParticle 0x5 0x5 ANIM_TAG_ROUND_SHADOW 0x2 0xD 0xD 0x5CAE @;Purple
-	playsound2 0x97 SOUND_PAN_ATTACKER
-	launchtemplate Template_FlyBallUp 0x2 0x4 0x0 0x0 0xd 0x150 @Fly up
-	waitanimation
-	loadBG1 0x10 @cosmic
+	pokespritetoBG bank_target
+	loadBG1 BG_COSMIC
+	waitbgfadeout
+	launchtask AnimTask_scroll_background 0x5 0x4 0xf700 0x0 TRUE 0xffff @;Scroll right/left
 	waitbgfadein
-	pokespritetoBG side_target
-	setblends 0x80c
-	playsound2 0xBA SOUND_PAN_TARGET
-	launchtemplate 0x83E6CFC 0x83 0x0 @Bounce down
-	pause 0x7
-	playsound2 0x86 SOUND_PAN_TARGET
-	launchtemplate Template_Hit TEMPLATE_TARGET | 2, 0x4, 0x0 0x0 0x1 0x0
-	launchtask AnimTask_move_bank 0x5 0x5 bank_target 0x0 0x5 0xb 0x1
+	launchtask AnimTask_AttackerFadeToInvisible 0x5 0x1 0x0
+	waitanimation
+	launchtask 0x80dd411 0x5 0x2 0xe7 0xffc0
+	launchtemplate DRAGON_RUSH_DRAKE 0x82 0x0
+	pause 0xe
+	launchtask AnimTask_pal_fade_complex 0x2 0x6 PAL_DEF 0x2 0x2 0x0 0xb 0x680F @;Purple
+	launchtask AnimTask_move_bank_2 0x2 0x5 0x1 0xa 0x0 0x12 0x1
 	call TAIL_WHACK_DOWN @seismic toss
+	pause 0x14
+	launchtask AnimTask_AttackerFadeFromInvisible 0x5 0x1 0x1
+	pause 0x2
+	launchtask AnimTask_pal_fade 0xa 0x5 PAL_ATK 0x0 0xf 0x0 0x7fff
 	waitanimation
-	pokespritefromBG side_target
-	resetblends
-	loaddefaultBG
-	waitbgfadein
+	makebankvisible bank_attacker
+	pokespritefromBG bank_target
+	call UNSET_SCROLLING_BG
 	endanimation
+
+.align 2
+DRAGON_RUSH_DRAKE: objtemplate ANIM_TAG_PURPLE_DRAKE ANIM_TAG_PURPLE_DRAKE OAM_NORMAL_64x64 gDummySpriteAnimTable 0x0 gDummySpriteAffineAnimTable 0x80B2D65
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
@@ -16370,10 +16398,32 @@ ANIM_BODY_PRESS:
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
-@Credits to -
+@Credits to Skeli
 ANIM_DECORATE:
-	goto 0x81c6f34 @ANIM_POUND
+	loadparticle ANIM_TAG_BLUE_STAR
+	loadparticle ANIM_TAG_MAGENTA_HEART
+	loadparticle ANIM_TAG_SPARKLE_2
+	playsound2 0xBC SOUND_PAN_ATTACKER
+	launchtask AnimTask_RockMonBackAndForth 0x5 0x3 bank_attacker 0x3 0x0
+	launchtemplate DECORATE_HEART 0x2 0x5 bank_target, -10, 0, 0x60 0x0
+	playsound2 0xcd SOUND_PAN_TARGET
+	pause 0x10
+	launchtemplate DECORATE_HEART 0x2 0x5 bank_target, 10, 10, 0x50 0x0
+	playsound2 0xcd SOUND_PAN_TARGET
+	pause 0x10
+	launchtemplate DECORATE_HEART 0x2 0x5 bank_target, 0, -15, 0x40 0x0
+	playsound2 0xcd SOUND_PAN_TARGET
+	pause 0x10
+	launchtemplate DECORATE_HEART 0x2 0x5 bank_target, -15, 16, 0x30 0x0
+	playsound2 0xcd SOUND_PAN_TARGET
+	pause 0x10
+	launchtemplate DECORATE_HEART 0x2 0x5 bank_target, -20, -14 0x20 0x0
+	playsound2 0xcd SOUND_PAN_TARGET
+	waitanimation
 	endanimation
+
+.align 2
+DECORATE_HEART: objtemplate ANIM_TAG_MAGENTA_HEART ANIM_TAG_MAGENTA_HEART OAM_OFF_16x16 gDummySpriteAnimTable 0x0 gDummySpriteAffineAnimTable SpriteCB_SpriteOnMonForDuration
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
@@ -16441,11 +16491,10 @@ ANIM_DRUM_BEATING:
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
-@Credits to -
+@Credits to GF
 .global ANIM_SNAP_TRAP
 ANIM_SNAP_TRAP:
-	goto 0x81c6f34 @ANIM_POUND
-	endanimation
+	goto 0x81CE29E @Original Clamp animation that uses teeth
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
@@ -16869,10 +16918,47 @@ OBSTRUCT_CROSS: objtemplate ANIM_TAG_OBSTRUCT_CROSS ANIM_TAG_OBSTRUCT_CROSS OAM_
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
-@Credits to -
+@Credits to Skeli
 ANIM_FALSE_SURRENDER:
-	goto ANIM_FEINT
-	endanimation
+	loadparticle ANIM_TAG_IMPACT
+	loadparticle ANIM_TAG_CROSS_IMPACT
+	pokespritetoBG bank_attacker 
+	loadBG1 BG_DARK 
+	waitbgfadein 
+	pause 0x0 
+	playsound2 0xb7 0xc0 
+	launchtask AnimTask_TranslateMonEllipticalRespectSide 0x2 0x5 0x0 0x12 0x6 0x1 0x3 
+	launchtask AnimTask_AttackerFadeToInvisible 0x2 0x1 0x1 
+	waitanimation 
+	pokespritefromBG bank_attacker 
+	makebankinvisible bank_attacker 
+	pause 0x1 
+	launchtask AnimTask_SetAttackerInvisibleWaitForSignal 0x2 0x0 
+	pokespritetoBG bank_target 
+	setblends 0x80c 
+	pause 0x1
+	playsound2 0x81 SOUND_PAN_TARGET
+	launchtemplate Template_ComplexPaletteBlend 0x2 0x7 0x1f 0x3 0x1 0x7fff 0xa 0x0 0xa
+	launchtemplate LARGE_CROSS_IMPACT 0x3 0x4 0x0 0x0 0x1 0x14
+	launchtask AnimTask_move_bank 0x5 0x5 0x1 0x7 0x0 0x9 0x1
+	waitanimation 
+	pokespritefromBG bank_target 
+	resetblends 
+	pause 0x1 
+	setarg 0x7 0x1000 
+	pause 0x1
+	launchtask AnimTask_InitAttackerFadeFromInvisible 0x2 0x0 
+	pokespritetoBG bank_attacker 
+	launchtask AnimTask_AttackerFadeFromInvisible 0x2 0x1 0x1 
+	waitanimation 
+	pokespritefromBG bank_attacker 
+	pause 0x1 
+	loaddefaultBG 
+	waitbgfadein 
+	endanimation 
+
+.align 2
+LARGE_CROSS_IMPACT: objtemplate ANIM_TAG_CROSS_IMPACT ANIM_TAG_CROSS_IMPACT OAM_DOUBLE_BLEND_32x32 gDummySpriteAnimTable 0x0 gSpriteAffineAnimTable_LargeHailRock 0x80BA739 
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
@@ -17108,7 +17194,7 @@ ANIM_SCALE_SHOT:
 	launchtemplate Template_HorizontalLunge 0x2 0x2 0x4 0x6 
 	pause 0x3 
 	playsound2 0xB4 SOUND_PAN_ATTACKER
-	launchtemplate SCALE_SHOT_SCALE TEMPLATE_TARGET | 2, 0x6 0x10 0x0 0x0 0x0 0x14 0x101 
+	launchtemplate SCALE_SHOT_SCALE 0x82 0x6 0x10 0x0 0x0 0x0 0x14 0x101 
 	waitanimation 
 	playsound2 0x7C SOUND_PAN_TARGET
 	launchtemplate Template_Hit 0x83 0x4 0x0 0x0 0x1 0x1 
@@ -17185,7 +17271,6 @@ METEOR_BEAM_ROCK_LAUNCH:
 
 .align 2
 METEOR_BEAM_ROCK: objtemplate ANIM_TAG_ROCKS ANIM_TAG_ROCKS OAM_DOUBLE_32x32 0x83E73A8 0x0 gSpriteAffineAnimTable_HydroCannonBall 0x80B563D
- 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
 @Credits to Skeli

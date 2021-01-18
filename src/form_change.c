@@ -358,7 +358,7 @@ void UpdateBurmy(void)
 {
 	#ifdef SPECIES_BURMY
 	int i;
-	u16 form = gTerrainTable[gBattleTerrain + 4].burmyForm;
+	u16 form = gTerrainTable[GetBattleTerrainOverride() + 4].burmyForm;
 
 	if (form != SPECIES_NONE)
 	{
