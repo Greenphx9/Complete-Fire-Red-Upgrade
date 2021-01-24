@@ -1581,7 +1581,7 @@ u8 GetExceptionMoveType(u8 bankAtk, u16 move)
 			break;
 		
 		case MOVE_TERRAINPULSE:
-			if (CheckGrounding(bankAtk))
+			if (IsAffectedByElectricTerrain(bankAtk))
 			{
 				switch (gTerrainType) {
 					case ELECTRIC_TERRAIN:
@@ -1684,7 +1684,7 @@ u8 GetMonExceptionMoveType(struct Pokemon* mon, u16 move)
 			break;
 
 		case MOVE_TERRAINPULSE:
-			if (gMain.inBattle && CheckMonGrounding(mon))
+			if (gMain.inBattle && IsMonAffectedByElectricTerrain(mon))
 			{
 				switch (gTerrainType) {
 					case ELECTRIC_TERRAIN:
@@ -3394,7 +3394,7 @@ static u16 GetBasePower(struct DamageCalc* data)
 
 		case MOVE_RISINGVOLTAGE:
 			if (!(data->specialFlags & FLAG_IGNORE_TARGET)
-			&& gTerrainType == ELECTRIC_TERRAIN && data->defIsGrounded)
+			&& gTerrainType == ELECTRIC_TERRAIN && (data->defIsGrounded || IsFloatingWithMagnetism(bankDef)))
 				power *= 2;
 			break;
 
