@@ -1692,7 +1692,7 @@ u8 TurnBasedEffects(void)
 
 			case ET_Reactivate_Overworld_Terrain:
 				gBattleStruct->turnEffectsBank = gBattlersCount;
-				if (gTerrainType == 0 && TryActivateOWTerrain())
+				if (/*gTerrainType == 0 && */TryActivateOWTerrain()) //Now always overwrites custom terrain
 				{
 					++effect;
 					return effect;

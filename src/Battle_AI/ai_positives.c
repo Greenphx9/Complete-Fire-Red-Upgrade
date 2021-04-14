@@ -176,14 +176,12 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 		case EFFECT_ATTACK_UP:
 		case EFFECT_ATTACK_UP_2:		
 			if (IsMovePredictionPhazingMove(bankDef, bankAtk)
+			|| HasUsedPhazingMoveThatAffects(bankDef, bankAtk)
 			|| (MoveInMoveset(MOVE_KINGSSHIELD, bankDef) && CheckContact(GetStrongestMove(bankAtk, bankDef), bankAtk))) //Don't set up if the Aegislash is probably going to revert your setup
 				break;
 
 			switch (move) {
 				case MOVE_HONECLAWS:
-					if (IsMovePredictionPhazingMove(bankDef, bankAtk))
-						break;
-
 					if (STAT_STAGE(bankAtk,STAT_STAGE_ATK) >= 8)
 						goto AI_ACCURACY_PLUS;
 					break;
@@ -222,7 +220,9 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 		case EFFECT_DEFENSE_UP:
 		case EFFECT_DEFENSE_UP_2:
 		AI_DEFENSE_PLUS:
-			if (IsMovePredictionPhazingMove(bankDef, bankAtk) || HasUsedMoveWithEffect(bankDef, EFFECT_DEFENSE_DOWN_2))
+			if (IsMovePredictionPhazingMove(bankDef, bankAtk)
+			|| HasUsedMoveWithEffect(bankDef, EFFECT_DEFENSE_DOWN_2)
+			|| HasUsedPhazingMoveThatAffects(bankDef, bankAtk))
 				break;
 
 			/*
@@ -270,7 +270,9 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 		case EFFECT_SPEED_UP:
 		case EFFECT_SPEED_UP_2:
 		AI_SPEED_PLUS:
-			if (IsMovePredictionPhazingMove(bankDef, bankAtk) || HasUsedMoveWithEffect(bankDef, EFFECT_SPEED_DOWN_2))
+			if (IsMovePredictionPhazingMove(bankDef, bankAtk)
+			|| HasUsedMoveWithEffect(bankDef, EFFECT_SPEED_DOWN_2)
+			|| HasUsedPhazingMoveThatAffects(bankDef, bankAtk))
 				break;
 			if (!IsTrickRoomActive() && atkAbility != ABILITY_CONTRARY)
 				INCREASE_STAT_VIABILITY(STAT_STAGE_SPEED, 8, 3);
@@ -290,7 +292,9 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 		case EFFECT_SPECIAL_ATTACK_UP:
 		case EFFECT_SPECIAL_ATTACK_UP_2:
-			if (IsMovePredictionPhazingMove(bankDef, bankAtk) || HasUsedMoveWithEffect(bankDef, EFFECT_SPECIAL_ATTACK_DOWN_2))
+			if (IsMovePredictionPhazingMove(bankDef, bankAtk)
+			|| HasUsedMoveWithEffect(bankDef, EFFECT_SPECIAL_ATTACK_DOWN_2)
+			|| HasUsedPhazingMoveThatAffects(bankDef, bankAtk))
 				break;
 			switch (move)
 			{
@@ -337,7 +341,9 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 		case EFFECT_SPECIAL_DEFENSE_UP:
 		case EFFECT_SPECIAL_DEFENSE_UP_2:
 		AI_SPECIAL_DEFENSE_PLUS: ;
-			if (IsMovePredictionPhazingMove(bankDef, bankAtk) || HasUsedMoveWithEffect(bankDef, EFFECT_SPECIAL_DEFENSE_DOWN_2))
+			if (IsMovePredictionPhazingMove(bankDef, bankAtk)
+			|| HasUsedMoveWithEffect(bankDef, EFFECT_SPECIAL_DEFENSE_DOWN_2)
+			|| HasUsedPhazingMoveThatAffects(bankDef, bankAtk))
 				break;
 			if (BankLikelyToUseMoveSplit(bankDef, class) == SPLIT_SPECIAL && atkAbility != ABILITY_CONTRARY)
 				INCREASE_STAT_VIABILITY(STAT_STAGE_SPDEF, 10, 1);
@@ -357,7 +363,8 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 		case EFFECT_EVASION_UP:
 		case EFFECT_EVASION_UP_2:
 		case EFFECT_MINIMIZE:
-			if (IsMovePredictionPhazingMove(bankDef, bankAtk))
+			if (IsMovePredictionPhazingMove(bankDef, bankAtk)
+			|| HasUsedPhazingMoveThatAffects(bankDef, bankAtk))
 				break;
 			if (move != MOVE_ACUPRESSURE)
 			{
@@ -2175,7 +2182,9 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			break;
 
 		case EFFECT_BULK_UP:
-			if (atkAbility != ABILITY_CONTRARY)
+			if (atkAbility != ABILITY_CONTRARY
+			&& !IsMovePredictionPhazingMove(bankDef, bankAtk)
+			&& !HasUsedPhazingMoveThatAffects(bankDef, bankAtk))
 			{
 				if (STAT_STAGE(bankAtk, STAT_STAGE_ATK) < 8 || IsClassBatonPass(class))
 					goto AI_ATTACK_PLUS;
@@ -2190,7 +2199,9 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			break;
 
 		case EFFECT_CALM_MIND:
-			if (atkAbility != ABILITY_CONTRARY && !IsMovePredictionPhazingMove(bankDef, bankAtk))
+			if (atkAbility != ABILITY_CONTRARY
+			&& !IsMovePredictionPhazingMove(bankDef, bankAtk)
+			&& !HasUsedPhazingMoveThatAffects(bankDef, bankAtk))
 			{
 				switch (move) {
 					case MOVE_GEOMANCY:
@@ -2215,7 +2226,9 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			break;
 
 		case EFFECT_DRAGON_DANCE:
-			if (atkAbility != ABILITY_CONTRARY && !IsMovePredictionPhazingMove(bankDef, bankAtk))
+			if (atkAbility != ABILITY_CONTRARY 
+			&& !IsMovePredictionPhazingMove(bankDef, bankAtk)
+			&& !HasUsedPhazingMoveThatAffects(bankDef, bankAtk))
 			{
 				switch (move) {
 					case MOVE_SHELLSMASH:
