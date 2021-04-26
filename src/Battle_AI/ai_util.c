@@ -3332,6 +3332,23 @@ bool8 HasUsedMoveWithEffect(u8 bank, u8 effect)
 	return FALSE;
 }
 
+bool8 HasUsedMoveWithEffectHigherThanChance(u8 bank, u8 effect, u8 chance)
+{
+    u32 i;
+
+    for (i = 0; i < MAX_MON_MOVES; ++i)
+	{
+		if (BATTLE_HISTORY->usedMoves[bank][i] == MOVE_NONE)
+			break; //Speed optimization since no blank move slots are left
+
+		if (gBattleMoves[BATTLE_HISTORY->usedMoves[bank][i]].effect == effect
+		&& CalcSecondaryEffectChance(bank, BATTLE_HISTORY->usedMoves[bank][i]) >= chance)
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
 bool8 HasUsedPhazingMoveThatAffects(u8 bankAtk, u8 bankDef)
 {
     u32 i;
@@ -4021,6 +4038,11 @@ bool8 ShouldAIUseZMoveByMoveAndMovePos(u8 bankAtk, u8 bankDef, u16 move, u8 move
 	return gNewBS->ai.shouldUseZMove[bankAtk][bankDef][movePos] = CalcShouldAIUseZMove(bankAtk, bankDef, move);
 }
 
+void ClearShouldAIUseZMoveByMoveAndMovePos(u8 bankAtk, u8 bankDef, u8 movePos)
+{
+	gNewBS->ai.shouldUseZMove[bankAtk][bankDef][movePos] = 0xFF;
+}
+
 static bool8 CalcShouldAIUseZMove(u8 bankAtk, u8 bankDef, u16 move)
 {
 	int i;
@@ -4184,7 +4206,24 @@ static bool8 CalcShouldAIUseZMove(u8 bankAtk, u8 bankDef, u16 move)
 					if (AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_EVASION))
 						return TRUE;
 					break;
-				default: //Recover HP
+				case Z_EFFECT_RECOVER_HP:
+					if (!BATTLER_MAX_HP(bankAtk) || IS_DOUBLE_BATTLE)
+						return TRUE;
+					else //At full HP currently
+					{
+						if (gBattleMoves[move].effect == EFFECT_BELLY_DRUM)
+							return TRUE; //Always try to heal before using Belly Drum
+
+						if (defMovePrediction != MOVE_NONE)
+						{
+							if (!MoveWouldHitFirst(move, bankAtk, bankDef)) //Enemy could strike and lower HP
+								return TRUE;
+						}
+
+						//Otherwise assume will move first so don't waste the Z-Effect
+					}
+					break;
+				default: //Recover Replacement HP
 					return TRUE;
 			}
 		}
