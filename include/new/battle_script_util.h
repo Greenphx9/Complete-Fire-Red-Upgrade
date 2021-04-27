@@ -140,3 +140,4 @@ void HandleIllusionShiftSwitch(void);
 void ClearStatBuffEffectNotProtectAffected(void);
 void TryFailSteelRoller(void);
 void PrintElectromagnetismFloatingStrings(void);
+void UpdatePreviousMonInOnSwitchout(void);
