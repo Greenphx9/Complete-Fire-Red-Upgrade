@@ -64,6 +64,7 @@ static void CloseMaxMoveDetails(void);
 static void HandleInputTeamPreview(void);
 static void ChangeBattlerSpritesInvisibilities(bool8 invisible);
 static void HighlightPossibleTargets(void);
+static void LoadShadowColourForGreyedOutBagText(void);
 extern void TryLoadTypeIcons(void);
 
 const u8 gText_EmptyString[] = {EOS};
@@ -1153,11 +1154,11 @@ static void ZMoveSelectionDisplayPpNumber(void)
 	const u16* palPtr = Pal_PPDisplay;
 
 	//Remove Palette Fading On The PP
-	gPlttBufferUnfaded[92] = palPtr[(3 * 2) + 0];
-	gPlttBufferUnfaded[91] = palPtr[(3 * 2) + 1];
+	gPlttBufferUnfaded[5 * 0x10 + 12] = palPtr[(3 * 2) + 0];
+	gPlttBufferUnfaded[5 * 0x10 + 11] = palPtr[(3 * 2) + 1];
 
-	CpuCopy16(&gPlttBufferUnfaded[92], &gPlttBufferFaded[92], sizeof(u16));
-	CpuCopy16(&gPlttBufferUnfaded[91], &gPlttBufferFaded[91], sizeof(u16));
+	CpuCopy16(&gPlttBufferUnfaded[5 * 0x10 + 12], &gPlttBufferFaded[5 * 0x10 + 12], sizeof(u16));
+	CpuCopy16(&gPlttBufferUnfaded[5 * 0x10 + 11], &gPlttBufferFaded[5 * 0x10 + 11], sizeof(u16));
 
 	//Load PP Text
 	txtPtr = ConvertIntToDecimalStringN(gDisplayedStringBattle, 1, STR_CONV_MODE_RIGHT_ALIGN, 2);
@@ -1971,17 +1972,27 @@ void PlayerHandleChooseAction(void)
 	&& !(gAbsentBattlerFlags & gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)])
 	&& !(gBattleTypeFlags & (BATTLE_TYPE_MULTI | BATTLE_TYPE_INGAME_PARTNER))
 	&& gBattleBufferA[gActiveBattler][1] != ACTION_USE_ITEM) //Mon 1 didn't use item
-	#ifndef UNBOUND
-		BattlePutTextOnWindow(gText_BattleMenu2, 2);
+	{
+		if (IsBagDisabled()) //Grey out bag text to indicate no point in pressing it
+		{
+			BattlePutTextOnWindow(gText_BattleMenu2NoItems, 2);
+			LoadShadowColourForGreyedOutBagText();
+		}
+		else
+			BattlePutTextOnWindow(gText_BattleMenu2, 2);
+	}
 	else
-		BattlePutTextOnWindow(gText_BattleMenu, 2);
-	#else
-		BattlePutTextOnWindow(gText_UnboundBattleMenu2, 2);
-	else
-		BattlePutTextOnWindow(gText_UnboundBattleMenu, 2);
-	#endif
+	{
+		if (IsBagDisabled())
+		{
+			BattlePutTextOnWindow(gText_BattleMenuNoItems, 2);
+			LoadShadowColourForGreyedOutBagText();
+		}
+		else
+			BattlePutTextOnWindow(gText_BattleMenu, 2);
+	}
 
-	for (i = 0; i < 4; i++)
+	for (i = 0; i < MAX_MON_MOVES; i++)
 		ActionSelectionDestroyCursorAt(i);
 
 	ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
@@ -1994,6 +2005,12 @@ void PlayerHandleChooseAction(void)
 
 	TryLoadLastUsedBallTrigger();
 	TryLoadTeamPreviewTrigger();
+}
+
+static void LoadShadowColourForGreyedOutBagText(void)
+{
+	gPlttBufferUnfaded[5 * 0x10 + 11] = RGB(28, 28, 27); //Grey shadow colour
+	CpuCopy16(&gPlttBufferUnfaded[5 * 0x10 + 11], &gPlttBufferFaded[5 * 0x10 + 11], sizeof(u16));
 }
 
 void HandleInputChooseAction(void)
@@ -2201,7 +2218,7 @@ bool8 IsBagDisabled(void)
 	{
 		if (!IsRaidBattle()
 		&& !FlagGet(FLAG_SYS_GAME_CLEAR) //Otherwise they can't catch Legendaries
-		&& VarGet(VAR_TOTEM + GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)) != 0 //Wild boss
+		&& IsAuraBoss(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)) //Wild boss
 		&& difficulty >= OPTIONS_EXPERT_DIFFICULTY) //No items in battles for Experts
 			return TRUE;
 	}

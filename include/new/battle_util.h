@@ -91,6 +91,7 @@ bool8 MoveIgnoresSubstitutes(u16 move, u8 atkAbility);
 bool8 MoveBlockedBySubstitute(u16 move, u8 bankAtk, u8 bankDef);
 bool8 BypassesScreens(u8 ability);
 bool8 MonMoveBlockedBySubstitute(u16 move, struct Pokemon* monAtk, u8 bankDef);
+bool8 IsAuraBoss(u8 bank);
 bool8 IsMockBattle(void);
 bool8 IsPlayerInControl(u8 bank);
 bool8 IsMoveAffectedByParentalBond(u16 move, u8 bankAtk);

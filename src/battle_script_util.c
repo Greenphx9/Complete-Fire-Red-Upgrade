@@ -993,6 +993,12 @@ void TopsyTurvyFunc(void)
 	}
 }
 
+void FailMoveIfAura(void)
+{
+	if (IsAuraBoss(gBankTarget)) //Wild boss
+		gBattlescriptCurrInstr = BattleScript_MoveFailedOnAura - 5;
+}
+
 void DoFairyLockHappyHourFunc(void)
 {
 	switch (gCurrentMove) {
@@ -1543,7 +1549,7 @@ void ClearAndTransferDontRemoveTransformSpecies(void)
 
 void FailTransformIfAura(void)
 {
-	if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) && VarGet(VAR_TOTEM + gBankTarget) != 0) //Wild boss
+	if (IsAuraBoss(gBankTarget)) //Wild boss
 		gBattlescriptCurrInstr = BattleScript_TransformFailedOnAura - 5;
 }
 
