@@ -2612,12 +2612,6 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smogonLittleCup = TRUE,
 	},
 #endif
-#ifdef SPECIES_TRAPINCH
-	[SPECIES_TRAPINCH] =
-	{
-		.smogonLittleCup = TRUE,
-	},
-#endif
 #ifdef SPECIES_TREECKO
 	[SPECIES_TREECKO] =
 	{
@@ -2716,12 +2710,6 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 #endif
 #ifdef SPECIES_WIMPOD
 	[SPECIES_WIMPOD] =
-	{
-		.smogonLittleCup = TRUE,
-	},
-#endif
-#ifdef SPECIES_WINGULL
-	[SPECIES_WINGULL] =
 	{
 		.smogonLittleCup = TRUE,
 	},

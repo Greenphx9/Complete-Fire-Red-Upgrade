@@ -1791,7 +1791,7 @@ bool8 CanBeGeneralStatused(u8 bank, bool8 checkFlowerVeil)
 	if (gBattleMons[bank].status1 != STATUS1_NONE)
 		return FALSE;
 
-	if (checkFlowerVeil && gSideStatuses[SIDE(bank)] & SIDE_STATUS_SAFEGUARD && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD))
+	if (checkFlowerVeil && BankSideHasSafeguard(bank) && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD))
 		return FALSE;
 
 	return TRUE;
@@ -1832,7 +1832,7 @@ bool8 CanBeYawned(u8 bank)
 	if (gBattleMons[bank].status1 != STATUS1_NONE)
 		return FALSE;
 
-	if (gSideStatuses[SIDE(bank)] & SIDE_STATUS_SAFEGUARD && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD))
+	if (BankSideHasSafeguard(bank) && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD))
 		return FALSE;
 
 	if (IS_DOUBLE_BATTLE)
@@ -2015,7 +2015,7 @@ bool8 CanBeConfused(u8 bank, u8 checkSafeguard)
 	if (ABILITY(bank) == ABILITY_OWNTEMPO)
 		return FALSE;
 
-	if (checkSafeguard && gSideStatuses[SIDE(bank)] & SIDE_STATUS_SAFEGUARD && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD))
+	if (checkSafeguard && BankSideHasSafeguard(bank) && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD))
 		return FALSE;
 
 	return TRUE;
