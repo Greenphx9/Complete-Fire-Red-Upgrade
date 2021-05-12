@@ -412,7 +412,14 @@ void atkEF_handleballthrow(void)
 			}
 
 			if (ballType == BALL_TYPE_MASTER_BALL
-			||	ballType == BALL_TYPE_PARK_BALL)
+			||	ballType == BALL_TYPE_PARK_BALL
+			#ifdef FLAG_ALWAYS_CATCHABLE
+			|| FlagGet(FLAG_ALWAYS_CATCHABLE)
+			#endif
+			#ifdef FLAG_SANDBOX_MODE
+			|| FlagGet(FLAG_SANDBOX_MODE)
+			#endif
+			)
 				shakes = maxShakes;
 			else
 			{

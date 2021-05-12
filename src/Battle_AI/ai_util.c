@@ -1882,6 +1882,18 @@ bool8 IsDamagingMoveUnusableByMon(u16 move, struct Pokemon* monAtk, u8 bankDef)
 	return FALSE;
 }
 
+/*bool8 IsHPAbsorptionAbility(u8 ability)
+{
+	switch (ability)
+	{
+		case ABILITY_WATERABSORB:
+		case ABILITY_VOLTABSORB:
+			return TRUE;
+		default:
+			return FALSE;
+	}
+}*/
+
 bool8 IsSuckerPunchOkayToUseThisRound(u16 move, u8 bankAtk, u8 bankDef)
 {
 	u8 movePos = FindMovePositionInMoveset(move, bankAtk);
@@ -2493,27 +2505,6 @@ bool8 DamagingMoveInMoveset(u8 bank)
 	return FALSE;
 }
 
-bool8 PriorityMoveInMoveset(u8 bank)
-{
-	u16 move;
-	u8 moveLimitations = CheckMoveLimitations(bank, 0, 0xFF);
-
-	for (u32 i = 0; i < MAX_MON_MOVES; ++i)
-	{
-		move = GetBattleMonMove(bank, i);
-		if (move == MOVE_NONE)
-			break;
-
-		if (!(gBitTable[i] & moveLimitations))
-		{
-			if (PriorityCalc(bank, ACTION_USE_MOVE, move) > 0)
-				return TRUE;
-		}
-	}
-
-	return FALSE;	
-}
-
 bool8 PhysicalMoveInMoveset(u8 bank)
 {
 	u16 move;
@@ -2587,30 +2578,6 @@ bool8 SpecialMoveInMoveset(u8 bank)
 	}
 
 	return FALSE;
-}
-
-bool8 DamagingPriorityMoveInMovesetThatAffects(u8 bankAtk, u8 bankDef)
-{
-	u16 move;
-	u8 moveLimitations = CheckMoveLimitations(bankAtk, 0, 0xFF);
-
-	for (u32 i = 0; i < MAX_MON_MOVES; ++i)
-	{
-		move = GetBattleMonMove(bankAtk, i);
-		if (move == MOVE_NONE)
-			break;
-
-		if (!(gBitTable[i] & moveLimitations))
-		{
-			if (SPLIT(move) != SPLIT_STATUS
-			&& PriorityCalc(bankAtk, ACTION_USE_MOVE, move) > 0
-			&& !(AI_SpecialTypeCalc(move, bankAtk, bankDef) & MOVE_RESULT_NO_EFFECT) //Move affects
-			&& !IsDamagingMoveUnusable(move, bankAtk, bankDef)) //Move is usable
-				return TRUE;
-		}
-	}
-
-	return FALSE;	
 }
 
 bool8 AtLeastTwoSpecialMoveInMoveset(u8 bank, u8 amount)
@@ -2697,6 +2664,51 @@ bool8 SpecialMoveInMonMoveset(struct Pokemon* mon, u8 moveLimitations)
 	}
 
 	return FALSE;
+}
+
+bool8 PriorityMoveInMoveset(u8 bank)
+{
+	u16 move;
+	u8 moveLimitations = CheckMoveLimitations(bank, 0, 0xFF);
+
+	for (u32 i = 0; i < MAX_MON_MOVES; ++i)
+	{
+		move = GetBattleMonMove(bank, i);
+		if (move == MOVE_NONE)
+			break;
+
+		if (!(gBitTable[i] & moveLimitations))
+		{
+			if (PriorityCalc(bank, ACTION_USE_MOVE, move) > 0)
+				return TRUE;
+		}
+	}
+
+	return FALSE;	
+}
+
+bool8 DamagingPriorityMoveInMovesetThatAffects(u8 bankAtk, u8 bankDef)
+{
+	u16 move;
+	u8 moveLimitations = CheckMoveLimitations(bankAtk, 0, 0xFF);
+
+	for (u32 i = 0; i < MAX_MON_MOVES; ++i)
+	{
+		move = GetBattleMonMove(bankAtk, i);
+		if (move == MOVE_NONE)
+			break;
+
+		if (!(gBitTable[i] & moveLimitations))
+		{
+			if (SPLIT(move) != SPLIT_STATUS
+			&& PriorityCalc(bankAtk, ACTION_USE_MOVE, move) > 0
+			&& !(AI_SpecialTypeCalc(move, bankAtk, bankDef) & MOVE_RESULT_NO_EFFECT) //Move affects
+			&& !IsDamagingMoveUnusable(move, bankAtk, bankDef)) //Move is usable
+				return TRUE;
+		}
+	}
+
+	return FALSE;	
 }
 
 bool8 MagicCoatableMovesInMoveset(u8 bank)

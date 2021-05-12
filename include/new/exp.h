@@ -14,6 +14,7 @@ extern const u16 LevelCap[];
 
 //Exported Functions
 bool8 AddEVs(struct Pokemon* mon, u8 statId, u16 numToAdd);
+u32 GetSpeciesExpToLevel(u16 species, u8 toLevel);
 
 //Functions Hooked In
 u8 GetCurrentLevelCap(void);
