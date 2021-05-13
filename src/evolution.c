@@ -35,7 +35,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon* mon, u8 type, u16 evolutionItem)
 
 	switch (type)
 	{
-	case 0:
+	case EVO_MODE_NORMAL:
 		level = mon->level;
 		friendship = mon->friendship;
 
@@ -317,7 +317,7 @@ case EVO_NATURE_HIGH:
 		}
 		break;
 
-	case 1:
+	case EVO_MODE_TRADE:
 		for (i = 0; i < EVOS_PER_MON; ++i)
 		{
 			switch (gEvolutionTable[species][i].method)
@@ -339,8 +339,8 @@ case EVO_NATURE_HIGH:
 		}
 		break;
 
-	case 2:
-	case 3:	// using items
+	case EVO_MODE_ITEM_USE:
+	case EVO_MODE_ITEM_CHECK:	// using items
 		for (i = 0; i < EVOS_PER_MON; ++i)
 		{
 			if (gEvolutionTable[species][i].method == EVO_ITEM

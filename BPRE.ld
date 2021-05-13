@@ -1446,6 +1446,7 @@ IsItemFlute = 0x812524C | 1;
 ExecuteTableBasedItemEffect_ = 0x8125268 | 1;
 Task_DisplayHPRestoredMessage = 0x8125554 | 1;
 ReturnToUseOnWhichMon = 0x81257D4 | 1;
+ItemUseCB_RareCandyStep = 0x8126350 | 1;
 UpdateMonDisplayInfoAfterRareCandy = 0x8126440 | 1;
 PartyMenuTryEvolution = 0x8126704 | 1;
 PartyMenu_DisplayMonLearnedMove = 0x8126804 | 1;

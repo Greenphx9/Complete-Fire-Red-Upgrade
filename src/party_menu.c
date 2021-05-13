@@ -27,6 +27,7 @@
 #include "../include/constants/items.h"
 #include "../include/constants/item_effects.h"
 #include "../include/constants/moves.h"
+#include "../include/constants/pokemon.h"
 #include "../include/constants/pokedex.h"
 #include "../include/constants/region_map_sections.h"
 #include "../include/constants/songs.h"
@@ -111,6 +112,8 @@ void __attribute__((long_call)) ShiftMoveSlot(struct Pokemon *mon, u8 slotTo, u8
 void __attribute__((long_call)) PartyMenuTryEvolution(u8 taskId);
 void __attribute__((long_call)) FreePartyPointers(void);
 void __attribute__((long_call)) PartyMenuDisplayYesNoMenu(void);
+void __attribute__((long_call)) ItemUseCB_RareCandyStep(u8 taskId, UNUSED TaskFunc func);
+void __attribute__((long_call)) sub_8124DC0(u8 taskId);
 
 //This file's functions:
 static void OpenSummary(u8 taskId);
@@ -2700,6 +2703,44 @@ void FieldUseFunc_Honey(u8 taskId)
 	sub_80A103C(taskId);
 }
 
+extern u8 GetCurrentLevelCap(void); //Must be implemented yourself
+void ItemUseCB_RareCandy(u8 taskId, TaskFunc func)
+{
+	bool8 noEffect;
+	struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
+	u16 item = gSpecialVar_ItemId;
+	u8 level = GetMonData(mon, MON_DATA_LEVEL, NULL);
+
+	PlaySE(SE_SELECT);
+
+	if (level >= MAX_LEVEL
+	|| (level >= GetCurrentLevelCap())
+	)
+	{
+		if (GetEvolutionTargetSpecies(mon, EVO_MODE_NORMAL, 0) == SPECIES_NONE) //Can't use Rare Candy to evolve mon
+			noEffect = TRUE;
+		else
+		{
+			PartyMenuTryEvolution(taskId);
+			return;
+		}
+	}
+	else
+		noEffect = PokemonItemUseNoEffect(mon, item, gPartyMenu.slotId, 0);
+
+	if (noEffect)
+	{
+		gPartyMenuUseExitCallback = FALSE;
+		DisplayPartyMenuMessage(gText_WontHaveEffect, TRUE);
+		ScheduleBgCopyTilemapToVram(2);
+		gTasks[taskId].func = func;
+	}
+	else
+	{
+		ItemUseCB_RareCandyStep(taskId, func);
+	}
+}
+
 #ifdef UNBOUND
 void FieldUseFunc_VsSeeker(u8 taskId)
 {
@@ -2724,58 +2765,6 @@ void FieldUseFunc_VsSeeker(u8 taskId)
 
 extern const u8 gText_PkmnElevatedToLvVar2[];
 extern const u8 gText_PastCap[];
-
-extern u8 GetBadgeCount(void);
-void ItemUseCB_RareCandy(u8 taskId, TaskFunc func)
-{
-    struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
-    u16 item = gSpecialVar_ItemId;
-    bool8 noEffect;
-    u8 level;
-	u8 badge = GetBadgeCount();
-	u8 cap = LevelCap[badge];
-	bool8 pastCap = FALSE;
-
-    if (GetMonData(mon, MON_DATA_LEVEL, 0) != MAX_LEVEL)
-		noEffect = PokemonItemUseNoEffect(mon, item, gPartyMenu.slotId, 0);
-    else
-		noEffect = TRUE;
-
-	if(GetMonData(mon, MON_DATA_LEVEL, 0) >= cap)
-		pastCap = TRUE;
-
-    PlaySE(SE_SELECT);
-    if (noEffect)
-    {
-        gPartyMenuUseExitCallback = FALSE;
-        DisplayPartyMenuMessage(gText_WontHaveEffect, TRUE);
-        ScheduleBgCopyTilemapToVram(2);
-        gTasks[taskId].func = func;
-    }else if(pastCap) {
-		gPartyMenuUseExitCallback = FALSE;
-        DisplayPartyMenuMessage(gText_PastCap, TRUE);
-        ScheduleBgCopyTilemapToVram(2);
-        gTasks[taskId].func = func;
-	}
-    else
-    {
-		GetMonLevelUpWindowStats(mon, (u16*) sPartyMenuInternal->data);
-		ExecuteTableBasedItemEffect_(gPartyMenu.slotId, gSpecialVar_ItemId, 0);
-		GetMonLevelUpWindowStats(mon, (u16*) &sPartyMenuInternal->data[NUM_STATS]);
-		gPartyMenuUseExitCallback = TRUE;
-		//ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, mon, gSpecialVar_ItemId, 0xFFFF);
-		PlayFanfareByFanfareNum(0);
-		UpdateMonDisplayInfoAfterRareCandy(gPartyMenu.slotId, mon);
-		RemoveBagItem(gSpecialVar_ItemId, 1);
-		GetMonNickname(mon, gStringVar1);
-		level = GetMonData(mon, MON_DATA_LEVEL, 0);
-		ConvertIntToDecimalStringN(gStringVar2, level, STR_CONV_MODE_LEFT_ALIGN, 3);
-		StringExpandPlaceholders(gStringVar4, gText_PkmnElevatedToLvVar2);
-		DisplayPartyMenuMessage(gStringVar4, TRUE);
-		ScheduleBgCopyTilemapToVram(2);
-		gTasks[taskId].func = Task_DisplayLevelUpStatsPg1;
-    }
-}
 
 
 
