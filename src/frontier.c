@@ -993,9 +993,15 @@ u16 sp056_DetermineBattlePointsToGive(void)
 {
 	u16 toGive;
 	u16 streakLength = GetCurrentBattleTowerStreak();
+	u8 tier = VarGet(VAR_BATTLE_FACILITY_TIER);
 
 	if (streakLength <= 10)
-		toGive = 2;
+	{
+		if (tier == BATTLE_FACILITY_STANDARD || tier == BATTLE_FACILITY_DYNAMAX_STANDARD)
+			toGive = 2;
+		else
+			toGive = 3;
+	}
 	else if (streakLength <= 19)
 		toGive = 3;
 	else if (streakLength == 20)
@@ -1004,12 +1010,12 @@ u16 sp056_DetermineBattlePointsToGive(void)
 
 		switch (BATTLE_FACILITY_NUM) {
 			case IN_BATTLE_TOWER:
-				if (VarGet(VAR_BATTLE_FACILITY_TIER) != BATTLE_FACILITY_MONOTYPE)
+				if (tier != BATTLE_FACILITY_MONOTYPE)
 					toGive = 20; //Battle against frontier brain
 				break;
 
 			case IN_BATTLE_SANDS:
-				if (VarGet(VAR_BATTLE_FACILITY_TIER) != BATTLE_FACILITY_MONOTYPE)
+				if (tier != BATTLE_FACILITY_MONOTYPE)
 					toGive = 20; //Battle against frontier brain
 				break;
 
@@ -1018,7 +1024,7 @@ u16 sp056_DetermineBattlePointsToGive(void)
 				break;
 
 			case IN_BATTLE_CIRCUS:
-				if (VarGet(VAR_BATTLE_FACILITY_TIER) != BATTLE_FACILITY_MONOTYPE)
+				if (tier != BATTLE_FACILITY_MONOTYPE)
 					toGive = 20; //Battle against frontier brain
 				break;
 		}
@@ -1035,12 +1041,12 @@ u16 sp056_DetermineBattlePointsToGive(void)
 
 		switch (BATTLE_FACILITY_NUM) {
 			case IN_BATTLE_TOWER:
-				if (VarGet(VAR_BATTLE_FACILITY_TIER) != BATTLE_FACILITY_MONOTYPE)
+				if (tier != BATTLE_FACILITY_MONOTYPE)
 					toGive = 50; //Battle against frontier brain
 				break;
 
 			case IN_BATTLE_SANDS:
-				if (VarGet(VAR_BATTLE_FACILITY_TIER) != BATTLE_FACILITY_MONOTYPE)
+				if (tier != BATTLE_FACILITY_MONOTYPE)
 					toGive = 50; //Battle against frontier brain
 				break;
 
@@ -1049,7 +1055,7 @@ u16 sp056_DetermineBattlePointsToGive(void)
 				break;
 
 			case IN_BATTLE_CIRCUS:
-				if (VarGet(VAR_BATTLE_FACILITY_TIER) != BATTLE_FACILITY_MONOTYPE)
+				if (tier != BATTLE_FACILITY_MONOTYPE)
 					toGive = 50; //Battle against frontier brain
 				break;
 		}
