@@ -30,6 +30,7 @@ u16 RtcCheckInfo(struct SiiRtcInfo *rtc);
 void RtcReset(void);
 void RtcCalcLocalTime(void);
 void ForceClockUpdate(void);
+void DirectClockUpdate(void);
 
 u8 __attribute__((long_call)) GetStartMenuWindowId(void);
 
