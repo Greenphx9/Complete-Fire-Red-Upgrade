@@ -1,6 +1,8 @@
 #include "defines.h"
 #include "defines_battle.h"
 #include "../include/battle_anim.h"
+#include "../include/dma3.h"
+#include "../include/item_icon.h"
 #include "../include/m4a.h"
 #include "../include/string_util.h"
 #include "../include/battle_anim.h"
@@ -67,30 +69,11 @@ extern const u8 gText_TeamPreviewSingleDoubleLinkText[];
 extern const u8 gText_TeamPreviewMultiText[];
 extern const u8 gText_TeamPreviewMultiLinkText[];
 
+extern const struct SpriteTemplate gHeldItemTemplate;
+extern const struct SpriteSheet gHeldItemSpriteSheet;
+extern const struct SpritePalette gHeldItemSpritePalette;
+
 #define GFX_TAG_HELD_ITEM 0x8472
-
-//8x8 oam with highest priority
-static const struct OamData sHeldItemOam =
-{
-	.affineMode = ST_OAM_AFFINE_OFF,
-	.objMode = ST_OAM_OBJ_NORMAL,
-	.shape = SPRITE_SHAPE(8x8),
-	.size = SPRITE_SIZE(8x8),
-	.priority = 0, //Above everything
-};
-
-const struct SpriteTemplate sHeldItemTemplate =
-{
-	.tileTag = GFX_TAG_HELD_ITEM,
-	.paletteTag = GFX_TAG_HELD_ITEM,
-	.oam = &sHeldItemOam,
-	.anims = gDummySpriteAnimTable,
-	.images = NULL,
-	.affineAnims = gDummySpriteAffineAnimTable,
-	.callback = SpriteCallbackDummy,
-};
-static const struct SpriteSheet sHeldItemSpriteSheet = {(const u8*) 0x845A3AC, (8 * 16) / 2, 0x8472};
-static const struct SpritePalette sHeldItemSpritePalette = {(const u16*) 0x0845A3EC, 0x8472};
 
 
 static bool8 IsIgnoredTriggerColour(u16 colour);
@@ -1695,6 +1678,7 @@ static void Task_DisplayInBattleTeamPreview(u8 taskId)
 	const u8* string;
 
 	//Update Background
+	gBattle_BG0_X = 0;
 	gBattle_BG0_Y = 0; //Hide action selection - must go before creating icons! Causes sprite bugs otherwise
 	gBattle_BG1_X = 0; //Fix bg offsets if necessary (gets messed up by some battle anims)
 	gBattle_BG1_Y = 0;
@@ -1715,11 +1699,12 @@ static void Task_DisplayInBattleTeamPreview(u8 taskId)
 
 	
 
-	LoadSpriteSheet(&sHeldItemSpriteSheet);
+	LoadSpriteSheet(&gHeldItemSpriteSheet);
 	LoadCompressedSpriteSheet(&sTeamPreviewStatusIconsSpriteSheet);
 	LoadSpriteSheet(&sTeamPreviewFaintedMonIconSpriteSheet);
-	LoadSpritePalette(&sHeldItemSpritePalette);
 	//LoadSpritePalette(&faintedIconSpritePalette);
+	LoadSpritePalette(&gHeldItemSpritePalette);
+	LoadMonIconPalette(SPECIES_NONE); //Used for status icon sprites
 
 	for (i = 0; i < 25; ++i) //Can't use LoadMonIconPalettes() because it loads 3 extra palettes into memory
 		LoadMonIconPalette(i); //Pretty much guaranteed to load all palettes
@@ -1766,7 +1751,7 @@ static void Task_DisplayInBattleTeamPreview(u8 taskId)
 						{
 							x = (80 + (8 / 2)) + (40 * (i % 3)); //Based on the item icon positions on the summary screen
 							y = (44 + (8 / 2)) + (40 * (i / 3));
-							CreateSprite(&sHeldItemTemplate, x, y, 0);
+							CreateSprite(&gHeldItemTemplate, x, y, 0);
 						}
 
 						u32 status = GetMonData(&gEnemyParty[i], MON_DATA_STATUS, NULL);
@@ -1850,7 +1835,7 @@ void HideInBattleTeamPreview(void)
 
 	//Hide BG
 	gBattle_BG0_Y = 160; //Show action selection
-	RequestDma3Fill(0, (void*)(BG_SCREEN_ADDR(28)), 0x1000, 1); //Wipe tilemap (tiles don't need to be wiped)
+	RequestDma3Fill(0, (void*)(BG_SCREEN_ADDR(28)), 0x1000, DMA3_32BIT); //Wipe tilemap (tiles don't need to be wiped)
 
 	//Destroy Sprites
 	for (i = 0; i < MAX_SPRITES; ++i)

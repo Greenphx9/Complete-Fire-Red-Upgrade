@@ -585,8 +585,8 @@ void atk52_switchineffects(void)
 					gNewBS->ai.switchesInARow[bank] = 0;
 					gNewBS->ai.previousMonIn[bank] = 0xFF;
 					gNewBS->ai.secondPreviousMonIn[bank] = 0xFF;
-					gNewBS->revealedEnemyMons |= gBitTable[gBattlerPartyIndexes[gActiveBattler]]; //Add to team preview
 				}
+				gNewBS->revealedEnemyMons |= gBitTable[gBattlerPartyIndexes[gActiveBattler]]; //Add to team preview
 			}
 
 			++gNewBS->switchInEffectsState;
