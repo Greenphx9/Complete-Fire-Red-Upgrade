@@ -645,9 +645,10 @@ void LoadPledgeScript(void)
 		gBattlescriptCurrInstr = BattleScript_PledgeCombined - 5;
 	}
 	else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE
-		&& gBattleMons[PARTNER(gBankAttacker)].hp
-		&& partnerMove != gCurrentMove
-		&& gBattleMoves[partnerMove].effect == EFFECT_PLEDGE)
+	&& BATTLER_ALIVE(PARTNER(gBankAttacker))
+	&& partnerMove != gCurrentMove
+	&& !IsDynamaxed(PARTNER(gBankAttacker))
+	&& gBattleMoves[partnerMove].effect == EFFECT_PLEDGE)
 	{
 		u8 index = 0;
 		u8 newTurnOrder[] = { 0xFF, 0xFF };

@@ -155,7 +155,12 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 			if (gNewBS->MultiHitOn)
 				gNewBS->turnDamageTaken[gBankTarget] += gHpDealt; //Total up damage taken
 			else
-				gNewBS->turnDamageTaken[gBankTarget] = gHpDealt;
+			{
+				if (gCurrentMove == MOVE_BATONPASS)
+					gNewBS->turnDamageTaken[gBankAttacker] = gHpDealt; //Target could be set to foe due to Intimidate
+				else
+					gNewBS->turnDamageTaken[gBankTarget] = gHpDealt;
+			}
 
 			gNewBS->totalDamageGiven += gHpDealt;
 			gNewBS->ResultFlags[gBankTarget] = gMoveResultFlags;
@@ -608,7 +613,7 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 					if (gChosenMove == 0xFFFF)
 					{
 						gLastLandedMoves[bankDef] = gChosenMove;
-					RecordLastUsedMoveByAttacker(gCurrentMove);
+						RecordLastUsedMoveByAttacker(gCurrentMove);
 					}
 					else
 					{
