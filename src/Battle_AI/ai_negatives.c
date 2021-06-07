@@ -114,7 +114,7 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 	data->atkAbility = GetAIAbility(bankAtk, bankDef, move);
 	data->defAbility = GetAIAbility(bankDef, bankAtk, predictedMove);
 
-	if (!NO_MOLD_BREAKERS(data->atkAbility, move)
+	if (IS_MOLD_BREAKER(data->atkAbility, move)
 	&& gSpecialAbilityFlags[data->defAbility].gMoldBreakerIgnoredAbilities)
 		data->defAbility = ABILITY_NONE;
 
@@ -735,7 +735,7 @@ MOVESCR_CHECK_0:
 
 		case EFFECT_EXPLOSION:
 		#ifdef OKAY_WITH_AI_SUICIDE
-			if (NO_MOLD_BREAKERS(data->atkAbility, move) && ABILITY_PRESENT(ABILITY_DAMP))
+			if (NO_MOLD_BREAKERS(data->atkAbility, move) && ABILITY_ON_FIELD(ABILITY_DAMP))
 			{
 				DECREASE_VIABILITY(10);
 			}
@@ -1533,7 +1533,7 @@ MOVESCR_CHECK_0:
 			&& move != MOVE_METALBURST
 			&& gLastUsedMoves[bankDef] != MOVE_NONE && gLastUsedMoves[bankDef] != 0xFFFF //Player attacked last turn
 			&& gBattleMoves[gLastUsedMoves[bankAtk]].effect == moveEffect //The AI tried using the same move last turn
-			&& CalcMoveSplit(bankDef, gLastUsedMoves[bankDef]) != CalcMoveSplit(bankDef, gNewBS->ai.previousMovePredictions[bankDef][bankAtk]) //But the player used a move split other than what was predicted
+			&& CalcMoveSplit(gLastUsedMoves[bankDef], bankDef, bankAtk) != CalcMoveSplit(gNewBS->ai.previousMovePredictions[bankDef][bankAtk], bankDef, bankAtk) //But the player used a move split other than what was predicted
 			&& AI_THINKING_STRUCT->simulatedRNG[1] & 1) //50% of the time
 			{
 				DECREASE_VIABILITY(8); //It's not unreasonable to think that they'll try something else again

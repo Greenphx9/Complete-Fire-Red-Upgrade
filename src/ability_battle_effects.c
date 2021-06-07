@@ -1973,7 +1973,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				&& ABILITY(gBankAttacker) != ABILITY_MAGICGUARD
 				&& CheckContact(move, gBankAttacker)
 				&& !BATTLER_ALIVE(bank)
-				&& !ABILITY_PRESENT(ABILITY_DAMP))
+				&& !ABILITY_ON_FIELD(ABILITY_DAMP))
 				{
 					gBattleMoveDamage = MathMax(1, GetBaseMaxHP(gBankAttacker) / 4);
 					BattleScriptPushCursor();
@@ -2298,7 +2298,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 		case ABILITYEFFECT_CHECK_ON_FIELD: // 19
 			for (i = 0; i < gBattlersCount; i++)
 			{
-				if (ABILITY(i) == ability && gBattleMons[i].hp)
+				if (ABILITY(i) == ability && BATTLER_ALIVE(i))
 				{
 					gLastUsedAbility = ability;
 					effect = i + 1;

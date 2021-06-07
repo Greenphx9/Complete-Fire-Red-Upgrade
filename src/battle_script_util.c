@@ -726,14 +726,16 @@ void SetPledgeEffect(void)
 
 void DoFieldEffect(void)
 {
+	u32 i;
+
 	if (IsAnyMaxMove(gCurrentMove)
 		&& gBattleMoves[gCurrentMove].z_move_effect == MAX_EFFECT_GRAVITY)
 	{
 		if (!IsGravityActive())
 		{
-			for (int i = 0; i < gBattlersCount; ++i)
+			for (i = 0; i < gBattlersCount; ++i)
 			{
-				if (!CheckGrounding(i))
+				if (BATTLER_ALIVE(i) && !CheckGrounding(i))
 					gNewBS->targetsToBringDown |= gBitTable[i];
 			}
 
@@ -799,8 +801,14 @@ void DoFieldEffect(void)
 		{
 			for (int i = 0; i < gBattlersCount; ++i)
 			{
-				if (!CheckGrounding(i))
-					gNewBS->targetsToBringDown |= gBitTable[i];
+				for (i = 0; i < gBattlersCount; ++i)
+				{
+					if (BATTLER_ALIVE(i) && !CheckGrounding(i))
+						gNewBS->targetsToBringDown |= gBitTable[i];
+				}
+
+				gNewBS->GravityTimer = 5;
+				gBattleStringLoader = GravitySetString;
 			}
 
 			gNewBS->GravityTimer = 5;
@@ -2027,12 +2035,12 @@ void FailIfAttackerIsntHoldingEdibleBerry(void)
 	u16 item = ITEM(gBankAttacker);
 
 	if (!IsBerry(item) || CheckTableForItem(item, gBannedBattleEatBerries)
-	|| AbilityBattleEffects(ABILITYEFFECT_CHECK_OTHER_SIDE, gBankAttacker, ABILITY_UNNERVE, 0, 0)
+	|| ABILITY_ON_OPPOSING_FIELD(gBankAttacker, ABILITY_UNNERVE)
 	#ifdef ABILITY_ASONE_GRIM
-	|| AbilityBattleEffects(ABILITYEFFECT_CHECK_OTHER_SIDE, gBankAttacker, ABILITY_ASONE_GRIM, 0, 0)
+	|| ABILITY_ON_OPPOSING_FIELD(gBankAttacker, ABILITY_ASONE_GRIM)
 	#endif
 	#ifdef ABILITY_ASONE_CHILLING
-	|| AbilityBattleEffects(ABILITYEFFECT_CHECK_OTHER_SIDE, gBankAttacker, ABILITY_ASONE_CHILLING, 0, 0)
+	|| ABILITY_ON_OPPOSING_FIELD(gBankAttacker, ABILITY_ASONE_CHILLING)
 	#endif
 	)
 		gBattlescriptCurrInstr = BattleScript_ButItFailedAttackstring - 5;

@@ -1719,8 +1719,6 @@ static void Task_DisplayInBattleTeamPreview(u8 taskId)
 			u16 hp = GetMonData(&gEnemyParty[i], MON_DATA_HP, NULL);
 			if (!CanShowEnemyMonIcon(i))
 				species = SPECIES_NONE; //Replace unrevealed icon with question mark
-			//if (hp <= 0)
-			//	species = SPECIES_EXEGGCUTE_A;
 			else if (GetMonAbility(&gEnemyParty[i]) == ABILITY_ILLUSION && !EntireEnemyTeamRevealed())
 			{
 				u8 bank;
