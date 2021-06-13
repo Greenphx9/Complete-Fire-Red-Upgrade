@@ -2087,6 +2087,20 @@ void HandleInputChooseAction(void)
 			EmitTwoReturnValues(1, ACTION_CANCEL_PARTNER, 0);
 			PlayerBufferExecCompleted();
 		}
+		#ifdef VAR_QUICK_RUN_COMBO
+		else if (VarGet(VAR_QUICK_RUN_COMBO) == 1) //B + A
+		{
+			PlaySE(SE_SELECT);
+			ActionSelectionDestroyCursorAt(gActionSelectionCursor[gActiveBattler]);
+
+			if (RAID_BATTLE_END)
+				gActionSelectionCursor[gActiveBattler] = 1; //End
+			else
+				gActionSelectionCursor[gActiveBattler] = 3; //Run
+
+			ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
+		}
+		#endif
 	}
 	else if (gMain.newKeys & START_BUTTON)
 	{
@@ -2126,12 +2140,17 @@ void HandleInputChooseAction(void)
 	}
 	else if (gMain.newKeys & R_BUTTON)
 	{
-		PlaySE(SE_SELECT);
+		#ifdef VAR_QUICK_RUN_COMBO
+		if (VarGet(VAR_QUICK_RUN_COMBO) != 1) //!= B + A
+		#endif
+		{
+			PlaySE(SE_SELECT);
 
-		if (RAID_BATTLE_END)
-			goto RAID_RUN;
-		else
-			goto NORMAL_RUN;
+			if (RAID_BATTLE_END)
+				goto RAID_RUN;
+			else
+				goto NORMAL_RUN;
+		}
 	}
 }
 

@@ -892,6 +892,7 @@ struct NewBattleStruct
 	bool8 rolloutFinalHit : 1; //Helps with Rollout 5th hit damage calc
 	bool8 totemOmniboostActive : 1; //Allows Contrary mons to get the correct animation
 	bool8 dontActivateMoldBreakersAnymoreThisTurn : 1;
+	bool8 trainerSlideInProgress : 1;
 
 	//Other
 	u16 LastUsedMove;

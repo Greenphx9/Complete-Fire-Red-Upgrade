@@ -1918,6 +1918,52 @@ bool8 IsSuckerPunchOkayToUseThisRound(u16 move, u8 bankAtk, u8 bankDef)
 	return TRUE;
 }
 
+s32 GetMonPassiveRecovery(struct Pokemon* mon, unusedArg u8 bank)
+{
+	s32 amountToRecover = 0;
+	u8 ability = GetMonAbility(mon);
+	u8 itemEffect = GetMonItemEffect(mon);
+	u16 maxHp = GetMonData(mon, MON_DATA_MAX_HP, NULL);
+
+	if (itemEffect == ITEM_EFFECT_LEFTOVERS)
+		amountToRecover += MathMax(1, maxHp / 16);
+	else if (itemEffect == ITEM_EFFECT_BLACK_SLUDGE)
+	{
+		if (IsMonOfType(mon, TYPE_POISON))
+			amountToRecover += MathMax(1, maxHp / 16);
+		else
+			amountToRecover -= MathMax(1, maxHp / 8); //Damage
+	}
+
+	if (gBattleWeather & WEATHER_RAIN_ANY && WEATHER_HAS_EFFECT && itemEffect != ITEM_EFFECT_UTILITY_UMBRELLA)
+	{
+		if (ability == ABILITY_RAINDISH)
+			amountToRecover += MathMax(1, maxHp / 16);
+		else if (ability == ABILITY_DRYSKIN)
+			amountToRecover += MathMax(1, maxHp / 8);
+	}
+
+	if (gBattleWeather & WEATHER_SUN_ANY && WEATHER_HAS_EFFECT)
+	{
+		if (ability == ABILITY_SOLARPOWER || ability == ABILITY_DRYSKIN)
+			amountToRecover -= MathMax(1, maxHp / 8); //Damage
+	}
+
+	if (gBattleWeather & WEATHER_HAIL_ANY && WEATHER_HAS_EFFECT)
+	{
+		if (ability == ABILITY_ICEBODY)
+			amountToRecover += MathMax(1, maxHp / 16);
+	}
+
+	if (ability == ABILITY_POISONHEAL && GetMonData(mon, MON_DATA_STATUS, NULL) & STATUS1_PSN_ANY)
+		amountToRecover += MathMax(1, maxHp / 8);
+
+	if (gTerrainType == GRASSY_TERRAIN && CheckMonGrounding(mon) == GROUNDED)
+		amountToRecover += MathMax(1, maxHp / 16);
+
+	return amountToRecover;
+}
+
 bool8 IsTrapped(u8 bank, bool8 switching)
 {
 	if (IsOfType(bank, TYPE_GHOST)
@@ -2151,7 +2197,7 @@ bool8 BadIdeaToPoison(u8 bankDef, u8 bankAtk)
 		||  (gBattleTypeFlags & BATTLE_TYPE_FRONTIER && defItemEffect == ITEM_EFFECT_CURE_STATUS) //Don't use this logic in general battles
 		||  defAbility == ABILITY_SHEDSKIN
 		||  defAbility == ABILITY_POISONHEAL
-		||  defAbility == ABILITY_MAGICGUARD
+		|| (defAbility == ABILITY_MAGICGUARD && !MoveInMoveset(MOVE_HEX, bankAtk) && !MoveInMoveset(MOVE_VENOSHOCK, bankAtk))
 		||  defAbility == ABILITY_QUICKFEET
 		|| (defAbility == ABILITY_SYNCHRONIZE && CanBePoisoned(bankAtk, bankDef, TRUE) && !GoodIdeaToPoisonSelf(bankAtk))
 		|| (defAbility == ABILITY_MARVELSCALE && PhysicalMoveInMoveset(bankAtk))
@@ -2222,7 +2268,7 @@ bool8 BadIdeaToBurn(u8 bankDef, u8 bankAtk)
 		||  (gBattleTypeFlags & BATTLE_TYPE_FRONTIER && defItemEffect == ITEM_EFFECT_CURE_BRN) //Don't use this logic in general battles
 		||  (gBattleTypeFlags & BATTLE_TYPE_FRONTIER && defItemEffect == ITEM_EFFECT_CURE_STATUS) //Don't use this logic in general battles
 		||  defAbility == ABILITY_SHEDSKIN
-		||  defAbility == ABILITY_MAGICGUARD
+		|| (defAbility == ABILITY_MAGICGUARD && !MoveInMoveset(MOVE_HEX, bankAtk))
 		||  defAbility == ABILITY_QUICKFEET
 		|| (defAbility == ABILITY_SYNCHRONIZE && CanBeBurned(bankAtk, TRUE) && !GoodIdeaToBurnSelf(bankAtk))
 		|| (defAbility == ABILITY_MARVELSCALE && PhysicalMoveInMoveset(bankAtk))
@@ -2759,7 +2805,9 @@ bool8 HasProtectionMoveInMoveset(u8 bank, u8 checkType)
 					case MOVE_SPIKYSHIELD:
 					case MOVE_KINGSSHIELD:
 					case MOVE_OBSTRUCT:
-						return TRUE;
+						if (checkType & CHECK_REGULAR_PROTECTION)
+							return TRUE;
+						break;
 
 					case MOVE_QUICKGUARD:
 						if (checkType & CHECK_QUICK_GUARD)
@@ -3438,7 +3486,7 @@ bool8 HasUsedPhazingMoveThatAffects(u8 bankAtk, u8 bankDef)
 static bool8 ShouldAIFreeChoiceLockWithDynamax(u8 bankAtk, u8 bankDef)
 {
 	if (CanDynamax(bankAtk)
-	&& (ITEM_EFFECT(bankAtk) == ITEM_EFFECT_CHOICE_BAND || ABILITY(bankAtk) == ABILITY_GORILLATACTICS)
+	&& CanBeChoiceLocked(bankAtk)
 	&& CHOICED_MOVE(bankAtk) != MOVE_NONE && CHOICED_MOVE(bankAtk) != 0xFFFF) //AI is locked into some move
 	{
 		u8 moveLimitations = CheckMoveLimitations(bankAtk, 0, MOVE_LIMITATION_ZEROMOVE | MOVE_LIMITATION_PP);
@@ -4395,7 +4443,7 @@ void CalcAIDynamaxMon(u8 bank)
 
 			if (itemEffect == ITEM_EFFECT_WEAKNESS_POLICY)
 				updateScore = 4;
-			else if (itemEffect == ITEM_EFFECT_CHOICE_BAND || ability == ABILITY_GORILLATACTICS)
+			else if (IsChoiceItemEffectOrAbility(itemEffect, ability))
 				updateScore = 3;
 			else if (MonCanTriggerWeatherAbilityWithMaxMove(mon))
 				updateScore = 2;
@@ -4482,7 +4530,7 @@ void CalcShouldAIDynamax(u8 bankAtk, u8 bankDef)
 
 				OnlyBadMovesLeftInMoveset(bankAtk, bankDef); //Force calculation
 
-				if ((ITEM_EFFECT(bankAtk) == ITEM_EFFECT_CHOICE_BAND || ABILITY(bankAtk) == ABILITY_GORILLATACTICS)
+				if (CanBeChoiceLocked(bankAtk)
 				&& !gNewBS->ai.shouldFreeChoiceLockWithDynamax[bankAtk][bankDef]) //There are good moves left
 					return; //Save Dynamax for when you really need it
 			}

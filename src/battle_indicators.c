@@ -6,6 +6,8 @@
 #include "../include/m4a.h"
 #include "../include/string_util.h"
 #include "../include/battle_anim.h"
+#include "../include/constants/items.h"
+
 #include "../include/new/battle_indicators.h"
 #include "../include/new/battle_util.h"
 #include "../include/new/catching.h"

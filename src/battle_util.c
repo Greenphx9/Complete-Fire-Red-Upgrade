@@ -666,7 +666,7 @@ bool8 IsUnusableMove(u16 move, u8 bank, u8 check, u8 pp, u8 ability, u8 holdEffe
 	else if (gDisableStructs[bank].encoreTimer && gDisableStructs[bank].encoredMove != move && check & MOVE_LIMITATION_ENCORE)
 		return TRUE;
 	else if (!isMaxMove
-		 && (holdEffect == ITEM_EFFECT_CHOICE_BAND || ability == ABILITY_GORILLATACTICS)
+		 && IsChoiceItemEffectOrAbility(holdEffect, ability)
 		 && choicedMove != 0 && choicedMove != 0xFFFF && choicedMove != move
 		 && check & MOVE_LIMITATION_CHOICE)
 	{
@@ -1102,6 +1102,21 @@ struct Pokemon* GetIllusionPartyData(u8 bank)
 	struct Pokemon* party = LoadPartyRange(bank, &firstMonId, &lastMonId);
 
 	return &party[GetIllusionPartyNumber(bank)];
+}
+
+
+u16 GetWishHPRecovery(u8 bank)
+{
+	u16 recovery = 0;
+
+	if (gWishFutureKnock.wishCounter[bank] > 0)
+	{
+		u8 firstId, lastId;
+		struct Pokemon* party = LoadPartyRange(bank, &firstId, &lastId);
+		recovery = MathMax(1, GetMonData(&party[gWishFutureKnock.wishMonId[bank]], MON_DATA_MAX_HP, NULL) / 2);
+	}
+
+	return recovery;
 }
 
 bool8 BankMovedBefore(u8 bank1, u8 bank2)
@@ -2073,6 +2088,11 @@ bool8 CanBeInfatuated(u8 bankDef, u8 bankAtk)
 		&& GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) != MON_GENDERLESS
 		&& GetGenderFromSpeciesAndPersonality(speciesTarget, personalityTarget) != MON_GENDERLESS
 		&& !AbilityBattleEffects(ABILITYEFFECT_CHECK_BANK_SIDE, bankDef, ABILITY_AROMAVEIL, 0, 0);
+}
+
+bool8 CanBeChoiceLocked(u8 bank)
+{
+	return IsChoiceItemEffectOrAbility(ITEM_EFFECT(bank), ABILITY(bank));
 }
 
 bool8 IsTrickRoomActive(void)

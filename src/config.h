@@ -432,6 +432,7 @@ enum //These vars need to be one after the other (hence the enum)
 #define CREATE_ROAMER_WITH_X_PERFECT_IVS 3 //Change this to the number of set 31 IVs you'd like roaming pokemon to have.
 #define EGG_HATCH_LEVEL 1 //The level eggs hatch at
 #define AI_TRY_TO_KILL_RATE 50 //In battles against a trainer with AI flags of 1, the AI will try to use a move to knock out the opponents XX percent of the time
+#define BIKE_ENCOUNTER_PERCENT 60 //Biking through grass or in caves only has this percentage of the encounter rate (vanilla FR is 80)
 
 /*===== Metatile Behaviours =====*/
 #define MB_OMNIDIRECTIONAL_JUMP 0x7F //The tile behaviour byte that can be jumped over in all directions

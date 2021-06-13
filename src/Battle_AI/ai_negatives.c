@@ -2071,7 +2071,7 @@ MOVESCR_CHECK_0:
 				&& !(data->defStatus2 & STATUS2_INFATUATION) //Foe wouldn't miss the attack since they'll never be immobilized by love
 				&& !TARGET_ASLEEP) //Target is awake (not that they could wake up and protect for the second turn but that's fair and not AI abuse
 				{
-					if (HasProtectionMoveInMoveset(bankDef, 0) //Foe could protect before the attack hits
+					if (HasProtectionMoveInMoveset(bankDef, CHECK_REGULAR_PROTECTION) //Foe could protect before the attack hits
 					&& !WillFaintFromSecondaryDamage(bankDef)) //And the foe protecting is reasonable
 						DECREASE_VIABILITY(8); //Better not to use this attack, but still can if need be
 					else if (CanKnockOut(bankDef, bankAtk) //Attacker can be knocked out
@@ -2087,7 +2087,7 @@ MOVESCR_CHECK_0:
 				DECREASE_VIABILITY(10);
 			else if (move == MOVE_FAKEOUT)
 			{
-				if ((data->atkItemEffect == ITEM_EFFECT_CHOICE_BAND || data->atkAbility == ABILITY_GORILLATACTICS)
+				if (IsChoiceItemEffectOrAbility(data->atkItemEffect, data->atkAbility)
 				&& (ViableMonCountFromBank(bankDef) >= 2 || !MoveKnocksOutXHits(MOVE_FAKEOUT, bankAtk, bankDef, 1)))
 				{
 					if (!HasMonToSwitchTo(bankAtk))
@@ -3033,7 +3033,7 @@ MOVESCR_CHECK_0:
 						if (!TARGETING_PARTNER)
 							DECREASE_VIABILITY(10);
 					}
-					else
+					else //Singles Only
 					{
 						if (GetBaseMoveTarget(instructedMove, bankDef) & (MOVE_TARGET_SELECTED
 																		| MOVE_TARGET_DEPENDS

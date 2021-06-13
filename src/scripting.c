@@ -4776,7 +4776,7 @@ s32 ListMenu_ProcessInput(u8 listTaskId)
 
     if (JOY_NEW(A_BUTTON))
     {
-        return list->template.items[list->scrollOffset + list->selectedRow].id;
+        return list->template.items[list->cursorPos + list->itemsAbove].id;
     }
     else if (JOY_NEW(B_BUTTON))
     {

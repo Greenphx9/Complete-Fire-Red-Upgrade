@@ -743,3 +743,7 @@ LoadOptionMenuItemNames 08088D8C 0
 OptionMenu_PickSwitchCancel 08088680 0
 StartMenuBagCallback 0806f480 0
 ##ListMenu_ProcessInput 08107078 1
+
+#ifdef UNBOUND
+GetCurrentLevelCap 801D79C 0
+#endif

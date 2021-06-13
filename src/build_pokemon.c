@@ -23,6 +23,7 @@
 #include "../include/new/ability_tables.h"
 #include "../include/new/ability_util.h"
 #include "../include/new/ai_advanced.h"
+#include "../include/new/battle_util.h"
 #include "../include/new/build_pokemon.h"
 #include "../include/new/build_pokemon_2.h"
 #include "../include/new/catching.h"
@@ -570,6 +571,13 @@ void sp067_GenerateRandomBattleTowerTeam(void)
 	}
 
 	SortItemsInBag(0, 1);*/
+
+	for (u32 i = SPECIES_GROOKEY; i < SPECIES_URSHIFU_RAPID_GIGA; ++i)
+	{
+		struct Pokemon mon;
+		CreateMon(&mon, i, 1, STANDARD_IV, TRUE, 0xAAAAAAAA, 0, 0);
+		GiveMonToPlayer(&mon);
+	}
 }
 
 //@Details: Adds a Pokemon with the given species from the requested spreads to
@@ -780,7 +788,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 		//Choose Trainer IVs
 #ifdef VAR_GAME_DIFFICULTY
 		u8 gameDifficulty = VarGet(VAR_GAME_DIFFICULTY);
-		if (gameDifficulty >= OPTIONS_EXPERT_DIFFICULTY)
+		if (gameDifficulty >= OPTIONS_EXPERT_DIFFICULTY && side != B_SIDE_PLAYER) //Not partner
 			baseIV = 31;
 		else
 #endif
@@ -1040,7 +1048,8 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 				#endif
 				{
 					SET_EVS(spread);
-					SET_IVS_SINGLE_VALUE(MathMin(31, spread->ivs));
+					if (spread->ivs != 0) //Otherwise use default class values
+						SET_IVS_SINGLE_VALUE(MathMin(31, spread->ivs));
 				}
 				
 				#ifdef FLAG_TRICK_ROOM_BATTLE
@@ -1423,7 +1432,7 @@ static void GiveMon2BestBaseStatEVs(struct Pokemon* mon)
 	}
 
 	//Find best of rest of stats
-	for (statId = STAT_DEF, bestStat1 = STAT_HP, bestStat2 = STAT_ATK; statId <= STAT_SPDEF; ++statId)
+	for (statId = STAT_DEF; statId <= STAT_SPDEF; ++statId)
 	{
 		u16 stat = GetVisualBaseStat(statId, species);
 
@@ -1994,7 +2003,7 @@ static u8 BuildFrontierParty(struct Pokemon* const party, const u16 trainerId, c
 				else
 					builder->itemEffectOnTeam[itemEffect] = TRUE;
 
-				if (itemEffect == ITEM_EFFECT_CHOICE_BAND || ability == ABILITY_GORILLATACTICS)
+				if (IsChoiceItemEffectOrAbility(itemEffect, ability))
 					++builder->numChoiceItems;
 
 				if (IsMegaStone(item))
@@ -2417,10 +2426,10 @@ void SetWildMonHeldItem(void)
 void GiveMonNatureAndAbility(struct Pokemon* mon, u8 nature, u8 abilityNum, bool8 forceShiny, bool8 keepGender, bool8 keepLetterCore)
 {
 	u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
-	u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
-	u32 trainerId = GetMonData(mon, MON_DATA_OT_ID, NULL);
-	u16 sid = HIHALF(trainerId);
-	u16 tid = LOHALF(trainerId);
+	u16 species  = GetMonData(mon, MON_DATA_SPECIES, NULL);
+	u32 otId = GetMonData(mon, MON_DATA_OT_ID, NULL);
+	u16 sid = HIHALF(otId);
+	u16 tid = LOHALF(otId);
 	u8 gender = GetGenderFromSpeciesAndPersonality(species, personality);
 	u8 letter = GetUnownLetterFromPersonality(personality);
 	bool8 isMinior = IsMinior(species);
@@ -2446,13 +2455,13 @@ void GiveMonNatureAndAbility(struct Pokemon* mon, u8 nature, u8 abilityNum, bool
 			personality |= abilityNum;
 		}
 	} while (GetNatureFromPersonality(personality) != nature
-		|| (keepGender && GetGenderFromSpeciesAndPersonality(species, personality) != gender)
-		|| (keepLetterCore && species == SPECIES_UNOWN && GetUnownLetterFromPersonality(personality) != letter) //Make sure the Unown letter doesn't change
-		|| (keepLetterCore && isMinior && GetMiniorCoreFromPersonality(personality) != miniorCore)); //Make sure the Minior core doesn't change
+	|| (keepGender && GetGenderFromSpeciesAndPersonality(species, personality) != gender)
+	|| (!forceShiny && IsShinyOtIdPersonality(otId, personality)) //Prevent NPCs from accidentally getting shinies
+	|| (keepLetterCore && species == SPECIES_UNOWN && GetUnownLetterFromPersonality(personality) != letter) //Make sure the Unown letter doesn't change
+	|| (keepLetterCore && isMinior && GetMiniorCoreFromPersonality(personality) != miniorCore)); //Make sure the Minior core doesn't change
 
 	mon->personality = personality;
 }
-
 
 void GiveMonXPerfectIVs(struct Pokemon* mon, u8 totalPerfectStats)
 {
@@ -2655,8 +2664,18 @@ static bool8 PokemonTierBan(const u16 species, const u16 item, const struct Batt
 		case BATTLE_FACILITY_STANDARD:
 		case BATTLE_FACILITY_MEGA_BRAWL:
 		case BATTLE_FACILITY_DYNAMAX_STANDARD:
+			//Load correct ability
+			switch (checkFromLocationType) {
+				case CHECK_BATTLE_TOWER_SPREADS:
+					LOAD_TIER_CHECKING_ABILITY;
+					break;
+				default:
+					ability = GetMonAbility(mon);
+			}
+
 			if (gSpecialSpeciesFlags[species].battleTowerStandardBan
-			||  CheckTableForItem(item, gBattleTowerStandard_ItemBanList))
+			||  CheckTableForItem(item, gBattleTowerStandard_ItemBanList)
+			|| (ability == ABILITY_BATTLEBOND && tier != BATTLE_FACILITY_MEGA_BRAWL)) //Battle Bond is banned in Standard
 				return TRUE;
 			break;
 
@@ -3266,7 +3285,7 @@ static bool8 TeamDoesntHaveSynergy(const struct BattleTowerSpread* const spread,
 		}
 		else //Double Battle
 		{
-			if ((itemEffect == ITEM_EFFECT_CHOICE_BAND || ability == ABILITY_GORILLATACTICS) && builder->numChoiceItems >= 1)
+			if (IsChoiceItemEffectOrAbility(itemEffect, ability) && builder->numChoiceItems >= 1)
 				return TRUE; //Max one choiced Pokemon per 4v4 doubles team
 
 			if (IsClassDoublesUtility(class) || IsClassDoublesTeamSupport(class))
@@ -3321,7 +3340,7 @@ static bool8 TeamDoesntHaveSynergy(const struct BattleTowerSpread* const spread,
 		}
 		else //Double Battle
 		{
-			if ((itemEffect == ITEM_EFFECT_CHOICE_BAND || ability == ABILITY_GORILLATACTICS) && builder->numChoiceItems >= 2)
+			if (IsChoiceItemEffectOrAbility(itemEffect, ability) && builder->numChoiceItems >= 2)
 				return TRUE; //Max two choiced Pokemon per 6v6 doubles team
 
 			if (IsClassDoublesUtility(class) || IsClassDoublesTeamSupport(class))
