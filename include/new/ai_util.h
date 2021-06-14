@@ -2,6 +2,7 @@
 #include "../global.h"
 #include "../battle.h"
 
+#include "ai_scripts.h"
 #include "damage_calc.h"
 
 //Exported Functions
@@ -158,6 +159,7 @@ bool8 HasUsedMove(u8 bankAtk, u16 move);
 bool8 HasUsedMoveWithEffect(u8 bankAtk, u8 effect);
 bool8 HasUsedMoveWithEffectHigherThanChance(u8 bank, u8 effect, u8 chance);
 bool8 HasUsedPhazingMoveThatAffects(u8 bankAtk, u8 bankDef);
+bool8 NoUsableHazardsInMoveset(u8 bankAtk, u8 bankDef, struct AIScript* aiScriptData);
 bool8 OnlyBadMovesLeftInMoveset(u8 bankAtk, u8 bankDef);
 bool8 DoubleDamageWithStatusMoveInMovesetThatAffects(u8 bankAtk, u8 bankDef);
 bool8 HazingMoveInMoveset(u8 bank);

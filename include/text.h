@@ -314,8 +314,6 @@ void __attribute__((long_call)) GenerateFontHalfRowLookupTable(u8 fgColor, u8 bg
 void __attribute__((long_call)) TextPrinterInitDownArrowCounters(struct TextPrinter *textPrinter);
 void __attribute__((long_call)) DecompressGlyphFont6(u16 glyph);
 bool8 __attribute__((long_call)) TextPrinterWaitAutoMode(struct TextPrinter *textPrinter);
-bool16 __attribute__((long_call)) TextPrinterWaitWithDownArrow(struct TextPrinter *textPrinter);
-bool16 __attribute__((long_call)) TextPrinterWait(struct TextPrinter *textPrinter);
 void __attribute__((long_call)) TextPrinterClearDownArrow(struct TextPrinter *textPrinter);
 void __attribute__((long_call)) CopyGlyphToWindow(struct TextPrinter *x);
 void __attribute__((long_call)) SetFontsPointer(const struct FontInfo *fonts);
@@ -337,7 +335,6 @@ u8 __attribute__((long_call)) GetFontAttribute(u8 fontId, u8 attributeId);
 u8 __attribute__((long_call)) GetMenuCursorDimensionByFont(u8 fontId, u8 whichDimension);
 void __attribute__((long_call)) TextPrinterDrawDownArrow(struct TextPrinter *textPrinter);
 bool8 __attribute__((long_call)) TextPrinterWaitAutoMode(struct TextPrinter *textPrinter);
-bool16 __attribute__((long_call)) TextPrinterWaitWithDownArrow(struct TextPrinter *textPrinter);
 
 /*
 extern u8 gStringVar1[];

@@ -51,6 +51,7 @@ bool8 CanNeverMakeContactByAbilityItemEffect(u8 ability, u8 itemEffect);
 bool8 CanNeverMakeContactByItemEffect(u8 itemEffect);
 bool8 CheckHealingMove(u16 move);
 bool8 CheckSoundMove(u16 move);
+bool8 CheckRecoil(u16 move);
 bool8 SheerForceCheck(void);
 bool8 IsOfType(u8 bank, u8 type);
 bool8 LiftProtect(u8 bank);
