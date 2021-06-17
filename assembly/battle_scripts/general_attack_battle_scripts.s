@@ -2066,7 +2066,6 @@ BS_094_LockOn:
 	jumpifmove MOVE_LASERFOCUS LaserFocusBS
 	
 LockOnBS:
-	attackcanceler
 	jumpifbehindsubstitute BANK_TARGET FAILED_PRE
 	accuracycheck FAILED_PRE 0x0
 	attackstring

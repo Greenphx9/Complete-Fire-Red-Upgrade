@@ -105,8 +105,8 @@ void AcupressureFunc(void)
 	u8 stat;
 	do
 	{
-		stat = umodsi(Random(), BATTLE_STATS_NO - 1) + 1;
-	} while (gBattleMons[gActiveBattler].statStages[stat - 1] == 12);
+		stat = umodsi(Random(), BATTLE_STATS_NO-1) + 1;
+	} while (STAT_STAGE(gBankTarget, stat) >= STAT_STAGE_MAX);
 
 	SET_STATCHANGER(stat, 2, FALSE);
 }
@@ -2393,6 +2393,11 @@ void TrySkipBattleNicknameOffer(void)
 {
 	#ifdef FLAG_DONT_OFFER_NICKNAMES_BATTLE
 	if (FlagGet(FLAG_DONT_OFFER_NICKNAMES_BATTLE))
-		gBattlescriptCurrInstr = BattleScript_CaughtPokemonSkipNickname - 5;
+	{
+		if (CalculatePlayerPartyCount() >= PARTY_SIZE || IsRaidBattle())
+			gBattlescriptCurrInstr = BattleScript_CaughtPokemonSkipNicknameFullParty - 5;
+		else
+			gBattlescriptCurrInstr = BattleScript_CaughtPokemonSkipNickname - 5;
+	}
 	#endif
 }
