@@ -240,7 +240,6 @@ BS_009_MirrorMove:
 
 CopycatBS:
 	attackstringnoprotean
-	ppreduce
 	callasm CopycatFunc
 	attackanimation
 	waitanimation
@@ -1199,14 +1198,23 @@ BS_037_SetRest:
 BS_038_OHK0:
 	attackcanceler
 	accuracycheck FAILED 0xFFFF
+	jumpifability BANK_TARGET, ABILITY_STURDY, BattleScript_SturdyPreventsOHKO
+	typecalc2
+	tryko OHKOMoveFail
 	attackstring
 	ppreduce
 	callasm FailMoveIfAura
-	typecalc2
 	jumpifmovehadnoeffect BS_HIT_FROM_ATTACKANIMATION
-	tryko 0x81D6EF1
 	trysetdestinybondtohappen
 	goto BS_HIT_FROM_ATTACKANIMATION
+
+OHKOMoveFail:
+	attackstring
+	ppreduce
+	pause DELAY_HALFSECOND
+	printfromtable 0x83FE5D4
+	waitmessage DELAY_1SECOND
+	goto BS_MOVE_END
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -2864,6 +2872,7 @@ BS_128_Pursuit:
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 .global BS_129_RapidSpin
+.global BattleScript_DefogAdditionalEffects_PlayAttackAnim
 .global BattleScript_DefogAdditionalEffects
 .global BattleScript_SideStatusWoreOffRet
 BS_129_RapidSpin:
@@ -2875,19 +2884,29 @@ RapidSpinBS:
 	
 DefogBS:
 	attackcanceler
-	jumpifbehindsubstitute BANK_TARGET SecondDefogCheck
-	accuracycheck SecondDefogCheck 0x0
 	attackstring
 	ppreduce
+	jumpifbehindsubstitute BANK_TARGET SecondDefogCheck_TryFail
+	accuracycheck SecondDefogCheck_FailPlayResultMessage 0x0
 	setstatchanger STAT_EVSN | DECREASE_1
-	statbuffchange STAT_TARGET | STAT_BS_PTR SecondDefogCheck
+	statbuffchange STAT_TARGET | STAT_BS_PTR SecondDefogCheck_TryFail
 	jumpifbyte LESSTHAN MULTISTRING_CHOOSER 0x2 DefogLoweredStat
-	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x3 SecondDefogCheck
+	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x3 SecondDefogCheck_TryFail
 	pause DELAY_HALFSECOND
 	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
+SecondDefogCheck:
+	callasm DefogHelperFunc @;Automatically redirects to BattleScript_DefogAdditionalEffects if applicable
+	goto BS_MOVE_END
+
+SecondDefogCheck_TryFail:
+	setword OUTCOME, OUTCOME_NO_EFFECT
+SecondDefogCheck_FailPlayResultMessage:
+	pause 0x20
+	resultmessage
+	waitmessage DELAY_1SECOND
 	goto SecondDefogCheck
-	
+
 DefogLoweredStat:
 	attackanimation
 	waitanimation
@@ -2896,7 +2915,10 @@ DefogLoweredStat:
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
 	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
-	
+	goto SecondDefogCheck
+
+BattleScript_DefogAdditionalEffects_PlayAttackAnim:
+	bicword OUTCOME, OUTCOME_NO_EFFECT
 BattleScript_DefogAdditionalEffects:
 	attackanimation @;Should only play after the Second Defog Check
 	waitanimation
@@ -2912,10 +2934,6 @@ RemoveFogBS:
 	printstring 0x184
 	waitmessage DELAY_1SECOND
 	breakfree
-	goto BS_MOVE_END
-	
-SecondDefogCheck:
-	callasm DefogHelperFunc @;Automatically redirects to BattleScript_DefogAdditionalEffects if applicable
 	goto BS_MOVE_END
 
 BattleScript_SideStatusWoreOffRet:

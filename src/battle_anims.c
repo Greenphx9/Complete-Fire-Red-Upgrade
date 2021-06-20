@@ -996,6 +996,31 @@ const union AnimCmd* const sExplosionAnimTable[] =
 
 
 
+const union AffineAnimCmd sSpriteAffineAnim_BehemothBlade[] =
+{
+	AFFINEANIMCMD_FRAME(0x20, 0x200, 0, 0),
+	AFFINEANIMCMD_FRAME(0x24, 0x0, 0, 12),
+	AFFINEANIMCMD_FRAME(0x0, 0x0, 0, 32),
+	AFFINEANIMCMD_END,
+};
+
+const union AffineAnimCmd *const gSpriteAffineAnimTable_BehemothBlade[] =
+{
+	sSpriteAffineAnim_BehemothBlade,
+};
+
+static const union AffineAnimCmd sSpriteAffineAnim_LargeExplosion[] =
+{
+	AFFINEANIMCMD_FRAME(256, 256, 0, 1), //Double sprite size
+	AFFINEANIMCMD_FRAME(0x0, 0x0, 0, 32),
+	AFFINEANIMCMD_END,
+};
+
+const union AffineAnimCmd* const gSpriteAffineAnimTable_LargeExplosion[] =
+{
+	sSpriteAffineAnim_LargeExplosion,
+};
+
 //This file's functions:
 static void InitSpritePosToAnimTargetsCentre(struct Sprite *sprite, bool8 respectMonPicOffsets);
 static void InitSpritePosToAnimAttackersCentre(struct Sprite *sprite, bool8 respectMonPicOffsets);
@@ -5522,8 +5547,8 @@ void HandleSpeciesGfxDataChange(u8 bankAtk, u8 bankDef, u8 transformType)
 
 void DoMoveAnim(u16 move)
 {
-    gBattleAnimAttacker = gBankAttacker;
-    gBattleAnimTarget = gBankTarget;
+	gBattleAnimAttacker = gBankAttacker;
+	gBattleAnimTarget = gBankTarget;
 
 	if (IS_DOUBLE_BATTLE
 	&& gBattleMoves[move].target & MOVE_TARGET_ALL
@@ -5538,7 +5563,7 @@ void DoMoveAnim(u16 move)
 			gBattleAnimTarget = PARTNER(foe);
 	}
 
-    LaunchBattleAnimation(gMoveAnimations, move, TRUE);
+	LaunchBattleAnimation(gMoveAnimations, move, TRUE);
 }
 
 #define tBattlerId 	data[0]

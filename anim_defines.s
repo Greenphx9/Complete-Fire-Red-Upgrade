@@ -489,6 +489,19 @@
 .equ AnimTask_ShakeTargetInPattern, 0x80adad9
 .equ AnimTask_StatusClearedEffect, 0x80e2085
 .equ AnimTask_InvertScreenColor, 0x80BA0E9
+.equ AnimTask_DigDownMovement, 0x80b8e95
+.equ AnimTask_SetAllNonAttackersInvisiblity, 0x80bb9b1
+.equ AnimTask_FlashAnimTagWithColor, 0x80b9f6d
+.equ AnimTask_VoltTackleBolt, 0x80aea11
+.equ AnimTask_VoltTackleAttackerReappear, 0x80ae8a1
+.equ AnimTask_StockpileDeformMon, 0x80df849
+.equ AnimTask_CreateSpotlight, 0x80dedd9
+.equ AnimTask_RemoveSpotlight, 0x80dee79
+.equ AnimTask_CreateRaindrops, 0x80aabc1
+.equ AnimTask_NightShadeClone, 0x80b54e9
+.equ AnimTask_BlendNonAttackerPalettes, 0x80bb7dd
+.equ SoundTask_PlaySE2WithPanning, 0x80DD411
+.equ SoundTask_LoopSEAdjustPanning, 0x80dcf39 @;Song Id, Source, Target Pan, Pan Increment, Num Times, Pan Increment Ofteness, Length of One
  
 @launchtemplate
 
@@ -579,6 +592,29 @@
 .equ Template_CrossImpact, 0x83e7c80
 .equ Template_EyeSparkle, 0x83e42fc
 .equ Template_MegaPunchKick, 0x83e67c0
+.equ Template_DirtPlume, 0x83e7aac
+.equ Template_FlyBallUp, 0x83e6bb8
+.equ Template_WhirlwindLine, 0x83e6c84
+.equ Template_DiveBall, 0x83e6d40
+.equ Template_DiveWaterSplash, 0x83e6d7c
+.equ Template_Whirlpool, 0x83e7420
+.equ Template_AromatherapySmallFlower, 0x83e3024
+.equ Template_AromatherapyBigFlower, 0x83e303c
+.equ Template_BrickBreakWallShard, 0x83e6820
+.equ Template_IceBeamOuterCrystal, 0x83e63a4
+.equ Template_GrowingChargeOrb, 0x83e61d4
+.equ Template_VoltTackleOrbSlide, 0x83e621c
+.equ Template_BounceBallLand, 0x83e6cfc
+.equ Template_GrantingStars, 0x83e33f4
+.equ Template_FirePlume, 0x83e5ca0
+.equ Template_FireSpin, 0x83e7438
+.equ Template_FireBlastCross, 0x83e5de4
+.equ Template_FireBlastRing, 0x83e5d94
+.equ Template_WillOWispFire, 0x83e5ee4
+.equ Template_FlatterSpotlight, 0x83ff3a0
+.equ Template_SuperpowerOrb, 0x83e6864
+.equ Template_ThinRingShrinking, 0x83E40C8
+.equ Template_SwordsDanceBlade, 0x83e3bf8
 
 .equ SpriteCB_AnimSpriteOnMonPos, 0x8075D9D
 .equ Callback_TranslateAnimSpriteToTargetMonLocation, 0x8075DF5
