@@ -269,8 +269,17 @@ Welcome to the Hall Of Fame!
 #org @gText_HardModeHOF
  Hard
 
+#org @gText_HOFNo
+ No
+
 #org @gText_NoIVGrinding
- No Grinding Mode
+ IV
+
+#org @gText_NoEVGrinding
+ EV
+
+#org @gText_Grinding
+ Grinding
 
 #org @gText_Scalemons
  Scalemons

@@ -18,6 +18,8 @@ extern u16 gTotalCameraPixelOffsetX;
 extern u16 gTotalCameraPixelOffsetY;
 
 void __attribute__((long_call)) CurrentMapDrawMetatileAt(int x, int y);
+void __attribute__((long_call)) DrawWholeMapView(void);
+void __attribute__((long_call)) ResetFieldCamera(void);
 
 // Exported ROM declarations
 /*

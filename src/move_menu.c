@@ -874,10 +874,11 @@ static bool8 MoveSelectionDisplayZMove(void)
 		}
 		BattlePutTextOnWindow(gDisplayedStringBattle, 3);
 
+		gNewBS->zMoveData.viewing = TRUE;
 		ZMoveSelectionDisplayPpNumber();
+		MoveSelectionDisplayMoveType();
 		MoveSelectionCreateCursorAt(0, 0);
 		MoveSelectionDisplayMoveEffectiveness();
-		gNewBS->zMoveData.viewing = TRUE;
 		PlaySE(2); //Turn On
 		return TRUE;
 	}

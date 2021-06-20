@@ -2198,7 +2198,7 @@ void ApplyGammaShiftOnRainFadeIn(void)
 // Hall of Fame Fix for Expanded Pokemon
 // credit to sagiri: https://github.com/Sagiri/fame-hall
 
-#ifdef UNBOUND
+/*#ifdef UNBOUND
 #define HALL_OF_FAME_BG_PAL RGB(23, 16, 28) //0x7217
 #else
 #define HALL_OF_FAME_BG_PAL RGB(22, 24, 29)
@@ -2484,59 +2484,12 @@ void Task_HofPC_DrawSpritesPrintText(u8 taskId)
 	gTasks[taskId].func = Task_HofPC_PrintMonInfo;
 }
 
-#define gText_WelcomeToHOF (const u8*) 0x8416008
-#define gText_EmptyString2 (const u8*) 0x84161cd
 /*extern const u8 gText_CasualDifficult[];
 extern const u8 gText_Expert[];
 extern const u8 gText_Insane[];
 extern const u8 gText_PostGame[];*/
-extern const u8 gText_Difficulty[];
-extern const u8 gText_NormalModeHOF[];
-extern const u8 gText_HardModeHOF[];
-extern const u8 gText_NoIVGrinding[];
-extern const u8 gText_Scalemons[];
-extern const u8 gText_ShrinkTextHOF[];
 
-extern const struct TextColor sHOFTextColors[];
-void HallOfFame_PrintWelcomeText(void)
-{
-	u8 x = (0xD0 - GetStringWidth(2, gText_WelcomeToHOF, 0)) / 2;
-	StringCopy(gStringVar1, gText_EmptyString2);
-	FillWindowPixelBuffer(0, PIXEL_FILL(0));
-	PutWindowTilemap(0);
-	WindowPrint(0, 2, x, 1, &sHOFTextColors[0], 0, gText_WelcomeToHOF);
-
-	StringAppend(gStringVar1, gText_ShrinkTextHOF);
-	if(FlagGet(FLAG_NO_GRINDING_IV) || FlagGet(FLAG_NO_GRINDING_EV))
-	{
-		StringAppend(gStringVar1, gText_NoIVGrinding);
-	}
-	if(FlagGet(FLAG_HAS_USED_NORMAL_MODE))
-	{
-		StringAppend(gStringVar1, gText_NormalModeHOF);
-	}
-	else if(!FlagGet(FLAG_HARD_MODE))
-	{
-		StringAppend(gStringVar1, gText_NormalModeHOF);
-	}
-	else
-	{
-		StringAppend(gStringVar1, gText_HardModeHOF);
-	}
-	if(FlagGet(FLAG_SCALEMONS))
-	{
-		StringAppend(gStringVar1, gText_Scalemons);
-	}
-
-	StringAppend(gStringVar1, gText_Difficulty);
-
-	u8 x2 = (0xD0 - GetStringWidth(2, gStringVar1, 0)) / 2;
-	WindowPrint(0, 2, x2, 20, &sHOFTextColors[0], 0, gStringVar1);
-
-	CopyWindowToVram(0, COPYWIN_BOTH);
-}
-
-void Task_HofPC_PrintMonInfo(u8 taskId)
+/*void Task_HofPC_PrintMonInfo(u8 taskId)
 {
 	struct HallofFameTeam* savedTeams = sHofMonPtr;
 	struct HallofFameMon* currMon;
@@ -2656,7 +2609,7 @@ void HallOfFame_PrintMonInfo(struct HallofFameMon *currMon, unusedArg u8 a1, unu
 	}
 
 	CopyWindowToVram(0, COPYWIN_BOTH);
-}
+}*/
 
 //Naming Screen Special////////////////////////////////////////////////////////////////////////////
 //Pointer+1 at 083E23D0, orig func at 0809F11C
@@ -3192,15 +3145,6 @@ static void Task_ClearItemSpriteAfterFind(u8 taskId)
 	FreeSpriteTilesByTag(ITEM_TAG);
 	FreeSpritePaletteByTag(ITEM_TAG);
 
-	#ifdef ITEM_DESCRIPTION_ACQUIRE
-	if (sHeaderBoxWindowId != 0xFF) //Description was shown
-	{
-		ClearDialogWindowAndFrame(sHeaderBoxWindowId, TRUE);
-		RemoveWindow(sHeaderBoxWindowId);
-		sHeaderBoxWindowId = 0xFF;
-	}
-	#endif
-
 	DestroyTask(taskId);
 }
 #endif
@@ -3224,6 +3168,15 @@ static void ClearItemSpriteAfterFind(unusedArg u8 spriteId)
 				gSprites[spriteId2].invisible = TRUE; //Hide until destroyed
 		}
 	}
+
+	#ifdef ITEM_DESCRIPTION_ACQUIRE
+	if (sHeaderBoxWindowId != 0xFF) //Description was shown
+	{
+		ClearDialogWindowAndFrame(sHeaderBoxWindowId, TRUE);
+		RemoveWindow(sHeaderBoxWindowId);
+		sHeaderBoxWindowId = 0xFF;
+	}
+	#endif
 	#endif
 }
 
@@ -4820,7 +4773,7 @@ s32 ListMenu_ProcessInput(u8 listTaskId)
 		if(Var8000 == 3)
 		{
 			HideFieldMessageBox();
-			ShowFieldMessage(gText_WelcomeToHOF);
+			//ShowFieldMessage(gText_WelcomeToHOF);
 		}
         ListMenuChangeSelection(list, TRUE, 1, FALSE);
         return LIST_NOTHING_CHOSEN;
@@ -4830,7 +4783,7 @@ s32 ListMenu_ProcessInput(u8 listTaskId)
 		if(Var8000 == 3)
 		{
 			HideFieldMessageBox();
-			ShowFieldMessage(gText_WelcomeToHOF);
+			//ShowFieldMessage(gText_WelcomeToHOF);
 		}
         ListMenuChangeSelection(list, TRUE, 1, TRUE);
         return LIST_NOTHING_CHOSEN;

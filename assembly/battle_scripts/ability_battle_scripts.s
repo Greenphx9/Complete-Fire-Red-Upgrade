@@ -1155,7 +1155,11 @@ BattleScript_PerishBodyReturn:
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 BattleScript_SturdyPreventsOHKO:
+	orword OUTCOME, OUTCOME_NOT_AFFECTED
+	attackstring
+	ppreduce
 	pause 0x10
+	copybyte BATTLE_SCRIPTING_BANK, TARGET_BANK
 	call BattleScript_AbilityPopUp
 	printstring 0x1B @;STRINGID_ITDOESNTAFFECT
 	waitmessage DELAY_1SECOND
