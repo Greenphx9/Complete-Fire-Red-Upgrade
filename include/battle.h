@@ -919,6 +919,7 @@ struct NewBattleStruct
 	u8 shellSideArmSplit[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT];
 	u8 ringChallengeBannedTypes[3];
 	u16 knockedOffWildItem;
+	u8 criticalHitsThisBattle[PARTY_SIZE];
 
 	//Things for Spread Moves
 	s32 DamageTaken[MAX_BATTLERS_COUNT];
@@ -1333,12 +1334,13 @@ extern struct BattleScripting gBattleScripting;
 // functions
 
 // battle_1
-void LoadBattleTextboxAndBackground(void);
-void LoadBattleEntryBackground(void);
-void ApplyPlayerChosenFrameToBattleMenu(void);
-bool8 LoadChosenBattleElement(u8 caseId);
-void DrawMainBattleBackground(void);
-void task00_0800F6FC(u8 taskId);
+//void LoadBattleTextboxAndBackground(void);
+//void LoadBattleEntryBackground(void);
+//void ApplyPlayerChosenFrameToBattleMenu(void);
+//bool8 LoadChosenBattleElement(u8 caseId);
+void __attribute__((long_call)) DrawMainBattleBackground(void);
+//void task00_0800F6FC(u8 taskId);
+void __attribute__((long_call)) BattleMainCB2(void);
 
 enum BackSprites
 {
