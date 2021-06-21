@@ -8544,7 +8544,7 @@ ANIM_SACREDSWORD:
 	playsound2 0xb8 SOUND_PAN_ATTACKER
 	launchtemplate Template_SwordsDanceBlade 0x2 0x2 0x0 0x0
 	pause 0x16
-	launchtask 0x80b9f6d 0x2 0x7 0x2715 0x2 0x2 0x7ff2 0x10 0x0 0x0
+	launchtask AnimTask_FlashAnimTagWithColor 0x2 0x7 ANIM_TAG_SWORD 0x2 0x2 0x7ff2 0x10 0x0 0x0
 	waitanimation
 	pokespritefromBG bank_attacker
 	pause 0x1
@@ -9214,7 +9214,7 @@ ANIM_SECRETSWORD:
 	launchtask AnimTask_pal_fade 0xa 0x5 PAL_BG 0x0 0x0 0x10 0x0
 	launchtemplate Template_SwordsDanceBlade 0x2 0x2 0x0 0x0
 	pause 0x16
-	launchtask 0x80b9f6d 0x2 0x7 0x2715 0x2 0x2 0x7ff2 0x10 0x0 0x0
+	launchtask AnimTask_FlashAnimTagWithColor 0x2 0x7 ANIM_TAG_SWORD 0x2 0x2 0x7ff2 0x10 0x0 0x0
 	waitanimation
 	pokespritefromBG bank_attacker
 	pause 0x1
@@ -18605,21 +18605,20 @@ ANIM_ASTRAL_BARRAGE:
 ANIM_GLACIAL_LANCE:
 	loadparticle ANIM_TAG_ICICLE_SPEAR
 	loadparticle ANIM_TAG_ICE_CUBE
-	loadparticle ANIM_TAG_ICE_CRYSTALS @ice
+	loadparticle ANIM_TAG_TORN_METAL
 	launchtask AnimTask_pal_fade 0xa 0x5 PAL_BG 0x1 0x0 0xA 0x3C00 @;Royal Blue
 	pokespritetobg bank_target
+	leftbankBG_over_partnerBG bank_target
 	playsound2 0xEB SOUND_PAN_TARGET
-	launchtask AnimTask_CentredFrozenIceCube TEMPLATE_TARGET | 2, 0x0
-	launchtemplate LARGE_ICE_LANCE TEMPLATE_TARGET | 2 0x7 0, 40, 0, 0, 40, 50, 10
-	pause 60
+	launchtask AnimTask_FrozenIceCube TEMPLATE_TARGET | 2, 0x0
+	launchtemplate LARGE_ICE_LANCE TEMPLATE_TARGET | 2 0x7 0, 30, 0, 0, 30, 18, 10
+	pause 30
 	launchtask AnimTask_FlashAnimTagWithColor 0x2 0x7 ANIM_TAG_ICICLE_SPEAR 0x4 0x1 0x7FFF 0x10 0x0 0x0
 	playsound2 0xca SOUND_PAN_TARGET
-	pause 38
+	pause 22
+	launchtask AnimTask_ShakeTargetBasedOnMovePowerOrDmg 0x2 0x5 0x0 0x1 0x14 0x1 0x0
 	playsound2 0xBF SOUND_PAN_TARGET
-	launchtask AnimTask_move_bank 0x5 0x5 bank_target 0x6 0x0 0x34 0x1
-	launchtask AnimTask_move_bank 0x5 0x5 target_partner 0x6 0x0 0x34 0x1
-	pause 4
-	call FREEZE_CHANCE_ANIM_DOUBLES
+	call BROKEN_GLASS
 	waitanimation
 	launchtask AnimTask_pal_fade 0xa 0x5 PAL_BG 0x0 0xA 0x0 0x3C00 @;Royal Blue
 	waitanimation
@@ -18627,7 +18626,7 @@ ANIM_GLACIAL_LANCE:
 	endanimation
 
 .align 2
-LARGE_ICE_LANCE: objtemplate ANIM_TAG_ICICLE_SPEAR ANIM_TAG_ICICLE_SPEAR OAM_DOUBLE_32x32 gDummySpriteAnimTable 0x0 gSpriteAffineAnimTable_GlacialLance SpriteCB_GlacialLance
+LARGE_ICE_LANCE: objtemplate ANIM_TAG_ICICLE_SPEAR ANIM_TAG_ICICLE_SPEAR OAM_DOUBLE_32x32 gDummySpriteAnimTable 0x0 gSpriteAffineAnimTable_GlacialLance SpriteCB_GlacialLance 
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -19732,9 +19731,8 @@ ANIM_ALL_OUT_PUMMELING:
 	launchtask AnimTask_scroll_background 0x5 0x4 0x800 0x0 0x0 0xffff
 	waitbgfadein
 	setblends 0x80c
-	pokespritetoBG side_target
-	launchtask AnimTask_move_bank 0x5 0x5 0x1 0x0 0x2 SOUND_PAN_TARGET 0x1
-	launchtemplate PUMMEL_ONSLAUGHT 0x2 0x8 0xffd0 0x18 0x0 0x0 0xa 0x1 OBJ_FOOT1 0x1
+	launchtask AnimTask_move_bank 0x5 0x5 0x1 0x0 0x2 0x3F 0x1
+	launchtemplate PUMMEL_ONSLAUGHT TEMPLATE_TARGET | 3, 0x8 0xffd0 0x18 0x0 0x0 0xa 0x1 OBJ_FOOT1 0x1
 	pause 0x2
 	launchtemplate Template_Hit 0x2 0x4 0x0 0x0 0x1 0x1
 	playsound2 0x88 SOUND_PAN_TARGET
@@ -21660,10 +21658,7 @@ SPSY_FINISH_PSYCHE:
 	loaddefaultBG
 	launchtask AnimTask_move_bank 0x2 0x5 bank_target 0x3 0x0 0xf 0x1
 	launchtask AnimTask_ScaleMonAndRestore 0x5 0x5 0xfffc 0xfffc 0xf bank_target 0x1
-	launchtemplate 0x83E6820 TEMPLATE_TARGET | 2, 0x4, 0x1 0x0 0x0 0x0  		@ -8, -12
-	launchtemplate 0x83E6820 TEMPLATE_TARGET | 2, 0x4, 0x1 0x1 0x0 0x0
-	launchtemplate 0x83E6820 TEMPLATE_TARGET | 2, 0x4, 0x1 0x2 0x0 0x0
-	launchtemplate 0x83E6820 TEMPLATE_TARGET | 2, 0x4, 0x1 0x3 0x0 0x0
+	call BROKEN_GLASS
 	waitbgfadeout
 	launchtask AnimTask_AllBanksVisible 0xA 0x0
 	waitanimation
@@ -21850,10 +21845,7 @@ SZS_FINISH_BG:
 	loadparticle ANIM_TAG_TORN_METAL
 	playsound2 0x86 SOUND_PAN_TARGET
 	pause 0x3
-	launchtemplate 0x83E6820 TEMPLATE_TARGET | 2, 0x4, 0x1 0x0 0x0 0x0  		@ -8, -12
-	launchtemplate 0x83E6820 TEMPLATE_TARGET | 2, 0x4, 0x1 0x1 0x0 0x0
-	launchtemplate 0x83E6820 TEMPLATE_TARGET | 2, 0x4, 0x1 0x2 0x0 0x0
-	launchtemplate 0x83E6820 TEMPLATE_TARGET | 2, 0x4, 0x1 0x3 0x0 0x0
+	call BROKEN_GLASS
 	launchtask AnimTask_screen_shake 0x5 0x3 bank_target 0x8 0x1c
 	call SZS_ICE_EXPLOSION
 	call SZS_ICE_EXPLOSION
@@ -21868,6 +21860,12 @@ SZS_FINISH_BG:
 	waitanimation
 	endanimation
 
+BROKEN_GLASS:
+	launchtemplate Template_BrickBreakWallShard TEMPLATE_TARGET | 2, 0x4, 0x1 0x0 0x0 0x0  		@ -8, -12
+	launchtemplate Template_BrickBreakWallShard TEMPLATE_TARGET | 2, 0x4, 0x1 0x1 0x0 0x0
+	launchtemplate Template_BrickBreakWallShard TEMPLATE_TARGET | 2, 0x4, 0x1 0x2 0x0 0x0
+	launchtemplate Template_BrickBreakWallShard TEMPLATE_TARGET | 2, 0x4, 0x1 0x3 0x0 0x0
+	return
 
 SZS_ICE_EXPLOSION:
 	playsound2 0xab SOUND_PAN_TARGET
