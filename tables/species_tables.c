@@ -973,6 +973,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smogonOUDoublesBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
+		.randomizerBan = TRUE,
 	},
 #endif
 #ifdef SPECIES_ZAMAZENTA
@@ -997,6 +998,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smogonOUDoublesBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
+		.randomizerBan = TRUE,
 	},
 #endif
 #ifdef SPECIES_ETERNATUS
@@ -5469,6 +5471,36 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 #endif
 #ifdef SPECIES_XERNEAS_NATURAL
 	[SPECIES_XERNEAS_NATURAL] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_CRAMORANT_GULPING
+	[SPECIES_CRAMORANT_GULPING] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_CRAMORANT_GORGING
+	[SPECIES_CRAMORANT_GORGING] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_EISCUE_NOICE
+	[SPECIES_EISCUE_NOICE] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_MORPEKO_HANGRY
+	[SPECIES_MORPEKO_HANGRY] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_ETERNATUS_ETERNAMAX
+	[SPECIES_ETERNATUS_ETERNAMAX] =
 	{
 		.randomizerBan = TRUE,
 	},
