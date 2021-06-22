@@ -417,3 +417,51 @@ void HallOfFame_PrintMonInfo(struct HallofFameMon *currMon, unusedArg u8 a1, unu
 
 	CopyWindowToVram(0, COPYWIN_BOTH);
 }
+
+#define gText_WelcomeToHOF (const u8*) 0x8416008
+#define gText_EmptyString2 (const u8*) 0x84161cd
+extern const u8 gText_Difficulty[];
+extern const u8 gText_NormalModeHOF[];
+extern const u8 gText_HardModeHOF[];
+extern const u8 gText_NoIVGrinding[];
+extern const u8 gText_Scalemons[];
+extern const u8 gText_ShrinkTextHOF[];
+
+extern const struct TextColor sHOFTextColors[];
+void HallOfFame_PrintWelcomeText(void)
+{
+	u8 x = (0xD0 - GetStringWidth(2, gText_WelcomeToHOF, 0)) / 2;
+	StringCopy(gStringVar1, gText_EmptyString2);
+	FillWindowPixelBuffer(0, PIXEL_FILL(0));
+	PutWindowTilemap(0);
+	WindowPrint(0, 2, x, 1, &sHOFTextColors[0], 0, gText_WelcomeToHOF);
+
+	StringAppend(gStringVar1, gText_ShrinkTextHOF);
+	if(FlagGet(FLAG_NO_GRINDING_IV) || FlagGet(FLAG_NO_GRINDING_EV))
+	{
+		StringAppend(gStringVar1, gText_NoIVGrinding);
+	}
+	if(FlagGet(FLAG_HAS_USED_NORMAL_MODE))
+	{
+		StringAppend(gStringVar1, gText_NormalModeHOF);
+	}
+	else if(!FlagGet(FLAG_HARD_MODE))
+	{
+		StringAppend(gStringVar1, gText_NormalModeHOF);
+	}
+	else
+	{
+		StringAppend(gStringVar1, gText_HardModeHOF);
+	}
+	if(FlagGet(FLAG_SCALEMONS))
+	{
+		StringAppend(gStringVar1, gText_Scalemons);
+	}
+
+	StringAppend(gStringVar1, gText_Difficulty);
+
+	u8 x2 = (0xD0 - GetStringWidth(2, gStringVar1, 0)) / 2;
+	WindowPrint(0, 2, x2, 20, &sHOFTextColors[0], 0, gStringVar1);
+
+	CopyWindowToVram(0, COPYWIN_BOTH);
+}

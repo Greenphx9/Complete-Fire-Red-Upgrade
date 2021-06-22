@@ -10974,9 +10974,9 @@ ANCHORANGLED: objtemplate ANIM_TAG_ANCHOR ANIM_TAG_CHAIN_LINK OAM_NORMAL_32x32 g
 ANCHORSHOT_ASM:
 	push {r1-r3}
 	strh r0, [r4, #0x22]
-	bl IsAnimMoveThunderWave
+	bl IsAnimMoveWithChain
 	cmp r0, #0x0
-	beq AnchorShota
+	bne AnchorShota
 	ldr r0, .NormalTWaveTemplate
 	b Jump
 
@@ -10986,11 +10986,11 @@ Jump:
 	pop {r1-r3}
 	add r1, #0x20
 	lsl r1, #0x10
-	ldr r2, =(0x80AE48C +1)
+	ldr r2, =(0x80AE48C | 1)
 	bx r2
 
 .align 2
-.NormalTWaveTemplate: .word 0x83E60B8
+.NormalTWaveTemplate: .word Template_ThunderWave
 .ATemplate: .word CHAIN
 CHAIN: objtemplate ANIM_TAG_CHAIN_LINK ANIM_TAG_CHAIN_LINK OAM_OFF_32x16 gDummySpriteAnimTable 0x0 gDummySpriteAffineAnimTable 0x80AE471
 
@@ -13168,8 +13168,8 @@ ANIM_SPIRITSHACKLE:
 	pause 0x8
 	launchtask AnimTask_move_bank 0x2 0x5 bank_target 0x3 0x0 0xa 0x1
 	waitanimation
-	soundcomplex 0x5F SOUND_PAN_ATTACKER 0x1c 0x2
-	launchtemplate SHACKLE_CHAIN 0x82 0x2 0xfff0 0xfff0
+	soundcomplex 0x5F SOUND_PAN_TARGET 0x1c 0x2
+	launchtemplate SHACKLE_CHAIN TEMPLATE_TARGET | 2, 0x2 0xfff0 0xfff0
 	pause 0x4
 	launchtemplate SHACKLE_CHAIN 0x82 0x2 0xfff0 0x0
 	pause 0x4
@@ -13192,8 +13192,8 @@ ANIM_SPOTLIGHT:
 	launchtask 0x80DEDD9 0x2 0x0
 	launchtask 0x80BAB39 0x2 0x5 0xf8 0x3 0x0 0xa 0x0
 	waitanimation
-	playsound2 0x5C SOUND_PAN_ATTACKER
-	launchtemplate 0x83FF00C 0x82 0x2 0x0 0xfff8
+	playsound2 0x5C SOUND_PAN_TARGET
+	launchtemplate 0x83FF00C TEMPLATE_TARGET | 2, 0x2 0x0 0xfff8
 	pause 0x40
 	launchtask  0x80BAB39 0x2 0x5 0xf8 0x3 0xa 0x0 0x1
 	waitanimation
@@ -18470,7 +18470,6 @@ DARK_PULSE_GEYSER: objtemplate ANIM_TAG_PURPLE_RING ANIM_TAG_PURPLE_RING OAM_DOU
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
 .equ THUNDER_CAGE_BALL_TIME, 0x64
-
 @Credits to Skeli
 .global ANIM_THUNDER_CAGE
 ANIM_THUNDER_CAGE:
@@ -18605,20 +18604,21 @@ ANIM_ASTRAL_BARRAGE:
 ANIM_GLACIAL_LANCE:
 	loadparticle ANIM_TAG_ICICLE_SPEAR
 	loadparticle ANIM_TAG_ICE_CUBE
-	loadparticle ANIM_TAG_TORN_METAL
+	loadparticle ANIM_TAG_ICE_CRYSTALS @ice
 	launchtask AnimTask_pal_fade 0xa 0x5 PAL_BG 0x1 0x0 0xA 0x3C00 @;Royal Blue
 	pokespritetobg bank_target
-	leftbankBG_over_partnerBG bank_target
 	playsound2 0xEB SOUND_PAN_TARGET
-	launchtask AnimTask_FrozenIceCube TEMPLATE_TARGET | 2, 0x0
-	launchtemplate LARGE_ICE_LANCE TEMPLATE_TARGET | 2 0x7 0, 30, 0, 0, 30, 18, 10
-	pause 30
+	launchtask AnimTask_CentredFrozenIceCube TEMPLATE_TARGET | 2, 0x0
+	launchtemplate LARGE_ICE_LANCE TEMPLATE_TARGET | 2 0x7 0, 40, 0, 0, 40, 50, 10
+	pause 60
 	launchtask AnimTask_FlashAnimTagWithColor 0x2 0x7 ANIM_TAG_ICICLE_SPEAR 0x4 0x1 0x7FFF 0x10 0x0 0x0
 	playsound2 0xca SOUND_PAN_TARGET
-	pause 22
-	launchtask AnimTask_ShakeTargetBasedOnMovePowerOrDmg 0x2 0x5 0x0 0x1 0x14 0x1 0x0
+	pause 38
 	playsound2 0xBF SOUND_PAN_TARGET
-	call BROKEN_GLASS
+	launchtask AnimTask_move_bank 0x5 0x5 bank_target 0x6 0x0 0x34 0x1
+	launchtask AnimTask_move_bank 0x5 0x5 target_partner 0x6 0x0 0x34 0x1
+	pause 4
+	call FREEZE_CHANCE_ANIM_DOUBLES
 	waitanimation
 	launchtask AnimTask_pal_fade 0xa 0x5 PAL_BG 0x0 0xA 0x0 0x3C00 @;Royal Blue
 	waitanimation
