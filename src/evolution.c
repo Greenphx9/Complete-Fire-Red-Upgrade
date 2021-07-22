@@ -17,8 +17,6 @@ evolution.c
 	handles old and new evolution methods
 */
 
-static bool8 HasHighNature(struct Pokemon* mon);
-
 u16 GetEvolutionTargetSpecies(struct Pokemon* mon, u8 type, u16 evolutionItem)
 {
 	u32 i, j;
@@ -423,7 +421,7 @@ bool8 IsOtherEvolutionMethod(u8 method)
 	}
 }
 
-static bool8 HasHighNature(struct Pokemon* mon)
+bool8 HasHighNature(struct Pokemon* mon)
 {
 	switch (GetNature(mon))
 	{
@@ -444,6 +442,22 @@ static bool8 HasHighNature(struct Pokemon* mon)
 		default:
 			return FALSE;
 	}
+}
+
+bool8 EvolvesViaScoring3Crits(struct Pokemon* mon)
+{
+	u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+	const struct Evolution* evolutions = gEvolutionTable[species];
+
+	for (u32 i = 0; i < EVOS_PER_MON; ++i)
+	{
+		if (evolutions[i].method == EVO_NONE) //Most likely end of entries
+			break; //Break now to save time
+		else if (evolutions[i].method == EVO_CRITICAL_HIT)
+			return TRUE;
+	}
+
+	return FALSE;
 }
 
 u16 GetMonDevolution(struct Pokemon* mon)

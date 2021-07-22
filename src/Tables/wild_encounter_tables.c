@@ -2349,9 +2349,9 @@ const struct WildPokemonHeader gWildMonMorningHeaders[] =
 		.mapGroup = MAP_GROUP(PEWTER_CITY),
 		.mapNum = MAP_NUM(PEWTER_CITY),
 		.landMonsInfo = &gPewterCity_LandMonsDayInfo,
-		.waterMonsInfo = NULL,
+		.waterMonsInfo = &gViridianCity_SurfMonsInfo,
 		.rockSmashMonsInfo = NULL,
-		.fishingMonsInfo = NULL,
+		.fishingMonsInfo = &gViridianCity_FishingMonsInfo,
 						},
 	{
 		.mapGroup = MAP_GROUP(ROUTE_3),
@@ -2874,9 +2874,9 @@ const struct WildPokemonHeader gWildMonEveningHeaders[] =
 		.mapGroup = MAP_GROUP(PEWTER_CITY),
 		.mapNum = MAP_NUM(PEWTER_CITY),
 		.landMonsInfo = &gPewterCity_LandMonsNightInfo,
-		.waterMonsInfo = NULL,
+		.waterMonsInfo = &gViridianCity_SurfMonsInfo,
 		.rockSmashMonsInfo = NULL,
-		.fishingMonsInfo = NULL,
+		.fishingMonsInfo = &gViridianCity_FishingMonsInfo,
 	},
 	{
 		.mapGroup = MAP_GROUP(ROUTE_3),

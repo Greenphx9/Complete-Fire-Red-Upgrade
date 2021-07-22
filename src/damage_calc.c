@@ -125,12 +125,8 @@ void atk04_critcalc(void)
 						#ifdef NATIONAL_DEX_CHANSEY
 						+ 2 * (atkEffect == ITEM_EFFECT_LUCKY_PUNCH && SpeciesToNationalPokedexNum(SPECIES(gBankAttacker)) == NATIONAL_DEX_CHANSEY)
 						#endif
-						#if (defined NATIONAL_DEX_FARFETCHD && defined NATIONAL_DEX_SIRFETCHD)
-						+ 2 * (atkEffect == ITEM_EFFECT_STICK && (SpeciesToNationalPokedexNum(SPECIES(gBankAttacker)) == NATIONAL_DEX_FARFETCHD
-						                                       || SpeciesToNationalPokedexNum(SPECIES(gBankAttacker)) == NATIONAL_DEX_SIRFETCHD))
-						#endif
-						#ifdef SPECIES_PALKIA_ORIGIN
-						+ 2 * (gCurrentMove == MOVE_SPACIALREND && SPECIES(gBankAttacker) == SPECIES_PALKIA_ORIGIN)
+						#ifdef NATIONAL_DEX_FARFETCHD
+						+ 2 * (atkEffect == ITEM_EFFECT_STICK && SpeciesToNationalPokedexNum(SPECIES(gBankAttacker)) == NATIONAL_DEX_FARFETCHD)
 						#endif
 						+ 2 * (gCurrentMove == MOVE_10000000_VOLT_THUNDERBOLT);
 
@@ -212,11 +208,11 @@ static u8 CalcPossibleCritChance(u8 bankAtk, u8 bankDef, u16 move, struct Pokemo
 					+ (gSpecialMoveFlags[move].gHighCriticalChanceMoves)
 					+ (atkEffect == ITEM_EFFECT_SCOPE_LENS)
 					+ (atkAbility == ABILITY_SUPERLUCK)
-					#ifdef SPECIES_CHANSEY
-					+ 2 * (atkEffect == ITEM_EFFECT_LUCKY_PUNCH && atkSpecies == SPECIES_CHANSEY)
+					#ifdef NATIONAL_DEX_CHANSEY
+					+ 2 * (atkEffect == ITEM_EFFECT_LUCKY_PUNCH && SpeciesToNationalPokedexNum(atkSpecies) == NATIONAL_DEX_CHANSEY)
 					#endif
-					#ifdef SPECIES_FARFETCHD
-					+ 2 * (atkEffect == ITEM_EFFECT_STICK && atkSpecies == SPECIES_FARFETCHD)
+					#ifdef NATIONAL_DEX_FARFETCHD
+					+ 2 * (atkEffect == ITEM_EFFECT_STICK && SpeciesToNationalPokedexNum(atkSpecies) == NATIONAL_DEX_FARFETCHD)
 					#endif
 					+ 2 * (move == MOVE_10000000_VOLT_THUNDERBOLT);
 

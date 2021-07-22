@@ -1236,6 +1236,11 @@ void DoStandardWildBattle(void)
 	}
 	#endif
 
+	#ifdef FLAG_AI_CONTROL_BATTLE
+	if (FlagGet(FLAG_AI_CONTROL_BATTLE))
+		gBattleTypeFlags |= BATTLE_TYPE_MOCK_BATTLE;
+	#endif
+
 	CreateBattleStartTask(GetWildBattleTransition(), GetMUS_ForBattle());
 	IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
 	IncrementGameStat(GAME_STAT_WILD_BATTLES);
@@ -1270,6 +1275,11 @@ void sp138_StartLegendaryBattle(void)
 		if (FlagGet(FLAG_TAG_BATTLE))
 			gBattleTypeFlags |=  BATTLE_TYPE_INGAME_PARTNER;
 	}
+	#endif
+
+	#ifdef FLAG_AI_CONTROL_BATTLE
+	if (FlagGet(FLAG_AI_CONTROL_BATTLE))
+		gBattleTypeFlags |= BATTLE_TYPE_MOCK_BATTLE;
 	#endif
 
 	CreateBattleStartTask(0, GetMUS_ForBattle());

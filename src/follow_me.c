@@ -917,7 +917,6 @@ static const union AffineAnimCmd* const sSpriteAffineAnimTable_GrowPlayerFromDoo
 {
 	sSpriteAffineAnim_GrowPlayerFromDoor,
 };
-#endif
 
 static void Task_DestroyEventObjSpriteMatrixOnAffineAnimCompletion(u8 taskId)
 {
@@ -932,6 +931,7 @@ static void Task_DestroyEventObjSpriteMatrixOnAffineAnimCompletion(u8 taskId)
 		DestroyTask(taskId);
 	}
 }
+#endif
 
 void PlayerGoThroughDoor(u8 taskId)
 {
@@ -1030,7 +1030,6 @@ void Task_PlayerExitDoor(u8 taskId)
 	struct Task * task = &gTasks[taskId];
 	s16 *x = &task->data[2];
 	s16 *y = &task->data[3];
-	u8 playerObjId = gPlayerAvatar->eventObjectId;
 
 	switch (task->data[0])
 	{
@@ -1060,6 +1059,7 @@ void Task_PlayerExitDoor(u8 taskId)
 				++task->data[0];
 
 				#ifdef SHRINK_PLAYER_THROUGH_DOOR
+				u8 playerObjId = gPlayerAvatar->eventObjectId;
 				struct Sprite* sprite = &gSprites[gEventObjects[playerObjId].spriteId];
 				sprite->oam.affineMode = ST_OAM_AFFINE_NORMAL;
 				sprite->affineAnims = sSpriteAffineAnimTable_GrowPlayerFromDoor;
@@ -1080,7 +1080,8 @@ void Task_PlayerExitDoor(u8 taskId)
 			}
 			break;
 		case 4:
-			if (FieldFadeTransitionBackgroundEffectIsFinished() && walkrun_is_standing_still() && !FieldIsDoorAnimationRunning() && !FuncIsActiveTask(Task_BarnDoorWipe))
+			if (FieldFadeTransitionBackgroundEffectIsFinished() && !FieldIsDoorAnimationRunning()
+			&& walkrun_is_standing_still() && !FuncIsActiveTask(Task_BarnDoorWipe))
 			{
 				EventObjectClearHeldMovementIfFinished(&gEventObjects[GetEventObjectIdByLocalIdAndMap(EVENT_OBJ_ID_PLAYER, 0, 0)]);
 				++task->data[0];

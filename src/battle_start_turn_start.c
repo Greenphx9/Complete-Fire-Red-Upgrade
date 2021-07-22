@@ -122,8 +122,6 @@ void HandleNewBattleRamClearBeforeBattle(void)
 	#endif
 
 	FormsRevert(gPlayerParty); //Try to reset all forms before battle
-	HeroDuoFormsInit(gPlayerParty);
-	HeroDuoFormsInit(gEnemyParty);
 }
 
 static void SavePartyItems(void)

@@ -749,4 +749,5 @@ StartMenuBagCallback 0806f480 0
 
 #ifdef UNBOUND
 GetCurrentLevelCap 801D79C 0
+ChangeTrainerPicPal 801D7A4 1
 #endif

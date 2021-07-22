@@ -225,6 +225,7 @@ static void CheckShinyMon(struct Pokemon* mon);
 extern u8 GetEVSpreadNumForUnboundRivalChallenge(struct Pokemon* mon, u32 aiFlags, u8 trainerClass);
 extern void TryGiveSpecialTrainerHiddenPower(u16 trainerId, struct Pokemon* mon);
 extern void TryGiveSpecialTrainerStatusCondition(u16 trainerId, struct Pokemon* mon);
+extern u8 GetCurrentLevelCap(void); //Must be implemented yourself
 #endif
 
 #ifdef OPEN_WORLD_TRAINERS
@@ -340,7 +341,20 @@ void BuildTrainerPartySetup(void)
 		{
 			#ifdef FLAG_BATTLE_YOURSELF
 			if (FlagGet(FLAG_BATTLE_YOURSELF))
-				Memcpy(gEnemyParty, gPlayerParty, sizeof(struct Pokemon) * PARTY_SIZE);
+			{
+				u32 k;
+				ZeroEnemyPartyMons();
+				
+				for (i = 0, k = 0; i < PARTY_SIZE; ++i)
+				{
+					u16 species = GetMonData(&gEnemyParty[i], MON_DATA_SPECIES2, NULL);
+					if (species != SPECIES_NONE && species != SPECIES_EGG) //Prevent Eggs from getting in
+					{
+						gEnemyParty[k] = gPlayerParty[i];
+						HealMon(&gEnemyParty[k++]);
+					}
+				}
+			}
 			else
 			#endif
 				CreateNPCTrainerParty(&gEnemyParty[0], gTrainerBattleOpponent_A, TRUE, B_SIDE_OPPONENT);
@@ -476,6 +490,10 @@ void BuildTrainerPartySetup(void)
 			TryGiveMonOnlyMetronome(&gEnemyParty[i]);
 		}
 	}
+
+	//Try change Zacian and Zamazenta's form
+	TryCrownZacianZamazenta(gPlayerParty);
+	TryCrownZacianZamazenta(gEnemyParty);
 
 	if (ViableMonCount(gEnemyParty) <= 1 && !IsRaidBattle()) //Error prevention
 		gBattleTypeFlags &= ~(BATTLE_TYPE_INGAME_PARTNER | BATTLE_TYPE_TWO_OPPONENTS | BATTLE_TYPE_DOUBLE);
@@ -1400,7 +1418,7 @@ u8 GetScaledWildBossLevel(u8 level)
 {
 	#if (defined SCALED_TRAINERS && !defined DEBUG_NO_LEVEL_SCALING)
 	u8 newLevel;
-	
+
 	#ifdef VAR_GAME_DIFFICULTY
 	if (VarGet(VAR_GAME_DIFFICULTY) == OPTIONS_EASY_DIFFICULTY)
 	{
@@ -1422,6 +1440,15 @@ u8 GetScaledWildBossLevel(u8 level)
 
 	if (level > MAX_LEVEL)
 		level = MAX_LEVEL;
+
+	#ifdef FLAG_HARD_LEVEL_CAP
+	u8 levelCap;
+	if (FlagGet(FLAG_HARD_LEVEL_CAP)
+	&& !CantCatchBecauseFlag() //Catchable mon
+	&& level >= (levelCap = GetCurrentLevelCap()))
+		level = levelCap; //Make sure catchable boss is within level cap
+	#endif
+
 	#endif
 
 	return level;
@@ -4472,6 +4499,7 @@ void CreateBoxMon(struct BoxPokemon* boxMon, u16 species, u8 level, u8 fixedIV, 
 		CheckShinyMon((struct Pokemon*) boxMon); //Activate Shiny Charm or fishing chain
 
 	GiveBoxMonInitialMoveset(boxMon);
+	TrySetCorrectToxtricityForm(boxMon);
 }
 
 void CreateMonWithNatureLetter(struct Pokemon* mon, u16 species, u8 level, u8 fixedIV, u8 nature, u8 letter)

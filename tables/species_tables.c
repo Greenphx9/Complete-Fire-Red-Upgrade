@@ -4965,12 +4965,6 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.randomizerBan = TRUE,
 	},
 #endif
-#ifdef SPECIES_MEOWSTIC_FEMALE
-	[SPECIES_MEOWSTIC_FEMALE] =
-	{
-		.randomizerBan = TRUE,
-	},
-#endif
 #ifdef SPECIES_AEGISLASH_BLADE
 	[SPECIES_AEGISLASH_BLADE] =
 	{
@@ -5487,6 +5481,12 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.randomizerBan = TRUE,
 	},
 #endif
+#ifdef SPECIES_TOXTRICITY_LOW_KEY
+	[SPECIES_TOXTRICITY_LOW_KEY] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
 #ifdef SPECIES_EISCUE_NOICE
 	[SPECIES_EISCUE_NOICE] =
 	{
@@ -5501,6 +5501,12 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 #endif
 #ifdef SPECIES_ETERNATUS_ETERNAMAX
 	[SPECIES_ETERNATUS_ETERNAMAX] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_DARMANITAN_G_ZEN
+	[SPECIES_DARMANITAN_G_ZEN] =
 	{
 		.randomizerBan = TRUE,
 	},
