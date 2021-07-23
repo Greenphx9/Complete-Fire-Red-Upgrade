@@ -1875,13 +1875,11 @@ free_temp_tile_data_buffers_if_possible = 0x80F682C | 1;
 decompress_and_copy_tile_data_to_vram = 0x80F6878 | 1;
 ResetBGs = 0x812D594 | 1;
 
-
-
 /* Scanline Effect Functions */
 ScanlineEffect_Stop = 0x8087E64 | 1;
 ScanlineEffect_Clear = 0x8087EA4 | 1;
 ScanlineEffect_SetParams = 0x8087EE4 | 1;
-//ScanlineEffect_InitHBlankDmaTransfer = 0x8087F54 | 1;
+ScanlineEffect_InitHBlankDmaTransfer = 0x8087F54 | 1;
 dp12_b_callback = 0x8087FE0 | 1;
 ScanlineEffect_InitWave = 0x8088230 | 1;
 

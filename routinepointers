@@ -259,3 +259,10 @@ FieldUseFunc_AbilityCapsule 93C7DEC
 FieldUseFunc_FormChangeItem 93C7E70
 
 SoundMainRAM 81DD0B4
+
+##Battle VBlank
+VBlankCB_Battle 800FF6C
+VBlankCB_Battle 8011B80
+VBlankCB_Battle 802AAC4
+VBlankCB_Battle 8077A9C
+
