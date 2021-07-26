@@ -18,3 +18,5 @@ void __attribute__((long_call)) TaskDestroyPicBox(u8 taskId);
 u8 __attribute__((long_call)) PicBoxWindow(u16 x, u16 y, u8, u8);
 void __attribute__((long_call)) Task_ScriptShowMonPic(u8 taskId);
 const struct CompressedSpritePalette* __attribute__((long_call)) GetMGiftMonPal(u16 species, u8 isShiny);
+void __attribute__((long_call)) Task_MultichoiceMenu_HandleInput(u8 taskId);
+void __attribute__((long_call)) DestroyScriptMenuWindow(u8 windowId);
