@@ -422,30 +422,14 @@ bool8 HasMonToSwitchTo(u8 bank)
 
 bool8 CheckContact(u16 move, u8 bank)
 {
-	if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
-	|| ITEM_EFFECT(bank) == ITEM_EFFECT_PROTECTIVE_PADS
-	|| ABILITY(bank) == ABILITY_LONGREACH)
-		return FALSE;
-
-	return TRUE;
+	return gBattleMoves[move].flags & FLAG_MAKES_CONTACT
+		&& !CanNeverMakeContact(bank);
 }
 
 bool8 CheckContactByMon(u16 move, struct Pokemon* mon)
 {
-	if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
-	|| GetMonItemEffect(mon) == ITEM_EFFECT_PROTECTIVE_PADS
-	|| GetMonAbility(mon) == ABILITY_LONGREACH)
-		return FALSE;
-
-	return TRUE;
-}
-
-bool8 IsContactMove(u16 move, u8 bankAtk, u8 bankDef)
-{
-	if (move == MOVE_SHELLSIDEARM && bankAtk != bankDef)
-		return gNewBS->shellSideArmSplit[bankAtk][bankDef] == SPLIT_PHYSICAL; //Calculated in advance
-	else
-		return gBattleMoves[move].flags & FLAG_MAKES_CONTACT;
+	return gBattleMoves[move].flags & FLAG_MAKES_CONTACT
+		&& !CanMonNeverMakeContact(mon);
 }
 
 bool8 CanNeverMakeContact(u8 bank)
@@ -461,7 +445,7 @@ bool8 CanMonNeverMakeContact(struct Pokemon* mon)
 bool8 CanNeverMakeContactByAbilityItemEffect(u8 ability, u8 itemEffect)
 {
 	return ability == ABILITY_LONGREACH
-		|| CanNeverMakeContactByItemEffect(itemEffect);
+		|| itemEffect == ITEM_EFFECT_PROTECTIVE_PADS;
 }
 
 bool8 CanNeverMakeContactByItemEffect(u8 itemEffect)

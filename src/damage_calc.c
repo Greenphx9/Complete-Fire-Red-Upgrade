@@ -377,6 +377,26 @@ s32 ConfusionDamageCalc(void)
 	return gBattleMoveDamage;
 }
 
+static u8 AdjustNumHitsForContactDamage(u8 numHits, s32 currHP, u32 contactDamage)
+{
+	if (contactDamage > 0)
+	{
+		u16 possibleHits = 0;
+
+		do
+		{
+			possibleHits += 1;
+			currHP -= contactDamage;
+		} while (currHP > 0 //Once you take more damage than HP you have left, you faint and can't attack anymore
+			&& possibleHits < numHits);  //Unless you're not going to be hitting that much
+
+		if (possibleHits < numHits) //The attacker will faint before it could do all of the hits
+			numHits = possibleHits;
+	}
+
+	return numHits;
+}
+
 u32 AI_CalcDmg(const u8 bankAtk, const u8 bankDef, const u16 move, struct DamageCalc* damageData)
 {
 	u8 resultFlags = AI_SpecialTypeCalc(move, bankAtk, bankDef);
@@ -440,20 +460,18 @@ u32 AI_CalcDmg(const u8 bankAtk, const u8 bankDef, const u16 move, struct Damage
 
 	damage = (damage * 93) / 100; //Roll 93% damage - about halfway between min & max damage
 
+	u8 numHits = 1;
 	if (gSpecialMoveFlags[move].gTwoToFiveStrikesMoves && ABILITY(bankAtk) == ABILITY_SKILLLINK && move != MOVE_SURGINGSTRIKES)
 	{
-		damage *= 5;
-		return damage;
+		numHits = 5;
 	}
 	else if (gSpecialMoveFlags[move].gTwoToFiveStrikesMoves) //Three hits on average
 	{
-		damage *= 3;
-		return damage;
+		numHits = 3;
 	}
 	else if (gSpecialMoveFlags[move].gTwoStrikesMoves)
 	{
-		damage *= 2;
-		return damage;
+		numHits = 2;
 	}
 	else if (ABILITY(bankAtk) == ABILITY_PARENTALBOND && IsMoveAffectedByParentalBond(move, bankAtk))
 	{
@@ -465,11 +483,20 @@ u32 AI_CalcDmg(const u8 bankAtk, const u8 bankDef, const u16 move, struct Damage
 		return damage;
 	}
 
-	//Multi hit moves skip these checks
-	if (gBattleMoves[move].effect == EFFECT_FALSE_SWIPE
-	|| (BATTLER_MAX_HP(bankDef) && ABILITY(bankDef) == ABILITY_STURDY && NO_MOLD_BREAKERS(ABILITY(bankAtk), move))
-	|| (BATTLER_MAX_HP(bankDef) && IsBankHoldingFocusSash(bankDef)))
-		damage = MathMin(damage, gBattleMons[bankDef].hp - 1);
+	//Try to reduce the number of hits for a multi-hit move if the attacker won't be able to finish because it will be KOd by the contact recoil first
+	if (numHits > 1)
+		numHits = AdjustNumHitsForContactDamage(numHits, gBattleMons[bankAtk].hp, GetContactDamage(move, bankAtk, bankDef));
+
+	if (numHits <= 1)
+	{
+		//Multi hit moves skip these checks
+		if (gBattleMoves[move].effect == EFFECT_FALSE_SWIPE
+		|| (BATTLER_MAX_HP(bankDef) && ABILITY(bankDef) == ABILITY_STURDY && NO_MOLD_BREAKERS(ABILITY(bankAtk), move))
+		|| (BATTLER_MAX_HP(bankDef) && IsBankHoldingFocusSash(bankDef)))
+			damage = MathMin(damage, gBattleMons[bankDef].hp - 1);
+	}
+	else
+		damage *= numHits;
 
 	return damage;
 }
@@ -536,20 +563,18 @@ u32 AI_CalcPartyDmg(u8 bankAtk, u8 bankDef, u16 move, struct Pokemon* monAtk, st
 
 	damage = (damage * 96) / 100; //Roll 96% damage with party mons - be more idealistic
 
+	u8 numHits = 1;
 	if (gSpecialMoveFlags[move].gTwoToFiveStrikesMoves && GetMonAbility(monAtk) == ABILITY_SKILLLINK && move != MOVE_SURGINGSTRIKES)
 	{
-		damage *= 5;
-		return damage;
+		numHits = 5;
 	}
 	else if (gSpecialMoveFlags[move].gTwoToFiveStrikesMoves) //Three hits on average
 	{
-		damage *= 3;
-		return damage;
+		numHits = 3;
 	}
 	else if (gSpecialMoveFlags[move].gTwoStrikesMoves)
 	{
-		damage *= 2;
-		return damage;
+		numHits = 2;
 	}
 	else if (GetMonAbility(monAtk) == ABILITY_PARENTALBOND && IsMoveAffectedByParentalBond(move, bankAtk))
 	{
@@ -561,11 +586,20 @@ u32 AI_CalcPartyDmg(u8 bankAtk, u8 bankDef, u16 move, struct Pokemon* monAtk, st
 		return damage;
 	}
 
-	//Multi hit moves skip these checks
-	if (gBattleMoves[move].effect == EFFECT_FALSE_SWIPE
-	|| (BATTLER_MAX_HP(bankDef) && ABILITY(bankDef) == ABILITY_STURDY && NO_MOLD_BREAKERS(GetMonAbility(monAtk), move))
-	|| (BATTLER_MAX_HP(bankDef) && IsBankHoldingFocusSash(bankDef)))
-		damage = MathMin(damage, gBattleMons[bankDef].hp - 1);
+	//Try to reduce the number of hits for a multi-hit move if the attacker won't be able to finish because it will be KOd by the contact recoil first
+	if (numHits > 1)
+		numHits = AdjustNumHitsForContactDamage(numHits, monAtk->hp, GetContactDamageMonAtk(monAtk, bankDef));
+
+	if (numHits <= 1)
+	{
+		//Multi hit moves skip these checks
+		if (gBattleMoves[move].effect == EFFECT_FALSE_SWIPE
+		|| (BATTLER_MAX_HP(bankDef) && ABILITY(bankDef) == ABILITY_STURDY && NO_MOLD_BREAKERS(GetMonAbility(monAtk), move))
+		|| (BATTLER_MAX_HP(bankDef) && IsBankHoldingFocusSash(bankDef)))
+			damage = MathMin(damage, gBattleMons[bankDef].hp - 1);
+	}
+	else
+		damage *= numHits;
 
 	return damage;
 }
@@ -633,20 +667,18 @@ u32 AI_CalcMonDefDmg(u8 bankAtk, u8 bankDef, u16 move, struct Pokemon* monDef, s
 
 	damage = (damage * 96) / 100; //Roll 96% damage with party mons - be more idealistic
 
+	u8 numHits = 1;
 	if (gSpecialMoveFlags[move].gTwoToFiveStrikesMoves && ABILITY(bankAtk) == ABILITY_SKILLLINK && move != MOVE_SURGINGSTRIKES)
 	{
-		damage *= 5;
-		return damage;
+		numHits = 5;
 	}
 	else if (gSpecialMoveFlags[move].gTwoToFiveStrikesMoves) //Three hits on average
 	{
-		damage *= 3;
-		return damage;
+		numHits = 3;
 	}
 	else if (gSpecialMoveFlags[move].gTwoStrikesMoves)
 	{
-		damage *= 2;
-		return damage;
+		numHits = 2;
 	}
 	else if (ABILITY(bankAtk) == ABILITY_PARENTALBOND && IsMoveAffectedByParentalBond(move, bankAtk))
 	{
@@ -659,15 +691,27 @@ u32 AI_CalcMonDefDmg(u8 bankAtk, u8 bankDef, u16 move, struct Pokemon* monDef, s
 	}
 	
 
-	//Multi hit moves skip these checks
-	if (gBattleMoves[move].effect == EFFECT_FALSE_SWIPE
-	|| (monDef->hp == monDef->maxHP && GetMonAbility(monDef) == ABILITY_STURDY && NO_MOLD_BREAKERS(ABILITY(bankAtk), move))
-	|| (monDef->hp == monDef->maxHP && IsBankHoldingFocusSash(bankDef)))
-		damage = MathMin(damage, monDef->hp - 1);
+	//Try to reduce the number of hits for a multi-hit move if the attacker won't be able to finish because it will be KOd by the contact recoil first
+	if (numHits > 1)
+		numHits = AdjustNumHitsForContactDamage(numHits, gBattleMons[bankAtk].hp, GetContactDamageMonDef(bankAtk, monDef));
 
-	damage += GetMonEntryHazardDamage(monDef, SIDE(bankDef)); //Hazard damage will be taken on switch in so factor it in (helps account for breaking Focus Sash & Sturdy)
+	u32 entryHazardDamage = GetMonEntryHazardDamage(monDef, SIDE(bankDef));
+	if (numHits <= 1)
+	{
+		//Multi hit moves skip these checks
+		if (gBattleMoves[move].effect == EFFECT_FALSE_SWIPE)
+			damage = MathMin(damage, monDef->hp - 1);
+		else if (entryHazardDamage == 0) //Focus Sash and Sturdy would work
+		{
+			if ((monDef->hp == monDef->maxHP && GetMonAbility(monDef) == ABILITY_STURDY && NO_MOLD_BREAKERS(ABILITY(bankAtk), move))
+			 || (monDef->hp == monDef->maxHP && IsBankHoldingFocusSash(bankDef)))
+				damage = MathMin(damage, monDef->hp - 1);
+		}
+	}
+	else
+		damage *= numHits;
 
-	return damage;
+	return damage + entryHazardDamage; //Hazard damage will be taken on switch in so factor it in
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1983,34 +2027,20 @@ void PopulateDamageCalcStructWithBaseAttackerData(struct DamageCalc* data)
 		data->atkPartnerAbility = ABILITY_NONE;
 		data->atkHP = monAtk->hp;
 		data->atkMaxHP = monAtk->maxHP;
+		data->atkSpeed = SpeedCalcMon(side, monAtk);
 		data->atkStatus3 = 0;
+		data->atkIsGrounded = CheckMonGrounding(monAtk);
 
-		if (data->atkImposter) //Would only be set in a non-Future Sight damage calc
-		{
-			u8 imposterBank = data->atkImposterBank;
-			data->atkAbility = ABILITY(imposterBank);
-			data->atkSpecies = SPECIES(imposterBank);
-			data->atkSpeed = SpeedCalc(imposterBank);
-		}
+		if (monAtk->condition == 0
+		&& gSideTimers[side].tspikesAmount > 0
+		&& data->atkIsGrounded
+		&& !IsMonOfType(monAtk, TYPE_POISON)
+		&& data->atkItemEffect != ITEM_EFFECT_HEAVY_DUTY_BOOTS //Affected by hazards
+		&& !BankSideHasSafeguard(bankAtk)
+		&& CanPartyMonBePoisoned(monAtk))
+			data->atkStatus1 = STATUS1_POISON; //Will be poisoned - relevant for Facade
 		else
-		{
-			data->atkSpecies = monAtk->species;
-			data->atkSpeed = SpeedCalcMon(side, monAtk);
-		}
-
-		data->atkStatus1 = monAtk->condition;
-		if (data->atkStatus1 == 0 && !(data->specialFlags & FLAG_FUTURE_SIGHT_DAMAGE))
-		{
-			if (gSideTimers[side].tspikesAmount > 0
-			&& data->atkIsGrounded
-			&& !IsMonOfType(monAtk, TYPE_POISON)
-			&& IsMonAffectedByHazardsByItemEffect(monAtk, data->atkItemEffect) //Affected by hazards
-			&& !BankSideHasSafeguard(bankAtk)
-			&& CanPartyMonBePoisoned(monAtk))
-				data->atkStatus1 = STATUS1_POISON; //Will be poisoned - relevant for Facade
-			//else //TO-DO Flame Orb when switching in
-			//	data->atkStatus1 = GetMonPotentialStatus1(monAtk, data->atkItemEffect);
-		}
+			data->atkStatus1 = monAtk->condition;
 	}
 	else //Load from bank
 	{
@@ -2042,6 +2072,7 @@ void PopulateDamageCalcStructWithBaseDefenderData(struct DamageCalc* data)
 
 	if (useMonDef)
 	{
+		u8 side = SIDE(bankDef);
 		struct Pokemon* monDef = data->monDef;
 
 		data->defSpecies = monDef->species;
@@ -2051,10 +2082,9 @@ void PopulateDamageCalcStructWithBaseDefenderData(struct DamageCalc* data)
 		data->defItemQuality = ItemId_GetHoldEffectParam(monDef->item);
 		data->defHP = monDef->hp;
 		data->defMaxHP = monDef->maxHP;
-		data->defSpeed = SpeedCalcMon(SIDE(bankDef), monDef);
-		data->defStatus1 = monDef->condition;
+		data->defSpeed = SpeedCalcMon(side, monDef);
 		data->defStatus3 = 0;
-		data->defSideStatus = gSideStatuses[SIDE(bankDef)];
+		data->defSideStatus = gSideStatuses[side];
 		data->defIsGrounded = CheckMonGrounding(monDef);
 
 		data->defBuff = (data->defAbility == ABILITY_DAUNTLESSSHIELD) ? 7 : 6;
@@ -2070,6 +2100,17 @@ void PopulateDamageCalcStructWithBaseDefenderData(struct DamageCalc* data)
 			data->defense = monDef->defense;
 			data->spDefense = monDef->spDefense;
 		}
+
+		if (monDef->condition == 0
+		&& gSideTimers[side].tspikesAmount > 0
+		&& data->defIsGrounded
+		&& !IsMonOfType(monDef, TYPE_POISON)
+		&& data->defItemEffect != ITEM_EFFECT_HEAVY_DUTY_BOOTS //Affected by hazards
+		&& !BankSideHasSafeguard(bankDef)
+		&& CanPartyMonBePoisoned(monDef))
+			data->defStatus1 = STATUS1_POISON; //Will be poisoned - relevant for things like Marvel Scale
+		else
+			data->defStatus1 = monDef->condition;
 	}
 	else //Load from bank
 	{
