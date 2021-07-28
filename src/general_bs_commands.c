@@ -1367,6 +1367,7 @@ void atk1B_cleareffectsonfaint(void) {
 				{
 					gLastUsedAbility = partnerAbility;
 					*GetAbilityLocation(partner) = CopyAbility(gActiveBattler);
+					SetTookAbilityFrom(partner, gActiveBattler);
 					gEffectBank = gActiveBattler;
 					gBattleScripting.bank = partner;
 					gNewBS->ReceiverActivated = TRUE;
@@ -1374,7 +1375,7 @@ void atk1B_cleareffectsonfaint(void) {
 					gBattlescriptCurrInstr = BattleScript_Receiver;
 
 					gAbilityPopUpHelper = gLastUsedAbility;
-					gAbilityPopUpSpecies = SPECIES(gActiveBattler);
+					SetProperAbilityPopUpSpecies(partner);
 					EmitDataTransfer(0, &gAbilityPopUpHelper, 3, &gAbilityPopUpHelper); //Copy Ability and Species
 					MarkBufferBankForExecution(gActiveBattler);
 
@@ -4734,6 +4735,7 @@ void atkD3_trycopyability(void) //Role Play
 	{
 		gNewBS->backupAbility = atkAbility;
 		*atkAbilityLoc = defAbility;
+		SetTookAbilityFrom(gBankAttacker, gBankTarget);
 		gLastUsedAbility = atkAbility; //To display what changed
 		TransferAbilityPopUp(gBankAttacker, gLastUsedAbility);
 		ResetVarsForAbilityChange(gBankAttacker);
@@ -4805,6 +4807,7 @@ void atkDA_tryswapabilities(void) //Skill Swap
 	{
 		*atkAbilityLoc = defAbility;
 		*defAbilityLoc = atkAbility;
+		SwapTookAbilityFrom(gBankAttacker, gBankTarget);
 
 		ResetVarsForAbilityChange(gBankAttacker);
 		ResetVarsForAbilityChange(gBankTarget);

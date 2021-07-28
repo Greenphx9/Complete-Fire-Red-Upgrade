@@ -702,6 +702,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				{
 					gBankAttacker = bank;
 					*GetAbilityLocation(bank) = *GetAbilityLocation(gActiveBattler);
+					SetTookAbilityFrom(bank, gActiveBattler);
 					gLastUsedAbility = *GetAbilityLocation(gActiveBattler);
 					//gLastUsedSpecies = SPECIES(gActiveBattler);
 					BattleScriptPushCursorAndCallback(BattleScript_TraceActivates);
@@ -3065,7 +3066,7 @@ void TransferAbilityPopUp(u8 bank, u8 ability)
 {
 	gActiveBattler = bank;
 	gAbilityPopUpHelper = ability;
-	gAbilityPopUpSpecies = SPECIES(bank);
+	SetProperAbilityPopUpSpecies(bank);
 
 	EmitDataTransfer(0, &gAbilityPopUpHelper, 3, &gAbilityPopUpHelper); //Copy Ability and species
 	MarkBufferBankForExecution(gActiveBattler);

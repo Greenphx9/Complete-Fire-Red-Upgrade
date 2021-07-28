@@ -48,6 +48,41 @@ void CopyAbilityName(u8* dst, const u8 ability, const u16 species)
 	StringCopy(dst, GetAbilityName(ability, species));
 }
 
+u16 GetProperAbilityPopUpSpecies(u8 bank)
+{
+	if (gNewBS->tookAbilityFrom[bank] != SPECIES_NONE)
+		return gNewBS->tookAbilityFrom[bank];
+	else
+		return SPECIES(bank);
+}
+
+void SetProperAbilityPopUpSpecies(u8 bank)
+{
+	gAbilityPopUpSpecies = GetProperAbilityPopUpSpecies(bank);
+}
+
+void SetTookAbilityFrom(u8 taker, u8 takenFrom)
+{
+	if (gNewBS->tookAbilityFrom[takenFrom] != SPECIES_NONE)
+		gNewBS->tookAbilityFrom[taker] = gNewBS->tookAbilityFrom[takenFrom]; //Pass along species
+	else
+		gNewBS->tookAbilityFrom[taker] = SPECIES(takenFrom);
+}
+
+void SwapTookAbilityFrom(u8 bank1, u8 bank2)
+{
+	u16 species1 = GetProperAbilityPopUpSpecies(bank1);
+	u16 species2 = GetProperAbilityPopUpSpecies(bank2);
+
+	gNewBS->tookAbilityFrom[bank1] = species2;
+	gNewBS->tookAbilityFrom[bank2] = species1;
+}
+
+void ResetTookAbilityFrom(u8 bank)
+{
+	gNewBS->tookAbilityFrom[bank] = SPECIES_NONE;
+}
+
 const u8* GetAbilityDescriptionOverride(const u8 ability, const u16 species) //Bypasses the 255 Ability limitation and implements new Abilities
 {
 	for(u8 i = 0; i < ARRAY_COUNT(sReplaceAbilities); i++)

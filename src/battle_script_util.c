@@ -1322,6 +1322,7 @@ void AbilityChangeBSFunc(void)
 			else
 			{
 				*defAbilityLoc = ABILITY_INSOMNIA;
+				ResetTookAbilityFrom(gBankTarget);
 				gLastUsedAbility = defAbility; //Original ability
 				ResetVarsForAbilityChange(gBankTarget);
 				gBattleStringLoader = WorrySeedString;
@@ -1350,12 +1351,14 @@ void AbilityChangeBSFunc(void)
 		case MOVE_ENTRAINMENT:
 			if (atkAbility == ABILITY_NONE
 			||  IsDynamaxed(gBankTarget)
+			||  *atkAbilityLoc == *defAbilityLoc
 			||  gSpecialAbilityFlags[atkAbility].gEntrainmentBannedAbilitiesAttacker
 			||  gSpecialAbilityFlags[defAbility].gEntrainmentBannedAbilitiesTarget)
 				gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
 			else
 			{
 				*defAbilityLoc = atkAbility;
+				SetTookAbilityFrom(gBankTarget, gBankAttacker);
 				gLastUsedAbility = defAbility; //Original ability
 				ResetVarsForAbilityChange(gBankTarget);
 				gBattleStringLoader = EntrainmentString;
@@ -1370,6 +1373,7 @@ void AbilityChangeBSFunc(void)
 			else
 			{
 				*defAbilityLoc = ABILITY_SIMPLE;
+				ResetTookAbilityFrom(gBankTarget);
 				gLastUsedAbility = defAbility; //Original ability
 				ResetVarsForAbilityChange(gBankTarget);
 				gBattleStringLoader = SimpleBeamString;
