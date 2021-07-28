@@ -3,6 +3,7 @@
 #include "../../include/random.h"
 #include "../../include/constants/items.h"
 
+#include "../../include/new/ability_tables.h"
 #include "../../include/new/accuracy_calc.h"
 #include "../../include/new/ai_advanced.h"
 #include "../../include/new/ai_util.h"
@@ -1080,7 +1081,7 @@ bool8 MoveKnocksOutXHitsFromParty(u16 move, struct Pokemon* monAtk, u8 bankDef, 
 {
 	u8 ability = ABILITY(bankDef);
 	u16 species = SPECIES(bankDef);
-	bool8 noMoldBreakers = NO_MOLD_BREAKERS(GetMonAbility(monAtk), move);
+	bool8 noMoldBreakers = NO_MOLD_BREAKERS(GetMonAbilityAfterTrace(monAtk, bankDef), move);
 
 	if (MonMoveBlockedBySubstitute(move, monAtk, bankDef)
 	#ifdef SPECIES_MIMIKYU
@@ -1797,7 +1798,7 @@ u8 GetAIAbility(u8 bankAtk, u8 bankDef, u16 move)
 	u8 ability = ABILITY_NONE;
 
 	if (!ShouldAIDelayMegaEvolution(bankAtk, bankDef, move, TRUE))
-		ability = GetBankMegaFormAbility(bankAtk);
+		ability = GetBankMegaFormAbility(bankAtk, bankDef);
 
 	if (ability == ABILITY_NONE)
 		return ABILITY(bankAtk);
@@ -1838,7 +1839,7 @@ u8 GetMonAbilityAfterTrace(struct Pokemon* mon, u8 foe)
 	if (IS_SINGLE_BATTLE && ability == ABILITY_TRACE)
 	{
 		u8 foeAbility = *GetAbilityLocation(foe);
-		if (gSpecialAbilityFlags[foeAbility].gTraceBannedAbilities)
+		if (!gSpecialAbilityFlags[foeAbility].gTraceBannedAbilities)
 			ability = foeAbility; //What the Ability will become
 	}
 
@@ -2287,7 +2288,7 @@ u32 GetContactDamage(u16 move, u16 bankAtk, u16 bankDef)
 
 u32 GetContactDamageMonAtk(struct Pokemon* monAtk, u16 bankDef)
 {
-	if (CanMonNeverMakeContact(monAtk) || GetMonAbility(monAtk) == ABILITY_MAGICGUARD)
+	if (CanMonNeverMakeContact(monAtk) || GetMonAbilityAfterTrace(monAtk, bankDef) == ABILITY_MAGICGUARD)
 		return 0;
 
 	return GetContactDamageByDefAbilityItemEffect(ABILITY(bankDef), ITEM_EFFECT(bankDef), monAtk->maxHP);
@@ -2298,7 +2299,7 @@ u32 GetContactDamageMonDef(u16 bankAtk, struct Pokemon* monDef)
 	if (CanNeverMakeContact(bankAtk) || ABILITY(bankAtk) == ABILITY_MAGICGUARD)
 		return 0;
 
-	return GetContactDamageByDefAbilityItemEffect(GetMonAbility(monDef), GetMonItemEffect(monDef), GetBaseMaxHP(bankAtk));
+	return GetContactDamageByDefAbilityItemEffect(GetMonAbilityAfterTrace(monDef, bankAtk), GetMonItemEffect(monDef), GetBaseMaxHP(bankAtk));
 }
 
 u16 CalcSecondaryEffectChance(u8 bank, u16 move)
@@ -2338,7 +2339,7 @@ bool8 ShouldAIDelayMegaEvolution(u8 bankAtk, unusedArg u8 bankDef, u16 move, boo
 		return TRUE; //This bank can't Mega Evolve
 
 	atkAbility = ABILITY(bankAtk);
-	megaAbility = GetBankMegaFormAbility(bankAtk);
+	megaAbility = GetBankMegaFormAbility(bankAtk, bankDef);
 
 	if (BATTLER_SEMI_INVULNERABLE(bankAtk))
 		return TRUE; //Can't Mega Evolve this turn
