@@ -20,6 +20,8 @@ void SwapTookAbilityFrom(u8 bank1, u8 bank2);
 void ResetTookAbilityFrom(u8 bank);
 
 bool8 IsMoldBreakerAbility(u8 ability);
+bool8 IsClearBodyAbility(u8 ability);
+bool8 IsMoxieAbility(u8 ability);
 bool8 SpeciesHasTurboblaze(u16 species);
 bool8 SpeciesHasTeravolt(u16 species);
 bool8 SpeciesHasStrongBeak(u16 species);
@@ -28,6 +30,10 @@ bool8 SpeciesHasEarthilate(u16 species);
 bool8 AbilityIncreasesWildItemChance(u8 ability);
 bool8 IsUnnerveAbility(u8 ability);
 bool8 UnnerveOnOpposingField(u8 bank);
+bool8 AbilityPreventsLoweringAtk(u8 ability);
+bool8 AbilityBlocksIntimidate(u8 ability);
+bool8 IsWhiteSmokeAbility(u8 ability, u16 species);
+bool8 IsVitalSpiritAbility(u8 ability, u16 species);
 
 struct SpecialReplaceAbilityFlags
 {

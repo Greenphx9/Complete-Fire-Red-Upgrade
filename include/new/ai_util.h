@@ -12,7 +12,7 @@ bool8 CanKnockOut(u8 bankAtk, u8 bankDef);
 bool8 GetCanKnockOut(u8 bankAtk, u8 bankDef);
 bool8 Can2HKO(u8 bankAtk, u8 bankDef);
 bool8 GetCan2HKO(u8 bankAtk, u8 bankDef);
-bool8 CanKnockOutAfterHealing(u8 bankAtk, u8 bankDef, u16 healAmount, u8 numHits);
+bool8 CanKnockOutAfterHealing(u8 bankAtk, u8 bankDef, u16 healAmount, u8 numHits, bool8 dealOneHitFirst);
 bool8 CanKnockOutWithoutMove(const u16 ignoredMove, const u8 bankAtk, const u8 bankDef, const bool8 ignoreFutureAttacks);
 bool8 CanKnockOutWithChipDamage(u8 bankAtk, u8 bankDef);
 bool8 Can2HKOWithChipDamage(u8 bankAtk, u8 bankDef);
@@ -176,6 +176,8 @@ bool8 HighChanceOfBeingImmobilized(u8 bank);
 
 bool8 GetHealthPercentage(u8 bank);
 bool8 TeamFullyHealedMinusBank(u8 bank);
+u8 CountUsefulBoosts(u8 bank);
+u8 CountUsefulDebuffs(u8 bank);
 bool8 AnyStatIsRaised(u8 bank);
 bool8 AnyUsefulStatIsRaised(u8 bank);
 bool8 AnyUsefulOffseniveStatIsRaised(u8 bank);

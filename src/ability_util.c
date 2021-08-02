@@ -119,6 +119,44 @@ bool8 IsMoldBreakerAbility(u8 ability)
 	return ability == ABILITY_MOLDBREAKER;
 }
 
+bool8 IsClearBodyAbility(u8 ability)
+{
+	return ability == ABILITY_CLEARBODY
+		#ifdef ABILITY_FULLMETALBODY
+		|| ability == ABILITY_FULLMETALBODY
+		#endif
+		#ifdef ABILITY_WHITESMOKE
+		|| ability == ABILITY_WHITESMOKE
+		#endif
+		;
+}
+
+bool8 IsMoxieAbility(u8 ability)
+{
+	switch (ability)
+	{
+		case ABILITY_MOXIE:
+		#ifdef ABILITY_GRIMNEIGH
+		case ABILITY_GRIMNEIGH:
+		#endif
+		#ifdef ABILITY_CHILLINGNEIGH
+		case ABILITY_CHILLINGNEIGH:
+		#endif
+		#ifdef ABILITY_ASONE_GRIM
+		case ABILITY_ASONE_GRIM:
+		#endif
+		#ifdef ABILITY_ASONE_CHILLING
+		case ABILITY_ASONE_CHILLING:
+		#endif
+		case ABILITY_BEASTBOOST:
+		case ABILITY_SOULHEART:
+		case ABILITY_BATTLEBOND:
+			return TRUE;
+		default:
+			return FALSE;
+	}
+}
+
 bool8 SpeciesHasTurboblaze(u16 species)
 {
 	return gSpecialReplaceAbilityFlags[species].hasTurboblaze;
@@ -166,4 +204,94 @@ bool8 UnnerveOnOpposingField(u8 bank)
 		|| ABILITY_ON_OPPOSING_FIELD(bank, ABILITY_ASONE_CHILLING)
 		#endif
 		;
+}
+
+bool8 AbilityPreventsLoweringAtk(u8 ability)
+{
+	return ability == ABILITY_HYPERCUTTER
+		|| ability == ABILITY_MIRRORARMOR
+		|| IsClearBodyAbility(ability);
+}
+
+bool8 AbilityBlocksIntimidate(u8 ability)
+{
+	return ability == ABILITY_INNERFOCUS
+		|| ability == ABILITY_OWNTEMPO
+		|| ability == ABILITY_OBLIVIOUS
+		|| ability == ABILITY_SCRAPPY;
+}
+
+bool8 IsWhiteSmokeAbility(u8 ability, u16 species)
+{
+	if (!IsClearBodyAbility(ability))
+		return FALSE;
+
+	switch (SpeciesToNationalPokedexNum(species))
+	{
+		#if (defined NATIONAL_DEX_TORKOAL && defined NATIONAL_DEX_HEATMOR && defined NATIONAL_DEX_SIZZLIPEDE && defined NATIONAL_DEX_CENTISKORCH)
+		case NATIONAL_DEX_TORKOAL:
+		case NATIONAL_DEX_HEATMOR:
+			return TRUE;
+		#endif
+	}
+
+	return FALSE;
+}
+
+bool8 IsVitalSpiritAbility(u8 ability, u16 species)
+{
+	if (ability != ABILITY_INSOMNIA)
+		return FALSE;
+
+	switch (SpeciesToNationalPokedexNum(species))
+	{
+		#ifdef NATIONAL_DEX_MANKEY
+		case NATIONAL_DEX_MANKEY:
+		#endif
+		#ifdef NATIONAL_DEX_PRIMEAPE
+		case NATIONAL_DEX_PRIMEAPE:
+		#endif
+		#ifdef NATIONAL_DEX_MR_MIME
+		case NATIONAL_DEX_MR_MIME:
+		#endif
+		#ifdef NATIONAL_DEX_ELECTABUZZ
+		case NATIONAL_DEX_ELECTABUZZ:
+		#endif
+		#ifdef NATIONAL_DEX_ELECTABUZZ
+		case NATIONAL_DEX_MAGMAR:
+		#endif
+		#ifdef NATIONAL_DEX_DELIBIRD
+		case NATIONAL_DEX_DELIBIRD:
+		#endif
+		#ifdef NATIONAL_DEX_TYROGUE
+		case NATIONAL_DEX_TYROGUE:
+		#endif
+		#ifdef NATIONAL_DEX_ELEKID
+		case NATIONAL_DEX_ELEKID:
+		#endif
+		#ifdef NATIONAL_DEX_MAGBY
+		case NATIONAL_DEX_MAGBY:
+		#endif
+		#ifdef NATIONAL_DEX_VIGOROTH
+		case NATIONAL_DEX_VIGOROTH:
+		#endif
+		#ifdef NATIONAL_DEX_ELECTIVIRE
+		case NATIONAL_DEX_ELECTIVIRE:
+		#endif
+		#ifdef NATIONAL_DEX_MAGMORTAR
+		case NATIONAL_DEX_MAGMORTAR:
+		#endif
+		#ifdef NATIONAL_DEX_LILLIPUP
+		case NATIONAL_DEX_LILLIPUP:
+		#endif
+		#ifdef NATIONAL_DEX_ROCKRUFF
+		case NATIONAL_DEX_ROCKRUFF:
+		#endif
+		#ifdef NATIONAL_DEX_LYCANROC
+		case NATIONAL_DEX_LYCANROC:
+		#endif
+			return TRUE;
+	}
+
+	return FALSE;
 }

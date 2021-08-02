@@ -274,7 +274,7 @@ bool8 IsClassDoublesTrickRoomSetup(u8 class)
 bool8 IsClassDoublesTrickRoomer(u8 class)
 {
 	return class == FIGHT_CLASS_DOUBLES_TRICK_ROOM_ATTACKER
-			     || class == FIGHT_CLASS_DOUBLES_TRICK_ROOM_SETUP;
+		|| class == FIGHT_CLASS_DOUBLES_TRICK_ROOM_SETUP;
 }
 
 bool8 IsClassDoublesUtility(u8 class)
@@ -307,7 +307,7 @@ bool8 IsClassDoublesSpecific(u8 class)
 bool8 IsClassDoublesAttacker(u8 class)
 {
 	return class == FIGHT_CLASS_DOUBLES_TRICK_ROOM_ATTACKER
-			     || class == FIGHT_CLASS_DOUBLES_SETUP_ATTACKER;
+		|| class ==  FIGHT_CLASS_DOUBLES_SETUP_ATTACKER;
 }
 
 bool8 IsClassDamager(u8 class)
@@ -750,6 +750,9 @@ bool8 ShouldTrap(u8 bankAtk, u8 bankDef, u16 move, u8 class)
 
 	if (IsClassStall(class))
 	{
+		if (!HasMonToSwitchTo(bankDef))
+			return FALSE;
+
 		if (MoveWouldHitFirst(move, bankAtk, bankDef)) //Attacker goes first
 		{
 			if (!CanKnockOut(bankDef, bankAtk)) //Enemy can't kill attacker
@@ -915,7 +918,7 @@ u16 GetAmountToRecoverBy(u8 bankAtk, u8 bankDef, u16 move)
 				amountToRecover = 0; //The AI wouldn't actually recover any HP
 	}
 
-	return MathMin(amountToRecover, gBattleMons[bankAtk].maxHP - gBattleMons[bankAtk].hp);
+	return MathMin(amountToRecover, gBattleMons[bankAtk].maxHP - 1); //Can recover at most up to Max HP - 1
 }
 
 bool8 ShouldRecover(u8 bankAtk, u8 bankDef, u16 move)
@@ -938,16 +941,16 @@ bool8 ShouldRecover(u8 bankAtk, u8 bankDef, u16 move)
 	//{
 		if (move == 0xFFFF || MoveWouldHitFirst(move, bankAtk, bankDef)) //Using item or attacker goes first
 		{
-			if ((CanKnockOut(bankDef, bankAtk)
-			|| (Can2HKO(bankDef, bankAtk) || GetHealthPercentage(bankAtk) <= 45))
-			&& !CanKnockOutAfterHealing(bankDef, bankAtk, healAmount, 1))
+			if (CanKnockOut(bankDef, bankAtk)
+			&& !CanKnockOutAfterHealing(bankDef, bankAtk, healAmount, 1, FALSE))
 				return TRUE;
 		}
 		else //Opponent Goes First
 		{
 			if (!CanKnockOut(bankDef, bankAtk)) //Enemy can't kill attacker
 			{
-				if ( (Can2HKO(bankDef, bankAtk) || GetHealthPercentage(bankAtk) <= 45 )  && !CanKnockOutAfterHealing(bankDef, bankAtk, healAmount, 2)) //changed this 
+				if (Can2HKO(bankDef, bankAtk)
+				&& !CanKnockOutAfterHealing(bankDef, bankAtk, healAmount, 1, TRUE)) //Deal one hit first since it's slower
 					return TRUE;
 			}
 		}
@@ -1065,7 +1068,7 @@ enum ProtectQueries ShouldProtect(u8 bankAtk, u8 bankDef, u16 move)
 
 		if (CanKnockOut(bankDef, bankAtk)) //Foe can kill
 		{
-			if (!isAtkDynamaxed && !CanKnockOutAfterHealing(bankDef, bankAtk, healAmount, 1))
+			if (!isAtkDynamaxed && !CanKnockOutAfterHealing(bankDef, bankAtk, healAmount, 1, FALSE))
 				return USE_PROTECT;
 			else if (!isAtkDynamaxed && IsTakingSecondaryDamage(bankDef))
 				return USE_PROTECT;
@@ -1074,7 +1077,7 @@ enum ProtectQueries ShouldProtect(u8 bankAtk, u8 bankDef, u16 move)
 		}
 		else if (Can2HKO(bankDef, bankAtk))
 		{
-			if (!isAtkDynamaxed && !CanKnockOutAfterHealing(bankDef, bankAtk, healAmount, 2))
+			if (!isAtkDynamaxed && !CanKnockOutAfterHealing(bankDef, bankAtk, healAmount, 2, FALSE))
 				return USE_PROTECT;
 			else if (!isAtkDynamaxed && IsTakingSecondaryDamage(bankDef))
 				return USE_PROTECT;
@@ -1141,6 +1144,7 @@ bool8 ShouldPhaze(u8 bankAtk, u8 bankDef, u16 move, u8 class)
 			default:
 				if (AnyUsefulStatIsRaised(bankDef))
 					return TRUE;
+				break;
 		}
 	}
 	else //Double Battle
@@ -1360,6 +1364,9 @@ bool8 ShouldUseFakeOut(u8 bankAtk, u8 bankDef)
 
 bool8 ShouldPivot(u8 bankAtk, u8 bankDef, u16 move, u8 class)
 {
+	if (gNewBS->ai.goodToPivot & gBitTable[bankAtk]) //Set in switching checks
+		return PIVOT_IMMEDIATELY;
+
 	bool8 hasUsefulStatBoost = (AnyUsefulOffseniveStatIsRaised(bankAtk) && IsClassDamager(class))
 							|| STAT_STAGE(bankDef, STAT_STAGE_EVASION) >= 6 + 4; //Significant boost in evasion for any class
 
@@ -1584,7 +1591,7 @@ void IncreaseStatusViability(s16* originalViability, u8 class, u8 boost, u8 bank
 			break;
 
 		case FIGHT_CLASS_STALL:
-			INCREASE_VIABILITY(4 + boost);
+			INCREASE_VIABILITY(3 + boost);
 			break;
 
 		case FIGHT_CLASS_TEAM_SUPPORT_BATON_PASS:
@@ -2454,7 +2461,7 @@ void IncreaseFakeOutViability(s16* originalViability, u8 class, u8 bankAtk, u8 b
 	*originalViability = MathMin(viability, 255);
 }
 
-void IncreasePivotViability(s16* originalViability, u8 class, u8 bankAtk, unusedArg u8 bankDef)
+void IncreasePivotViability(s16* originalViability, u8 class, u8 bankAtk, unusedArg u8 bankDef, u8 pivotType)
 {
 	s16 viability = *originalViability;
 
@@ -2469,72 +2476,82 @@ void IncreasePivotViability(s16* originalViability, u8 class, u8 bankAtk, unused
 			class = FIGHT_CLASS_DOUBLES_ALL_OUT_ATTACKER;
 	}
 
-	switch (class) {
-		case FIGHT_CLASS_SWEEPER_KILL:
-			INCREASE_VIABILITY(3);
-			break;
-
-		case FIGHT_CLASS_SWEEPER_SETUP_STATS:
+	if (pivotType == PIVOT_IMMEDIATELY) //Set by the switching logic to pivot instead of actually switching
+	{
+		if (IsClassDoublesSpecific(pivotType))
+			INCREASE_VIABILITY(19);
+		else
 			INCREASE_VIABILITY(9);
-			break;
+	}
+	else
+	{
+		switch (class) {
+			case FIGHT_CLASS_SWEEPER_KILL:
+				INCREASE_VIABILITY(3);
+				break;
 
-		case FIGHT_CLASS_SWEEPER_SETUP_STATUS:
-			INCREASE_VIABILITY(9);
-			break;
+			case FIGHT_CLASS_SWEEPER_SETUP_STATS:
+				INCREASE_VIABILITY(9);
+				break;
 
-		case FIGHT_CLASS_STALL:
-			INCREASE_VIABILITY(9);
-			break;
+			case FIGHT_CLASS_SWEEPER_SETUP_STATUS:
+				INCREASE_VIABILITY(9);
+				break;
 
-		case FIGHT_CLASS_TEAM_SUPPORT_BATON_PASS:
-			INCREASE_VIABILITY(9);
-			break;
+			case FIGHT_CLASS_STALL:
+				INCREASE_VIABILITY(9);
+				break;
 
-		case FIGHT_CLASS_TEAM_SUPPORT_CLERIC:
-			INCREASE_VIABILITY(7);
-			break;
+			case FIGHT_CLASS_TEAM_SUPPORT_BATON_PASS:
+				INCREASE_VIABILITY(9);
+				break;
 
-		case FIGHT_CLASS_TEAM_SUPPORT_SCREENS:
-		case FIGHT_CLASS_SWEEPER_SETUP_SCREENS:
-			INCREASE_VIABILITY(7);
-			break;
+			case FIGHT_CLASS_TEAM_SUPPORT_CLERIC:
+				INCREASE_VIABILITY(7);
+				break;
 
-		case FIGHT_CLASS_TEAM_SUPPORT_PHAZING:
-			INCREASE_VIABILITY(4);
-			break;
+			case FIGHT_CLASS_TEAM_SUPPORT_SCREENS:
+			case FIGHT_CLASS_SWEEPER_SETUP_SCREENS:
+				INCREASE_VIABILITY(7);
+				break;
 
-		case FIGHT_CLASS_ENTRY_HAZARDS:
-			INCREASE_VIABILITY(3);
-			break;
+			case FIGHT_CLASS_TEAM_SUPPORT_PHAZING:
+				INCREASE_VIABILITY(4);
+				break;
 
-		case FIGHT_CLASS_DOUBLES_ALL_OUT_ATTACKER:
-			INCREASE_VIABILITY(18);
-			break;
+			case FIGHT_CLASS_ENTRY_HAZARDS:
+				INCREASE_VIABILITY(3);
+				break;
 
-		case FIGHT_CLASS_DOUBLES_SETUP_ATTACKER:
-			INCREASE_VIABILITY(18);
-			break;
+			case FIGHT_CLASS_DOUBLES_ALL_OUT_ATTACKER:
+				INCREASE_VIABILITY(18);
+				break;
 
-		case FIGHT_CLASS_DOUBLES_TRICK_ROOM_ATTACKER:
-			INCREASE_VIABILITY(16);
-			break;
+			case FIGHT_CLASS_DOUBLES_SETUP_ATTACKER:
+				INCREASE_VIABILITY(18);
+				break;
 
-		case FIGHT_CLASS_DOUBLES_TRICK_ROOM_SETUP:
-			INCREASE_VIABILITY(16);
-			break;
+			case FIGHT_CLASS_DOUBLES_TRICK_ROOM_ATTACKER:
+				INCREASE_VIABILITY(16);
+				break;
 
-		case FIGHT_CLASS_DOUBLES_UTILITY:
-			INCREASE_VIABILITY(16);
-			break;
+			case FIGHT_CLASS_DOUBLES_TRICK_ROOM_SETUP:
+				INCREASE_VIABILITY(16);
+				break;
 
-		case FIGHT_CLASS_DOUBLES_PHAZING:
-			INCREASE_VIABILITY(14);
-			break;
+			case FIGHT_CLASS_DOUBLES_UTILITY:
+				INCREASE_VIABILITY(16);
+				break;
 
-		case FIGHT_CLASS_DOUBLES_TEAM_SUPPORT:
-		case FIGHT_CLASS_DOUBLES_TOTAL_TEAM_SUPPORT:
-			INCREASE_VIABILITY(15);
-			break;
+			case FIGHT_CLASS_DOUBLES_PHAZING:
+				INCREASE_VIABILITY(14);
+				break;
+
+			case FIGHT_CLASS_DOUBLES_TEAM_SUPPORT:
+			case FIGHT_CLASS_DOUBLES_TOTAL_TEAM_SUPPORT:
+				INCREASE_VIABILITY(15);
+				break;
+		}
 	}
 
 	*originalViability = MathMin(viability, 255);
