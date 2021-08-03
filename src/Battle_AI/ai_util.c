@@ -2351,6 +2351,11 @@ u32 GetContactDamageMonDef(u16 bankAtk, struct Pokemon* monDef)
 	return GetContactDamageByDefAbilityItemEffect(GetMonAbilityAfterTrace(monDef, bankAtk), GetMonItemEffect(monDef), GetBaseMaxHP(bankAtk));
 }
 
+bool8 WillFaintFromContactDamage(u8 bankAtk, u8 bankDef, u16 move)
+{
+	return GetContactDamage(move, bankAtk, bankDef) >= gBattleMons[bankAtk].hp;
+}
+
 u16 CalcSecondaryEffectChance(u8 bank, u16 move)
 {
 	u16 chance = gBattleMoves[move].secondaryEffectChance;
