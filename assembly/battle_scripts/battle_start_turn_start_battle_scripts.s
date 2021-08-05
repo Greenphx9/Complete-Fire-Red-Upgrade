@@ -222,7 +222,6 @@ BattleScript_QuickDraw:
 	call BattleScript_AbilityPopUpRevert
 	end3
 
-
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 BattleScript_FocusPunchSetUp:

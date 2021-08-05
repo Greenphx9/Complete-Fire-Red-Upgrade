@@ -595,7 +595,6 @@ void BattleBeginFirstTurn(void)
 				}
 
 			ClearCachedAIData();
-
 			TurnValuesCleanUp(0);
 			SpecialStatusesClear();
 			gBattleStruct->field_91 = gAbsentBattlerFlags;
@@ -1910,7 +1909,7 @@ u8 GetWhoStrikesFirst(u8 bank1, u8 bank2, bool8 ignoreMovePriorities)
 	else if (bank1Bracket < bank2Bracket)
 		return SecondMon;
 
-	//SpeedCalc
+//Speed Calc
 	bank1Spd = SpeedCalc(bank1);
 	bank2Spd = SpeedCalc(bank2);
 	u32 temp;
