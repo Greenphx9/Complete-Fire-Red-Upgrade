@@ -5073,6 +5073,65 @@ void AnimTask_TwinkleTackleLaunch(u8 taskId)
 #undef tSide
 #undef tAnimLengthTime
 
+//Moves up the orbs up in Genesis Supernova
+//arg 0: Initial X-Pos
+//arg 1: Initial Y-Pos
+//arg 2: Destination Y-Pos
+//arg 3: Duration
+void SpriteCB_GenesisSupernovaOrbUp(struct Sprite* sprite)
+{
+	InitSpritePosToAnimAttacker(sprite, TRUE);
+	sprite->data[0] = gBattleAnimArgs[3]; //Duration
+	sprite->data[2] = sprite->pos1.x; //Dest X - Don't move
+	sprite->data[4] = gBattleAnimArgs[2]; //Dest Y
+	StoreSpriteCallbackInData6(sprite, DestroyAnimSprite);
+	sprite->callback = InitAndRunAnimFastLinearTranslation;
+}
+
+//Moves the rings for Clangorous Soulblaze
+//arg 0: initial x offset
+//arg 1: initial y offset
+//arg 2: target x offset
+//arg 3: target y offset
+//arg 4: duration
+//arg 5: lower 8 bits = location on attacking mon, upper 8 bits = location on target mon pick to target
+void SpriteCB_TranslateAnimSpriteToTargetsCentre(struct Sprite* sprite)
+{
+	bool8 respectMonPicOffsets;
+	u8 coordType;
+
+	if (!(gBattleAnimArgs[5] & 0xFF00))
+		respectMonPicOffsets = TRUE;
+	else
+		respectMonPicOffsets = FALSE;
+
+	if (!(gBattleAnimArgs[5] & 0xFF))
+		coordType = BATTLER_COORD_Y_PIC_OFFSET;
+	else
+		coordType = BATTLER_COORD_Y;
+
+	InitSpritePosToAnimAttacker(sprite, respectMonPicOffsets);
+	if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
+		gBattleAnimArgs[2] = -gBattleAnimArgs[2];
+
+	if (SIDE(gBattleAnimAttacker) == SIDE(gBattleAnimTarget) || IS_SINGLE_BATTLE)
+	{
+		sprite->data[2] = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2);
+		sprite->data[4] = GetBattlerSpriteCoord(gBattleAnimTarget, coordType);
+	}
+	else
+	{
+		sprite->data[2] = (GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2) + GetBattlerSpriteCoord(PARTNER(gBattleAnimTarget), BATTLER_COORD_X_2)) / 2;
+		sprite->data[4] = (GetBattlerSpriteCoord(gBattleAnimTarget, coordType) + GetBattlerSpriteCoord(PARTNER(gBattleAnimTarget), coordType)) / 2;
+	}
+
+	sprite->data[2] += gBattleAnimArgs[2];
+	sprite->data[4] += gBattleAnimArgs[3];
+	sprite->data[0] = gBattleAnimArgs[4];
+	sprite->callback = StartAnimLinearTranslation;
+	StoreSpriteCallbackInData6(sprite, DestroyAnimSprite);
+}
+
 // To move a mon off-screen when pushed out by Roar/Whirlwind
 void AnimTask_SlideOffScreen(u8 taskId)
 {

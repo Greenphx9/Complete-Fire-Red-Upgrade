@@ -218,3 +218,4 @@ definitions for animation particles
 .equ SHELL_SIDE_ARM_PAL, Shell_Side_ArmPal
 .equ SHELL_SIDE_ARM_BALL_PAL, Shell_Side_Arm_BallPal
 .equ LARGE_HOOPA_RING_PAL, Hoopa_Ring_LargePal
+.equ LARGE_HOOPA_RING_PAL, Hoopa_Ring_LargePal

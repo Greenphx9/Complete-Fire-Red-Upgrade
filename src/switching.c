@@ -913,6 +913,7 @@ void atk52_switchineffects(void)
 				BattleScriptPushCursor();
 				gBattlescriptCurrInstr = BattleScript_TotemRet;
 				gBankAttacker = gBattleScripting.bank = gActiveBattler;
+				gBattleScripting.statAnimPlayed = FALSE;
 				++gNewBS->switchInEffectsState;
 				return;
 			}
@@ -921,6 +922,7 @@ void atk52_switchineffects(void)
 				BattleScriptPushCursor();
 				gBattlescriptCurrInstr = BattleScript_TotemMultiBoostRet;
 				gBankAttacker = gBattleScripting.bank = gActiveBattler;
+				gBattleScripting.statAnimPlayed = FALSE;
 				++gNewBS->switchInEffectsState;
 				return;
 			}
@@ -929,6 +931,8 @@ void atk52_switchineffects(void)
 				BattleScriptPushCursor();
 				gBattlescriptCurrInstr = BattleScript_TotemOmniboostRet;
 				gBankAttacker = gBattleScripting.bank = gActiveBattler;
+				gBattleScripting.statAnimPlayed = FALSE;
+				GiveOmniboost(gBankAttacker);
 				++gNewBS->switchInEffectsState;
 				return;
 			}
