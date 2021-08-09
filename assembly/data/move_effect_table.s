@@ -217,8 +217,8 @@ gBattleScriptsForMoveEffects:
 .word BS_199_Blank	@was teeter dance
 .word BS_200_RaiseUserDefSpeed	@was blaze kick
 .word BS_201_MudSport
-.word BS_202_Blank	@was poison fang
-.word BS_203_Blank	@was weather ball
+.word BS_202_RaiseUserAtkSpAtk	@was poison fang
+.word BS_203_PlayNice	@was weather ball
 .word BS_204_Overheat
 .word BS_205_Tickle
 .word BS_206_CosmicPower
@@ -301,15 +301,16 @@ gStatLoweringMoveEffects:
 .byte EFFECT_ACCURACY_DOWN_2
 .byte EFFECT_EVASION_DOWN_2
 .byte EFFECT_SPEED_DOWN_RECOIL
+.byte EFFECT_TICKLE
+.byte EFFECT_PLAY_NICE
 .byte MOVE_EFFECT_TABLES_TERMIN
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 gConfusionMoveEffects:
-.byte EFFECT_CONFUSE_HIT
+.byte EFFECT_CONFUSE
 .byte EFFECT_SWAGGER
 .byte EFFECT_FLATTER
-.byte EFFECT_TEETER_DANCE
 .byte MOVE_EFFECT_TABLES_TERMIN
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

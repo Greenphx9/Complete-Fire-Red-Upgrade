@@ -829,7 +829,7 @@ void UpdateBestDoubleKillingMoveScore(u8 bankAtk, u8 bankDef, u8 bankAtkPartner,
 										break;
 									goto DEFAULT_CHECK;
 								case EFFECT_SPEED_DOWN_HIT:
-									if (CALC && GoodIdeaToLowerSpeed(currTarget, bankAtk, move))
+									if (CALC && GoodIdeaToLowerSpeed(currTarget, bankAtk, move, 1))
 										break;
 									goto DEFAULT_CHECK;
 								case EFFECT_ACCURACY_DOWN_HIT:
@@ -1806,6 +1806,24 @@ u16 GetPokemonOnSideSpeedAverage(u8 bank)
 	return (speed1 + speed2) / numBattlersAlive;
 }
 
+bool8 WillBeFasterAfterSpeedDrop(u8 bankAtk, u8 bankDef, u8 reduceBy)
+{
+	u8 oldSpeedStage = STAT_STAGE(bankDef, STAT_STAGE_SPEED); //Backup current stat stage before modification
+
+	if (ABILITY(bankDef) == ABILITY_SIMPLE)
+		reduceBy *= 2;
+
+	//Emulate speed drop
+	if (reduceBy > STAT_STAGE(bankDef, STAT_STAGE_SPEED))
+		STAT_STAGE(bankDef, STAT_STAGE_SPEED) = 0;
+	else
+		STAT_STAGE(bankDef, STAT_STAGE_SPEED) -= reduceBy;
+
+	bool8 faster = SpeedCalc(bankAtk) <= SpeedCalc(bankDef); //Check speeds now
+	STAT_STAGE(bankDef, STAT_STAGE_SPEED) = oldSpeedStage; //Restore speed from backup
+	return faster;
+}
+
 u16 GetBattleMonMove(u8 bank, u8 i)
 {
 	u16 move;
@@ -2093,18 +2111,6 @@ bool8 IsDamagingMoveUnusableByMon(u16 move, struct Pokemon* monAtk, u8 bankDef)
 	}
 
 	return FALSE;
-}
-
-bool8 IsHPAbsorptionAbility(u8 ability)
-{
-	switch (ability)
-	{
-		case ABILITY_WATERABSORB:
-		case ABILITY_VOLTABSORB:
-			return TRUE;
-		default:
-			return FALSE;
-	}
 }
 
 bool8 IsStatRecoilMove(u16 move)
@@ -2667,7 +2673,10 @@ bool8 BadIdeaToMakeContactWith(u8 bankAtk, u8 bankDef)
 	}
 
 	if (ITEM_EFFECT(bankDef) == ITEM_EFFECT_ROCKY_HELMET && atkAbility != ABILITY_MAGICGUARD)
-		badIdea |= TRUE;
+		badIdea = TRUE;
+
+	if (!badIdea && HasContactProtectionMoveInMoveset(bankDef))
+		badIdea = TRUE;
 
 	return badIdea;
 }
@@ -2735,7 +2744,7 @@ bool8 GoodIdeaToLowerSpDef(u8 bankDef, u8 bankAtk, u16 move)
 		&& defAbility != ABILITY_COMPETITIVE;
 }
 
-bool8 GoodIdeaToLowerSpeed(u8 bankDef, u8 bankAtk, u16 move)
+bool8 GoodIdeaToLowerSpeed(u8 bankDef, u8 bankAtk, u16 move, u8 reduceBy)
 {
 	if (!MoveWouldHitFirst(move, bankAtk, bankDef) && CanKnockOut(bankAtk, bankDef))
 		return FALSE; //Don't bother lowering stats if can kill enemy.
@@ -2744,7 +2753,9 @@ bool8 GoodIdeaToLowerSpeed(u8 bankDef, u8 bankAtk, u16 move)
 
 	return SpeedCalc(bankAtk) <= SpeedCalc(bankDef)
 		&& defAbility != ABILITY_CONTRARY
-		&& defAbility != ABILITY_CLEARBODY;
+		&& !IsClearBodyAbility(defAbility)
+		&& !AbilityPreventsLoweringStat(defAbility, STAT_STAGE_SPEED)
+		&& (!IS_DOUBLE_BATTLE || WillBeFasterAfterSpeedDrop(bankAtk, bankDef, reduceBy));
 }
 
 bool8 GoodIdeaToLowerAccuracy(u8 bankDef, u8 bankAtk, u16 move)
@@ -3169,6 +3180,7 @@ bool8 HasProtectionMoveInMoveset(u8 bank, u8 checkType)
 					case MOVE_PROTECT:
 					case MOVE_SPIKYSHIELD:
 					case MOVE_KINGSSHIELD:
+					case MOVE_BANEFULBUNKER:
 					case MOVE_OBSTRUCT:
 						if (checkType & CHECK_REGULAR_PROTECTION)
 							return TRUE;
@@ -3195,6 +3207,32 @@ bool8 HasProtectionMoveInMoveset(u8 bank, u8 checkType)
 							return TRUE;
 						break;
 				}
+			}
+		}
+	}
+
+	return FALSE;
+}
+
+bool8 HasContactProtectionMoveInMoveset(u8 bank)
+{
+	u8 moveLimitations = CheckMoveLimitations(bank, 0, 0xFF);
+
+	for (u32 i = 0; i < MAX_MON_MOVES; ++i)
+	{
+		u16 move = GetBattleMonMove(bank, i);
+		if (move == MOVE_NONE)
+			break;
+
+		if (!(gBitTable[i] & moveLimitations))
+		{
+			switch (move)
+			{
+				case MOVE_SPIKYSHIELD:
+				case MOVE_KINGSSHIELD:
+				case MOVE_BANEFULBUNKER:
+				case MOVE_OBSTRUCT:
+					return TRUE;
 			}
 		}
 	}
@@ -3760,6 +3798,7 @@ bool8 OffensiveSetupMoveInMoveset(u8 bankAtk, u8 bankDef)
 				case EFFECT_SPEED_UP_2:
 				case EFFECT_SPECIAL_ATTACK_UP_2:
 				case EFFECT_EVASION_UP_2:
+				case EFFECT_ATK_SPATK_UP:
 				case EFFECT_BULK_UP:
 				case EFFECT_CALM_MIND:
 				case EFFECT_DRAGON_DANCE:
