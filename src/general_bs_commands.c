@@ -4941,37 +4941,59 @@ void atkE4_getsecretpowereffect(void)
 	gBattlescriptCurrInstr++;
 }
 
-void atkE5_pickupitemcalculation(void) {
-	u16 item = 0;
-	u8 chance = 0;
-
-	for (int i = 0; i < 6; ++i)
+void atkE5_pickupitemcalculation(void)
+{
+	for (; gNewBS->pickupMonId < PARTY_SIZE; ++gNewBS->pickupMonId)
 	{
-		if (gPlayerParty[i].species == SPECIES_NONE) break;
-		if (GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG, 0)) continue;
+		u16 item, chance, species, level;
+		struct Pokemon* mon = &gPlayerParty[gNewBS->pickupMonId];
+		species = GetMonData(mon, MON_DATA_SPECIES2, NULL);
 
-		u8 level = gPlayerParty[i].level;
-		if (gPlayerParty[i].item == ITEM_NONE) { 
-			switch (GetMonAbility(&gPlayerParty[i])) {
-				case ABILITY_PICKUP:
-					chance = 10; // ~10% chance of pickup to activate
-					item = ChoosePickupItem(level);
-					break;
+		if (species == SPECIES_NONE || species == SPECIES_EGG
+		#ifndef PICKUP_ITEMS_STRAIGHT_TO_BAG //No issue with Pokemon already holding an item since they won't carry it anyway
+		|| GetMonData(mon, MON_DATA_HELD_ITEM, NULL) != ITEM_NONE
+		#endif
+		)
+			continue;
 
-				case ABILITY_HONEYGATHER:
-					chance = 5 + 5 * udivsi((level - 1), 10);
-					item = ITEM_HONEY;
-					break;
+		level = GetMonData(mon, MON_DATA_LEVEL, NULL);
 
-				default:
-					chance = 0;
-					item = ITEM_NONE;
-			}
-			if (Random() % 100 < chance)
-				SetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, &item);
+		switch (GetMonAbility(mon))
+		{
+			case ABILITY_PICKUP:
+				chance = 10; // ~10% chance of pickup to activate
+				item = ChoosePickupItem(level);
+				break;
+			case ABILITY_HONEYGATHER:
+				chance = 5 + 5 * ((level - 1) / 10);
+				item = ITEM_HONEY;
+				break;
+			default:
+				continue;
 		}
 
-
+		if (Random() % 100 < chance)
+		{
+			#ifdef PICKUP_ITEMS_STRAIGHT_TO_BAG
+			if (CheckBagHasSpace(item, 1))
+			{
+				AddBagItem(item, 1);
+				gLastUsedItem = item;
+				PREPARE_MON_NICK_BUFFER(gBattleTextBuff1, GetBattlerAtPosition(B_POSITION_PLAYER_LEFT), gNewBS->pickupMonId);
+				BattleScriptPush(gBattlescriptCurrInstr);
+				#ifdef UNBOUND
+				gBattleStringLoader = gText_PickUpItemToCube;
+				#else
+				gBattleStringLoader = gText_PickUpItemToBag;
+				#endif
+				++gNewBS->pickupMonId;
+				gBattlescriptCurrInstr = BattleScript_PrintCustomString;
+				return;
+			}
+			#else
+			SetMonData(mon, MON_DATA_HELD_ITEM, &item);
+			#endif
+		}
 	}
 
 	++gBattlescriptCurrInstr;
