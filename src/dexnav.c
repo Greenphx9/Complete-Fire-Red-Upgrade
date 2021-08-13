@@ -80,7 +80,7 @@ extern const struct SwarmData gSwarmTable[];
 extern void sp09A_StopSounds(void);
 
 //This file's functions
-static void DexNavGetMon(u16 species, u8 potential, u8 level, u8 ability, u16* moves, u8 searchLevel, u8 chain);
+static void DexNavGetMon(u16 species, u8 potential, u8 level, u8 ability, u16* moves, u8 searchLevel, u8 chain, u16 item);
 static u16 TryRandomizePumpkabooForm(u16 species);
 static bool8 SpeciesHasMultipleSearchableForms(u16 species);
 static u8 FindHeaderIndexWithLetter(u16 species, u8 letter);
@@ -203,7 +203,7 @@ static void CB2_DexNav(void);
 // ===== Dex Nav Pokemon Generator ===== //
 // ===================================== //
 
-static void DexNavGetMon(u16 species, u8 potential, u8 level, u8 ability, u16* moves, u8 searchLevel, u8 chain)
+static void DexNavGetMon(u16 species, u8 potential, u8 level, u8 ability, u16* moves, u8 searchLevel, u8 chain, u16 item)
 {
 	struct Pokemon* mon = &gEnemyParty[0];
 
@@ -258,12 +258,13 @@ static void DexNavGetMon(u16 species, u8 potential, u8 level, u8 ability, u16* m
 	else if (gBaseStats[species].ability2 != ABILITY_NONE) //Helps fix a bug where Unown would crash the game in the below function
 		GiveMonNatureAndAbility(mon, GetNature(mon), (GetAbility2(species) == ability) ? 1 : 0, IsMonShiny(mon), TRUE, TRUE); //Make sure details match what was on the HUD
 
+	//Set item
+	if (item)
+        SetMonData(mon, MON_DATA_HELD_ITEM, &item);
+
 	//Set moves
 	for (i = 0; i < MAX_MON_MOVES; ++i)
-		SetMonMoveSlot(mon, moves[i], i);
-
-	//Set item
-	SetMonData(mon, MON_DATA_HELD_ITEM, &sDexNavHudPtr->heldItem);
+		SetMonMoveSlot(mon, item, i);
 
 	CalculateMonStats(mon);
 	HealMon(mon); //Restore PP and fix HP if IV changed
@@ -1085,7 +1086,7 @@ static void Task_ManageDexNavHUD(u8 taskId)
 		u16 species = sDexNavHudPtr->species;
 
 		DexNavGetMon(sDexNavHudPtr->species, sDexNavHudPtr->potential, sDexNavHudPtr->pokemonLevel,
-					sDexNavHudPtr->ability, sDexNavHudPtr->moveId, sDexNavHudPtr->searchLevel, gCurrentDexNavChain);
+					sDexNavHudPtr->ability, sDexNavHudPtr->moveId, sDexNavHudPtr->searchLevel, gCurrentDexNavChain, sDexNavHudPtr->heldItem);
 		DestroyTask(taskId);
 
 		TryRandomizeSpecies(&species);

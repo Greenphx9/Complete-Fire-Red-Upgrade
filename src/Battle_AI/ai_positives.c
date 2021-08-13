@@ -675,7 +675,10 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			{
 				AI_SPEED_MINUS:
 				if (IS_SINGLE_BATTLE)
-					goto AI_SPEED_MINUS;
+				{
+					if (GoodIdeaToLowerSpeed(bankDef, bankAtk, move, 1))
+						INCREASE_VIABILITY(3); //Increase past strongest move
+				}
 				else //Double Battle
 				{
 					if (defAbility != ABILITY_CONTRARY

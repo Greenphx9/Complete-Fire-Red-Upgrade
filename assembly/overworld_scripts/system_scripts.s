@@ -184,9 +184,9 @@ EndScript:
 SystemScript_StartDexNavBattle:
 	lockall
 	call FollowerPositionFixScript
-	checksound
+	special SPECIAL_STOP_SOUNDS
 	sound 0x15 @;Exclaim
-	applymovement PLAYER PlayerExclaim
+	applymovement PLAYER m_PlayerExclaim
 	waitmovement 0x0
 	checksound
 	pause 0x10
@@ -194,15 +194,27 @@ SystemScript_StartDexNavBattle:
 	releaseall
 	end
 
-PlayerExclaim:
-.byte exclaim, end_m
-
 .global SystemScript_DisplayDexnavMsg
 SystemScript_DisplayDexnavMsg:
 	lockall
 	callstd MSG_NORMAL
 	releaseall
 	end
+
+.global SystemScript_DexNavDetector
+SystemScript_DexNavDetector:
+	lockall
+	special SPECIAL_STOP_SOUNDS
+	sound 0x69 @;SE_POKENAV_SEARCHING
+	applymovement PLAYER m_PlayerConfused
+	waitmovement 0x0
+	msgbox gText_DexNavDetectedRarePokemon MSG_KEEPOPEN
+	closeonkeypress
+	releaseall
+	end
+
+m_PlayerExclaim: .byte exclaim, end_m
+m_PlayerConfused: .byte say_question, end_m
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 

@@ -1802,8 +1802,10 @@ bool8 DoesSleepClausePrevent(u8 bank)
 			case BATTLE_FACILITY_UU:
 			case BATTLE_FACILITY_RU:
 			case BATTLE_FACILITY_NU:
-			SLEEP_ON_TEAM_CHECK: ;
-				u8 firstId, lastId;
+			#ifdef VAR_GAME_DIFFICULTY
+			SLEEP_ON_TEAM_CHECK:
+			#endif
+				; u8 firstId, lastId;
 				struct Pokemon* party = LoadPartyRange(bank, &firstId, &lastId);
 
 				for (int i = 0; i < PARTY_SIZE; ++i)
@@ -2251,7 +2253,7 @@ bool8 BankSideHasTailwind(u8 bank)
 	return gNewBS->TailwindTimers[SIDE(bank)];
 }
 
-bool8 MonHasTailwind(struct Pokemon* mon, u8 side)
+bool8 MonHasTailwind(unusedArg struct Pokemon* mon, u8 side)
 {
 	return gNewBS->TailwindTimers[side]
 		#ifdef FLAG_TAILWIND_BATTLE
