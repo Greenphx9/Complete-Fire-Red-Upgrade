@@ -7,6 +7,7 @@
 
 #include "../include/new/ability_tables.h"
 #include "../include/new/ability_util.h"
+#include "../include/new/move_tables.h"
 #include "../include/new/battle_util.h"
 #include "../include/new/build_pokemon.h"
 #include "../include/new/move_tables.h"
@@ -81,6 +82,11 @@ void SwapTookAbilityFrom(u8 bank1, u8 bank2)
 void ResetTookAbilityFrom(u8 bank)
 {
 	gNewBS->tookAbilityFrom[bank] = SPECIES_NONE;
+}
+
+bool8 IsTargetAbilityIgnored(u8 defAbility, u8 atkAbility, u16 move)
+{
+	return IS_MOLD_BREAKER(atkAbility, move) && gSpecialAbilityFlags[defAbility].gMoldBreakerIgnoredAbilities;
 }
 
 const u8* GetAbilityDescriptionOverride(const u8 ability, const u16 species) //Bypasses the 255 Ability limitation and implements new Abilities
