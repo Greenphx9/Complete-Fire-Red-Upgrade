@@ -1433,13 +1433,6 @@ RemoveShopModifierCheats:
 
 FreeShopMemoryReturn:
 	ldr r0, =0x809B1B2 | 1
-	bx r0
-
-.pool
-@0x807A1E4 with r0
-RainFadeInHook:
-	bl ApplyGammaShiftOnRainFadeIn
-	ldr r0, =0x807A1EE | 1
 bxr0:
 	bx r0
 
@@ -1463,9 +1456,10 @@ LoadMapFromCameraTransition_DNSFixHook1:
 LoadMapFromCameraTransition_DNSFixHook2:
 	ldr r0, [sp] @Old map header - saved above in Hook1
 	bl TryLoadTileset2OnCameraTransition
-	ldr r0, =0x80558D2 | 1
+	ldr r0, =0x80558E2 | 1
 	bx r0
 
+/*
 .pool
 @0x80714D4 with r0
 BlendPalettesOptimization:
@@ -1473,3 +1467,4 @@ BlendPalettesOptimization:
 	lsl r1, #0x2
 	bl BlendPalettesOptimized
 	pop {pc}
+*/

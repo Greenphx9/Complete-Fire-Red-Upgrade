@@ -2243,6 +2243,7 @@ BS_114_PerishSong:
 	attackcanceler
 	attackstringnoprotean
 	ppreduce
+	callasm FailMoveIfAura
 	setperishsong FAILED
 	tryactivateprotean
 	attackanimation
