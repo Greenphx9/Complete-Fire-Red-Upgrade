@@ -102,7 +102,7 @@ bool8 GoodIdeaToRaiseAttackAgainst(u8 bankAtk, u8 bankDef, u8 amount);
 bool8 GoodIdeaToRaiseDefenseAgainst(u8 bankAtk, u8 bankDef, u8 amount);
 bool8 GoodIdeaToRaiseSpAttackAgainst(u8 bankAtk, u8 bankDef, u8 amount);
 bool8 GoodIdeaToRaiseSpDefenseAgainst(u8 bankAtk, u8 bankDef, u8 amount);
-bool8 GoodIdeaToRaiseSpeedAgainst(u8 bankAtk, u8 bankDef, u8 amount, u16 atkSpeed, u16 defSpeed);
+bool8 GoodIdeaToRaiseSpeedAgainst(u8 bankAtk, u8 bankDef, u8 amount);
 bool8 GoodIdeaToRaiseEvasionAgainst(u8 bankAtk, u8 bankDef, u8 amount);
 bool8 GoodIdeaToRaiseAccuracyAgainst(u8 bankAtk, u8 bankDef, u8 amount);
 
@@ -143,8 +143,8 @@ bool8 HasProtectionMoveInMoveset(u8 bank, u8 checkType);
 bool8 HasContactProtectionMoveInMoveset(u8 bank);
 bool8 MoveTypeInMoveset(u8 bank, u8 moveType);
 bool8 DamagingMoveTypeInMoveset(u8 bank, u8 moveType);
-bool8 DamagingAllHitMoveTypeInMoveset(u8 bank, u8 moveType);
 bool8 DamagingMoveTypeInMovesetThatAffects(u8 bankAtk, u8 bankDef, u8 moveType);
+bool8 DamagingAllHitMoveTypeInMoveset(u8 bank, u8 moveType);
 bool8 DamagingSpreadMoveInMoveset(u8 bank);
 bool8 HasSnatchableMove(u8 bank);
 bool8 MoveEffectInMoveset(u8 moveEffect, u8 bank);

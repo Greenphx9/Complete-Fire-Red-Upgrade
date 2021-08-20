@@ -38,6 +38,7 @@ bool8 UnnerveOnOpposingField(u8 bank);
 bool8 AbilityBlocksIntimidate(u8 ability);
 bool8 AbilityPreventsLoweringAtk(u8 ability);
 bool8 AbilityPreventsLoweringStat(u8 ability, u8 statId);
+bool8 AbilityRaisesOneStatWhenSomeStatIsLowered(u8 ability);
 bool8 IsWhiteSmokeAbility(u8 ability, u16 species);
 bool8 IsVitalSpiritAbility(u8 ability, u16 species);
 

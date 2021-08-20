@@ -252,36 +252,9 @@ CopycatBS:
 .global BS_010_RaiseUserAtk1
 BS_010_RaiseUserAtk1:
 	setstatchanger STAT_ATK | INCREASE_1
-	jumpifmove MOVE_HONECLAWS HoneClawsBS
 	jumpifnotbattletype BATTLE_DOUBLE BS_BUFF_ATK_STATS
 	jumpifmove MOVE_HOWL HowlBS @;Only difference is that it raises partner's attack in Doubles too
 	goto BS_BUFF_ATK_STATS
-
-HoneClawsBS:
-	attackcanceler
-	attackstring
-	ppreduce
-	jumpifstat BANK_TARGET LESSTHAN STAT_ATK STAT_MAX HoneClaws_Atk
-	jumpifstat BANK_TARGET EQUALS STAT_ACC STAT_MAX BattleScript_CantRaiseMultipleStats
-
-HoneClaws_Atk:
-	attackanimation
-	waitanimation
-	setbyte STAT_ANIM_PLAYED 0x0
-	playstatchangeanimation BANK_ATTACKER, STAT_ANIM_ATK | STAT_ANIM_ACC, STAT_ANIM_UP | STAT_ANIM_IGNORE_ABILITIES
-	@;setstatchanger STAT_ATK | INCREASE_1
-	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN HoneClaws_Acc
-	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 HoneClaws_Acc
-	printfromtable 0x83FE57C
-	waitmessage DELAY_1SECOND
-
-HoneClaws_Acc:
-	setstatchanger STAT_ACC | INCREASE_1
-	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
-	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE57C
-	waitmessage DELAY_1SECOND
-	goto BS_MOVE_END
 
 HowlBS:
 	attackcanceler
@@ -1458,13 +1431,7 @@ BS_071_LowerTargetSpAtk1Chance:
 
 .global BS_072_LowerTargetSpDef1Chance
 BS_072_LowerTargetSpDef1Chance:
-	jumpifmove MOVE_ACIDSPRAY AcidSprayBS
-	jumpifmove MOVE_SEEDFLARE AcidSprayBS
 	setmoveeffect MOVE_EFFECT_SP_DEF_MINUS_1
-	goto BS_STANDARD_HIT
-
-AcidSprayBS:
-	setmoveeffect MOVE_EFFECT_SP_DEF_MINUS_2
 	goto BS_STANDARD_HIT
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -1589,9 +1556,9 @@ BS_076_SetConfusionChance:
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-.global BS_077_Blank @;Was Twineedle
-BS_077_Blank:
-	setmoveeffect MOVE_EFFECT_POISON
+.global BS_077_LowerTargetSpDef2Chance @;Was Twineedle
+BS_077_LowerTargetSpDef2Chance:
+	setmoveeffect MOVE_EFFECT_SP_DEF_MINUS_2
 	goto BS_STANDARD_HIT
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -4128,15 +4095,67 @@ BS_197_SecretPower:
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-.global BS_198_Blank @;Was 33% Recoil
-BS_198_Blank:
-	goto BS_STANDARD_HIT
-	
+.global BS_198_RaiseUserAtkSpAtk @;Was 33% Recoil
+BS_198_RaiseUserAtkSpAtk:
+	attackcanceler
+	attackstring
+	ppreduce
+	jumpifmove MOVE_ROTOTILLER RototillerBS
+	jumpifmove MOVE_GEARUP GearUpBS
+
+@;WorkUpBS
+	jumpifstat BANK_ATTACKER LESSTHAN STAT_ATK STAT_MAX WorkUp_RaiseAtk
+	jumpifstat BANK_ATTACKER EQUALS STAT_SPATK STAT_MAX BattleScript_CantRaiseMultipleStats
+
+WorkUp_RaiseAtk:
+	attackanimation
+	waitanimation
+	setbyte STAT_ANIM_PLAYED 0x0
+	playstatchangeanimation BANK_ATTACKER, STAT_ANIM_ATK | STAT_ANIM_SPATK, STAT_ANIM_UP | STAT_ANIM_IGNORE_ABILITIES
+	setstatchanger STAT_ATK | INCREASE_1
+	callasm ModifyGrowthInSun
+	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN WorkUp_RaiseSpAtk
+	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 WorkUp_RaiseSpAtk
+	printfromtable 0x83FE57C
+	waitmessage DELAY_1SECOND
+
+WorkUp_RaiseSpAtk:
+	setstatchanger STAT_SPATK | INCREASE_1
+	callasm ModifyGrowthInSun
+	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
+	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
+	printfromtable 0x83FE57C
+	waitmessage DELAY_1SECOND
+	goto BS_MOVE_END
+
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-.global BS_199_Blank @;Was Teeter Dance
-BS_199_Blank:
-	goto BS_STANDARD_HIT
+.global BS_199_RaiseUserAtkAcc @;Was Teeter Dance
+BS_199_RaiseUserAtkAcc:
+	attackcanceler
+	attackstring
+	ppreduce
+	jumpifstat BANK_TARGET LESSTHAN STAT_ATK STAT_MAX RaiseUserAtkAcc_Atk
+	jumpifstat BANK_TARGET EQUALS STAT_ACC STAT_MAX BattleScript_CantRaiseMultipleStats
+
+RaiseUserAtkAcc_Atk:
+	attackanimation
+	waitanimation
+	setbyte STAT_ANIM_PLAYED 0x0
+	playstatchangeanimation BANK_ATTACKER, STAT_ANIM_ATK | STAT_ANIM_ACC, STAT_ANIM_UP | STAT_ANIM_IGNORE_ABILITIES
+	setstatchanger STAT_ATK | INCREASE_1
+	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN RaiseUserAtkAcc_Acc
+	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 RaiseUserAtkAcc_Acc
+	printfromtable 0x83FE57C
+	waitmessage DELAY_1SECOND
+
+RaiseUserAtkAcc_Acc:
+	setstatchanger STAT_ACC | INCREASE_1
+	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
+	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
+	printfromtable 0x83FE57C
+	waitmessage DELAY_1SECOND
+	goto BS_MOVE_END
 	
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -4186,38 +4205,9 @@ BS_210_WaterSport:
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-.global BS_202_RaiseUserAtkSpAtk
-BS_202_RaiseUserAtkSpAtk:
-	attackcanceler
-	attackstring
-	ppreduce
-	jumpifmove MOVE_ROTOTILLER RototillerBS
-	jumpifmove MOVE_GEARUP GearUpBS
-
-@;WorkUpBS
-	jumpifstat BANK_ATTACKER LESSTHAN STAT_ATK STAT_MAX WorkUp_RaiseAtk
-	jumpifstat BANK_ATTACKER EQUALS STAT_SPATK STAT_MAX BattleScript_CantRaiseMultipleStats
-
-WorkUp_RaiseAtk:
-	attackanimation
-	waitanimation
-	setbyte STAT_ANIM_PLAYED 0x0
-	playstatchangeanimation BANK_ATTACKER, STAT_ANIM_ATK | STAT_ANIM_SPATK, STAT_ANIM_UP | STAT_ANIM_IGNORE_ABILITIES
-	setstatchanger STAT_ATK | INCREASE_1
-	callasm ModifyGrowthInSun
-	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN WorkUp_RaiseSpAtk
-	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 WorkUp_RaiseSpAtk
-	printfromtable 0x83FE57C
-	waitmessage DELAY_1SECOND
-
-WorkUp_RaiseSpAtk:
-	setstatchanger STAT_SPATK | INCREASE_1
-	callasm ModifyGrowthInSun
-	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
-	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE57C
-	waitmessage DELAY_1SECOND
-	goto BS_MOVE_END
+.global BS_202_Blank
+BS_202_Blank:
+	goto BS_STANDARD_HIT
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
