@@ -41,6 +41,7 @@
 #include "../include/new/dns.h"
 #include "../include/new/util2.h"
 #include "../include/new/item.h"
+#include "../include/new/learn_move.h"
 #include "../include/new_menu_helpers.h"
 #include "../include/new/multi.h"
 #include "../include/new/mystery_gift.h"

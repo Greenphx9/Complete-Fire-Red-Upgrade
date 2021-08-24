@@ -1,7 +1,7 @@
 #ifndef GUARD_POKEMON_SUMMARY_SCREEN_H
 #define GUARD_POKEMON_SUMMARY_SCREEN_H
 
-#include "main.h"
+#include "constants/moves.h"
 
 extern const u8* const gMoveDescriptionPointers[];
 extern const u8* const gNatureNamePointers[];
@@ -113,37 +113,37 @@ struct PokemonSummaryScreenData
     u8 ALIGNED(4) curPageIndex; /* 0x3214 */
     u8 ALIGNED(4) unk3218; /* 0x3218 */
     u8 ALIGNED(4) isBoxMon; /* 0x321C */
-    u8 ALIGNED(4) unk3220[2]; /* 0x3220 */
+    u8 ALIGNED(4) monTypes[2]; /* 0x3220 */
 
-    u8 ALIGNED(4) unk3224; /* 0x3224 */
+    u8 ALIGNED(4) pageFlipDirection; /* 0x3224 */
     u8 ALIGNED(4) unk3228; /* 0x3228 */
     u8 ALIGNED(4) unk322C; /* 0x322C */
     u8 ALIGNED(4) unk3230; /* 0x3230 */
 
     u8 ALIGNED(4) lockMovesFlag; /* 0x3234 */
 
-    u8 ALIGNED(4) unk3238; /* 0x3238 */
-    u8 ALIGNED(4) unk323C; /* 0x323C */
-    u8 ALIGNED(4) unk3240; /* 0x3240 */
-    u8 ALIGNED(4) unk3244; /* 0x3244 */
+    u8 ALIGNED(4) whichBgLayerToTranslate; /* 0x3238 */
+    u8 ALIGNED(4) skillsPageBgNum; /* 0x323C */
+    u8 ALIGNED(4) infoAndMovesPageBgNum; /* 0x3240 */
+    u8 ALIGNED(4) flippingPages; /* 0x3244 */
     u8 ALIGNED(4) unk3248; /* 0x3248 */
-    s16 ALIGNED(4) unk324C; /* 0x324C */
+    s16 ALIGNED(4) flipPagesBgHofs; /* 0x324C */
 
-    u16 unk3250[5]; /* 0x3250 */
-    u16 unk325A[5]; /* 0x325A */
-    u8 ALIGNED(4) unk3264; /* 0x3264 */
-    u8 ALIGNED(4) unk3268; /* 0x3268 */
+    u16 moveTypes[5]; /* 0x3250 */
+    u16 moveIds[5]; /* 0x325A */
+    u8 ALIGNED(4) numMoves; /* 0x3264 */
+    u8 ALIGNED(4) isSwappingMoves; /* 0x3268 */
 
     u8 ALIGNED(4) curMonStatusAilment; /* 0x326C */
 
     u8 ALIGNED(4) state3270; /* 0x3270 */
-    u8 ALIGNED(4) unk3274; /* 0x3274 */
-    u8 ALIGNED(4) unk3278; /* 0x3278 */
-    u8 ALIGNED(4) unk327C; /* 0x327C */
-    u8 ALIGNED(4) unk3280; /* 0x3280 */
-    u8 ALIGNED(4) unk3284; /* 0x3284 */
-    u8 ALIGNED(4) unk3288; /* 0x3288 */
-    u8 ALIGNED(4) unk328C; /* 0x328C */
+    u8 ALIGNED(4) summarySetupStep; /* 0x3274 */
+    u8 ALIGNED(4) loadBgGfxStep; /* 0x3278 */
+    u8 ALIGNED(4) spriteCreationStep; /* 0x327C */
+    u8 ALIGNED(4) bufferStringsStep; /* 0x3280 */
+    u8 ALIGNED(4) state3284; /* 0x3284 */
+    u8 ALIGNED(4) selectMoveInputHandlerState; /* 0x3288 */
+    u8 ALIGNED(4) switchMonTaskState; /* 0x328C */
 
     struct Pokemon currentMon; /* 0x3290 */
 
@@ -156,11 +156,11 @@ struct PokemonSummaryScreenData
     MainCallback savedCallback;
     struct Sprite * markingSprite;
 
-    u8 ALIGNED(4) unk3300[2]; /* 0x3300 */
-    u8 ALIGNED(4) unk3304[3]; /* 0x3304 */
+    u8 ALIGNED(4) lastPageFlipDirection; /* 0x3300 */
+    u8 ALIGNED(4) unk3304; /* 0x3304 */
 };
 
-extern struct PokemonSummaryScreenData* sMonSummaryScreen;
+#define sMonSummaryScreen ((struct PokemonSummaryScreenData*) *((u32*) 0x203B140))
 
 #define TAG_PSS_UNK_64 0x64
 #define TAG_PSS_UNK_65 0x65

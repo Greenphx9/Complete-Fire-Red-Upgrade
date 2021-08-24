@@ -15,11 +15,21 @@
 	#define gLevelUpLearnsets ((struct LevelUpMove**) *((u32*) 0x8043E20)) //extern const struct LevelUpMove* const gLevelUpLearnsets[];
 #endif
 
+//Exported Structs
+struct MovePair
+{
+	u16 move;
+	u16 num;
+};
+
 //Exported Functions
 void GiveBoxMonInitialMoveset(struct BoxPokemon* boxMon);
 u16 MonTryLearningNewMoveAfterEvolution(struct Pokemon* mon, bool8 firstMove);
 u8 GetLevelUpMovesBySpecies(u16 species, u16* moves);
+u8 GetLevelUpMovePairsBySpecies(u16 species, struct MovePair* moves);
 u16 BuildLearnableMoveset(struct Pokemon* mon, u16* moves);
+u16 BuildTMMoveset(struct Pokemon* mon, struct MovePair* moves);
+u16 BuildTutorMoveset(struct Pokemon* mon, u16* moves);
 u16 RandomizeMove(u16 move);
 
 //Functions Hooked In
