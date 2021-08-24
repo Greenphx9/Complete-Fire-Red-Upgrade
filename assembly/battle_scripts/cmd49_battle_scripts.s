@@ -24,6 +24,7 @@ cmd49_battle_scripts.s
 .global BattleScript_FaintAttackerForExplosion
 .global BattleScript_ExplosionAnim
 .global BattleScript_ItemSteal
+.global BattleScript_ItemStealTrainer
 .global BattleScript_LifeOrbDamage
 .global BattleScript_Pickpocket
 .global BattleScript_DancerActivated
@@ -306,6 +307,17 @@ BattleScript_ItemSteal:
 	@callasm TransferLastUsedItem
 	playanimation BANK_TARGET ANIM_STEAL_ITEM 0x0
 	printstring 0x8E
+	waitmessage DELAY_1SECOND
+	call 0x81D92DC @;BattleScript_WeatherFormChanges - In case of Utility Umbrella
+	return
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+BattleScript_ItemStealTrainer:
+	@callasm TransferLastUsedItem
+	playanimation BANK_TARGET ANIM_STEAL_ITEM 0x0
+	setword BATTLE_STRING_LOADER gText_StoleItemTrainer
+	printstring 0x184
 	waitmessage DELAY_1SECOND
 	call 0x81D92DC @;BattleScript_WeatherFormChanges - In case of Utility Umbrella
 	return

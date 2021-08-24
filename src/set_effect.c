@@ -934,7 +934,7 @@ bool8 SetMoveEffect2(void)
 			}
 			else if (!BATTLER_ALIVE(gBankAttacker)
 			|| ITEM(gEffectBank) == ITEM_NONE
-			//|| ITEM(gBankAttacker) != ITEM_NONE //Doesn't matter anymore; Thiefed items will go straight to the bag.
+			|| (ITEM(gBankAttacker) != ITEM_NONE && (gBattleTypeFlags & BATTLE_TYPE_TRAINER))
 			|| !CanTransferItem(SPECIES(gEffectBank), ITEM(gEffectBank))
 			|| !CanTransferItem(SPECIES(gBankAttacker), ITEM(gEffectBank))
 			|| (gNewBS->corrodedItems[SIDE(gBankAttacker)] & gBitTable[gBattlerPartyIndexes[gBankAttacker]]))
@@ -958,25 +958,29 @@ bool8 SetMoveEffect2(void)
 			{
 				gLastUsedItem = gBattleMons[gEffectBank].item;
 				gBattleMons[gEffectBank].item = 0;
-				gBattleMons[gBankAttacker].item = gLastUsedItem;
-				HandleUnburdenBoost(gEffectBank); //Give target Unburden boost
-				HandleUnburdenBoost(gBankAttacker); //Remove attacker's Unburden boost
+				if(ITEM(gBankAttacker) == ITEM_NONE)
+				{
+					gBattleMons[gBankAttacker].item = gLastUsedItem;
+					HandleUnburdenBoost(gBankAttacker); //Remove attacker's Unburden boost
+					
+					gActiveBattler = gBankAttacker;
+					EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gLastUsedItem);
+					MarkBufferBankForExecution(gActiveBattler);
 
-				//Handles giving the mon the new held item, I think
-				//Don't give the item to the mon, instead put it in the bag.
-				/*gActiveBattler = gBankAttacker;
-				EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gLastUsedItem);
-				MarkBufferBankForExecution(gActiveBattler);*/
-				AddBagItem(1, gLastUsedItem);
+					gBattleStruct->choicedMove[gEffectBank] = 0;
+				}
+				if(!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) && ITEM(gBankAttacker) != ITEM_NONE)
+				{
+					gNewBS->knockedOffWildItem = gLastUsedItem;
+				}
+				HandleUnburdenBoost(gEffectBank); //Give target Unburden boost
 
 				gActiveBattler = gEffectBank;
 				EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gActiveBattler].item);
 				MarkBufferBankForExecution(gActiveBattler);
 
 				BattleScriptPushCursor();
-				gBattlescriptCurrInstr = BattleScript_ItemSteal;
-
-				gBattleStruct->choicedMove[gEffectBank] = 0;
+				gBattlescriptCurrInstr = BattleScript_ItemStealTrainer; //not actually the trainer steal script, just uses a different string.				
 				effect = TRUE;
 			}
 			break;

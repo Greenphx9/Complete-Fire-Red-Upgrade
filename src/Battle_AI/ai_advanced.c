@@ -1481,6 +1481,7 @@ bool8 ShouldPivot(u8 bankAtk, u8 bankDef, u16 move, u8 class)
 	u8 switchFlags = GetMostSuitableMonToSwitchIntoFlags();
 	gActiveBattler = backupBattler;
 
+	u8 atkAbility = ABILITY(bankAtk);
 	u8 defAbility = ABILITY(bankDef);
 
 	if (WillTakeSignificantDamageFromEntryHazards(bankAtk, 4)) //Don't switch out if you'll do a quarter or more damage to yourself on switch in
@@ -1512,16 +1513,18 @@ bool8 ShouldPivot(u8 bankAtk, u8 bankDef, u16 move, u8 class)
 					if (IsClassDamager(class)
 					&& SPLIT(move) != SPLIT_STATUS //Damaging pivot move
 					&& ((switchFlags & SWITCHING_FLAG_RESIST_ALL_MOVES && switchFlags & (SWITCHING_FLAG_KO_FOE | SWITCHING_FLAG_CAN_REMOVE_HAZARDS)) //Resists all moves and can KO or remove hazards
-					 || (BATTLER_MAX_HP(bankDef)
-					    && (IsBankHoldingFocusSash(bankDef) || defAbility == ABILITY_STURDY || defAbility == ABILITY_MULTISCALE)))) //Pivot to break the sash/sturdy/multiscale
+					 || IsAffectedByFocusSash(bankDef)
+					 || IsAffectedBySturdy(defAbility, bankDef)
+					 || IsDamageHalvedDueToFullHP(bankDef, defAbility, move, atkAbility))) //Pivot to break the sash/sturdy/multiscale
 						return PIVOT;
 				}
 				else if (!hasUsefulStatBoost) //3HKO+ the foe
 				{
 					if (IsClassDamager(class)
-					&& BATTLER_MAX_HP(bankDef)
-					&& SPLIT(move) != SPLIT_STATUS //Damaging move
-					&& (IsBankHoldingFocusSash(bankDef) || defAbility == ABILITY_STURDY || defAbility == ABILITY_MULTISCALE)) //Pivot to break the sash/sturdy/multiscale
+					&& SPLIT(move) != SPLIT_STATUS //Damaging pivot move
+					&& (IsAffectedByFocusSash(bankDef)
+					 || IsAffectedBySturdy(defAbility, bankDef)
+					 || IsDamageHalvedDueToFullHP(bankDef, defAbility, move, atkAbility))) //Pivot to break the sash/sturdy/multiscale
 						return PIVOT;
 
 					if (switchFlags & (SWITCHING_FLAG_WALLS_FOE | SWITCHING_FLAG_RESIST_ALL_MOVES)) //Switched in mon won't take too much damage
@@ -1600,8 +1603,9 @@ bool8 ShouldPivot(u8 bankAtk, u8 bankDef, u16 move, u8 class)
 					{
 						if ((switchFlags & SWITCHING_FLAG_KO_FOE && switchFlags & (SWITCHING_FLAG_OUTSPEEDS | SWITCHING_FLAG_WALLS_FOE | SWITCHING_FLAG_RESIST_ALL_MOVES)) //New mon will go first and KO or survive a hit
 						 || (switchFlags & SWITCHING_FLAG_RESIST_ALL_MOVES && switchFlags & SWITCHING_FLAG_CAN_REMOVE_HAZARDS) //Resists all moves and can remove hazards
-						 || (BATTLER_MAX_HP(bankDef)
-						  && (IsBankHoldingFocusSash(bankDef) || defAbility == ABILITY_STURDY || defAbility == ABILITY_MULTISCALE))) //Pivot to break the sash
+						 || IsAffectedByFocusSash(bankDef)
+						 || IsAffectedBySturdy(defAbility, bankDef)
+						 || IsDamageHalvedDueToFullHP(bankDef, defAbility, move, atkAbility)) //Pivot to break the sash
 							return PIVOT;
 					}
 

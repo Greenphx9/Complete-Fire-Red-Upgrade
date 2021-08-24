@@ -73,6 +73,7 @@ extern const u8 BattleScript_MoveFailedOnAura[];
 extern const u8 BattleScript_TargetSleepHeal[];
 extern const u8 BattleScript_TargetBurnHeal[];
 extern const u8 BattleScript_ItemSteal[];
+extern const u8 BattleScript_ItemStealTrainer[];
 extern const u8 BattleScript_KnockedOff[];
 extern const u8 BattleScript_AbilityWasSuppressed[];
 extern const u8 BattleScript_StatUpPartner[];

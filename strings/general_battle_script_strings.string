@@ -507,3 +507,6 @@ A storm of leaves surrounded\n[TARGET]!
 
 #org @gText_StoleItem
 [ATTACKER] stole\n[TARGET]'s [LAST_ITEM]!\pThe [LAST_ITEM] was put in\nthe bag.
+
+#org @gText_StoleItemTrainer
+[ATTACKER] stole\n[TARGET]'s [LAST_ITEM]!
