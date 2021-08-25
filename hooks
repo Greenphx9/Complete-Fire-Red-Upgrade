@@ -204,7 +204,7 @@ LoadMaxNumPokemonChooseBattleTowerStringHook 8124184 0
 CursorCb_Enter 8124154 1
 IsMonAllowedInBattleTower 8127550 1
 Task_ClosePartyMenuAfterText 81255BC 1
-PartyMenuAfterCancelLearnMoveHook 8125EEE 1
+##PartyMenuAfterCancelLearnMoveHook 8125EEE 1
 CanPokemonSelectedBeEnteredInBattleTower 81275F8 0
 ExpandedAbilityNamesSummaryScreen 8136714 1
 FieldMoveBadgeHook 812461C 0
