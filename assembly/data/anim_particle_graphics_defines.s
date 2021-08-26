@@ -107,6 +107,8 @@ definitions for animation particles
 .equ SHELL_SIDE_ARM_IMG, Shell_Side_ArmTiles
 .equ SHELL_SIDE_ARM_BALL_IMG, Shell_Side_Arm_BallTiles
 .equ LARGE_HOOPA_RING_IMG, Hoopa_Ring_LargeTiles
+.equ ALPHA_SYMBOL_IMG, Alpha_SymbolTiles
+.equ OMEGA_SYMBOL_IMG, Omega_SymbolTiles
 
 @;Palettes
 .equ SWORD_PAL, SwordPal
@@ -219,3 +221,5 @@ definitions for animation particles
 .equ SHELL_SIDE_ARM_BALL_PAL, Shell_Side_Arm_BallPal
 .equ LARGE_HOOPA_RING_PAL, Hoopa_Ring_LargePal
 .equ LARGE_HOOPA_RING_PAL, Hoopa_Ring_LargePal
+.equ ALPHA_SYMBOL_PAL, Alpha_SymbolPal
+.equ OMEGA_SYMBOL_PAL, Omega_SymbolPal
