@@ -557,12 +557,12 @@ void sp015_ModifyHeldItem(void) {
 }
 
 void sp016_ChangePokemonSpecies(void) {
-	u16 mon = Var8004;
-	//u16 species = Var8005;
-
-	if (mon >= 6)
+	u16 partyId = Var8004;
+	if (partyId >= PARTY_SIZE)
 		return;
+
 	SetMonDataFromVar8003(MON_DATA_SPECIES);
+	CalculateMonStats(&gPlayerParty[partyId]);
 }
 
 
