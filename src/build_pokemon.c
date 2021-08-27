@@ -181,6 +181,7 @@ extern bool8 CanMonParticipateInASkyBattle(struct Pokemon* mon);
 //This file's functions:
 static void TryGiveMonOnlyMetronome(struct Pokemon* mon);
 static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerNum, const bool8 firstTrainer, const bool8 side);
+static u8 GetTrainerMonGender(struct Trainer* trainer);
 static u8 GetTrainerMonMovePPBonus(void);
 static u8 GetTrainerMonMovePP(u16 move, u8 index);
 #if (defined SCALED_TRAINERS && !defined  DEBUG_NO_LEVEL_SCALING)
@@ -761,6 +762,23 @@ u16 sp06A_GivePlayerFrontierMonByLoadedSpread(void)
 	struct BattleTowerSpread* spread = (struct BattleTowerSpread*)gLoadPointer;
 
 	CreateFrontierMon(&mon, Var8000, spread, 0, 0, 0, TRUE);
+
+	#ifdef FLAG_POKEMON_RANDOMIZER
+	if (FlagGet(FLAG_POKEMON_RANDOMIZER))
+	{
+		Memset(mon.moves, 0, sizeof(mon.moves)); //Wipe custom moves
+		GiveBoxMonInitialMoveset((struct BoxPokemon*) &mon);
+	}
+	#endif
+
+	#ifdef FLAG_POKEMON_LEARNSET_RANDOMIZER
+	if (FlagGet(FLAG_POKEMON_LEARNSET_RANDOMIZER))
+	{
+		Memset(mon.moves, 0, sizeof(mon.moves)); //Wipe custom moves
+		GiveBoxMonInitialMoveset((struct BoxPokemon*) &mon); //Of randomized moves
+	}
+	#endif
+
 	SetMonPokedexFlags(&mon);
 	return GiveMonToPlayer(&mon);
 }
@@ -846,7 +864,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 		}
 		
 		//Choose Trainer Pokemon genders
-		setMonGender = 0xFF; //Randomly assign gender based on hash
+		setMonGender = GetTrainerMonGender(trainer);
 		if (!firstTrainer && side == B_SIDE_PLAYER && trainer->encounterMusic > 0) //Multi partner with preset Id
 		{
 			otid = gFrontierMultiBattleTrainers[trainer->encounterMusic - 1].otId;
@@ -964,6 +982,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 		{
 			u32 personalityValue;
 			u8 genderOffset = 0x80;
+			struct Pokemon* mon = &party[i];
 
 			if (setMonGender == 1)
 			{
@@ -1009,7 +1028,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 				if (FlagGet(FLAG_SCALE_TRAINER_LEVELS) || (gBattleTypeFlags & BATTLE_TYPE_TRAINER_TOWER))
 					openWorldLevel = GetHighestMonLevel(gPlayerParty);
 
-				CreateMon(&party[i], speciesToCreate, openWorldLevel, STANDARD_IV, TRUE, personalityValue, otIdType, otid);
+				CreateMon(mon, speciesToCreate, openWorldLevel, STANDARD_IV, TRUE, personalityValue, otIdType, otid);
 			}
 			else
 #endif 
@@ -1036,7 +1055,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 						#else
 						MAKE_POKEMON(trainer->party.ItemDefaultMoves);
 						#endif
-						SetMonData(&party[i], MON_DATA_HELD_ITEM, &trainer->party.ItemDefaultMoves[i].heldItem);
+						SetMonData(mon, MON_DATA_HELD_ITEM, &trainer->party.ItemDefaultMoves[i].heldItem);
 						break;
 
 					case PARTY_FLAG_CUSTOM_MOVES | PARTY_FLAG_HAS_ITEM:
@@ -1053,7 +1072,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 
 						if (setCustomMoves)
 							SET_MOVES(trainer->party.ItemCustomMoves);
-						SetMonData(&party[i], MON_DATA_HELD_ITEM, &trainer->party.ItemCustomMoves[i].heldItem);
+						SetMonData(mon, MON_DATA_HELD_ITEM, &trainer->party.ItemCustomMoves[i].heldItem);
 						break;
 				}
 			}
@@ -1062,15 +1081,15 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 			u8 otGender = trainer->gender;
 			const u8* name = TryGetRivalNameByTrainerClass(gTrainers[trainerId].trainerClass);
 			if (name == NULL) //Not Rival or Rival name isn't tied to Trainer class
-				SetMonData(&party[i], MON_DATA_OT_NAME, &trainer->trainerName);
+				SetMonData(mon, MON_DATA_OT_NAME, &trainer->trainerName);
 			else
-				SetMonData(&party[i], MON_DATA_OT_NAME, name);
-			SetMonData(&party[i], MON_DATA_OT_GENDER, &otGender);
+				SetMonData(mon, MON_DATA_OT_NAME, name);
+			SetMonData(mon, MON_DATA_OT_GENDER, &otGender);
 
 			//Give custom Poke Ball
-#ifdef TRAINER_CLASS_POKE_BALLS
-			SetMonData(&party[i], MON_DATA_POKEBALL, &gClassPokeBalls[trainer->trainerClass]);
-#endif
+			#ifdef TRAINER_CLASS_POKE_BALLS
+			SetMonData(mon, MON_DATA_POKEBALL, &gClassPokeBalls[trainer->trainerClass]);
+			#endif
 
 			//Give EVs
 #ifdef TRAINERS_WITH_EVS
@@ -1080,7 +1099,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 			if ((gTrainers[trainerId].trainerClass == CLASS_RIVAL
 			  || gTrainers[trainerId].trainerClass == CLASS_RIVAL_2)
 			&& gameDifficulty >= OPTIONS_HARD_DIFFICULTY)
-				spreadNum = GetEVSpreadNumForUnboundRivalChallenge(&party[i], trainer->aiFlags, gTrainers[trainerId].trainerClass);
+				spreadNum = GetEVSpreadNumForUnboundRivalChallenge(mon, trainer->aiFlags, gTrainers[trainerId].trainerClass);
 			#endif
 
 			if (gTrainers[trainerId].partyFlags == (PARTY_FLAG_CUSTOM_MOVES | PARTY_FLAG_HAS_ITEM)
@@ -1099,8 +1118,8 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 						SET_IVS_SINGLE_VALUE(MathMin(31, spread->ivs));
 				}
 
-				if (MoveInMonMoveset(MOVE_TRICKROOM, &party[i])
-				|| MoveInMonMoveset(MOVE_GYROBALL, &party[i])
+				if (MoveInMonMoveset(MOVE_TRICKROOM, mon)
+				|| MoveInMonMoveset(MOVE_GYROBALL, mon)
 				#ifdef FLAG_TRICK_ROOM_BATTLE
 				|| FlagGet(FLAG_TRICK_ROOM_BATTLE)
 				#endif
@@ -1108,7 +1127,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 				{
 					//Set all speed IVs to 0 in a forced Trick Room battle
 					u32 zero = 0;
-					SetMonData(&party[i], MON_DATA_SPEED_IV, &zero);
+					SetMonData(mon, MON_DATA_SPEED_IV, &zero);
 				}
 
 				u8 ballType;
@@ -1127,23 +1146,24 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 					ballType = MathMin(spread->ball, LAST_BALL_INDEX);
 				}
 
-				SetMonData(&party[i], MON_DATA_POKEBALL, &ballType);
+				SetMonData(mon, MON_DATA_POKEBALL, &ballType);
 
-				switch (spread->ability) {
-				case Ability_Hidden:
-				TRAINER_WITH_EV_GIVE_HIDDEN_ABILITY:
-					GiveMonNatureAndAbility(&party[i], spread->nature, 0xFF, FALSE, TRUE, FALSE); //Give Hidden Ability
-					break;
-				case Ability_1:
-				case Ability_2:
-					GiveMonNatureAndAbility(&party[i], spread->nature, MathMin(1, spread->ability - 1), FALSE, TRUE, FALSE);
-					break;
-				case Ability_Random_1_2:
-				TRAINER_WITH_EV_GIVE_RANDOM_ABILITY:
-					GiveMonNatureAndAbility(&party[i], spread->nature, Random() % 2, FALSE, TRUE, FALSE);
-					break;
-				case Ability_RandomAll:;
-					u8 random = Random() % 3;
+				switch(spread->ability) {
+					case Ability_Hidden:
+					TRAINER_WITH_EV_GIVE_HIDDEN_ABILITY:
+						GiveMonNatureAndAbility(mon, spread->nature, 0xFF, FALSE, TRUE, FALSE); //Give Hidden Ability
+						break;
+					case Ability_1:
+					case Ability_2:
+						GiveMonNatureAndAbility(mon, spread->nature, MathMin(1, spread->ability - 1), FALSE, TRUE, FALSE);
+						break;
+					case Ability_Random_1_2:
+					TRAINER_WITH_EV_GIVE_RANDOM_ABILITY:
+						GiveMonNatureAndAbility(mon, spread->nature, 0xFF, FALSE, TRUE, FALSE);
+						mon->hiddenAbility = FALSE; //Set by setting abilityNum to 0xFF (which is done to save time since Ability doesn't matter)
+						break;
+					case Ability_RandomAll: ;
+						u8 random = Random() % 3;
 
 					if (random == 2)
 						goto TRAINER_WITH_EV_GIVE_HIDDEN_ABILITY;
@@ -1152,7 +1172,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 				}
 
 				#ifdef UNBOUND
-				TryGiveSpecialTrainerHiddenPower(trainerId, &party[i]);
+				TryGiveSpecialTrainerHiddenPower(trainerId, mon);
 				#endif
 			}
 			#endif
@@ -1161,22 +1181,28 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 			if (gameDifficulty >= OPTIONS_EXPERT_DIFFICULTY
 			|| (gameDifficulty == OPTIONS_HARD_DIFFICULTY && GetCurrentRegionMapSectionId() == MAPSEC_VICTORY_ROAD))
 			{
-				party[i].friendship = 255; //Max friendship
-				if (GetMonEVCount(&party[i]) == 0) //Has no EVs already
-					GiveMon2BestBaseStatEVs(&party[i]);
+				mon->friendship = 255; //Max friendship
+				if (GetMonEVCount(mon) == 0) //Has no EVs already
+					GiveMon2BestBaseStatEVs(mon);
 			}
 			#endif
 
+			//Fix Minior
+			if (IsMinior(mon->species))
+			{
+				u16 correctMiniorForm = GetMiniorCoreFromPersonality(mon->personality);
+				SetMonData(mon, MON_DATA_SPECIES, &correctMiniorForm); //Prevents problems with it changing forms after lowering its shields
+			}
+
 			//Caluate stats and set to full health
-			CalculateMonStatsNew(&party[i]);
-			HealMon(&party[i]);
+			CalculateMonStatsNew(mon);
+			HealMon(mon);
 
 			//Status Inducers
-			TryStatusInducer(&party[i]);
+			TryStatusInducer(mon);
 			#ifdef UNBOUND
-			TryGiveSpecialTrainerStatusCondition(trainerId, &party[i]);
+			TryGiveSpecialTrainerStatusCondition(trainerId, mon);
 			#endif
-			gBankTarget = i + 1;
 		}
 
 		//Set Double battle type if necessary
@@ -1201,6 +1227,32 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 				monsCount = 1;
 
 	return monsCount;
+}
+
+static u8 GetTrainerMonGender(struct Trainer* trainer)
+{
+	switch (trainer->trainerClass)
+	{
+		case CLASS_TEAM_ROCKET: //Otherwise all Grunts have the same genders
+		case CLASS_LEADER:
+		case CLASS_ELITE_4:
+		case CLASS_CHAMPION:
+		case CLASS_RIVAL:
+		case CLASS_RIVAL_2:
+		case CLASS_BOSS:
+		#ifdef UNBOUND
+		case CLASS_LOR:
+		case CLASS_SUCCESSOR:
+		case CLASS_SHADOW_ADMIN:
+		case CLASS_EX_SHADOW_ADMIN:
+		case CLASS_LOR_ADMIN:
+		case CLASS_LOR_LEADER:
+		case CLASS_AGENT:
+		#endif
+			return trainer->gender; //These Trainer classes always match the gender of the Trainer
+		default:
+			return 0xFF; //Randomly assign gender based on hash
+	}
 }
 
 static u8 GetTrainerMonMovePPBonus(void)
