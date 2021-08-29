@@ -1112,6 +1112,7 @@ SetPlayerAvatarStateMask = 0x805C970 | 1;
 SetPlayerAvatarFieldMove = 0x805CB70 | 1; 
 StartStrengthAnim = 0x805CCD0 | 1;
 TeleportAnim_RotatePlayer = 0x805DDC8 | 1;
+GetCollisionInDirection = 0x806366C | 1;
 GetCollisionAtCoords = 0x80636AC | 1;
 MoveCoords = 0x8063A20 | 1;
 GetFaceDirectionMovementAction = 0x8063EB8 | 1;

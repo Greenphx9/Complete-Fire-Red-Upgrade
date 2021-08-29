@@ -1370,6 +1370,11 @@ bool8 IsMonAffectedByFocusSash(struct Pokemon* mon)
 	return mon->hp == mon->maxHP && IsMonHoldingFocusSash(mon);
 }
 
+bool8 CanBeTrapped(u8 bank)
+{
+	return !IsOfType(bank, TYPE_GHOST) && ITEM_EFFECT(bank) != ITEM_EFFECT_SHED_SHELL && ABILITY(bank) != ABILITY_RUNAWAY;
+}
+
 bool8 IsAffectedByPowder(u8 bank)
 {
 	return IsAffectedByPowderByDetails(gBattleMons[bank].type1, gBattleMons[bank].type2, gBattleMons[bank].type3, ABILITY(bank), ITEM_EFFECT(bank));
