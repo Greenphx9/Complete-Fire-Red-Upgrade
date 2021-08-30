@@ -2448,8 +2448,19 @@ u16 CalcSecondaryEffectChance(u8 bank, u16 move, u8 ability)
 {
 	u16 chance = gBattleMoves[move].secondaryEffectChance;
 
-	if (ability == ABILITY_SERENEGRACE || BankHasRainbow(bank))
-		chance *= 2;
+	if (gSpecialMoveFlags[move].gFlinchChanceMoves)
+	{
+		if (ability == ABILITY_SERENEGRACE || BankHasRainbow(bank)) //DOES NOT STACK
+			chance *= 2;
+	}
+	else //Stacks for moves without a flinch chance
+	{
+		if (ability == ABILITY_SERENEGRACE)
+			chance *= 2;
+
+		if (BankHasRainbow(bank))
+			chance *= 2;
+	}
 
 	#ifdef FROSTBITE
 	if (gBattleWeather & WEATHER_HAIL_ANY && (move == MOVE_ICEFANG || gBattleMoves[move].effect == EFFECT_FREEZE_HIT) && WEATHER_HAS_EFFECT)
