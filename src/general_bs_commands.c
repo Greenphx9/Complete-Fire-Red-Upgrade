@@ -1560,7 +1560,7 @@ void atk1F_jumpifsideaffecting(void)
 			flags |= SIDE_STATUS_SAFEGUARD;
 		if (BankSideHasMist(gBankTarget))
 			flags |= SIDE_STATUS_MIST;
-		if (ABILITY(gBankTarget) == ABILITY_INFILTRATOR)
+		if (BypassesScreens(ABILITY(gBankTarget))
 			flags &= ~(SIDE_STATUS_SAFEGUARD | SIDE_STATUS_MIST);
 	}
 

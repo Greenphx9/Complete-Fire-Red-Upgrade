@@ -1372,7 +1372,7 @@ void atkFF29_trysetsleep(void)
 		gBattleStringLoader = gText_TargetAlreadyHasStatusCondition; //String not in official games; officially "But it failed!"
 		fail = TRUE;
 	}
-	else if (ABILITY(gBankAttacker) != ABILITY_INFILTRATOR && BankSideHasSafeguard(bank))
+	else if (!BypassesScreens(ABILITY(gBankAttacker)) && BankSideHasSafeguard(bank))
 	{
 		gBattleStringLoader = gText_TeamProtectedBySafeguard;
 		fail = TRUE;
@@ -1481,7 +1481,7 @@ void atkD7_setyawn(void)
 		gBattleStringLoader = gText_TargetAlreadyHasStatusCondition; //String not in official games; officially "But it failed!"
 		fail = TRUE;
 	}
-	else if (ABILITY(gBankAttacker) != ABILITY_INFILTRATOR && BankSideHasSafeguard(bank))
+	else if (!BypassesScreens(ABILITY(gBankAttacker)) && BankSideHasSafeguard(bank))
 	{
 		gBattleStringLoader = gText_TeamProtectedBySafeguard;
 		fail = TRUE;
@@ -1613,7 +1613,7 @@ void atkFF2A_trysetparalysis(void)
 		gBattleStringLoader = gText_TargetAlreadyHasStatusCondition; //String not in official games; officially "But it failed!"
 		fail = TRUE;
 	}
-	else if (ABILITY(gBankAttacker) != ABILITY_INFILTRATOR && BankSideHasSafeguard(bank))
+	else if (!BypassesScreens(ABILITY(gBankAttacker)) && BankSideHasSafeguard(bank))
 	{
 		gBattleStringLoader = gText_TeamProtectedBySafeguard;
 		fail = TRUE;
@@ -1701,7 +1701,7 @@ void atkFF2B_trysetburn(void)
 		gBattleStringLoader = gText_TargetAlreadyHasStatusCondition; //String not in official games; officially "But it failed!"
 		fail = TRUE;
 	}
-	else if (ABILITY(gBankAttacker) != ABILITY_INFILTRATOR && BankSideHasSafeguard(bank))
+	else if (!BypassesScreens(ABILITY(gBankAttacker)) && BankSideHasSafeguard(bank))
 	{
 		gBattleStringLoader = gText_TeamProtectedBySafeguard;
 		fail = TRUE;
@@ -1792,7 +1792,7 @@ void atkFF2C_trysetpoison(void)
 		gBattleStringLoader = gText_TargetAlreadyHasStatusCondition; //String not in official games; officially "But it failed!"
 		fail = TRUE;
 	}
-	else if (ABILITY(gBankAttacker) != ABILITY_INFILTRATOR && BankSideHasSafeguard(bank))
+	else if (!BypassesScreens(ABILITY(gBankAttacker)) && BankSideHasSafeguard(bank))
 	{
 		gBattleStringLoader = gText_TeamProtectedBySafeguard;
 		fail = TRUE;
@@ -1932,7 +1932,7 @@ void atkFF34_canconfuse(void)
 		gBattleStringLoader = gText_TargetAlreadyConfused;
 		fail = TRUE;
 	}
-	else if (ABILITY(gBankAttacker) != ABILITY_INFILTRATOR && BankSideHasSafeguard(bank))
+	else if (!BypassesScreens(ABILITY(gBankAttacker)) && BankSideHasSafeguard(bank))
 	{
 		gBattleStringLoader = gText_TeamProtectedBySafeguard;
 		fail = TRUE;

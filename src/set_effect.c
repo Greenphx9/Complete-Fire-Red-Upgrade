@@ -181,7 +181,7 @@ void SetMoveEffect(bool8 primary, u8 certain)
 
 	if (BankSideHasSafeguard(gEffectBank)
 	&& !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
-	&& ABILITY(gBankAttacker) != ABILITY_INFILTRATOR
+	&& !BypassesScreens(ABILITY(gBankAttacker))
 	&& gEffectBank != gBankAttacker
 	&& !primary
 	&& certain != MOVE_EFFECT_CERTAIN
