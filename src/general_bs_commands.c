@@ -2417,7 +2417,7 @@ void atk7E_setreflect(void) {
 	gBattlescriptCurrInstr++;
 }
 
-const u16 gReflectLightScreenSafeguardStringIds[] =
+const u16 gReflectLightScreenStringIds[] =
 {
 	STRINGID_BUTITFAILED, 0x184
 };
@@ -4055,6 +4055,12 @@ void atkB7_presentdamagecalculation(void)
 	}
 }
 
+
+const u16 gSafeguardStringIds[] =
+{
+	STRINGID_BUTITFAILED, STRINGID_PKMNCOVEREDBYVEIL, 0x184
+};
+
 void atkB8_setsafeguard(void)
 {
 	if (BankSideHasSafeguard(gBankAttacker))
@@ -4064,10 +4070,20 @@ void atkB8_setsafeguard(void)
 	}
 	else
 	{
-		gSideStatuses[SIDE(gBankAttacker)] |= SIDE_STATUS_SAFEGUARD;
-		gSideTimers[SIDE(gBankAttacker)].safeguardTimer = 5;
-		gSideTimers[SIDE(gBankAttacker)].safeguardBank = gBankAttacker;
-		gBattleCommunication[MULTISTRING_CHOOSER] = 5;
+		if (IsShadowShieldBattle() && !IsAffectedByShadowShieldBattle(gBankAttacker))
+		{
+			gMoveResultFlags |= MOVE_RESULT_MISSED;
+			gBattleStringLoader = gText_ShadowShieldBattleBlocksSafeguard;
+			gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+		}
+		else
+		{
+			u8 side = SIDE(gBankAttacker);
+			gSideStatuses[side] |= SIDE_STATUS_SAFEGUARD;
+			gSideTimers[side].safeguardTimer = 5;
+			gSideTimers[side].safeguardBank = gBankAttacker;
+			gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+		}
 	}
 
 	gBattlescriptCurrInstr++;

@@ -1318,7 +1318,7 @@ BS_065_Reflect:
 ReflectBS:
 	attackanimation
 	waitanimation
-	printfromtable gReflectLightScreenSafeguardStringIds
+	printfromtable gReflectLightScreenStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -1576,10 +1576,20 @@ BS_079_Substitute:
 	attackstring
 	waitstateatk
 	jumpifbehindsubstitute BANK_ATTACKER 0x81D7321
+	callasm FailSubstituteInShadowShieldBattle
 	setsubstituteeffect
 	jumpifbyte NOTEQUALS MULTISTRING_CHOOSER 0x1 0x81D730E
 	pause DELAY_HALFSECOND
 	goto 0x81D7314
+
+.global BattleScript_ShadowShieldBlocksSubstitute
+BattleScript_ShadowShieldBlocksSubstitute:
+	pause DELAY_HALFSECOND
+	setword BATTLE_STRING_LOADER gText_ShadowShieldBattleBlocksSubstitute
+	printstring 0x184
+	waitmessage DELAY_1SECOND
+	orbyte OUTCOME OUTCOME_FAILED
+	goto BS_MOVE_END
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -2401,7 +2411,7 @@ BS_124_Safeguard:
 	setsafeguard
 	attackanimation
 	waitanimation
-	printfromtable 0x83FE54C
+	printfromtable gSafeguardStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 

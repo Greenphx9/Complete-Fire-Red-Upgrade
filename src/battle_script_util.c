@@ -2505,3 +2505,9 @@ void ShowSOSMonHealthbox(void)
 	SetHealthboxSpriteVisible(gHealthboxSpriteIds[sosBank]);
 	CreateMegaIndicatorAfterAnim();
 }
+
+void FailSubstituteInShadowShieldBattle(void)
+{
+	if (IsShadowShieldBattle() && !IsAffectedByShadowShieldBattle(gBankAttacker))
+		gBattlescriptCurrInstr = BattleScript_ShadowShieldBlocksSubstitute - 5;	
+}
