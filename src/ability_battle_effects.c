@@ -1681,45 +1681,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				}
 				break;
 
-			case ABILITY_GULPMISSILE: //Credits to soupercell
-				if (MOVE_HAD_EFFECT
-				&& TOOK_DAMAGE(bank)
-				&& move != MOVE_STRUGGLE
-				&& SPLIT(move) != SPLIT_STATUS
-				&& BATTLER_ALIVE(bank) // we deal damage even if we die
-				&& gBankAttacker != bank
-				&& (SPECIES(bank) == SPECIES_CRAMORANT_GORGING || SPECIES(bank) == SPECIES_CRAMORANT_GULPING))
-				{
-					if (ABILITY(gBankAttacker) != ABILITY_MAGICGUARD && BATTLER_ALIVE(gBankAttacker)){
-						gBattleMoveDamage = MathMax(1, GetBaseMaxHP(gBankAttacker) / 4);
-						BattleScriptPushCursor();
-						gBattlescriptCurrInstr = BattleScript_RoughSkinActivates;
-						effect++;
-					}
-					if (SPECIES(bank) == SPECIES_CRAMORANT_GORGING 
-					&& CanBeParalyzed(gBankAttacker, TRUE)
-					&& BATTLER_ALIVE(gBankAttacker)) {
-						gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_PARALYSIS;
-						BattleScriptPushCursor();
-						gBattlescriptCurrInstr = BattleScript_AbilityApplySecondaryEffect;
-						gHitMarker |= HITMARKER_IGNORE_SAFEGUARD; //Safeguard checked earlier
-						effect++;
-					}
-					else if (SPECIES(bank) == SPECIES_CRAMORANT_GULPING 
-					&& (STAT_CAN_FALL(gBankAttacker, STAT_SPEED) || ABILITY(gBankAttacker) == ABILITY_MIRRORARMOR)
-					&& BATTLER_ALIVE(gBankAttacker)){
-						gBattleScripting.statChanger = STAT_SPEED | DECREASE_1;
-						BattleScriptPushCursor();
-						gBattlescriptCurrInstr = BattleScript_GooeyActivates;
-						effect++;
-					}
-					DoFormChange(bank, SPECIES_CRAMORANT, TRUE, TRUE, FALSE);
-					BattleScriptPushCursor();
-					gBattlescriptCurrInstr = BattleScript_AbilityTransformed;
-					effect++;
-				}
-				break;
-
 			//case ABILITY_IRONBARBS:
 			case ABILITY_ROUGHSKIN:
 				if (MOVE_HAD_EFFECT
@@ -1752,7 +1713,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 
 					switch (gBattleCommunication[MOVE_EFFECT_BYTE]) {
 						case MOVE_EFFECT_SLEEP:
-							if (CanBePutToSleep(gBankAttacker, TRUE))
+							if (CanBePutToSleep(gBankAttacker, bank, TRUE))
 								++effect;
 							break;
 						case MOVE_EFFECT_POISON:
@@ -1761,7 +1722,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 							break;
 						case MOVE_EFFECT_BURN: //Gets changed to Paralysis
 							gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_PARALYSIS;
-							if (CanBeParalyzed(gBankAttacker, TRUE))
+							if (CanBeParalyzed(gBankAttacker, bank, TRUE))
 								++effect;
 							break;
 					}
@@ -1784,7 +1745,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				&& BATTLER_ALIVE(gBankAttacker)
 				&& gBankAttacker != bank
 				&& CheckContact(move, gBankAttacker)
-				&& CanBePoisoned(gBankAttacker, gBankTarget, TRUE)
+				&& CanBePoisoned(gBankAttacker, bank, TRUE)
 				&& umodsi(Random(), 3) == 0)
 				{
 					gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_POISON;
@@ -1801,7 +1762,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				&& BATTLER_ALIVE(gBankAttacker)
 				&& gBankAttacker != bank
 				&& CheckContact(move, gBankAttacker)
-				&& CanBeParalyzed(gBankAttacker, TRUE)
+				&& CanBeParalyzed(gBankAttacker, bank, TRUE)
 				&& umodsi(Random(), 3) == 0)
 				{
 					gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_PARALYSIS;
@@ -1818,7 +1779,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				&& BATTLER_ALIVE(gBankAttacker)
 				&& gBankAttacker != bank
 				&& CheckContact(move, gBankAttacker)
-				&& CanBeBurned(gBankAttacker, TRUE)
+				&& CanBeBurned(gBankAttacker, bank, TRUE)
 				&& umodsi(Random(), 3) == 0)
 				{
 					gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_BURN;

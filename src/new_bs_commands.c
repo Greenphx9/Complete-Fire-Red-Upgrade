@@ -1078,7 +1078,7 @@ void atkFE_prefaintmoveendeffects(void)
 			&& MOVE_HAD_EFFECT
 			&& TOOK_DAMAGE(gBankTarget)
 			&& gNewBS->BeakBlastByte & gBitTable[gBankTarget]
-			&& CanBeBurned(gBankAttacker, TRUE))
+			&& CanBeBurned(gBankAttacker, gBankTarget, TRUE))
 			{
 				BattleScriptPushCursor();
 				gBattlescriptCurrInstr = BattleScript_BeakBlastBurn;

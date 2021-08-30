@@ -348,7 +348,7 @@ u8 AIScript_Partner(const u8 bankAtk, const u8 bankAtkPartner, const u16 origina
 		case EFFECT_SWAGGER:
 			if (STAT_STAGE(bankAtkPartner, STAT_STAGE_ATK) < STAT_STAGE_MAX
 			&& !IsClassDoublesTotalTeamSupport(partnerClass)
-			&& (!CanBeConfused(bankAtkPartner, TRUE)
+			&& (!CanBeConfused(bankAtkPartner, bankAtk, TRUE)
 			 || atkPartnerItemEffect == ITEM_EFFECT_CURE_CONFUSION
 			 || atkPartnerItemEffect == ITEM_EFFECT_CURE_STATUS))
 				IncreaseHelpingHandViability(&viability, class);
@@ -357,7 +357,7 @@ u8 AIScript_Partner(const u8 bankAtk, const u8 bankAtkPartner, const u16 origina
 		case EFFECT_FLATTER:
 			if (STAT_STAGE(bankAtkPartner, STAT_STAGE_SPATK) < STAT_STAGE_MAX
 			&& !IsClassDoublesTotalTeamSupport(partnerClass)
-			&& (!CanBeConfused(bankAtkPartner, TRUE)
+			&& (!CanBeConfused(bankAtkPartner, bankAtk, TRUE)
 			 || atkPartnerItemEffect == ITEM_EFFECT_CURE_CONFUSION
 			 || atkPartnerItemEffect == ITEM_EFFECT_CURE_STATUS))
 				IncreaseHelpingHandViability(&viability, class);

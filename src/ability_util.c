@@ -90,6 +90,7 @@ bool8 IsTargetAbilityIgnored(u8 defAbility, u8 atkAbility, u16 move)
 }
 
 const u8* GetAbilityDescriptionOverride(const u8 ability, const u16 species) //Bypasses the 255 Ability limitation and implements new Abilities
+
 {
 	for(u8 i = 0; i < ARRAY_COUNT(sReplaceAbilities); i++)
 	{
@@ -123,6 +124,11 @@ void CopyAbilityDescription(u8* dst, const u8 ability, const u16 species)
 bool8 IsMoldBreakerAbility(u8 ability)
 {
 	return ability == ABILITY_MOLDBREAKER;
+}
+
+bool8 IsTargetAbilityIgnoredNoMove(u8 defAbility, u8 atkAbility)
+{
+	return IsMoldBreakerAbility(atkAbility) && gSpecialAbilityFlags[defAbility].gMoldBreakerIgnoredAbilities;
 }
 
 bool8 IsClearBodyAbility(u8 ability)

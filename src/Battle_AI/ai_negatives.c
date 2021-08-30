@@ -734,7 +734,7 @@ SKIP_CHECK_TARGET:
 			#endif
 
 		AI_CHECK_SLEEP:
-			if (!CanBePutToSleep(bankDef, TRUE)
+			if (!CanBePutToSleep(bankDef, bankAtk, TRUE)
 			|| (MoveBlockedBySubstitute(move, bankAtk, bankDef))
 			|| PARTNER_MOVE_EFFECT_IS_STATUS_SAME_TARGET)
 				DECREASE_VIABILITY(10);
@@ -1396,33 +1396,13 @@ SKIP_CHECK_TARGET:
 
 		case EFFECT_CONFUSE:
 		AI_CONFUSE:
-			if (PARTNER_MOVE_IS_CONFUSION_MAX_MOVE)
+			if (!CanBeConfused(bankDef, bankAtk, TRUE)
+			|| MoveBlockedBySubstitute(move, bankAtk, bankDef)
+			|| PARTNER_MOVE_EFFECT_IS_STATUS_SAME_TARGET
+			|| PARTNER_MOVE_IS_CONFUSION_MAX_MOVE)
 			{
 				DECREASE_VIABILITY(10);
 				break;
-			}
-
-			switch (move) {
-				case MOVE_TEETERDANCE: //Check if can affect either target
-					if ((IsConfused(bankDef)
-					  || (NO_MOLD_BREAKERS(data->atkAbility, move) && data->defAbility == ABILITY_OWNTEMPO)
-					  || (CheckGrounding(bankDef) == GROUNDED && gTerrainType == MISTY_TERRAIN)
-					  || (MoveBlockedBySubstitute(move, bankAtk, bankDef)))
-					&&  (IsConfused(data->bankDefPartner)
-					  || (NO_MOLD_BREAKERS(data->atkAbility, move) && data->defPartnerAbility == ABILITY_OWNTEMPO)
-					  || (CheckGrounding(data->bankDefPartner) == GROUNDED && gTerrainType == MISTY_TERRAIN)
-					  || (MoveBlockedBySubstitute(move, bankAtk, data->bankDefPartner))))
-					{
-						DECREASE_VIABILITY(10);
-					}
-					break;
-				default:
-					if (IsConfused(bankDef)
-					|| (NO_MOLD_BREAKERS(data->atkAbility, move) && data->defAbility == ABILITY_OWNTEMPO)
-					|| (CheckGrounding(bankDef) == GROUNDED && gTerrainType == MISTY_TERRAIN)
-					|| (MoveBlockedBySubstitute(move, bankAtk, bankDef))
-					|| PARTNER_MOVE_EFFECT_IS_SAME)
-						DECREASE_VIABILITY(10);
 			}
 			break;
 
@@ -1459,7 +1439,7 @@ SKIP_CHECK_TARGET:
 
 		case EFFECT_PARALYZE:
 		AI_PARALYZE_CHECK: ;
-			if (!CanBeParalyzed(bankDef, TRUE)
+			if (!CanBeParalyzed(bankDef, bankAtk, TRUE)
 			|| MoveBlockedBySubstitute(move, bankAtk, bankDef)
 			|| PARTNER_MOVE_EFFECT_IS_STATUS_SAME_TARGET)
 				DECREASE_VIABILITY(10);
@@ -2204,7 +2184,7 @@ SKIP_CHECK_TARGET:
 
 		case EFFECT_WILL_O_WISP:
 		AI_BURN_CHECK: ;
-			if (!CanBeBurned(bankDef, TRUE)
+			if (!CanBeBurned(bankDef, bankAtk, TRUE)
 			|| MoveBlockedBySubstitute(move, bankAtk, bankDef)
 			|| PARTNER_MOVE_EFFECT_IS_STATUS_SAME_TARGET)
 				DECREASE_VIABILITY(10);
@@ -2499,7 +2479,7 @@ SKIP_CHECK_TARGET:
 				#ifdef FROSTBITE
 				else if (data->atkStatus1 & STATUS1_FREEZE)
 				{
-					if (!CanBeFrozen(bankDef, TRUE)
+					if (!CanBeFrozen(bankDef, bankAtk, TRUE)
 					|| MoveBlockedBySubstitute(move, bankAtk, bankDef)
 					|| PARTNER_MOVE_EFFECT_IS_STATUS_SAME_TARGET)
 						DECREASE_VIABILITY(10);
@@ -2887,7 +2867,7 @@ SKIP_CHECK_TARGET:
 					goto AI_POISON_CHECK;
 
 				case MOVE_EFFECT_FREEZE:
-					if (!CanBeFrozen(bankDef, TRUE)
+					if (!CanBeFrozen(bankDef, bankAtk, TRUE)
 					 || MoveBlockedBySubstitute(move, bankAtk, bankDef))
 						DECREASE_VIABILITY(10);
 					break;

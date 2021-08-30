@@ -1418,7 +1418,7 @@ void LoadStatustoPsychoShiftTransfer(void)
 {
 	u32 status = gBattleMons[gBankAttacker].status1;
 
-	if (status & STATUS_SLEEP && CanBePutToSleep(gBankTarget, TRUE))
+	if (status & STATUS_SLEEP && CanBePutToSleep(gBankTarget, gBankAttacker, TRUE))
 	{
 		gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_SLEEP;
 	}
@@ -1430,16 +1430,16 @@ void LoadStatustoPsychoShiftTransfer(void)
 	{
 		gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_POISON;
 	}
-	else if (status & STATUS_BURN && CanBeBurned(gBankTarget, TRUE))
+	else if (status & STATUS_BURN && CanBeBurned(gBankTarget, gBankAttacker, TRUE))
 	{
 		gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_BURN;
 	}
-	else if (status & STATUS_PARALYSIS && CanBeParalyzed(gBankTarget, TRUE))
+	else if (status & STATUS_PARALYSIS && CanBeParalyzed(gBankTarget, gBankAttacker, TRUE))
 	{
 		gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_PARALYSIS;
 	}
 	#ifdef FROSTBITE
-	else if (status & STATUS_FREEZE && CanBeFrozen(gBankTarget, TRUE))
+	else if (status & STATUS_FREEZE && CanBeFrozen(gBankTarget, gBankAttacker, TRUE))
 	{
 		gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_FREEZE;
 	}
