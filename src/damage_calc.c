@@ -1900,7 +1900,7 @@ void AdjustDamage(bool8 checkFalseSwipe)
 		if ((gNewBS->zMoveData.active || IsAnyMaxMove(gCurrentMove))
 		&& !IsDynamaxed(bankDef)
 		&& ProtectsAgainstZMoves(gCurrentMove, gBankAttacker, bankDef))
-			damage = (damage  * 25) / 100;
+			damage = max(1, (damage  * 25) / 100);
 
 		if (MoveBlockedBySubstitute(gCurrentMove, gBankAttacker, bankDef))
 			goto END;

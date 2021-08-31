@@ -911,7 +911,7 @@ BS_035_LightScreen:
 	prefaintmoveendeffects 0x0
 	faintpokemonaftermove
 	setlightscreen
-	printfromtable gReflectLightScreenSafeguardStringIds
+	printfromtable gReflectLightScreenStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 	
@@ -1330,7 +1330,7 @@ BaddyBadBS:
 	prefaintmoveendeffects 0x0
 	faintpokemonaftermove
 	setreflect
-	printfromtable gReflectLightScreenSafeguardStringIds
+	printfromtable gReflectLightScreenStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -2187,7 +2187,7 @@ BS_112_Spikes:
 .global BS_113_Foresight
 BS_113_Foresight:
 	jumpifmove MOVE_MIRACLEEYE MiracleEyeBS
-	
+
 ForesightBS:
 	attackcanceler
 	accuracycheck BS_MOVE_MISSED 0x0
