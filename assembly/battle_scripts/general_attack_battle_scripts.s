@@ -273,7 +273,7 @@ HowlAttackAnimation:
 	setgraphicalstatchangevalues
 	playanimation BANK_ATTACKER ANIM_STAT_BUFF ANIM_ARG_1
 HowlPrintAttackerString:
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 HowlTryPartnerBS:
@@ -285,7 +285,7 @@ HowlTryPartnerBS:
 	jumpifbyte NOTEQUALS MULTISTRING_CHOOSER 0x2 HowlSecondAttackAnimation
 	pause DELAY_HALFSECOND
 	swapattackerwithtarget @;So the proper string is shown
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND	
 	swapattackerwithtarget
 	goto BS_MOVE_END
@@ -297,7 +297,7 @@ HowlSecondAttackAnimation:
 	setgraphicalstatchangevalues
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
 HowlPrintPartnerString:
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -347,13 +347,13 @@ BattleScript_FlowerShieldStatBoost:
 	setbyte ANIM_TARGETS_HIT 0x1
 	setgraphicalstatchangevalues
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BattleScript_FlowerShieldLoop
 
 BattleScript_FlowerShieldCantRaiseStats:
 	swapattackerwithtarget @;So the correct string prints
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	swapattackerwithtarget
 	waitmessage DELAY_1SECOND
 	goto BattleScript_FlowerShieldLoop
@@ -408,7 +408,7 @@ AromaticMistRaiseSpDef:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 FAILED
 	setgraphicalstatchangevalues
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -438,7 +438,7 @@ AcupressureBS:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
 	setgraphicalstatchangevalues
 	playanimation BANK_TARGET 0x1 ANIM_ARG_1
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -1156,7 +1156,7 @@ AutotomizeBS:
 	waitanimation
 	setgraphicalstatchangevalues
 	playanimation BANK_ATTACKER ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	callasm IncreaseNimbleCounter
 	setword BATTLE_STRING_LOADER BecameNimbleString
@@ -2000,7 +2000,7 @@ BattleScript_SapSipperAromatherapy:
 	statbuffchange STAT_TARGET | STAT_BS_PTR SapSipperReturnBS
 	call BattleScript_AbilityPopUp
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	call BattleScript_AbilityPopUpRevert
 SapSipperReturnBS:
@@ -2302,7 +2302,7 @@ BS_118_Swagger:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 SwaggerTryConfuseBS
 	setgraphicalstatchangevalues
 	playanimation BANK_TARGET, ANIM_STAT_BUFF, ANIM_ARG_1
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	
 SwaggerTryConfuseBS:
@@ -2802,7 +2802,7 @@ FellStingerKill:
 	setstatchanger STAT_ATK | INCREASE_3
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN, BS_MOVE_END
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -2906,7 +2906,7 @@ BS_145_SkullBash:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 SkipSkullBashStatBuff
 	setgraphicalstatchangevalues
 	playanimation BANK_ATTACKER ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 SkipSkullBashStatBuff:
 	call BattleScript_CheckPowerHerb
@@ -2918,7 +2918,7 @@ BS_MeteorBeam:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 SkipMeteorBeamStatBuff
 	setgraphicalstatchangevalues
 	playanimation BANK_ATTACKER ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 SkipMeteorBeamStatBuff:
 	call BattleScript_CheckPowerHerb
@@ -3169,14 +3169,14 @@ StockpileRaiseDef:
 	setstatchanger STAT_DEF | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN StockpileRaiseSpDef
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 StockpileRaiseSpDef
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 StockpileRaiseSpDef:
 	setstatchanger STAT_SPDEF | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -3207,7 +3207,7 @@ SpitUpLowerDef:
 	callasm ModifyPostStockpileBoostDecrement
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN SpitUpLowerSpDef
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 SpitUpLowerSpDef
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	
 SpitUpLowerSpDef:
@@ -3215,7 +3215,7 @@ SpitUpLowerSpDef:
 	callasm ModifyPostStockpileBoostDecrement
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN StockpileWearOff
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 StockpileWearOff
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 StockpileWearOff:
@@ -3294,7 +3294,7 @@ BS_166_Flatter:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 SwaggerTryConfuseBS
 	setgraphicalstatchangevalues
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto SwaggerTryConfuseBS
 
@@ -3741,14 +3741,14 @@ CC_SkipTo:
 	setstatchanger STAT_DEF | DECREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN CC_LowerSpDef
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 CC_LowerSpDef
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 CC_LowerSpDef:
 	setstatchanger STAT_SPDEF | DECREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_FAINT
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_FAINT
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_FAINT
 
@@ -3781,7 +3781,7 @@ VC_LowerSpd:
 	setstatchanger STAT_SPD | DECREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN VC_LowerDef
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 VC_LowerDef
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 VC_LowerDef:
@@ -4126,7 +4126,7 @@ WorkUp_RaiseAtk:
 	callasm ModifyGrowthInSun
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN WorkUp_RaiseSpAtk
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 WorkUp_RaiseSpAtk
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 WorkUp_RaiseSpAtk:
@@ -4134,7 +4134,7 @@ WorkUp_RaiseSpAtk:
 	callasm ModifyGrowthInSun
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -4156,14 +4156,14 @@ RaiseUserAtkAcc_Atk:
 	setstatchanger STAT_ATK | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN RaiseUserAtkAcc_Acc
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 RaiseUserAtkAcc_Acc
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 RaiseUserAtkAcc_Acc:
 	setstatchanger STAT_ACC | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 	
@@ -4242,14 +4242,14 @@ Rototiller_Atk:
 	setstatchanger STAT_ATK | INCREASE_1
 	statbuffchange STAT_TARGET | STAT_BS_PTR Rototiller_SpAtk
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 Rototiller_SpAtk
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	
 Rototiller_SpAtk:
 	setstatchanger STAT_SPATK | INCREASE_1
 	statbuffchange STAT_TARGET | STAT_BS_PTR BattleScript_RototillerLoop
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BattleScript_RototillerLoop
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BattleScript_RototillerLoop
 
@@ -4289,14 +4289,14 @@ GearUp_Atk:
 	setstatchanger STAT_ATK | INCREASE_1
 	statbuffchange STAT_TARGET | STAT_BS_PTR GearUp_SpAtk
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 GearUp_SpAtk
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	
 GearUp_SpAtk:
 	setstatchanger STAT_SPATK | INCREASE_1
 	statbuffchange STAT_TARGET | STAT_BS_PTR BattleScript_GearUpLoop
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BattleScript_GearUpLoop
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BattleScript_GearUpLoop
 
@@ -4341,7 +4341,7 @@ PlayNice_SkipAnim:
 	statbuffchange STAT_TARGET | STAT_BS_PTR PlayNice_SpAtk
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x3 PlayNice_SpAtk
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x4 BS_MOVE_END
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 
 PlayNice_SpAtk:
@@ -4349,7 +4349,7 @@ PlayNice_SpAtk:
 	setstatchanger STAT_SPATK | DECREASE_1
 	statbuffchange STAT_TARGET | STAT_BS_PTR BS_MOVE_END
 	jumpifbyte GREATERTHAN MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -4380,7 +4380,7 @@ VenomDrench_SkipAnim:
 	statbuffchange STAT_TARGET | STAT_BS_PTR VenomDrench_SpAtk
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x3 VenomDrench_SpAtk
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x4 BS_MOVE_END
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 
 VenomDrench_SpAtk:
@@ -4389,7 +4389,7 @@ VenomDrench_SpAtk:
 	setstatchanger STAT_SPATK | DECREASE_1
 	statbuffchange STAT_TARGET | STAT_BS_PTR VenomDrench_Spd
 	jumpifbyte GREATERTHAN MULTISTRING_CHOOSER 0x2 VenomDrench_Spd
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 
 VenomDrench_Spd:
@@ -4397,7 +4397,7 @@ VenomDrench_Spd:
 	setstatchanger STAT_SPD | DECREASE_1
 	statbuffchange STAT_TARGET | STAT_BS_PTR BS_MOVE_END
 	jumpifbyte GREATERTHAN MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -4466,14 +4466,14 @@ CosmicPower_Def:
 	setstatchanger STAT_DEF | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN CosmicPower_SpDef
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 CosmicPower_SpDef
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 CosmicPower_SpDef:
 	setstatchanger STAT_SPDEF | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -4500,14 +4500,14 @@ MagneticFlux_Def:
 	setstatchanger STAT_DEF | INCREASE_1
 	statbuffchange STAT_TARGET | STAT_BS_PTR MagneticFlux_SpDef
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 MagneticFlux_SpDef
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 MagneticFlux_SpDef:
 	setstatchanger STAT_SPDEF | INCREASE_1
 	statbuffchange STAT_TARGET | STAT_BS_PTR BattleScript_MagneticFluxLoop
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BattleScript_MagneticFluxLoop
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BattleScript_MagneticFluxLoop
 
@@ -4547,35 +4547,35 @@ ExtremeEvoboost_Atk:
 	setstatchanger STAT_ATK | INCREASE_2
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN ExtremeEvoboost_Def
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 ExtremeEvoboost_Def
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 ExtremeEvoboost_Def:
 	setstatchanger STAT_DEF | INCREASE_2
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN ExtremeEvoboost_SpAtk
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 ExtremeEvoboost_SpAtk
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 ExtremeEvoboost_SpAtk:
 	setstatchanger STAT_SPATK | INCREASE_2
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN ExtremeEvoboost_SpDef
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 ExtremeEvoboost_SpDef
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 ExtremeEvoboost_SpDef:
 	setstatchanger STAT_SPDEF | INCREASE_2
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN ExtremeEvoboost_Spd
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 ExtremeEvoboost_Spd
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 ExtremeEvoboost_Spd:
 	setstatchanger STAT_SPD | INCREASE_2
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -4639,14 +4639,14 @@ BulkUp_Atk:
 	setstatchanger STAT_ATK | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BulkUp_Def
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BulkUp_Def
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 BulkUp_Def:
 	setstatchanger STAT_DEF | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -4665,21 +4665,21 @@ Coil_Atk:
 	setstatchanger STAT_ATK | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN Coil_Def
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 Coil_Def
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 Coil_Def:
 	setstatchanger STAT_DEF | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN Coil_Acc
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 Coil_Acc
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 Coil_Acc:
 	setstatchanger STAT_ACC | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -4722,7 +4722,7 @@ CalmMind_SpDef:
 	setstatchanger STAT_SPDEF | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -4756,21 +4756,21 @@ QuiverDance_RaiseSpAtk1:
 	setstatchanger STAT_SPATK | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN QuiverDance_RaiseSpDef1
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 QuiverDance_RaiseSpDef1
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 QuiverDance_RaiseSpDef1:
 	setstatchanger STAT_SPDEF | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN QuiverDance_RaiseSpd1
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 QuiverDance_RaiseSpd1
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 QuiverDance_RaiseSpd1:
 	setstatchanger STAT_SPD | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -4878,21 +4878,21 @@ Geomancy_RaiseSpAtk2:
 	setstatchanger STAT_SPATK | INCREASE_2
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN Geomancy_RaiseSpDef2
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 Geomancy_RaiseSpDef2
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 Geomancy_RaiseSpDef2:
 	setstatchanger STAT_SPDEF | INCREASE_2
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN Geomancy_RaiseSpd2
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 Geomancy_RaiseSpd2
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 Geomancy_RaiseSpd2:
 	setstatchanger STAT_SPD | INCREASE_2
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -4931,14 +4931,14 @@ DragonDance_Atk:
 	setstatchanger STAT_ATK | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN DragonDance_Spd
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 DragonDance_Spd
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 DragonDance_Spd:
 	setstatchanger STAT_SPD | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -4956,14 +4956,14 @@ ShiftGear_Atk:
 	setstatchanger STAT_ATK | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN ShiftGear_Spd
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 ShiftGear_Spd
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 ShiftGear_Spd:
 	setstatchanger STAT_SPD | INCREASE_2
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -4982,14 +4982,14 @@ ShellSmash_DropDef:
 	setstatchanger STAT_DEF | DECREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN ShellSmash_DropSpDef
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 ShellSmash_DropSpDef
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 ShellSmash_DropSpDef:
 	setstatchanger STAT_SPDEF | DECREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN ShellSmash_BoostStats
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 ShellSmash_BoostStats
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 ShellSmash_BoostStats:
@@ -5005,14 +5005,14 @@ ShellSmash_SharpAtk:
 	setstatchanger STAT_ATK | INCREASE_2
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN ShellSmash_SharpSpAtk
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 ShellSmash_SharpSpAtk
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 ShellSmash_SharpSpAtk:
 	setstatchanger STAT_SPATK | INCREASE_2
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN ShiftGear_Spd
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 ShiftGear_Spd
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto ShiftGear_Spd
 

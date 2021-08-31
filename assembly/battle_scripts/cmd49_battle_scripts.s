@@ -120,7 +120,7 @@ RageReturn:
 	return
 	
 RageContraryBS: @;Rage says "Attack fell!" if the target has Contrary. Only the rage string is printed if the stat rises
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	goto RagePrintString
 	
@@ -151,7 +151,7 @@ BattleScript_Moxie:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 .LReturn
 	call BattleScript_AbilityPopUp
 	playanimation BANK_ATTACKER ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	call BattleScript_AbilityPopUpRevert
 .LReturn:
@@ -350,7 +350,7 @@ ScaleShot_Def:
 	setstatchanger STAT_DEF | DECREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN, ScaleShot_Spd
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 ScaleShot_Spd
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 ScaleShot_Spd:
@@ -359,7 +359,7 @@ ScaleShot_Spd:
 	setstatchanger STAT_SPD | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN, .LReturn
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 .LReturn
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	return
 

@@ -419,7 +419,7 @@ MoodySkipString:
 	statbuffchange STAT_ATTACKER | STAT_NOT_PROTECT_AFFECTED | STAT_CERTAIN MoodyStatRaiseEnd
 	setgraphicalstatchangevalues
 	playanimation BANK_ATTACKER ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 MoodyStatRaiseEnd:
 	call BattleScript_AbilityPopUpRevert
@@ -430,7 +430,7 @@ BattleScript_MoodyRegular:
 	statbuffchange STAT_ATTACKER | STAT_NOT_PROTECT_AFFECTED | STAT_CERTAIN MoodyRegularP2
 	setgraphicalstatchangevalues
 	playanimation BANK_ATTACKER ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	
 MoodyRegularP2:
@@ -704,7 +704,7 @@ WeakArmorModSpd:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 WeakArmorRevertPopUp
 	setgraphicalstatchangevalues
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	
 WeakArmorRevertPopUp:
@@ -970,7 +970,7 @@ BattleScript_DefiantCompetitiveCall:
 	call BattleScript_AbilityPopUp
 	setgraphicalstatchangevalues
 	playanimation BANK_SCRIPTING ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	call BattleScript_AbilityPopUpRevert
 

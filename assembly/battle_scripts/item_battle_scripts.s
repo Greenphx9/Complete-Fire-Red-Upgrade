@@ -610,7 +610,7 @@ BattleScript_AIUseXstat:
 	waitmessage DELAY_1SECOND
 	useitemonopponent
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable gStatUpStringIds @;gStatUpStringIds
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 	finishaction
 
