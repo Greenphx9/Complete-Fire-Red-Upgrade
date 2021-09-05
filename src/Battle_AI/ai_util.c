@@ -1188,12 +1188,9 @@ u16 CalcFinalAIMoveDamage(u16 move, u8 bankAtk, u8 bankDef, u8 numHits, struct D
 			break;
 
 		case EFFECT_0HKO:
-			if (gBattleMons[bankAtk].level <= gBattleMons[bankDef].level)
-				return 0;
-			if (move == MOVE_SHEERCOLD && IsOfType(bankDef, TYPE_ICE))
-				return 0;
-
-			return gBattleMons[bankDef].hp;
+			if (!IsPlayerInControl(bankAtk) || MoveWillHit(move, bankAtk, bankDef)) //AI attacker or player will hit
+				return gBattleMons[bankDef].hp; //Assume the move will be used
+			return 1; //Assume the move does damage, but the player probably won't click it
 
 		case EFFECT_POLTERGEIST:
 			if (WillPoltergeistFail(ITEM(bankDef), ABILITY(bankDef)))
@@ -1264,16 +1261,12 @@ u16 CalcFinalAIMoveDamageFromParty(u16 move, struct Pokemon* monAtk, u8 bankDef,
 
 	switch (gBattleMoves[move].effect) {
 		case EFFECT_0HKO:
-			if (GetMonData(monAtk, MON_DATA_LEVEL, NULL) <= gBattleMons[bankDef].level)
-				return 0;
-			if (move == MOVE_SHEERCOLD && IsOfType(bankDef, TYPE_ICE))
-				return 0;
+			
+			if (IsPlayerInControl(bankDef) //AI attacker - assume player wouldn't target their own mons with an OHKO move
+			|| MonMoveWillHit(move, monAtk, bankDef)) //Player and the move will hit the AI
+				return gBattleMons[bankDef].hp; //Assume the move will be used
 
-			return gBattleMons[bankDef].hp;
-
-		case EFFECT_COUNTER: //Includes Metal Burst
-		case EFFECT_MIRROR_COAT:
-			return 0;
+			return 1; //Assume the move does damage, but the player probably won't click it
 	}
 
 	u32 dmg = AI_CalcPartyDmg(FOE(bankDef), bankDef, move, monAtk, damageData) * numHits;
@@ -1622,35 +1615,47 @@ void ForceCompleteDamageRecalculation(const u8 bankAtk)
 	}
 }
 
+static bool8 MoveCantHitTarget(u16 move, u8 bankDef)
+{
+	return (gStatuses3[bankDef] & (STATUS3_IN_AIR | STATUS3_SKY_DROP_ATTACKER | STATUS3_SKY_DROP_TARGET) && !gSpecialMoveFlags[move].gIgnoreInAirMoves)
+		|| (gStatuses3[bankDef] & STATUS3_UNDERGROUND && !gSpecialMoveFlags[move].gIgnoreUndergoundMoves)
+		|| (gStatuses3[bankDef] & STATUS3_UNDERWATER  && !gSpecialMoveFlags[move].gIgnoreUnderwaterMoves)
+		|| (gStatuses3[bankDef] & STATUS3_DISAPPEARED);
+}
+
+static bool8 MoveAlwaysHitsTarget(u16 move, u8 bankDef)
+{
+	return (gSpecialMoveFlags[move].gAlwaysHitWhenMinimizedMoves && gStatuses3[bankDef] & STATUS3_MINIMIZED)
+		|| (gStatuses3[bankDef] & STATUS3_TELEKINESIS && gBattleMoves[move].effect != EFFECT_0HKO)
+		|| gBattleMoves[move].accuracy == 0
+		|| (gBattleWeather & WEATHER_RAIN_ANY && gSpecialMoveFlags[move].gAlwaysHitInRainMoves && WEATHER_HAS_EFFECT)
+		|| IsZMove(move)
+		|| IsAnyMaxMove(move);
+}
+
 bool8 MoveWillHit(u16 move, u8 bankAtk, u8 bankDef)
 {
-	#ifdef REALLY_SMART_AI
-		u8 defAbility = BATTLE_HISTORY->abilities[bankDef];
-	#else
-		u8 defAbility = ABILITY(bankDef);
-	#endif
-
-	if (ABILITY(bankAtk) == ABILITY_NOGUARD
-	||  defAbility == ABILITY_NOGUARD
+	if (ABILITY(bankAtk) == ABILITY_NOGUARD || ABILITY(bankDef) == ABILITY_NOGUARD
 	|| (gStatuses3[bankDef] & STATUS3_ALWAYS_HITS && gDisableStructs[bankDef].bankWithSureHit == bankAtk))
 		return TRUE;
 
-	if (((gStatuses3[bankDef] & (STATUS3_IN_AIR | STATUS3_SKY_DROP_ATTACKER | STATUS3_SKY_DROP_TARGET)) && !gSpecialMoveFlags[move].gIgnoreInAirMoves)
-	||  ((gStatuses3[bankDef] & STATUS3_UNDERGROUND) && !gSpecialMoveFlags[move].gIgnoreUndergoundMoves)
-	||  ((gStatuses3[bankDef] & STATUS3_UNDERWATER) && !gSpecialMoveFlags[move].gIgnoreUnderwaterMoves)
-	||   (gStatuses3[bankDef] & STATUS3_DISAPPEARED))
+	if (MoveCantHitTarget(move, bankDef))
 		return FALSE;
 
-	if ((move == MOVE_TOXIC && IsOfType(bankAtk, TYPE_POISON))
-	||  (gSpecialMoveFlags[move].gAlwaysHitWhenMinimizedMoves && gStatuses3[bankDef] & STATUS3_MINIMIZED)
-	|| ((gStatuses3[bankDef] & STATUS3_TELEKINESIS) && gBattleMoves[move].effect != EFFECT_0HKO)
-	||  gBattleMoves[move].accuracy == 0
-	|| ((gBattleWeather & WEATHER_RAIN_ANY) && gSpecialMoveFlags[move].gAlwaysHitInRainMoves && WEATHER_HAS_EFFECT)
-	||  IsZMove(move)
-	||  IsAnyMaxMove(move))
+	return MoveAlwaysHitsTarget(move, bankDef)
+		|| (move == MOVE_TOXIC && IsOfType(bankAtk, TYPE_POISON));
+}
+
+bool8 MonMoveWillHit(u16 move, struct Pokemon* monAtk, u8 bankDef)
+{
+	if (GetMonAbility(monAtk) == ABILITY_NOGUARD || ABILITY(bankDef) == ABILITY_NOGUARD)
 		return TRUE;
 
-	return FALSE;
+	if (MoveCantHitTarget(move, bankDef))
+		return FALSE;
+
+	return MoveAlwaysHitsTarget(move, bankDef)
+		|| (move == MOVE_TOXIC && IsMonOfType(monAtk, TYPE_POISON));
 }
 
 bool8 MoveWouldHitFirst(u16 move, u16 bankAtk, u16 bankDef)
