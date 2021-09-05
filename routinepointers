@@ -266,3 +266,32 @@ VBlankCB_Battle 8011B80
 VBlankCB_Battle 802AAC4
 VBlankCB_Battle 8077A9C
 
+#ifdef UNBOUND
+FieldUseFunc_MaxPowder 8876C40
+FieldUseFunc_Honey 8876E7C
+FieldUseFunc_EVReducingBerry 8877C68
+FieldUseFunc_EVReducingBerry 8877C94
+FieldUseFunc_EVReducingBerry 8877CC0
+FieldUseFunc_EVReducingBerry 8877CEC
+FieldUseFunc_EVReducingBerry 8877D18
+FieldUseFunc_EVReducingBerry 8877D44
+FieldUseFunc_FormChangeItem 887BE3C
+FieldUseFunc_FormChangeItem 887BE68
+FieldUseFunc_FormChangeItem 887BE94
+FieldUseFunc_FormChangeItem 887BE10
+FieldUseFunc_FormChangeItem 887CC54
+FieldUseFunc_FormChangeItem 887CC80
+FieldUseFunc_FormChangeItem 887CCAC
+FieldUseFunc_FormChangeItem 887CCD8
+FieldUseFunc_FormChangeItem 887D308
+FieldUseFunc_FormChangeItem 887D334
+FieldUseFunc_AbilityCapsule 8877168
+FieldUseFunc_AbilityCapsule 887CA9C
+#endif
+
+#ifdef UNBOUND
+CB2_NewGame 812EB54
+FieldUseFunc_VsSeeker 887A054
+CB2_PartyMenuFromField 801D7FC
+CB2_ItemMenuFromField 801D800
+#endif
