@@ -4488,8 +4488,10 @@ void atkC3_trysetfutureattack(void) {
 	}
 }
 
-void atkC5_setsemiinvulnerablebit(void) {
-	switch (gCurrentMove) {
+void atkC5_setsemiinvulnerablebit(void)
+{
+	switch (gCurrentMove)
+	{
 		case MOVE_FLY:
 		case MOVE_BOUNCE:
 			gStatuses3[gBankAttacker] |= STATUS3_IN_AIR;
@@ -4524,8 +4526,10 @@ void atkC5_setsemiinvulnerablebit(void) {
 	gBattlescriptCurrInstr++;
 }
 
-void atkC6_clearsemiinvulnerablebit(void) {
-	switch (gCurrentMove) {
+void atkC6_clearsemiinvulnerablebit(void)
+{
+	switch (gCurrentMove)
+	{
 		case MOVE_FLY:
 		case MOVE_BOUNCE:
 			gStatuses3[gBankAttacker] &= ~STATUS3_IN_AIR;
@@ -4547,6 +4551,7 @@ void atkC6_clearsemiinvulnerablebit(void) {
 			gNewBS->skyDropTargetsAttacker[gBankTarget] = 0;
 			break;
 	}
+
 	gBattlescriptCurrInstr++;
 }
 
