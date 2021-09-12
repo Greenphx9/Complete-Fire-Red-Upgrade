@@ -246,7 +246,6 @@ bool8 IsPriorityBlockingAbility(u8 ability)
 {
 	switch (ability)
 	{
-		case ABILITY_DAZZLING:
 		#ifdef ABILITY_QUEENLYMAJESTY
 		case ABILITY_QUEENLYMAJESTY:
 		#endif

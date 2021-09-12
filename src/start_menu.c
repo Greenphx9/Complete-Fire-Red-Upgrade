@@ -551,6 +551,14 @@ bool8 StartMenuBagCallback(void)
 			}
 
 		}
+		if(VarGet(VAR_POWER_ITEM_LEVEL) == 0) 
+		{
+			VarSet(VAR_POWER_ITEM_LEVEL, 1);
+		}
+		if(VarGet(VAR_POWER_ITEM_LEVEL) != 6 && FlagGet(FLAG_NO_GRINDING_EV))
+		{
+			VarSet(VAR_POWER_ITEM_LEVEL, 6);
+		}
         return TRUE;
     }
     return FALSE;

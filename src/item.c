@@ -2446,14 +2446,6 @@ void BagListMenuGetItemNameColored(u8 *dest, u16 itemId)
 		case ITEM_POWER_LENS:
 		case ITEM_POWER_BAND:
 		case ITEM_POWER_ANKLET:
-			if(VarGet(VAR_POWER_ITEM_LEVEL) == 0) 
-			{
-				VarSet(VAR_POWER_ITEM_LEVEL, 1);
-			}
-			if(VarGet(VAR_POWER_ITEM_LEVEL) != 6 && FlagGet(FLAG_NO_GRINDING_EV))
-			{
-				VarSet(VAR_POWER_ITEM_LEVEL, 6);
-			}
 			levelToAppend = VarGet(VAR_POWER_ITEM_LEVEL);
 			break;
 	}
