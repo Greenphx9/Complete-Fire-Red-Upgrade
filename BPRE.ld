@@ -317,6 +317,10 @@ sDrawStartMenuState = 0x20370FF;
 sTimeWindowTemplate = 0x83a738c;
 sTimeWindowId = 0x2037101;
 
+/* Trade RAM */
+gSelectedTradeMonPositions = 0x2031DA4;
+sTradeData = 0x2031DAC;
+
 /* Other RAM */
 sWarpDestination = 0x2031DBC;
 gPSSData = 0x20397B0;
