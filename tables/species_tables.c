@@ -180,7 +180,6 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smogonUUBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
-		.randomizerBan = TRUE,
 	},
 #endif
 #ifdef SPECIES_DEOXYS_DEFENSE
@@ -191,7 +190,6 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smogonUUBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
-		.randomizerBan = TRUE,
 	},
 #endif
 #ifdef SPECIES_DEOXYS_SPEED
@@ -203,7 +201,6 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smogonUUBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
-		.randomizerBan = TRUE,
 	},
 #endif
 #ifdef SPECIES_DIALGA
