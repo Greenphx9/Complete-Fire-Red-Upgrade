@@ -1692,7 +1692,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				&& BATTLER_ALIVE(gBankAttacker)
 				&& gBankAttacker != bank
 				&& ABILITY(gBankAttacker) != ABILITY_MAGICGUARD
-				&& CheckContact(move, gBankAttacker))
+				&& CheckContact(move, gBankAttacker, bank))
 				{
 					gBattleMoveDamage = MathMax(1, GetBaseMaxHP(gBankAttacker) / 8);
 					BattleScriptPushCursor();
@@ -1706,7 +1706,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				&& TOOK_DAMAGE(bank)
 				&& BATTLER_ALIVE(gBankAttacker)
 				&& gBankAttacker != bank
-				&& CheckContact(move, gBankAttacker)
+				&& CheckContact(move, gBankAttacker, bank)
 				&& IsAffectedByPowder(gBankAttacker)
 				&& Random() % 10 == 0)
 				{
@@ -1748,7 +1748,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				&& TOOK_DAMAGE(bank)
 				&& BATTLER_ALIVE(gBankAttacker)
 				&& gBankAttacker != bank
-				&& CheckContact(move, gBankAttacker)
+				&& CheckContact(move, gBankAttacker, bank)
 				&& CanBePoisoned(gBankAttacker, bank, TRUE)
 				&& umodsi(Random(), 3) == 0)
 				{
@@ -1765,7 +1765,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				&& TOOK_DAMAGE(bank)
 				&& BATTLER_ALIVE(gBankAttacker)
 				&& gBankAttacker != bank
-				&& CheckContact(move, gBankAttacker)
+				&& CheckContact(move, gBankAttacker, bank)
 				&& CanBeParalyzed(gBankAttacker, bank, TRUE)
 				&& umodsi(Random(), 3) == 0)
 				{
@@ -1782,7 +1782,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				&& TOOK_DAMAGE(bank)
 				&& BATTLER_ALIVE(gBankAttacker)
 				&& gBankAttacker != bank
-				&& CheckContact(move, gBankAttacker)
+				&& CheckContact(move, gBankAttacker, bank)
 				&& CanBeBurned(gBankAttacker, bank, TRUE)
 				&& umodsi(Random(), 3) == 0)
 				{
@@ -1800,7 +1800,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				&& BATTLER_ALIVE(gBankAttacker)
 				&& BATTLER_ALIVE(bank)
 				&& gBankAttacker != bank
-				&& CheckContact(move, gBankAttacker)
+				&& CheckContact(move, gBankAttacker, bank)
 				&& umodsi(Random(), 3) == 0
 				&& ABILITY(gBankAttacker) != ABILITY_OBLIVIOUS
 				&& ABILITY(gBankAttacker) != ABILITY_AROMAVEIL
@@ -1881,7 +1881,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				&& TOOK_DAMAGE(bank)
 				&& BATTLER_ALIVE(gBankAttacker)
 				&& gBankAttacker != bank
-				&& CheckContact(move, gBankAttacker))
+				&& CheckContact(move, gBankAttacker, bank))
 				{
 					switch (ABILITY(gBankAttacker)) {
 						case ABILITY_MUMMY:
@@ -1910,7 +1910,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				&& TOOK_DAMAGE(bank)
 				&& (BATTLER_ALIVE(gBankAttacker) || BATTLER_ALIVE(gBankTarget))
 				&& gBankAttacker != bank
-				&& CheckContact(move, gBankAttacker))
+				&& CheckContact(move, gBankAttacker, bank))
 				{
 					BattleScriptPushCursor();
 					gBattlescriptCurrInstr = BattleScript_WanderingSpiritActivates;
@@ -1940,7 +1940,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				&& BATTLER_ALIVE(gBankAttacker)
 				&& gBankAttacker != bank
 				&& ABILITY(gBankAttacker) != ABILITY_MAGICGUARD
-				&& CheckContact(move, gBankAttacker)
+				&& CheckContact(move, gBankAttacker, bank)
 				&& !BATTLER_ALIVE(bank)
 				&& !ABILITY_ON_FIELD(ABILITY_DAMP))
 				{
@@ -1972,7 +1972,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 			case ABILITY_COTTONDOWN: //TODO REMOVE
 				if (MOVE_HAD_EFFECT
 				&& TOOK_DAMAGE(bank)
-				&& CheckContact(move, gBankAttacker)
+				&& CheckContact(move, gBankAttacker, bank)
 				&& BATTLER_ALIVE(gBankAttacker)
 				&& gBankAttacker != bank
 				&& (STAT_CAN_FALL(gBankAttacker, STAT_SPD) || ABILITY(gBankAttacker) == ABILITY_MIRRORARMOR))
@@ -2082,7 +2082,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				if (MOVE_HAD_EFFECT
 				&& TOOK_DAMAGE(bank)
 				&& gBankAttacker != bank
-				&& CheckContact(move, gBankAttacker))
+				&& CheckContact(move, gBankAttacker, bank))
 				{
 					BattleScriptPushCursor();
 					gBattlescriptCurrInstr = BattleScript_PerishBody;

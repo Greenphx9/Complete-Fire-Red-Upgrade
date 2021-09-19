@@ -985,7 +985,7 @@ void atkFE_prefaintmoveendeffects(void)
 						break;
 
 					case ABILITY_POISONTOUCH:
-						if (CheckContact(gCurrentMove, gBankAttacker)
+						if (CheckContact(gCurrentMove, gBankAttacker, gBankTarget)
 						&& ABILITY(gBankTarget) != ABILITY_SHIELDDUST
 						&& CanBePoisoned(gBankTarget, gBankAttacker, TRUE)
 						&& umodsi(Random(), 100) < 30)
@@ -1091,7 +1091,7 @@ void atkFE_prefaintmoveendeffects(void)
 			break;
 
 		case FAINT_BEAK_BLAST_BURN:
-			if (CheckContact(gCurrentMove, gBankAttacker)
+			if (CheckContact(gCurrentMove, gBankAttacker, gBankTarget)
 			&& MOVE_HAD_EFFECT
 			&& TOOK_DAMAGE(gBankTarget)
 			&& gNewBS->BeakBlastByte & gBitTable[gBankTarget]

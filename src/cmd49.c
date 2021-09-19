@@ -190,7 +190,7 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 						if (BankHasRainbow(gBankAttacker))
 							chance *= 2;
 
-						if (CheckContact(gCurrentMove, gBankAttacker)
+						if (CheckContact(gCurrentMove, gBankAttacker, gBankTarget)
 						&& ABILITY(gBankTarget) != ABILITY_SHIELDDUST
 						&& CanBePoisoned(gBankTarget, gBankAttacker, TRUE)
 						&& umodsi(Random(), 100) < chance)
@@ -296,7 +296,7 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 			break;
 
 		case ATK49_BEAK_BLAST_BURN:
-			if (CheckContact(gCurrentMove, gBankAttacker)
+			if (CheckContact(gCurrentMove, gBankAttacker, gBankTarget)
 			&& MOVE_HAD_EFFECT
 			&& TOOK_DAMAGE(gBankTarget)
 			&& gNewBS->BeakBlastByte & gBitTable[gBankTarget]
@@ -1372,7 +1372,7 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 				&& ((gBattleTypeFlags & BATTLE_TYPE_TRAINER) || SIDE(bank) == B_SIDE_PLAYER) //Wild mons can't activate
 				&&  !MoveBlockedBySubstitute(gCurrentMove, gBankAttacker, bank)
 				&&  gBattleMons[bank].hp != 0
-				&&  CheckContact(gCurrentMove, gBankAttacker)
+				&&  CheckContact(gCurrentMove, gBankAttacker, bank)
 				&&  ITEM(gBankAttacker) != ITEM_NONE
 				&&  ITEM(bank) == ITEM_NONE
 				&& (ABILITY(gBankAttacker) != ABILITY_STICKYHOLD || !BATTLER_ALIVE(gBankAttacker)))

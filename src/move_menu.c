@@ -507,7 +507,7 @@ void EmitChooseMove(u8 bufferId, bool8 isDoubleBattle, bool8 NoPpNumber, struct 
 			tempMoveStruct->movePowers[i] = CalcVisualBasePower(gActiveBattler, gActiveBattler, move, TRUE);
 			tempMoveStruct->moveAcc[i] = VisualAccuracyCalc_NoTarget(move, gActiveBattler);
 			tempMoveStruct->moveSplit[i] = CalcMoveSplit(move, gActiveBattler, gActiveBattler);
-			tempMoveStruct->makesContact[i] = CheckContact(move, gActiveBattler);
+			tempMoveStruct->makesContact[i] = CheckContact(move, gActiveBattler, gActiveBattler);
 
 			if (tempMoveStruct->possibleMaxMoves[i] != MOVE_NONE)
 			{
@@ -541,7 +541,7 @@ void EmitChooseMove(u8 bufferId, bool8 isDoubleBattle, bool8 NoPpNumber, struct 
 			tempMoveStruct->movePowers[i] = CalcVisualBasePower(gActiveBattler, foe, move, FALSE);
 			tempMoveStruct->moveAcc[i] = VisualAccuracyCalc(move, gActiveBattler, foe);
 			tempMoveStruct->moveSplit[i] = CalcMoveSplit(move, gActiveBattler, foe);
-			tempMoveStruct->makesContact[i] = CheckContact(move, gActiveBattler);
+			tempMoveStruct->makesContact[i] = CheckContact(move, gActiveBattler, foe);
 
 			if (tempMoveStruct->possibleMaxMoves[i] != MOVE_NONE)
 			{
