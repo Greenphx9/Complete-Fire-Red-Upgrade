@@ -1229,7 +1229,7 @@ bool8 MoveKnocksOutXHitsFromParty(u16 move, struct Pokemon* monAtk, u8 bankDef, 
 	bool8 noMoldBreakers = NO_MOLD_BREAKERS(GetMonAbilityAfterTrace(monAtk, bankDef), move);
 
 	if (MonMoveBlockedBySubstitute(move, monAtk, bankDef)
-	|| (noMoldBreakers && IsAffectedByDisguse(ability, species, CalcMoveSplitFromParty(monAtk, move))))
+	|| (noMoldBreakers && IsAffectedByDisguse(ability, species, CalcMoveSplitFromParty(move, monAtk))))
 	{
 		if (numHits > 0)
 			numHits -= 1; //Takes at least a hit to break Disguise/Ice Face or sub
@@ -3502,7 +3502,7 @@ bool8 PhysicalMoveInMonMoveset(struct Pokemon* mon, u8 moveLimitations)
 
 		if (!(gBitTable[i] & moveLimitations))
 		{
-			if (CalcMoveSplitFromParty(mon, move) == SPLIT_PHYSICAL
+			if (CalcMoveSplitFromParty(move, mon) == SPLIT_PHYSICAL
 			&& gBattleMoves[move].power != 0
 			&& gBattleMoves[move].effect != EFFECT_COUNTER)
 				return TRUE;
@@ -3525,7 +3525,7 @@ bool8 SpecialMoveInMonMoveset(struct Pokemon* mon, u8 moveLimitations)
 
 		if (!(gBitTable[i] & moveLimitations))
 		{
-			if (CalcMoveSplitFromParty(mon, move) == SPLIT_SPECIAL
+			if (CalcMoveSplitFromParty(move, mon) == SPLIT_SPECIAL
 			&& gBattleMoves[move].power != 0
 			&& gBattleMoves[move].effect != EFFECT_MIRROR_COAT)
 				return TRUE;
@@ -5101,7 +5101,7 @@ static bool8 CalcShouldAIUseZMove(u8 bankAtk, u8 bankDef, u16 move)
 			 && !MoveIgnoresSubstitutes(zMove, atkAbility)))
 				return FALSE; //Don't use a Z-Move on a Substitute or if the enemy is going to go first and use Substitute
 
-			if (IsAffectedByDisguse(defAbility, defSpecies, CalcMoveSplit(zMove, bankAtk, bankDef)))
+			if (noMoldBreakers && IsAffectedByDisguse(defAbility, defSpecies, CalcMoveSplit(zMove, bankAtk, bankDef)))
 				return FALSE; //Don't waste a Z-Move breaking a disguise
 
 			if (defMovePrediction == MOVE_PROTECT || defMovePrediction == MOVE_KINGSSHIELD || defMovePrediction == MOVE_SPIKYSHIELD || defMovePrediction == MOVE_OBSTRUCT

@@ -469,7 +469,8 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 			&& IsBerry(ITEM(gBankTarget))
 			&& !CheckTableForItem(ITEM(gBankTarget), gBannedBattleEatBerries)
 			&& ABILITY(gBankTarget) != ABILITY_STICKYHOLD
-			&& (!BATTLER_ALIVE(gBankTarget) || !(ITEM_EFFECT(gBankTarget) == ITEM_EFFECT_JABOCA_ROWAP_BERRY && ITEM_QUALITY(gBankTarget) == CalcMoveSplit(gCurrentMove, gBankAttacker, gBankTarget))))
+			&& (!BATTLER_ALIVE(gBankTarget) || !(ITEM_EFFECT(gBankTarget) == ITEM_EFFECT_JABOCA_ROWAP_BERRY
+			                                  && ITEM_QUALITY(gBankTarget) == CalcMoveSplit(gCurrentMove, gBankAttacker, gBankTarget))))
 			{
 				gNewBS->canBelch[SIDE(gBankAttacker)] |= gBitTable[gBattlerPartyIndexes[gBankAttacker]];
 

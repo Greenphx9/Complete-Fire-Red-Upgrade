@@ -788,7 +788,7 @@ u8 ItemBattleEffects(u8 caseID, u8 bank, bool8 moveTurn, bool8 doPluck)
 					&& gBattleMons[gBankAttacker].hp
 					&& gBattleMons[bank].hp
 					&& !MoveBlockedBySubstitute(gCurrentMove, gBankAttacker, bank)
-					&& moveSplit == bankQuality)
+					&& CalcMoveSplit(gCurrentMove, gBankAttacker, bank) == bankQuality)
 					{
 						gBattleMoveDamage = MathMax(1, GetBaseMaxHP(gBankAttacker) / 8);
 

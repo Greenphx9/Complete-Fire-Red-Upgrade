@@ -2271,7 +2271,7 @@ static s32 CalculateBaseDamage(struct DamageCalc* data)
 				TryBoostMonOffensesForTotemBoost(data, bankAtk, FALSE);
 		}
 
-		data->moveSplit = CalcMoveSplitFromParty(monAtk, move);
+		data->moveSplit = CalcMoveSplitFromParty(move, monAtk);
 		data->moveType = GetMonMoveTypeSpecial(monAtk, move);
 
 		/*if (useMonDef) //CAN'T AND SHOULD NOT HAPPEN

@@ -582,7 +582,7 @@ static u8 GetMaxMoveType(u16 move, u8 bank, struct Pokemon* mon)
 
 		if (mon != NULL)
 		{
-			moveSplit = CalcMoveSplitFromParty(mon, move);
+			moveSplit = CalcMoveSplitFromParty(move, mon);
 			ability = GetMonAbility(mon);
 		}
 		else
@@ -657,7 +657,7 @@ move_t GetMaxMoveByMove(u8 bank, u16 baseMove)
 static move_t GetMonMaxMove(struct Pokemon* mon, u16 baseMove)
 {
 	u8 moveType = GetMaxMoveType(baseMove, 0, mon);
-	u8 moveSplit = CalcMoveSplitFromParty(mon, baseMove);
+	u8 moveSplit = CalcMoveSplitFromParty(baseMove, mon);
 	u16 maxMove = GetGMaxMove(moveType, moveSplit, mon->species, mon->gigantamax);
 	if (maxMove != MOVE_NONE)
 		return maxMove;

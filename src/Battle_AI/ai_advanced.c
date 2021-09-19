@@ -1368,7 +1368,7 @@ bool8 MoveSplitOnTeam(u8 bank, u8 split)
 
 			if (alive && pp > 0 && move != MOVE_NONE)
 			{
-				if (CalcMoveSplitFromParty(&party[i], move) == split)
+				if (CalcMoveSplitFromParty(move, &party[i]) == split)
 					return TRUE;
 			}
 		}

@@ -1506,7 +1506,7 @@ u8 CalcMoveSplit(u16 move, u8 bankAtk, u8 bankDef)
 	#endif
 }
 
-u8 CalcMoveSplitFromParty(struct Pokemon* mon, u16 move)
+u8 CalcMoveSplitFromParty(u16 move, struct Pokemon* mon)
 {
 	if (gSpecialMoveFlags[move].gMovesThatChangePhysicality)
 	{
