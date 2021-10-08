@@ -2447,6 +2447,7 @@ void BagListMenuGetItemNameColored(u8 *dest, u16 itemId)
 		case ITEM_POWER_BAND:
 		case ITEM_POWER_ANKLET:
 			levelToAppend = VarGet(VAR_POWER_ITEM_LEVEL);
+			minUpgradedLevel = 2;
 			break;
 	}
 

@@ -7,7 +7,6 @@
 
 #include "../include/new/ability_tables.h"
 #include "../include/new/ability_util.h"
-#include "../include/new/move_tables.h"
 #include "../include/new/battle_util.h"
 #include "../include/new/build_pokemon.h"
 #include "../include/new/move_tables.h"
