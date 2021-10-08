@@ -1280,6 +1280,7 @@ void HandleAction_UseMove(void)
 	gNewBS->MoveBounceInProgress = FALSE;
 	gNewBS->breakDisguiseSpecialDmg = FALSE;
 	gNewBS->dontActivateMoldBreakersAnymoreThisTurn = FALSE;
+	gNewBS->printedStrongWindsWeakenedAttack = FALSE;
 	gNewBS->zMoveData.active = FALSE;
 	gNewBS->batonPassing = FALSE;
 	gNewBS->dynamaxData.nullifiedStats = FALSE;
