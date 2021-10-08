@@ -4,6 +4,7 @@
 .text
 .align 2
 .global AttackAnimationTable
+
 /*
 attack_anim_table.s
 	table of attack animation and associated animation scripts
@@ -4727,20 +4728,12 @@ ANIM_FLAREBLITZ:
 	playsound2 0x91 SOUND_PAN_ATTACKER
 	launchtemplate Template_VerticalDip 0x2 0x3 0x6 0x1 bank_attacker
 	pause 0x19
-	launchtemplate Template_SlideMonToOffset 0x2 0x5 bank_attacker 0x1a 0x0 0x0 0x5
-	pause 0x6
-	soundcomplex 0x86 SOUND_PAN_TARGET 0x2 0x4
+	launchtemplate Template_SlideMonToOffset 0x2 0x5 bank_attacker 0x2a 0x0 0x0 0x5
+	pause 0x2
 	launchtask AnimTask_move_bank 0x2 0x5 bank_target 0x0 0x3 0x20 0x1
-	launchtemplate Template_Hit TEMPLATE_TARGET | 0, 0x4 0xFFF0 0x10 0x1 0x0
-	pause 0x2
-	launchtemplate Template_Hit TEMPLATE_TARGET | 0, 0x4 0x10 0xFFF0 0x1 0x0
-	pause 0x2
-	launchtemplate Template_Hit TEMPLATE_TARGET | 0, 0x4 0xFFEA 0x3 0x1 0x0
-	pause 0x2
-	launchtemplate Template_Hit TEMPLATE_TARGET | 0, 0x4 0x0 0x8 0x1 0x0
-	pause 0x2
+	call FLARE_BLITZ_HITS
 	playsound2 0x8C SOUND_PAN_TARGET
-	call BURN_CHANCE_ANIM
+	call FLAME_BURST_SPREAD
 	waitanimation
 	launchtemplate Template_SlideMonToOriginalPos 0x2 0x3 bank_attacker 0x0 0x5
 	waitanimation
@@ -4748,6 +4741,12 @@ ANIM_FLAREBLITZ:
 	pokespritefromBG bank_target
 	call UNSET_SCROLLING_BG
 	endanimation
+
+	launchtemplate Template_Hit 0x2 0x4 0x15 0x0 0x1 0x0
+	launchtemplate Template_Hit 0x2 0x4 0x0 0x15 0x1 0x0
+	launchtemplate Template_Hit 0x2 0x4 0xFFFA 0xFFF0 0x1 0x0
+	launchtemplate Template_Hit 0x2 0x4 0xFFF0 0x10 0x1 0x0
+	launchtemplate Template_Hit 0x2 0x4 0x0 0x0 0x1 0x0
 
 FLAME_BUFF:
 	launchtemplate FLAREBLITZ_BUFF 0x2 0x5 bank_attacker 0xffe8 0x1a 0x2 0x16
@@ -4759,6 +4758,20 @@ FLAME_BUFF:
 	launchtemplate FLAREBLITZ_BUFF 0x2 0x5 bank_attacker 0x1c 0x1a 0x3 0x16
 	pause 0x4
 	launchtemplate FLAREBLITZ_BUFF 0x2 0x5 bank_attacker 0xfff4 0x0 0x1 0x16
+	return
+
+FLARE_BLITZ_HITS:
+	soundcomplex 0x86 SOUND_PAN_TARGET 0x2 0x5
+	launchtemplate Template_Hit TEMPLATE_TARGET | 0, 0x4,  21,   0, bank_target 0x0
+	pause 0x2
+	launchtemplate Template_Hit TEMPLATE_TARGET | 1, 0x4,   0,  21, bank_target 0x0
+	pause 0x2
+	launchtemplate Template_Hit TEMPLATE_TARGET | 2, 0x4,  -6, -16, bank_target 0x0
+	pause 0x2
+	launchtemplate Template_Hit TEMPLATE_TARGET | 3, 0x4, -16,  16, bank_target 0x0
+	pause 0x2
+	launchtemplate Template_Hit TEMPLATE_TARGET | 4, 0x4,   0,   0, bank_target 0x0
+	pause 0x2
 	return
 
 .align 2
@@ -16930,34 +16943,34 @@ ANIM_GRAV_APPLE:
 
 SMALL_APPLES_FALL:
 	launchtemplate SMALL_FALLING_APPLE, TEMPLATE_TARGET | 2, 0x4, 35, 0x3c, 4, bank_target
-	playsound2 0x25 SOUND_PAN_ATTACKER @;Falling sound
+	playsound2 0x25 SOUND_PAN_TARGET @;Falling sound
 	pause 0x2
 	launchtemplate SMALL_FALLING_APPLE, TEMPLATE_TARGET | 2, 0x4, -30, 0x44, 4, bank_target
-	playsound2 0x25 SOUND_PAN_ATTACKER @;Falling sound
+	playsound2 0x25 SOUND_PAN_TARGET @;Falling sound
 	pause 0x2
 	launchtemplate SMALL_FALLING_APPLE, TEMPLATE_TARGET | 2, 0x4, 27, 0x37, 4, bank_target
-	playsound2 0x25 SOUND_PAN_ATTACKER @;Falling sound
+	playsound2 0x25 SOUND_PAN_TARGET @;Falling sound
 	pause 0x2
 	launchtemplate SMALL_FALLING_APPLE, TEMPLATE_TARGET | 2, 0x4, -20, 0x32, 4, bank_target
-	playsound2 0x25 SOUND_PAN_ATTACKER @;Falling sound
+	playsound2 0x25 SOUND_PAN_TARGET @;Falling sound
 	pause 0x2
 	launchtemplate SMALL_FALLING_APPLE, TEMPLATE_TARGET | 2, 0x4, 33, 0x3a, 4, bank_target
-	playsound2 0x25 SOUND_PAN_ATTACKER @;Falling sound
+	playsound2 0x25 SOUND_PAN_TARGET @;Falling sound
 	pause 0x2
 	launchtemplate SMALL_FALLING_APPLE, TEMPLATE_TARGET | 2, 0x4, -12, 0x3a, 4, bank_target
-	playsound2 0x25 SOUND_PAN_ATTACKER @;Falling sound
+	playsound2 0x25 SOUND_PAN_TARGET @;Falling sound
 	pause 0x2
 	launchtemplate SMALL_FALLING_APPLE, TEMPLATE_TARGET | 2, 0x4, 19, 0x3c, 4, bank_target
-	playsound2 0x25 SOUND_PAN_ATTACKER @;Falling sound
+	playsound2 0x25 SOUND_PAN_TARGET @;Falling sound
 	pause 0x2
 	launchtemplate SMALL_FALLING_APPLE, TEMPLATE_TARGET | 2, 0x4, -38, 0x3a, 4, bank_target
-	playsound2 0x25 SOUND_PAN_ATTACKER @;Falling sound
+	playsound2 0x25 SOUND_PAN_TARGET @;Falling sound
 	pause 0x2
 	launchtemplate SMALL_FALLING_APPLE, TEMPLATE_TARGET | 2, 0x4, 5, 0x3c, 4, bank_target
-	playsound2 0x25 SOUND_PAN_ATTACKER @;Falling sound
+	playsound2 0x25 SOUND_PAN_TARGET @;Falling sound
 	pause 0x2
 	launchtemplate SMALL_FALLING_APPLE, TEMPLATE_TARGET | 2, 0x4, -23, 0x28, 4, bank_target
-	playsound2 0x25 SOUND_PAN_ATTACKER @;Falling sound
+	playsound2 0x25 SOUND_PAN_TARGET @;Falling sound
 	pause 0x2
 	return
 
