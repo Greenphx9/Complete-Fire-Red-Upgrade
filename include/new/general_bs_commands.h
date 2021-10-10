@@ -8,6 +8,7 @@
  */
 
 //Exported Functions
+void TrySetMissStringForSafetyGoggles(u8 bankDef);
 bool8 TryDoBenjaminButterfree(u8 scriptOffset);
 s32 GetPsywaveDamage(u8 randDamage);
 bool8 TrySpitePPReduce(u8 bank, u8 lostPP);
@@ -41,6 +42,7 @@ enum FaintEffectsStates
 	Faint_ReceiverActivate,
 	Faint_SwitchInAbilities,
 	Faint_PrimalWeather,
+	Faint_SkyDrop,
 	Faint_RaidBattle,
 	Faint_LastPokemonMusic,
 	Faint_FormsRevert,

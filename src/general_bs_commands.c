@@ -81,6 +81,7 @@ const u16 gMissStringIds[] =
 	0x184, //Quick Guard
 	0x184, //Wide Guard
 	0x184, //Raid Shield
+	0x184, //Safety Goggles
 };
 
 static const u8* const sEntryHazardsStrings[] =
@@ -91,6 +92,17 @@ static const u8* const sEntryHazardsStrings[] =
 	StickyWebLayString,
 	gText_SteelsurgeLay,
 };
+
+
+void TrySetMissStringForSafetyGoggles(u8 bankDef)
+{
+	if (ITEM_EFFECT(bankDef) == ITEM_EFFECT_SAFETY_GOGGLES)
+	{
+		gLastUsedItem = ITEM(bankDef);
+		gBattleStringLoader = gText_NotAffectedBecauseOfItem;
+		gNewBS->missStringId[ bankDef] = 10;
+	}
+}
 
 bool8 TryActivateGemBattlescript(void)
 {
@@ -1442,6 +1454,71 @@ void atk1B_cleareffectsonfaint(void) {
 					return;
 
 				++gNewBS->faintEffectsState;
+			__attribute__ ((fallthrough));
+
+			case Faint_SkyDrop:
+				++gNewBS->faintEffectsState;
+				u32 status3;
+				u8 bankToFree;
+
+				//Determine if this mon was active in a Sky Drop
+				for (bankToFree = 0, status3 = 0; bankToFree < gBattlersCount; ++bankToFree)
+				{
+					if (gStatuses3[bankToFree] & STATUS3_SKY_DROP_ATTACKER)
+					{
+						if (gNewBS->skyDropAttackersTarget[bankToFree] == gActiveBattler)
+						{
+							status3 = STATUS3_SKY_DROP_TARGET; //The fainted bank was a target of Sky Drop
+							break;
+						}
+					}
+					else if (gStatuses3[bankToFree] & STATUS3_SKY_DROP_TARGET)
+					{
+						if (gNewBS->skyDropTargetsAttacker[bankToFree] == gActiveBattler)
+						{
+							status3 = STATUS3_SKY_DROP_ATTACKER; //The fainted bank was a user of Sky Drop
+							break;
+						}
+					}
+				}
+
+				if (status3 & STATUS3_SKY_DROP_ANY) //The fainted bank was active in a Sky Drop
+				{
+					if (status3 & STATUS3_SKY_DROP_ATTACKER) //The fainted bank was the user of a Sky Drop
+					{
+						//So free the Pokemon it had held up in the air
+						gNewBS->skyDropAttackersTarget[gActiveBattler] = 0;
+						gNewBS->skyDropTargetsAttacker[bankToFree] = 0;
+
+						//A message is only printed when the target is freed.
+						gBattleScripting.bank = bankToFree;
+						gBattleStringLoader = FreedFromSkyDropString;
+						BattleScriptPushCursor();
+						gBattlescriptCurrInstr = BattleScript_PrintCustomString;
+
+						gActiveBattler = bankToFree;
+						EmitSpriteInvisibility(0, FALSE);
+						MarkBufferBankForExecution(gActiveBattler);
+					}
+					else if (status3 & STATUS3_SKY_DROP_TARGET) //The fainted bank was the target of a Sky Drop
+					{
+						//So free the Pokemon that was holding it in the air
+						CancelMultiTurnMoves(bankToFree);
+						gNewBS->skyDropAttackersTarget[bankToFree] = 0;
+						gNewBS->skyDropTargetsAttacker[gActiveBattler] = 0;
+						gNewBS->NoMoreMovingThisTurn |= gBitTable[bankToFree]; //So it doesn't try using Sky Drop again
+						gActiveBattler = bankToFree;
+						EmitSpriteInvisibility(0, FALSE);
+						MarkBufferBankForExecution(gActiveBattler);
+					}
+					else
+						goto END_SKY_DROP_CHECK;
+
+					gStatuses3[gActiveBattler] &= ~(STATUS3_SKY_DROP_ANY | STATUS3_IN_AIR);
+					gStatuses3[bankToFree] &= ~(STATUS3_SKY_DROP_ANY | STATUS3_IN_AIR);
+					return;
+				}
+				END_SKY_DROP_CHECK: ;
 			__attribute__ ((fallthrough));
 
 			case Faint_RaidBattle:

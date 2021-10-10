@@ -923,9 +923,15 @@ void ChangeTargetTypeFunc(void)
 		}
 		break;
 
-	case MOVE_MAGICPOWDER:
-		if (ABILITY(gBankTarget) == ABILITY_MULTITYPE
-			|| ABILITY(gBankTarget) == ABILITY_RKS_SYSTEM
+		case MOVE_MAGICPOWDER:
+			if (!IsAffectedByPowder(gBankTarget))
+			{
+				gMoveResultFlags |= MOVE_RESULT_MISSED;
+				TrySetMissStringForSafetyGoggles(gBankTarget);
+				gBattlescriptCurrInstr = BattleScript_NotAffected - 5;
+			}
+			else if (ABILITY(gBankTarget) == ABILITY_MULTITYPE
+			||  ABILITY(gBankTarget) == ABILITY_RKS_SYSTEM
 			|| (gBattleMons[gBankTarget].type1 == TYPE_PSYCHIC &&
 				gBattleMons[gBankTarget].type2 == TYPE_PSYCHIC &&
 				gBattleMons[gBankTarget].type3 == TYPE_BLANK))
