@@ -732,7 +732,41 @@ void SetPledgeEffect(void)
 	gNewBS->PledgeHelper = 0;
 }
 
-void DoFieldEffect(void)
+static void SwapBytes(u8* data1, u8* data2)
+{
+	u8 temp = *data1;
+	*data1 = *data2;
+	*data2 = temp;
+}
+
+static void SwapHalfWords(u16* data1, u16* data2)
+{
+	u16 temp = *data1;
+	*data1 = *data2;
+	*data2 = temp;
+}
+
+static void SwapSideTimers(u8* timers)
+{
+	SwapBytes(&timers[B_SIDE_PLAYER], &timers[B_SIDE_OPPONENT]);
+}
+
+static void SwapVanillaSideTimers(void)
+{
+	//Swap the timer values
+	struct SideTimer temp = gSideTimers[B_SIDE_PLAYER];
+	gSideTimers[B_SIDE_PLAYER] = gSideTimers[B_SIDE_OPPONENT];
+	gSideTimers[B_SIDE_OPPONENT] = temp;
+
+	//Swap the status flags
+	SwapHalfWords(&gSideStatuses[B_SIDE_PLAYER], &gSideStatuses[B_SIDE_OPPONENT]);
+
+	//These shouldn't have been switched in the first place
+	SwapBytes(&gSideTimers[B_SIDE_PLAYER].followmeTimer, &gSideTimers[B_SIDE_OPPONENT].followmeTimer);
+	SwapBytes(&gSideTimers[B_SIDE_PLAYER].followmeTarget, &gSideTimers[B_SIDE_OPPONENT].followmeTarget);
+}
+
+void DoBattleFieldEffect(void)
 {
 	u32 i;
 
@@ -754,60 +788,58 @@ void DoFieldEffect(void)
 	}
 
 	switch (gCurrentMove) {
-	case MOVE_TRICKROOM:
-		if (gNewBS->TrickRoomTimer > 0)
-		{
-			gNewBS->TrickRoomTimer = 0;
-			gBattleStringLoader = TrickRoomEndString;
-		}
-		else if (!IsTrickRoomActive())
-		{
-			gNewBS->TrickRoomTimer = 5;
-			gBattleStringLoader = TrickRoomSetString;
-		}
-		else
-			gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
-		break;
+		case MOVE_TRICKROOM:
+			if (gNewBS->TrickRoomTimer > 0)
+			{
+				gNewBS->TrickRoomTimer = 0;
+				gBattleStringLoader = TrickRoomEndString;
+			}
+			else if (!IsTrickRoomActive())
+			{
+				gNewBS->TrickRoomTimer = 5;
+				gBattleStringLoader = TrickRoomSetString;
+			}
+			else
+				gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
+			break;
 
-	case MOVE_WONDERROOM:
-		if (gNewBS->WonderRoomTimer > 0)
-		{
-			gNewBS->WonderRoomTimer = 0;
-			gBattleStringLoader = WonderRoomEndString;
-		}
-		else if (!IsWonderRoomActive())
-		{
-			gNewBS->WonderRoomTimer = 5;
-			gBattleStringLoader = WonderRoomSetString;
-		}
-		else
-			gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
-		break;
+		case MOVE_WONDERROOM:
+			if (gNewBS->WonderRoomTimer > 0)
+			{
+				gNewBS->WonderRoomTimer = 0;
+				gBattleStringLoader = WonderRoomEndString;
+			}
+			else if (!IsWonderRoomActive())
+			{
+				gNewBS->WonderRoomTimer = 5;
+				gBattleStringLoader = WonderRoomSetString;
+			}
+			else
+				gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
+			break;
 
-	case MOVE_MAGICROOM:
-		if (gNewBS->MagicRoomTimer)
-		{
-			gNewBS->MagicRoomTimer = 0;
-			gBattleStringLoader = MagicRoomEndString;
-		}
-		else if (!IsMagicRoomActive())
-		{
-			gNewBS->MagicRoomTimer = 5;
-			gBattleStringLoader = MagicRoomSetString;
-		}
-		else
-			gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
-		break;
+		case MOVE_MAGICROOM:
+			if (gNewBS->MagicRoomTimer)
+			{
+				gNewBS->MagicRoomTimer = 0;
+				gBattleStringLoader = MagicRoomEndString;
+			}
+			else if (!IsMagicRoomActive())
+			{
+				gNewBS->MagicRoomTimer = 5;
+				gBattleStringLoader = MagicRoomSetString;
+			}
+			else
+				gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
+			break;
 
-	case MOVE_GRAVITY:
-		if (gNewBS->GravityTimer > 0)
-		{
-			gNewBS->GravityTimer = 0;
-			gBattleStringLoader = GravityEndString;
-		}
-		else if (!IsGravityActive())
-		{
-			for (int i = 0; i < gBattlersCount; ++i)
+		case MOVE_GRAVITY:
+			if (gNewBS->GravityTimer > 0)
+			{
+				gNewBS->GravityTimer = 0;
+				gBattleStringLoader = GravityEndString;
+			}
+			else if (!IsGravityActive())
 			{
 				for (i = 0; i < gBattlersCount; ++i)
 				{
@@ -818,23 +850,34 @@ void DoFieldEffect(void)
 				gNewBS->GravityTimer = 5;
 				gBattleStringLoader = GravitySetString;
 			}
+			else
+				gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
+			break;
 
-			gNewBS->GravityTimer = 5;
-			gBattleStringLoader = GravitySetString;
-		}
-		else
-			gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
-		break;
+		case MOVE_IONDELUGE:
+			if (!IsIonDelugeActive())
+			{
+				gNewBS->IonDelugeTimer = 1;
+			}
 
-	case MOVE_IONDELUGE:
-		if (!IsIonDelugeActive())
-		{
-			gNewBS->IonDelugeTimer = 1;
-		}
+			//Doesn't fail even if already Ion Deluge
+			gBattleStringLoader = IonDelugeShowerString;
+			break;
 
-		//Doesn't fail even if already Ion Deluge
-		gBattleStringLoader = IonDelugeShowerString;
-		break;
+		case MOVE_COURTCHANGE:
+			SwapSideTimers(gNewBS->SeaOfFireTimers);
+			SwapSideTimers(gNewBS->SwampTimers);
+			SwapSideTimers(gNewBS->RainbowTimers);
+			SwapSideTimers(gNewBS->LuckyChantTimers);
+			SwapSideTimers(gNewBS->TailwindTimers);
+			SwapSideTimers(gNewBS->AuroraVeilTimers);
+			SwapSideTimers(gNewBS->maxVineLashTimers);
+			SwapSideTimers(gNewBS->maxWildfireTimers);
+			SwapSideTimers(gNewBS->maxCannonadeTimers);
+			SwapSideTimers(gNewBS->maxVolcalithTimers);
+			SwapVanillaSideTimers();
+			gBattleStringLoader = gText_CourtChange;
+			break;
 	}
 }
 

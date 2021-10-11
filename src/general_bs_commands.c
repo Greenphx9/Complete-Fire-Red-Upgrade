@@ -4033,6 +4033,7 @@ void atkB0_trysetspikes(void)
 			{
 				gSideStatuses[defSide] |= SIDE_STATUS_SPIKES;
 				gSideTimers[defSide].stickyWeb = 1;
+				gSideTimers[defSide].stickyWebBank = gBankAttacker; //Used by Court Change
 				gBattlescriptCurrInstr += 5;
 				stringcase = 3;
 			}

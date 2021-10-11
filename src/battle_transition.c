@@ -342,15 +342,15 @@ void Mugshots_CreateOpponentPlayerSprites(struct Task* task)
 	}
 
 	//Load Opponent A
-	if (sTrainerEventObjectLocalId != 0 //Used for mugshots
+	/*if (sTrainerEventObjectLocalId != 0 //Used for mugshots
 	#ifdef FR_PRE_BATTLE_MUGSHOT_STYLE
 	|| gTrainers[gTrainerBattleOpponent_A].trainerClass == CLASS_CHAMPION
 	|| gTrainers[gTrainerBattleOpponent_A].trainerClass == CLASS_ELITE_FOUR
 	#endif
-	)
+	)*/
 		trainerPicId = GetFrontierTrainerFrontSpriteId(gTrainerBattleOpponent_A, 0);
-	else
-		trainerPicId = sMugshotsTrainerPicIDsTable[mugshotId];
+	//else
+	//	trainerPicId = sMugshotsTrainerPicIDsTable[mugshotId];
 
 	task->tOpponentSpriteId = CreateMugshotTrainerSprite(trainerPicId,
 														sMugshotsOpponentCoords[mugshotId][0] - x1,

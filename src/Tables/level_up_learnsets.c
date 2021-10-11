@@ -17179,6 +17179,7 @@ static const struct LevelUpMove sCinderaceLevelUpLearnset[] = {
 	LEVEL_UP_MOVE(38, MOVE_COUNTER),
 	LEVEL_UP_MOVE(46, MOVE_BOUNCE),
 	LEVEL_UP_MOVE(54, MOVE_DOUBLEEDGE),
+	LEVEL_UP_MOVE(62, MOVE_COURTCHANGE),
 	LEVEL_UP_END
 };
 static const struct LevelUpMove sSobbleLevelUpLearnset[] = {
