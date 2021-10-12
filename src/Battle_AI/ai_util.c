@@ -5025,6 +5025,9 @@ bool8 AnyUsefulOffseniveStatIsRaised(u8 bank)
 	&&  DamagingMoveTypeInMoveset(bank, TYPE_FIRE))
 		return TRUE;
 
+	if (gNewBS->UnburdenBoosts & gBitTable[bank] && ITEM(bank) == ITEM_NONE)
+		return TRUE;
+
 	return FALSE;
 }
 
