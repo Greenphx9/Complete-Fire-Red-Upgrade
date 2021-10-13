@@ -517,8 +517,6 @@ extern u8 gText_Fourth[];
 extern u8 gText_Fifth[];
 extern u8 gText_Sixth[];
 
-extern const struct TextColor gUnknown_08459FFC[];
-
 static const u8* sChoosePokemonMaxStrings[PARTY_SIZE - 1] =
 {
 	gOtherText_NoMoreOnePoke,
@@ -2760,7 +2758,7 @@ void FieldUseFunc_Honey(u8 taskId)
 {
 	RemoveBagItem(Var800E, 1);
 	sItemUseOnFieldCB = Task_HoneyField;
-	sub_80A103C(taskId);
+	SetUpItemUseOnFieldCallback(taskId);
 }
 
 extern u8 GetCurrentLevelCap(void); //Must be implemented yourself
@@ -2819,7 +2817,7 @@ void FieldUseFunc_VsSeeker(u8 taskId)
 	else
 	{
 		sItemUseOnFieldCB = (void*) (0x810C670 | 1); //Task_VsSeeker_0
-		sub_80A103C(taskId);
+		SetUpItemUseOnFieldCallback(taskId);
 	}
 }
 #endif

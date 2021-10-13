@@ -2118,7 +2118,7 @@ bool8 HandleFaintedMonActions(void)
 				break;
 
 			case 2:
-				sub_8017434(gBankFainted);
+				OpponentSwitchInResetSentPokesToOpponentValue(gBankFainted);
 				if (++gBattleStruct->faintedActionsBank >= gBattlersCount)
 					gBattleStruct->faintedActionsState = 3;
 				else
