@@ -1472,6 +1472,7 @@ static void SpriteCB_ShellSmashShell_DestroyDuringFadeOut(struct Sprite* sprite)
 		DestroyAnimSprite(sprite);
 }
 
+
 //Struggle Bug//
 
 //Creates the hit splat for Struggle Bug
