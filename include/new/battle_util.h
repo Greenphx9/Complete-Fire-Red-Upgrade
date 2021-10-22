@@ -133,7 +133,8 @@ bool8 IsChoiceAbility(u8 ability);
 bool8 IsChoiceItemEffectOrAbility(u8 itemEffect, u8 ability);
 
 void ClearBankStatus(u8 bank);
-bool8 DoesSleepClausePrevent(u8 bank);
+bool8 IsSleepClauseInEffect(u8 bankToPutToSleep);
+bool8 DoesSleepClausePrevent(u8 bankToPutToSleep);
 bool8 CanBePutToSleep(u8 bankDef, u8 bankAtk, bool8 checkFlowerVeil);
 bool8 CanBeYawned(u8 bankDef, u8 bankAtk);
 bool8 CanRest(u8 bank);
