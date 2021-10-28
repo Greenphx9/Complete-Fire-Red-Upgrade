@@ -1422,6 +1422,19 @@ void AnimTask_GetRaidBattleStormLevel(u8 taskId)
 	DestroyAnimVisualTask(taskId);
 }
 
+//Searing Shot//
+static const union AffineAnimCmd sSpriteAffineAnim_SearingShotFlyingFlame[] =
+{
+	AFFINEANIMCMD_FRAME(16, 16, 20, 16), //Double in size and spin
+	AFFINEANIMCMD_END
+};
+
+const union AffineAnimCmd* const gSpriteAffineAnimTable_SearingShotFlyingFlame[] =
+{
+	sSpriteAffineAnim_SearingShotFlyingFlame,
+};
+
+
 //Shell Smash//
 static const union AffineAnimCmd sShellSmashShrinkAffineAnimCmds[] =
 {
