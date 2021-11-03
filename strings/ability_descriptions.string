@@ -180,7 +180,7 @@ Boosts moves that make contact.
 Boosts biting moves.
 
 #org @DESC_VICTORYSTAR
-Raises accuracy.
+Raises own and ally's accuracy.
 
 #org @DESC_STORMDRAIN
 Draws in Water-type moves.
@@ -234,7 +234,7 @@ Attack rises when poisoned.
 Sp. Atk rises when burned.
 
 #org @DESC_FURCOAT
-Raises Defense.
+Halves physical damage.
 
 #org @DESC_WONDERSKIN
 Ups status move evasion.
@@ -244,7 +244,7 @@ Ups status move evasion.
 Changes type to match move.
 
 #org @DESC_PARENTALBOND
-Attacks hit twice. 2nd deals less.
+Moves get a weaker second hit.
 
 #org @DESC_MOLDBREAKER
 Moves ignore Abilities.
@@ -275,7 +275,7 @@ Takes one hit with no damage.
 Switches out below half HP.
 
 #org @DESC_FLUFFY
-Halves contact damage.
+Halves contact hits. Weak to Fire.
 
 #org @DESC_BROKEN_1
 #org @DESC_BROKEN_2
@@ -318,7 +318,7 @@ Ups Water attacks. Prevents burn.
 Water-type hits raise Defense.
 
 #org @DESC_STALL
-Moves after even slower foes.
+Often attacks last.
 
 #org @DESC_MULTITYPE
 Changes type to match held Plate.
@@ -531,7 +531,7 @@ Halves special damage.
 Doubles Berry effects.
 
 #org @DESC_ICEFACE
-Takes one free physical hit.
+Free physical hit. Hail renews.
 
 #org @DESC_POWERSPOT
 Powers up ally moves.
@@ -543,7 +543,7 @@ Changes type with terrain.
 Screens are removed on entry.
 
 #org @DESC_STEELYSPIRIT
-Boosts ally Steel moves.
+Boosts own and ally Steel moves.
 
 #org @DESC_PERISHBODY
 Gives a perish count on contact.
