@@ -1178,12 +1178,20 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 			#endif
 
 			#ifdef VAR_GAME_DIFFICULTY
-			if (gameDifficulty >= OPTIONS_EXPERT_DIFFICULTY
-			|| (gameDifficulty == OPTIONS_HARD_DIFFICULTY && GetCurrentRegionMapSectionId() == MAPSEC_VICTORY_ROAD))
+			extern bool8 ShouldGiveTrainerMonBestStatsMaxEVs(u8 trainerClass);
+			extern bool8 ShouldGiveTrainerMonMaxFriendship(u8 trainerClass);
+			if (ShouldGiveTrainerMonBestStatsMaxEVs(trainer->trainerClass))
 			{
-				mon->friendship = 255; //Max friendship
 				if (GetMonEVCount(mon) == 0) //Has no EVs already
 					GiveMon2BestBaseStatEVs(mon);
+			}
+
+			if (ShouldGiveTrainerMonMaxFriendship(trainer->trainerClass))
+			{
+				if (MoveInMonMoveset(MOVE_FRUSTRATION, mon))
+					mon->friendship = 0; //Give Frustration max power
+				else
+					mon->friendship = 255; //Max friendship
 			}
 			#endif
 
