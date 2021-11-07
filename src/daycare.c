@@ -1015,3 +1015,12 @@ u8 GetLevelAfterDaycareSteps(struct BoxPokemon* mon, u32 steps)
 	SetBoxMonData(&tempMon, MON_DATA_EXP, &experience);
 	return GetLevelFromBoxMonExp(&tempMon);
 }
+
+bool8 ShouldSkipOfferEggHatchNickname(void)
+{
+	#ifdef FLAG_DONT_OFFER_NICKNAMES_BATTLE
+	return FlagGet(FLAG_DONT_OFFER_NICKNAMES_BATTLE);
+	#else
+	return FALSE;
+	#endif
+}
