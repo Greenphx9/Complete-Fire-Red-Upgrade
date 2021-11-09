@@ -1373,6 +1373,38 @@ u8 VisualTypeCalc(u16 move, u8 bankAtk, u8 bankDef)
 	return flags;
 }
 
+void FutureSightTypeCalc(void)
+{
+	struct Pokemon* futureSightMon;
+	u8 backupType1, backupType2, backupType3;
+	bool8 futureSightMonInParty = !IsFutureSightAttackerOnField(gBankTarget, gBankAttacker);
+
+	if (futureSightMonInParty)
+	{
+		//Backup attacker types
+		backupType1 = gBattleMons[gBankAttacker].type1;
+		backupType2 = gBattleMons[gBankAttacker].type2;
+		backupType3 = gBattleMons[gBankAttacker].type3;
+
+		//Replace with party mon types
+		futureSightMon = GetFutureSightMon(gBankTarget, gBankAttacker);
+		gBattleMons[gBankAttacker].type1 = GetMonType(futureSightMon, 0); //Helps get STAB if necessary
+		gBattleMons[gBankAttacker].type2 = GetMonType(futureSightMon, 1);
+		gBattleMons[gBankAttacker].type3 = TYPE_BLANK;
+	}
+
+	atk06_typecalc();
+	--gBattlescriptCurrInstr; //Offset the addition in the type calc function
+
+	if (futureSightMonInParty)
+	{
+		//Restore attacker types
+		gBattleMons[gBankAttacker].type1 = backupType1;
+		gBattleMons[gBankAttacker].type2 = backupType2;
+		gBattleMons[gBankAttacker].type3 = backupType3;
+	}
+}
+
 void TypeDamageModification(u8 atkAbility, u8 bankDef, u16 move, u8 moveType, u8* flags)
 {
 	return TypeDamageModificationByDefTypes(atkAbility, bankDef, move, moveType, flags, gBattleMons[bankDef].type1, gBattleMons[bankDef].type2, gBattleMons[bankDef].type3);
@@ -2089,6 +2121,8 @@ void PopulateDamageCalcStructWithBaseAttackerData(struct DamageCalc* data)
 		u8 side = SIDE(bankAtk);
 		struct Pokemon* monAtk = data->monAtk;
 
+		data->atkSpecies = monAtk->species;
+
 		if (!(data->specialFlags & FLAG_FUTURE_SIGHT_DAMAGE)) //Ignores Abilities and held items if mon who used Future Sight isn't on the field
 		{
 			data->atkAbility = GetMonAbilityAfterTrace(monAtk, FOE(side));
@@ -2111,10 +2145,9 @@ void PopulateDamageCalcStructWithBaseAttackerData(struct DamageCalc* data)
 		data->atkMaxHP = monAtk->maxHP;
 		data->atkSpeed = SpeedCalcMon(side, monAtk);
 		data->atkStatus3 = 0;
-		data->atkIsGrounded = CheckMonGrounding(monAtk);
 
 		data->atkStatus1 = monAtk->condition;
-		if (data->atkStatus1 == 0)
+		if (data->atkStatus1 == 0 && !(data->specialFlags & FLAG_FUTURE_SIGHT_DAMAGE))
 		{
 			if (gSideTimers[side].tspikesAmount > 0
 			&& data->atkIsGrounded
