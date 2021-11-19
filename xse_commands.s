@@ -1410,7 +1410,7 @@ map \map
 .endm
 
 @ In FireRed, this command is a nop.
-.macro getpricereduction
+.macro getpokenewsactive
 .byte 0x96
 .endm
 
@@ -1427,7 +1427,7 @@ map \map
 .byte \speed
 .endm
 
-.macro setflashradius word:req
+.macro setflashlevel word:req
 .byte 0x99
 .2byte \word
 .endm
@@ -1549,7 +1549,7 @@ map \map
 .hword \setmapfooter_param
 .endm
 
-.macro setobjectpriority index:req, bank:req, map:req, priority:req
+.macro setobjectsubpriority index:req, bank:req, map:req, priority:req
 .byte 0xa8
 .2byte \index
 .byte \bank
@@ -1557,7 +1557,7 @@ map \map
 .byte \priority
 .endm
 
-.macro resetobjectpriority index:req, bank:req, map:req
+.macro resetobjectsubpriority index:req, bank:req, map:req
 .byte 0xa9
 .byte \bank
 .byte \map
@@ -1836,8 +1836,8 @@ map \map
 .2byte \worldmapflag
 .endm
 
-@ Clone of warpteleport? It is apparently only used in FR/LG, and only with specials.[source]
-.macro warpteleport2 map:req, warp:req, x:req, y:req
+@ Alternate warpteleport. Spins the player in on entry.
+.macro warpspinenter map:req, warp:req, x:req, y:req
 .byte 0xd1
 map \map
 .byte \warp
