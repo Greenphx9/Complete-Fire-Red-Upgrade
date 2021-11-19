@@ -651,6 +651,12 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				DECREASE_VIABILITY(19);
 				return viability;
 			}
+			else if (gLastResultingMoves[bankDef] == MOVE_PLASMAFISTS && IsElectricAbsorptionAblity(data->defAbility)) //Based on the last move the target used - not prediction
+			{
+				//Don't use Normal-type move
+				DECREASE_VIABILITY(19);
+				return viability;
+			}
 		}
 	}
 
