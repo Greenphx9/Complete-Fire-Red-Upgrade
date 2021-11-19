@@ -153,7 +153,7 @@ enum MoveTutors
 };
 
 //Special Move Tutors - Not in Table
-//Numbers in comments are ideal numbers (if NUM_MOVE_TUTORS is 145)
+//Numbers in comments are ideal numbers (if NUM_MOVE_TUTORS is 146)
 enum SpecialMoveTutors
 {
 	TUTOR_SPECIAL_DRACO_METEOR = NUM_MOVE_TUTORS,	//148 - Dragon Pokemon
