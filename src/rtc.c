@@ -167,23 +167,23 @@ u16 RtcCheckInfo(struct SiiRtcInfo *rtc)
 	return errorFlags;
 }
 
-static void UpdateClockFromRtc(struct SiiRtcInfo* rtc)
+static void UpdateClockFromRtc(struct SiiRtcInfo *rtc)
 {
 	gClock.year = ConvertBcdToBinary(rtc->year) + 2000; //Base year is 2000
 	gClock.month = ConvertBcdToBinary(rtc->month);
 	gClock.day = ConvertBcdToBinary(rtc->day);
 	gClock.dayOfWeek = ConvertBcdToBinary(rtc->dayOfWeek);
-	if(FlagGet(FLAG_TIME_TURNER))
-	{
-		gClock.hour = (ConvertBcdToBinary(rtc->hour) >= 12) ? ConvertBcdToBinary(rtc->hour) - 12 : ConvertBcdToBinary(rtc->hour) + 12;
-	}
-	else
-	{
-		gClock.hour = ConvertBcdToBinary(rtc->hour);
-	}
+	gClock.hour = ConvertBcdToBinary(rtc->hour);
 	gClock.minute = ConvertBcdToBinary(rtc->minute);
 	gClock.second = ConvertBcdToBinary(rtc->second);
 
+	if (FlagGet(FLAG_TIME_TURNER))
+	{
+		if (gClock.hour >= 12)
+			gClock.hour -= 12;
+		else
+			gClock.hour += 12;
+	}
 }
 
 void __attribute__((long_call)) break_func();
