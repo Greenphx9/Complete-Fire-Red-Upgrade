@@ -394,6 +394,51 @@ static const struct SpriteFrameImage sTrainerBackPicTable_Alford[] =
 	{gTrainerBackPic_AlfordTiles + 0x2000,	0x800, 0},
 };
 
+static const struct SpriteFrameImage sTrainerBackPicTable_Vega[] =
+{
+	{gTrainerBackPic_VegaTiles, 			0x800, 0},
+	{gTrainerBackPic_VegaTiles + 0x0800, 	0x800, 0},
+	{gTrainerBackPic_VegaTiles + 0x1000, 	0x800, 0},
+	{gTrainerBackPic_VegaTiles + 0x1800, 	0x800, 0},
+	{gTrainerBackPic_VegaTiles + 0x2000, 	0x800, 0},
+};
+
+static const struct SpriteFrameImage sTrainerBackPicTable_Alice[] =
+{
+	{gTrainerBackPic_AliceTiles, 			0x800, 0},
+	{gTrainerBackPic_AliceTiles + 0x0800, 	0x800, 0},
+	{gTrainerBackPic_AliceTiles + 0x1000, 	0x800, 0},
+	{gTrainerBackPic_AliceTiles + 0x1800, 	0x800, 0},
+	{gTrainerBackPic_AliceTiles + 0x2000, 	0x800, 0},
+};
+
+static const struct SpriteFrameImage sTrainerBackPicTable_Mel[] =
+{
+	{gTrainerBackPic_MelTiles, 				0x800, 0},
+	{gTrainerBackPic_MelTiles + 0x0800, 	0x800, 0},
+	{gTrainerBackPic_MelTiles + 0x1000, 	0x800, 0},
+	{gTrainerBackPic_MelTiles + 0x1800, 	0x800, 0},
+	{gTrainerBackPic_MelTiles + 0x2000, 	0x800, 0},
+};
+
+static const struct SpriteFrameImage sTrainerBackPicTable_Galavan[] =
+{
+	{gTrainerBackPic_GalavanTiles, 				0x800, 0},
+	{gTrainerBackPic_GalavanTiles + 0x0800, 	0x800, 0},
+	{gTrainerBackPic_GalavanTiles + 0x1000, 	0x800, 0},
+	{gTrainerBackPic_GalavanTiles + 0x1800, 	0x800, 0},
+	{gTrainerBackPic_GalavanTiles + 0x2000, 	0x800, 0},
+};
+
+static const struct SpriteFrameImage sTrainerBackPicTable_BigMo[] =
+{
+	{gTrainerBackPic_BigMoTiles, 			0x800, 0},
+	{gTrainerBackPic_BigMoTiles ,			0x800, 0},
+	{gTrainerBackPic_BigMoTiles + 0x0800, 	0x800, 0},
+	{gTrainerBackPic_BigMoTiles + 0x1000, 	0x800, 0},
+	{gTrainerBackPic_BigMoTiles + 0x1800, 	0x800, 0},
+};
+
 static const struct SpriteFrameImage sTrainerBackPicTable_Tessy[] =
 {
 	{gTrainerBackPic_TessyTiles, 			0x800, 0},
