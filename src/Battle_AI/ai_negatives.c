@@ -77,9 +77,6 @@ ai_negatives.c
 #define ATTACKER_ASLEEP (data->atkStatus1 & STATUS1_SLEEP && data->atkStatus1 > 1)
 #define TARGET_ASLEEP (data->defStatus1 & STATUS1_SLEEP && data->defStatus1 > 1)
 
-#define ATTACKER_ASLEEP (data->atkStatus1 & STATUS1_SLEEP && data->atkStatus1 > 1)
-#define TARGET_ASLEEP (data->defStatus1 & STATUS1_SLEEP && data->defStatus1 > 1)
-
 //Doubles is now defined as being a non 1v1 Double Battle
 #undef IS_DOUBLE_BATTLE
 #define IS_DOUBLE_BATTLE (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && ((BATTLER_ALIVE(data->foe1) && BATTLER_ALIVE(data->foe2)) || BATTLER_ALIVE(bankAtkPartner)))
@@ -630,8 +627,7 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 	}
 
 	//Powder & Ion Deluge Check
-	if (AI_THINKING_STRUCT->aiFlags > AI_SCRIPT_CHECK_BAD_MOVE //Not dumb AI
-	&& !TARGETING_PARTNER) //Partner isn't important for these checks
+	if (GOOD_AI && !TARGETING_PARTNER) //Not dumb AI, partner isn't important for these checks
 	{
 		if (moveType == TYPE_FIRE)
 		{
@@ -663,7 +659,7 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 	if (IS_DOUBLE_BATTLE && moveTarget & MOVE_TARGET_SPREAD)
 	{
 		if (moveSplit == SPLIT_STATUS
-		&& AI_THINKING_STRUCT->aiFlags > AI_SCRIPT_CHECK_BAD_MOVE //Not dumb AI
+		&& GOOD_AI //Not dumb AI
 		&& AI_THINKING_STRUCT->simulatedRNG[0] < 75 //75% chance AI will care about Wide Guard this round
 		&& (HasUsedMove(bankDef, MOVE_WIDEGUARD) //Unlike the damage calc, this only cares if the foe has revealed Wide Guard
 		 || (BATTLER_ALIVE(data->bankDefPartner) && HasUsedMove(data->bankDefPartner, MOVE_WIDEGUARD))))
@@ -971,7 +967,14 @@ SKIP_CHECK_TARGET:
 		case EFFECT_ACCURACY_UP:
 		case EFFECT_ACCURACY_UP_2:
 			if (data->atkAbility == ABILITY_CONTRARY || GOOD_AI_MOVE_LOCKED || !AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_ACC))
+			{
 				DECREASE_VIABILITY(10);
+				break;
+			}
+
+			ACC_CHECK_2:
+			if (GOOD_AI && !MoveInMovesetWithAccuracyLessThan(bankAtk, bankDef, 100, FALSE)) //All moves hit 100% of the time
+				DECREASE_VIABILITY(1); //Can be used, but better not to (helps AI know when it should switch out)
 			break;
 
 		case EFFECT_EVASION_UP:
@@ -1031,14 +1034,14 @@ SKIP_CHECK_TARGET:
 			break;
 
 		case EFFECT_ATK_ACC_UP: //Hone Claws
-			if (GOOD_AI_MOVE_LOCKED)
+			if (data->atkAbility == ABILITY_CONTRARY || GOOD_AI_MOVE_LOCKED)
 				DECREASE_VIABILITY(10);
-			else
+			else if (!AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_ATK) || !RealPhysicalMoveInMoveset(bankAtk)) //Can't boost Attack anymore
 			{
-				if (data->atkAbility == ABILITY_CONTRARY
-				|| (!AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_ACC)
-				&& (!AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_ATK) || !RealPhysicalMoveInMoveset(bankAtk))))
+				if (!AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_ACC)) //Accuracy can't go any higher
 					DECREASE_VIABILITY(10);
+				else //Accuracy can still rise
+					goto ACC_CHECK_2; //Check if there's a point to raising Accuracy
 			}
 			break;
 
@@ -1225,7 +1228,7 @@ SKIP_CHECK_TARGET:
 			}
 
 			//Don't want to reset enemy lowered stats
-			if (AI_THINKING_STRUCT->aiFlags > AI_SCRIPT_CHECK_BAD_MOVE)
+			if (GOOD_AI)
 			{
 				u16 goodToGetRidOf = CountUsefulBoosts(bankDef) + CountUsefulDebuffs(bankAtk);
 				u16 badToGetRidOf = CountUsefulDebuffs(bankDef) + CountUsefulBoosts(bankAtk);
@@ -1610,7 +1613,7 @@ SKIP_CHECK_TARGET:
 			|| MoveBlockedBySubstitute(predictedMove, bankDef, bankAtk))
 				DECREASE_VIABILITY(10);
 
-			if (AI_THINKING_STRUCT->aiFlags > AI_SCRIPT_CHECK_BAD_MOVE //Semi-Smart/Smart AI only
+			if (GOOD_AI //Semi-Smart/Smart AI only
 			&& move != MOVE_METALBURST
 			&& gLastUsedMoves[bankDef] != MOVE_NONE && gLastUsedMoves[bankDef] != 0xFFFF //Player attacked last turn
 			&& gBattleMoves[gLastUsedMoves[bankAtk]].effect == moveEffect //The AI tried using the same move last turn
@@ -2159,7 +2162,7 @@ SKIP_CHECK_TARGET:
 			if (WillFaintFromSecondaryDamage(bankAtk))
 				DECREASE_VIABILITY(10); //Attacker will faint while charging
 
-			if (AI_THINKING_STRUCT->aiFlags > AI_SCRIPT_CHECK_BAD_MOVE) //Semi-Smart or SMart AI
+			if (GOOD_AI) //Semi-Smart or SMart AI
 			{
 				if (!(data->defStatus1 & (STATUS1_PARALYSIS | STATUS1_FREEZE)) //Target won't randomly not be able to attack
 				&& (data->defStatus2 & STATUS2_CONFUSION) < 3 //Foe wouldn't be confused when the attack would hit
@@ -2291,7 +2294,7 @@ SKIP_CHECK_TARGET:
 		case EFFECT_FOCUS_PUNCH: ;
 			switch (move) {
 				case MOVE_SHELLTRAP: ;
-					if (AI_THINKING_STRUCT->aiFlags > AI_SCRIPT_CHECK_BAD_MOVE //Not dumb AI
+					if (GOOD_AI //Not dumb AI
 					&& !CheckContact(predictedMove, bankDef, bankAtk))
 						DECREASE_VIABILITY(10); //Probably better not to use it
 					else
@@ -2688,7 +2691,7 @@ SKIP_CHECK_TARGET:
 						goto AI_SUBSTITUTE_CHECK;
 
 					case MOVE_HEARTSWAP:
-						if (AI_THINKING_STRUCT->aiFlags > AI_SCRIPT_CHECK_BAD_MOVE) //Not dumb AI
+						if (GOOD_AI) //Not dumb AI
 						{
 							s16 goodToGetRidOf = CountUsefulBoosts(bankDef) + CountUsefulDebuffs(bankAtk);
 							s16 badToGetRidOf = CountUsefulDebuffs(bankDef) + CountUsefulBoosts(bankAtk);
@@ -2852,7 +2855,7 @@ SKIP_CHECK_TARGET:
 					if (PARTNER_MOVE_IS_SAME_NO_TARGET
 					|| SIDE(bankDef) == SIDE(bankAtk)) //Never try to use when considering mon on attacker's side
 						DECREASE_VIABILITY(10);
-					else if (AI_THINKING_STRUCT->aiFlags > AI_SCRIPT_CHECK_BAD_MOVE
+					else if (GOOD_AI
 					&& (!ShouldCourtChange(bankAtk, bankDef) || ShouldCourtChange(bankDef, bankAtk))) //No benefit to attacker or benefit to foe
 						DECREASE_VIABILITY(10); //Only ever Court Change when it's a good idea to
 					break;
