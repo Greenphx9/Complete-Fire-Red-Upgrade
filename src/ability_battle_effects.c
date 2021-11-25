@@ -1055,7 +1055,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 			&& !(gBattleMons[transformBank].status2 & (STATUS2_TRANSFORMED | STATUS2_SUBSTITUTE))
 			&& !(gStatuses3[transformBank] & (STATUS3_SEMI_INVULNERABLE | STATUS3_ILLUSION))
 			&& !IS_TRANSFORMED(bank)
-			&& !(IsRaidBattle() && transformBank == BANK_RAID_BOSS && gNewBS->dynamaxData.raidShieldsUp))
+			#ifdef UNBOUND
+			&& SPECIES(transformBank) != SPECIES_SHADOW_WARRIOR
+			#endif
+			&& !HasRaidShields(transformBank))
 			{
 				gBankAttacker = bank;
 				gBankTarget = transformBank;
