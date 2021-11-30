@@ -1784,6 +1784,7 @@ u8 TurnBasedEffects(void)
 				}
 
 				Memset(gNewBS->ai.pivotTo, PARTY_SIZE, sizeof(gNewBS->ai.pivotTo));
+				ClearMonCachedDamageCalcs();
 				ClearCachedAIData();
 		}
 		gBattleStruct->turnEffectsBank++;
