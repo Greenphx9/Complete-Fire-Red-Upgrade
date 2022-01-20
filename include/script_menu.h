@@ -20,3 +20,5 @@ void __attribute__((long_call)) Task_ScriptShowMonPic(u8 taskId);
 const struct CompressedSpritePalette* __attribute__((long_call)) GetMGiftMonPal(u16 species, u8 isShiny);
 void __attribute__((long_call)) Task_MultichoiceMenu_HandleInput(u8 taskId);
 void __attribute__((long_call)) DestroyScriptMenuWindow(u8 windowId);
+bool8 __attribute__((long_call)) CreatePCMenu(void);
+void __attribute__((long_call)) ScriptMenu_DisplayPCStartupPrompt(void);

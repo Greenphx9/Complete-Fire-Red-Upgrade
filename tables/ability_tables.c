@@ -247,6 +247,7 @@ const struct SpecialAbilityFlags gSpecialAbilityFlags[ABILITIES_COUNT] =
 	[ABILITY_WONDERGUARD] =
 	{
 		.gMoldBreakerIgnoredAbilities = TRUE,
+		.gRandomizerBannedNewAbilities = TRUE,
 		.gRolePlayBannedAbilities = TRUE,
 		.gSkillSwapBannedAbilities = TRUE,
 		.gReceiverBannedAbilities = TRUE,
@@ -598,6 +599,12 @@ const struct SpecialAbilityFlags gSpecialAbilityFlags[ABILITIES_COUNT] =
 		.gReceiverBannedAbilities = TRUE,
 		.gTraceBannedAbilities = TRUE,
 		.gNeutralizingGasBannedAbilities = TRUE,
+	},
+#endif
+#ifdef ABILITY_UNUSED
+	[ABILITY_UNUSED] =
+	{
+		.gRandomizerBannedNewAbilities = TRUE,
 	},
 #endif
 #ifdef ABILITY_TRACE

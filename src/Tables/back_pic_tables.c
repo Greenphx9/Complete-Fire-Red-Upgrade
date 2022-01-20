@@ -2,6 +2,7 @@
 #include "../../include/data2.h"
 #include "../../include/sprite.h"
 #include "../../include/constants/trainers.h"
+
 /*
 back_pic_tables.c
 	Set up tables to switch the player's back sprite
@@ -106,11 +107,13 @@ const struct CompressedSpritePalette gTrainerBackPicPaletteTable[] =
 #define gTrainerBackAnims_May (const union AnimCmd* const*) 0x8239F54
 #define gTrainerBackAnims_PokeDude (const union AnimCmd* const*) 0x8239F54
 #define gTrainerBackAnims_OldMan (const union AnimCmd* const*) 0x8239F5C
-#define gTrainerBackAnims_Marlon (const union AnimCmd* const*) 0x8239F44
-#define gTrainerBackAnims_PokeKid (const union AnimCmd* const*)0x8239F54
+#define gTrainerBackAnims_PokeKid (const union AnimCmd* const*) 0x8239F54
 #define gTrainerBackAnims_Rival (const union AnimCmd* const*) 0x8239F44
 #define gTrainerBackAnims_Jax (const union AnimCmd* const*) 0x8239F44
 #define gTrainerBackAnims_RedNew (const union AnimCmd* const*) 0x8239F54
+#define gTrainerBackAnims_EthanLyra (const union AnimCmd* const*) 0x8239F44
+#define gTrainerBackAnims_LucasDawn (const union AnimCmd* const*) 0x8239F44
+#define gTrainerBackAnims_PlayerChampion (const union AnimCmd* const*) 0x8239F44
 #define gTrainerBackAnims_Catherine (const union AnimCmd* const*) 0x8239F44
 #define gTrainerBackAnims_Ginger (const union AnimCmd* const*) 0x8239F44
 #define gTrainerBackAnims_Abimbola (const union AnimCmd* const*) 0x8239F44
@@ -143,6 +146,21 @@ const struct CompressedSpritePalette gTrainerBackPicPaletteTable[] =
 #define gTrainerBackAnims_Cress (const union AnimCmd* const*) 0x8239F44
 #define gTrainerBackAnims_Cilan (const union AnimCmd* const*) 0x8239F44
 #define gTrainerBackAnims_Adrian (const union AnimCmd* const*) 0x8239F44
+
+static const union AnimCmd sAnimCmd_Marlon[] =
+{
+    ANIMCMD_FRAME(1, 32),
+    ANIMCMD_FRAME(2, 6),
+    ANIMCMD_FRAME(3, 6),
+    ANIMCMD_FRAME(4, 4),
+    ANIMCMD_END
+};
+
+const union AnimCmd *const gTrainerBackAnims_Marlon[] =
+{
+	(void*) 0x82347E8, //sAnim_GeneralFrame0
+	sAnimCmd_Marlon,
+};
 
 const union AnimCmd* const* const gTrainerBackAnimsPtrTable[] =
 {
@@ -181,10 +199,21 @@ const union AnimCmd* const* const gTrainerBackAnimsPtrTable[] =
 
 #ifdef UNBOUND
 	[TRAINER_BACK_PIC_MARLON] = gTrainerBackAnims_Marlon,
+	[TRAINER_BACK_PIC_MARLON_ARM] = gTrainerBackAnims_Marlon,
+	[TRAINER_BACK_PIC_MARLON_PLAYER_M] = gTrainerBackAnims_Marlon,
+	[TRAINER_BACK_PIC_MARLON_PLAYER_F] = gTrainerBackAnims_Marlon,
 	[TRAINER_BACK_PIC_POKE_KID] = gTrainerBackAnims_PokeKid,
 	[TRAINER_BACK_PIC_RIVAL] = gTrainerBackAnims_Rival,
 	[TRAINER_BACK_PIC_JAX] = gTrainerBackAnims_Jax,
 	[TRAINER_BACK_PIC_RED_NEW] = gTrainerBackAnims_RedNew,
+	[TRAINER_BACK_PIC_RED_PLAYER] = gTrainerBackAnims_RedNew,
+	[TRAINER_BACK_PIC_LEAF_PLAYER] = gTrainerBackAnims_RedNew,
+	[TRAINER_BACK_PIC_ETHAN_PLAYER] = gTrainerBackAnims_EthanLyra,
+	[TRAINER_BACK_PIC_LYRA_PLAYER] = gTrainerBackAnims_EthanLyra,
+	[TRAINER_BACK_PIC_LUCAS_PLAYER] = gTrainerBackAnims_LucasDawn,
+	[TRAINER_BACK_PIC_DAWN_PLAYER] = gTrainerBackAnims_LucasDawn,
+	[TRAINER_BACK_PIC_PLAYER_CHAMPION_M] = gTrainerBackAnims_PlayerChampion,
+	[TRAINER_BACK_PIC_PLAYER_CHAMPION_F] = gTrainerBackAnims_PlayerChampion,
 	[TRAINER_BACK_PIC_CATHERINE] = gTrainerBackAnims_Catherine,
 	[TRAINER_BACK_PIC_GINGER] = gTrainerBackAnims_Ginger,
 	[TRAINER_BACK_PIC_ABIMBOLA] = gTrainerBackAnims_Abimbola,
@@ -440,16 +469,45 @@ static const struct SpriteFrameImage sTrainerBackPicTable_BigMo[] =
 	{gTrainerBackPic_BigMoTiles + 0x1800, 	0x800, 0},
 };
 
-static const struct SpriteFrameImage sTrainerBackPicTable_Tessy[] =
-{
-	{gTrainerBackPic_TessyTiles, 			0x800, 0},
-	{gTrainerBackPic_TessyTiles + 0x0800, 	0x800, 0},
-	{gTrainerBackPic_TessyTiles + 0x1000, 	0x800, 0},
-	{gTrainerBackPic_TessyTiles + 0x1800, 	0x800, 0},
-	{gTrainerBackPic_TessyTiles + 0x2000, 	0x800, 0},
-};
+FIVE_FRAME_TABLE(Marlon)
+FIVE_FRAME_TABLE(MarlonArm)
+FIVE_FRAME_TABLE(MarlonPlayerM)
+FIVE_FRAME_TABLE(MarlonPlayerF)
+FOUR_FRAME_TABLE(PokeKid)
+FIVE_FRAME_TABLE(Rival)
+FIVE_FRAME_TABLE(Jax)
+FOUR_FRAME_TABLE(RedNew)
+FOUR_FRAME_TABLE(RedPlayer)
+FOUR_FRAME_TABLE(LeafPlayer)
+FIVE_FRAME_TABLE(EthanPlayer)
+FIVE_FRAME_TABLE(LyraPlayer)
+FIVE_FRAME_TABLE(LucasPlayer)
+FIVE_FRAME_TABLE(DawnPlayer)
+FIVE_FRAME_TABLE(PlayerChampionM)
+FIVE_FRAME_TABLE(PlayerChampionF)
+FIVE_FRAME_TABLE(Catherine)
+FIVE_FRAME_TABLE(Ginger)
+FIVE_FRAME_TABLE(Abimbola)
+FIVE_FRAME_TABLE(Mahina)
+FIVE_FRAME_TABLE(Alford)
+FIVE_FRAME_TABLE(Vega)
+FIVE_FRAME_TABLE(Alice)
+FIVE_FRAME_TABLE(Mel)
+FIVE_FRAME_TABLE(Galavan)
+FIVE_FRAME_TABLE(Tessy)
 
 #endif
+
+#define BACK_TEMPLATE(name)                            \
+	{                                                  \
+		.tileTag = 0xFFFF,                             \
+		.paletteTag = 0,                               \
+		.oam = gOamData_TrainerBacksprite,             \
+		.anims = NULL,                                 \
+		.images = sTrainerBackPicTable_##name,         \
+		.affineAnims = gAffineAnims_TrainerBacksprite, \
+		.callback = gSpriteCB_TrainerBacksprite,       \
+	},
 
 const struct SpriteTemplate gSpriteTemplateTable_TrainerBackSprites[] =
 {

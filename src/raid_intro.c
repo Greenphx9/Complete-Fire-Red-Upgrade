@@ -31,6 +31,7 @@ extern const u8 RaidBattleIntroBGPal[];
 extern const u8 RaidBattleIntroBGMap[];
 extern const u8 RaidBattleIntroBGRedPal[];
 extern const u8 RaidBattleIntroBGRedMap[];
+extern const u8 RaidBattleIntroBGUnboundPal[];
 extern const u8 RaidBattleStarTiles[];
 extern const u8 RaidBattleStarPal[];
 extern const u8 RaidBattleCursorTiles[];
@@ -673,16 +674,13 @@ static void InitRaidBattleIntro(void)
 
 static void LoadRaidBattleIntroGfx(void)
 {
-	if (FlagGet(FLAG_RED_RAID_BG)) {
-		decompress_and_copy_tile_data_to_vram(2, &RaidBattleIntroBGRedTiles, 0, 0, 0);
-		LZDecompressWram(RaidBattleIntroBGRedMap, sRaidBattleIntroPtr->tilemapPtr);
-		LoadPalette(RaidBattleIntroBGRedPal, 0, 0x20);
-	}
-	else {
-		decompress_and_copy_tile_data_to_vram(2, &RaidBattleIntroBGTiles, 0, 0, 0);
-		LZDecompressWram(RaidBattleIntroBGMap, sRaidBattleIntroPtr->tilemapPtr);
-		LoadPalette(RaidBattleIntroBGPal, 0, 0x20);
-	}
+	decompress_and_copy_tile_data_to_vram(2, &RaidBattleIntroBGTiles, 0, 0, 0);
+	LZDecompressWram(RaidBattleIntroBGMap, sRaidBattleIntroPtr->tilemapPtr);
+	#ifdef UNBOUND
+	LoadPalette(RaidBattleIntroBGUnboundPal, 0, 0x20);
+	#else
+	LoadPalette(RaidBattleIntroBGPal, 0, 0x20);
+	#endif
 	LoadMenuElementsPalette(0xC0, 1);
 	Menu_LoadStdPalAt(0xF0);
 }

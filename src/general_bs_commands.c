@@ -309,6 +309,7 @@ static bool8 TryStrongWindsWeakenAttack(u8 bankDef)
 	&& SPLIT(gCurrentMove) != SPLIT_STATUS
 	&& IsOfType(bankDef, TYPE_FLYING)
 	&& gTypeEffectiveness[gBattleStruct->dynamicMoveType][TYPE_FLYING] == TYPE_MUL_SUPER_EFFECTIVE
+	&& WEATHER_HAS_EFFECT
 	&& !gNewBS->printedStrongWindsWeakenedAttack) //Already checked before in doubles but not in singles
 	{
 		BattleScriptPushCursor();
@@ -3736,17 +3737,18 @@ void atkA6_settypetorandomresistance(void) //Conversion 2
 
 void atkA8_copymovepermanently(void) // sketch
 {
-	//Use gLastResultingMoves to allow copying Transform & Mimic. Metronome still won't be copied, though
+	//Use gLastPrintedMoves to allow copying Metronome, Transform & Mimic.
+	u16 lastMove = (gLastPrintedMoves[gBankTarget] != 0 && gLastPrintedMoves[gBankTarget] != 0xFFFF) ? gLastPrintedMoves[gBankTarget] : gLastResultingMoves[gBankTarget];
 	gChosenMove = 0xFFFF;
 
 	if (!(gBattleMons[gBankAttacker].status2 & STATUS2_TRANSFORMED)
-	&& !IsZMove(gLastResultingMoves[gBankTarget])
-	&& !IsAnyMaxMove(gLastResultingMoves[gBankTarget])
-	&& gLastResultingMoves[gBankTarget] != MOVE_STRUGGLE
-	&& gLastResultingMoves[gBankTarget] != MOVE_CHATTER
-	&& gLastResultingMoves[gBankTarget] != MOVE_SKETCH
-	&& gLastResultingMoves[gBankTarget] != 0
-	&& gLastResultingMoves[gBankTarget] != 0xFFFF)
+	&& !IsZMove(lastMove)
+	&& !IsAnyMaxMove(lastMove)
+	&& lastMove != MOVE_STRUGGLE
+	&& lastMove != MOVE_CHATTER
+	&& lastMove != MOVE_SKETCH
+	&& lastMove != 0
+	&& lastMove != 0xFFFF)
 	{
 		int i;
 
@@ -3754,7 +3756,7 @@ void atkA8_copymovepermanently(void) // sketch
 		{
 			if (gBattleMons[gBankAttacker].moves[i] == MOVE_SKETCH)
 				continue;
-			if (gBattleMons[gBankAttacker].moves[i] == gLastResultingMoves[gBankTarget])
+			if (gBattleMons[gBankAttacker].moves[i] == lastMove)
 				break;
 		}
 
@@ -3766,8 +3768,8 @@ void atkA8_copymovepermanently(void) // sketch
 		{
 			struct MovePpInfo movePpData;
 
-			gBattleMons[gBankAttacker].moves[gCurrMovePos] = gLastResultingMoves[gBankTarget];
-			gBattleMons[gBankAttacker].pp[gCurrMovePos] = gBattleMoves[gLastResultingMoves[gBankTarget]].pp;
+			gBattleMons[gBankAttacker].moves[gCurrMovePos] = lastMove;
+			gBattleMons[gBankAttacker].pp[gCurrMovePos] = gBattleMoves[lastMove].pp;
 			gActiveBattler = gBankAttacker;
 
 			for (i = 0; i < MAX_MON_MOVES; i++)
@@ -3780,7 +3782,7 @@ void atkA8_copymovepermanently(void) // sketch
 			EmitSetMonData(0, REQUEST_MOVES_PP_BATTLE, 0, sizeof(struct MovePpInfo), &movePpData);
 			MarkBufferBankForExecution(gActiveBattler);
 
-			PREPARE_MOVE_BUFFER(gBattleTextBuff1, gLastResultingMoves[gBankTarget])
+			PREPARE_MOVE_BUFFER(gBattleTextBuff1, lastMove)
 
 			gBattlescriptCurrInstr += 5;
 		}

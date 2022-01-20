@@ -36,6 +36,7 @@
 #include "../include/constants/songs.h"
 
 #include "../include/new/battle_strings.h"
+#include "../include/new/build_pokemon.h"
 #include "../include/new/catching.h"
 #include "../include/new/damage_calc.h"
 #include "../include/new/dns.h"
@@ -1233,7 +1234,10 @@ bool8 CanMonParticipateInASkyBattle(struct Pokemon* mon)
 
 	if (GetMonData(mon, MON_DATA_IS_EGG, NULL)
 	||  mon->hp == 0
-	||  CheckTableForSpecies(species, gSkyBattleBannedSpeciesList))
+	#ifndef UNBOUND
+	||  CheckTableForSpecies(species, gSkyBattleBannedSpeciesList)
+	#endif
+	)
 		return FALSE;
 
 	if (gBaseStats2[species].type1 == TYPE_FLYING
@@ -1271,9 +1275,12 @@ u16 sp058_BufferSwarmText(void)
 	u8 mapName = gSwarmTable[index].mapName;
 	u16 species = gSwarmTable[index].species;
 
-	GetMapName(sScriptStringVars[0], mapName, 0);
-	StringCopy(sScriptStringVars[1], gSpeciesNames[species]);
-
+	if (IsValidSwarmIndex(index))
+	{
+		u8 mapName = gSwarmTable[index].mapName;
+		u16 species = gSwarmTable[index].species;
+		TryRandomizeSpecies(&species);
+	}
 	return species;
 }
 

@@ -417,7 +417,6 @@ ReturnPokedexWeight:
 bxr1:
 	bx r1
 
-
 .pool
 @0x8104ACA with r0
 FixPokedexCheckNullSpeciesHook:
@@ -1036,6 +1035,9 @@ CheckPlayerPressedStartButton:
 	and r0, r1
 	cmp r0, #0
 	beq CheckSelectButtonReturn
+	bl IsDexNavHudActive
+	cmp r0, #0x0
+	bne CheckSelectButtonReturn @No opening Start Menu while HUD is active
 	ldr r2, =0x0806CCD6 | 1
 	bx r2
 
@@ -1516,3 +1518,23 @@ BlendPalettesOptimization:
 	bl BlendPalettesOptimized
 	pop {pc}
 */
+
+@0x8026330 with r0
+AutoScrollBattleLevelUpBoxHook1:
+	bl ShouldCloseBattleLevelUpBox
+	cmp r0, #0x0
+	beq AutoScrollBattleLevelUpBoxHook_ReturnNo
+	ldr r0, =0x8026338 | 1
+	bx r0
+
+AutoScrollBattleLevelUpBoxHook_ReturnNo:
+	ldr r0, =0x80263F6 | 1
+	bx r0
+
+@0x8026350 with r0
+AutoScrollBattleLevelUpBoxHook2:
+	bl ShouldCloseBattleLevelUpBox
+	cmp r0, #0x0
+	beq AutoScrollBattleLevelUpBoxHook_ReturnNo
+	ldr r0, =0x8026358 | 1
+	bx r0

@@ -551,7 +551,6 @@ void atk52_switchineffects(void)
 	gHitMarker &= ~(HITMARKER_FAINTED(gActiveBattler));
 	gSpecialStatuses[gActiveBattler].flag40 = 0;
 	u8 ability = ABILITY(gActiveBattler);
-	u8 itemEffect = ITEM_EFFECT(gActiveBattler);
 
 	if (gBattleMons[gActiveBattler].hp == 0)
 		goto SWITCH_IN_END;
@@ -725,7 +724,7 @@ void atk52_switchineffects(void)
 			if (CheckGrounding(gActiveBattler)
 			&& gSideTimers[SIDE(gActiveBattler)].spikesAmount > 0
 			&& ability != ABILITY_MAGICGUARD
-			&& itemEffect != ITEM_EFFECT_HEAVY_DUTY_BOOTS)
+			&& IsAffectedByHazards(gActiveBattler))
 			{
 				gBattleMoveDamage = CalcSpikesDamage(gActiveBattler);
 				gNewBS->DamageTaken[gActiveBattler] += gBattleMoveDamage;
@@ -745,7 +744,7 @@ void atk52_switchineffects(void)
 		case SwitchIn_StealthRock:
 			if (gSideTimers[SIDE(gActiveBattler)].srAmount > 0
 			&& ability != ABILITY_MAGICGUARD
-			&& itemEffect != ITEM_EFFECT_HEAVY_DUTY_BOOTS)
+			&& IsAffectedByHazards(gActiveBattler))
 			{
 				gBattleMoveDamage = CalcStealthRockDamage(gActiveBattler);
 				gNewBS->DamageTaken[gActiveBattler] += gBattleMoveDamage;
@@ -765,7 +764,7 @@ void atk52_switchineffects(void)
 		case SwitchIn_Steelsurge:
 			if (gSideTimers[SIDE(gActiveBattler)].steelsurge > 0
 			&& ability != ABILITY_MAGICGUARD
-			&& itemEffect != ITEM_EFFECT_HEAVY_DUTY_BOOTS)
+			&& IsAffectedByHazards(gActiveBattler))
 			{
 				gBattleMoveDamage = CalcSteelsurgeDamage(gActiveBattler);
 				gNewBS->DamageTaken[gActiveBattler] += gBattleMoveDamage;
@@ -791,7 +790,8 @@ void atk52_switchineffects(void)
 					BattleScriptPushCursor();
 					gBattlescriptCurrInstr = BattleScript_TSAbsorb;
 				}
-				else if (itemEffect != ITEM_EFFECT_HEAVY_DUTY_BOOTS //Pokemon with this item can still remove T-Spikes
+				else if (IsAffectedByHazards(gActiveBattler) //Pokemon with this item can still remove T-Spikes
+				&& CanBePoisoned(gActiveBattler, 0xFF, TRUE) //Must include check here, otherwise Corrosion can activate (which it shouldn't)
 				&& !BankSideHasSafeguard(gActiveBattler))
 				{
 					if (gSideTimers[SIDE(gActiveBattler)].tspikesAmount == 1)
@@ -820,7 +820,7 @@ void atk52_switchineffects(void)
 		case SwitchIn_StickyWeb:
 			if (gSideTimers[SIDE(gActiveBattler)].stickyWeb
 			&&  CheckGrounding(gActiveBattler)
-			&& itemEffect != ITEM_EFFECT_HEAVY_DUTY_BOOTS)
+			&& IsAffectedByHazards(gActiveBattler))
 			{
 				BattleScriptPushCursor();
 				gBattlescriptCurrInstr = BattleScript_StickyWebSpeedDrop;
@@ -1361,7 +1361,7 @@ void PartyMenuSwitchingUpdate(void)
 
 u32 CalcSpikesDamage(u8 bank)
 {
-	if (ITEM_EFFECT(bank) == ITEM_EFFECT_HEAVY_DUTY_BOOTS)
+	if (!IsAffectedByHazards(bank))
 		return 0;
 
 	u32 dmg = (5 - gSideTimers[SIDE(bank)].spikesAmount) * 2;
@@ -1370,7 +1370,7 @@ u32 CalcSpikesDamage(u8 bank)
 
 u32 CalcSpikesDamagePartyMon(struct Pokemon* mon, u8 side)
 {
-	if (GetMonItemEffect(mon) == ITEM_EFFECT_HEAVY_DUTY_BOOTS)
+	if (!IsMonAffectedByHazards(mon))
 		return 0;
 
 	u32 dmg = (5 - gSideTimers[side].spikesAmount) * 2;
@@ -1383,7 +1383,7 @@ u32 CalcStealthRockDamage(u8 bank)
 	u8 divisor = 8;
 	gBattleMoveDamage = 40;
 
-	if (ITEM_EFFECT(bank) == ITEM_EFFECT_HEAVY_DUTY_BOOTS)
+	if (!IsAffectedByHazards(bank))
 		return 0;
 
 	TypeDamageModification(0, bank, MOVE_STEALTHROCK, TYPE_ROCK, &flags);
@@ -1398,7 +1398,7 @@ u32 CalcStealthRockDamagePartyMon(struct Pokemon* mon)
 	u8 divisor = 8;
 	gBattleMoveDamage = 40;
 
-	if (GetMonItemEffect(mon) == ITEM_EFFECT_HEAVY_DUTY_BOOTS)
+	if (!IsMonAffectedByHazards(mon))
 		return 0;
 
 	TypeDamageModificationPartyMon(0, mon, MOVE_STEALTHROCK, TYPE_ROCK, &flags);
@@ -1413,7 +1413,7 @@ u32 CalcSteelsurgeDamage(u8 bank)
 	u8 divisor = 8;
 	gBattleMoveDamage = 40;
 
-	if (ITEM_EFFECT(bank) == ITEM_EFFECT_HEAVY_DUTY_BOOTS)
+	if (!IsAffectedByHazards(bank))
 		return 0;
 
 	TypeDamageModification(0, bank, MOVE_IRONHEAD, TYPE_STEEL, &flags);
@@ -1428,7 +1428,7 @@ u32 CalcSteelsurgeDamagePartyMon(struct Pokemon* mon)
 	u8 divisor = 8;
 	gBattleMoveDamage = 40;
 
-	if (GetMonItemEffect(mon) == ITEM_EFFECT_HEAVY_DUTY_BOOTS)
+	if (!IsMonAffectedByHazards(mon))
 		return 0;
 
 	TypeDamageModificationPartyMon(0, mon, MOVE_IRONHEAD, TYPE_STEEL, &flags);
@@ -1469,12 +1469,11 @@ static u8 GetStealthRockDivisor(void)
 
 u32 GetMonEntryHazardDamage(struct Pokemon* mon, u8 side)
 {
-	u8 ability;
 	u32 dmg = 0;
 
 	if (gSideStatuses[side] & SIDE_STATUS_SPIKES
-	&& (ability = GetMonAbility(mon)) != ABILITY_MAGICGUARD
-	&& (ability == ABILITY_KLUTZ || ItemId_GetHoldEffect(mon->item) != ITEM_EFFECT_HEAVY_DUTY_BOOTS)) //Has Klutz or not holding boots
+	&& GetMonAbility(mon) != ABILITY_MAGICGUARD
+	&& IsMonAffectedByHazards(mon)) //Has Klutz or not holding boots
 	{
 		if (gSideTimers[side].srAmount > 0)
 			dmg += CalcStealthRockDamagePartyMon(mon);

@@ -57,6 +57,8 @@ void SortBerriesOrTMHMs(struct BagPocket* bagPocket);
 void SortTMHMs(struct ItemSlot* itemSlot);
 void SortItemsInBag(u8 pocket, u8 type);
 
+u16 GetBestBallInBag(void);
+
 //Hooked in Functions
 u8 TryHandleExcuseForDracoMeteorTutor(struct Pokemon* mon);
 u8 TryHandleExcuseForDracoMeteorTutorAlreadyKnow(void);

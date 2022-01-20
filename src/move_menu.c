@@ -13,6 +13,7 @@
 #include "../include/new/ai_util.h"
 #include "../include/new/battle_indicators.h"
 #include "../include/new/battle_util.h"
+#include "../include/new/catching.h"
 #include "../include/new/damage_calc.h"
 #include "../include/new/dynamax.h"
 #include "../include/new/general_bs_commands.h"
@@ -2196,8 +2197,8 @@ bool8 IsBagDisabled(void)
 	else
 	{
 		if (!IsRaidBattle()
-		&& !FlagGet(FLAG_SYS_GAME_CLEAR) //Otherwise they can't catch Legendaries
 		&& IsAuraBoss(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)) //Wild boss
+		&& CantCatchBecauseFlag() //Can't be caught
 		&& (difficulty >= OPTIONS_EXPERT_DIFFICULTY //No items in battles for Insane players
 		 || itemRestrictions >= OPTIONS_ITEM_RESTRICTIONS_NO_ITEMS))
 			return TRUE;

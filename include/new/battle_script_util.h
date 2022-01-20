@@ -156,4 +156,4 @@ void ShowSOSMon(void);
 void ShowSOSMonHealthbox(void);
 void FailSubstituteInShadowShieldBattle(void);
 void TryFailAuraWheel(void);
-
+void SkipUseNextPkmnPromptIfCantRun(void);

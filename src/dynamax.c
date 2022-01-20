@@ -101,6 +101,7 @@ static const struct GMaxMove sGMaxMoveTable[] =
 	{SPECIES_APPLETUN_GIGA,       TYPE_GRASS,      MOVE_G_MAX_SWEETNESS_P},
 	{SPECIES_SANDACONDA_GIGA,     TYPE_GROUND,     MOVE_G_MAX_SANDBLAST_P},
 	{SPECIES_TOXTRICITY_GIGA,     TYPE_ELECTRIC,   MOVE_G_MAX_STUN_SHOCK_P},
+	{SPECIES_TOXTRICITY_LOW_KEY_GIGA,     TYPE_ELECTRIC,   MOVE_G_MAX_STUN_SHOCK_P},
 	{SPECIES_CENTISKORCH_GIGA,    TYPE_FIRE,       MOVE_G_MAX_CENTIFERNO_P},
 	{SPECIES_HATTERENE_GIGA,      TYPE_FAIRY,      MOVE_G_MAX_SMITE_P},
 	{SPECIES_GRIMMSNARL_GIGA,     TYPE_DARK,       MOVE_G_MAX_SNOOZE_P},
@@ -253,23 +254,26 @@ static bool8 IsBannedHeldItemForDynamax(u16 item)
 bool8 IsBannedDynamaxSpecies(u16 species)
 {
 	switch (species) {
-	case SPECIES_NONE:
-#ifdef SPECIES_ZACIAN
-	case SPECIES_ZACIAN:
-#endif
-#ifdef SPECIES_ZAMAZENTA
-	case SPECIES_ZAMAZENTA:
-#endif
-#ifdef SPECIES_ZACIAN_CROWNED
-	case SPECIES_ZACIAN_CROWNED:
-#endif
-#ifdef SPECIES_ZAMAZENTA_CROWNED
-	case SPECIES_ZAMAZENTA_CROWNED:
-#endif
-#ifdef SPECIES_ETERNATUS
-	case SPECIES_ETERNATUS:
-#endif
-		return TRUE;
+		case SPECIES_NONE:
+		#ifdef SPECIES_ZACIAN
+		case SPECIES_ZACIAN:
+		#endif
+		#ifdef SPECIES_ZAMAZENTA
+		case SPECIES_ZAMAZENTA:
+		#endif
+		#ifdef SPECIES_ZACIAN_CROWNED
+		case SPECIES_ZACIAN_CROWNED:
+		#endif
+		#ifdef SPECIES_ZAMAZENTA_CROWNED
+		case SPECIES_ZAMAZENTA_CROWNED:
+		#endif
+		#ifdef SPECIES_ETERNATUS
+		case SPECIES_ETERNATUS:
+		#endif
+		#ifdef SPECIES_ETERNATUS_ETERNAMAX
+		case SPECIES_ETERNATUS_ETERNAMAX: //Because people seem to have this as a hackmon
+		#endif
+			return TRUE;
 	}
 
 	if (IsMegaSpecies(species)
@@ -1571,6 +1575,11 @@ bool8 ShouldStartWithRaidShieldsUp(void)
 		return TRUE;
 	#endif
 
+	#ifdef SPECIES_SHEDINJA
+	if (IsRaidBattle() && SPECIES(BANK_RAID_BOSS) == SPECIES_SHEDINJA)
+		return TRUE; //Starts with shields otherwise it can't survive a hit
+	#endif
+
 	#ifdef FLAG_START_WITH_RAID_SHIELDS
 	if (FlagGet(FLAG_START_WITH_RAID_SHIELDS))
 		return TRUE;
@@ -1665,7 +1674,12 @@ void CreateRaidShieldSprites(void)
 	u8 bank = BANK_RAID_BOSS;
 	u16 baseStatTotal = GetBaseStatsTotal(SPECIES(bank));
 
-#ifdef FLAG_RAID_BATTLE_NO_FORCE_END
+	#ifdef SPECIES_SHEDINJA
+	if (SPECIES(bank) == SPECIES_SHEDINJA)
+		numShields = MAX_NUM_RAID_SHIELDS; //Always gets max shields
+	else
+	#endif
+	#ifdef FLAG_RAID_BATTLE_NO_FORCE_END
 	if (!FlagGet(FLAG_RAID_BATTLE_NO_FORCE_END)) //Less shields for battle that ends in 10 turns
 #endif
 	{
@@ -1922,7 +1936,7 @@ void DetermineRaidSpecies(void)
 
 		if (ShouldTryGigantamaxRaidMon())
 		{
-			altSpecies = GetGigantamaxSpecies(raid->data[index].species, TRUE);
+			altSpecies = GetGigantamaxSpecies(gRaidBattleSpecies, TRUE);
 			if (altSpecies != SPECIES_NONE)
 				gRaidBattleSpecies = altSpecies; //Update with Gigantamax form
 		}
@@ -2221,6 +2235,23 @@ static u16 ModifyFrontierRaidDropItem(u16 item)
 	}
 
 	return item;
+}
+
+static bool8 IsFoughtRaidSpecies(u16 species)
+{
+	if (species == gRaidBattleSpecies)
+		return TRUE;
+
+	if (species == GetGigantamaxBaseForm(gRaidBattleSpecies))
+		return TRUE;
+
+	#ifdef NATIONAL_DEX_WORMADAM //Special exception for Wormadam since one species can become all three for the battle
+	u16 dexNum = SpeciesToNationalPokedexNum(species);
+	if (dexNum == NATIONAL_DEX_WORMADAM && SpeciesToNationalPokedexNum(gRaidBattleSpecies) == dexNum) //Both are Wormadam
+		return TRUE; //Give the items for Wormadam
+	#endif
+
+	return FALSE;
 }
 
 //Input: VAR_TEMP_0 = 0

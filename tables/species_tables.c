@@ -1010,6 +1010,19 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smartWild = TRUE,
 	},
 #endif
+#ifdef SPECIES_ETERNATUS_ETERNAMAX
+	[SPECIES_ETERNATUS_ETERNAMAX] =
+	{
+		.battleTowerStandardBan = TRUE,
+		.gsCupLegendaries = TRUE,
+		.smogonOUBan = TRUE,
+		.smogonNationalDexOUBan = TRUE,
+		.smogonOUDoublesBan = TRUE,
+		.setPerfectXIVs = TRUE,
+		.smartWild = TRUE,
+		.randomizerBan = TRUE,
+	},
+#endif
 #ifdef SPECIES_ZARUDE
 	[SPECIES_ZARUDE] =
 	{
@@ -5492,12 +5505,6 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 #endif
 #ifdef SPECIES_MORPEKO_HANGRY
 	[SPECIES_MORPEKO_HANGRY] =
-	{
-		.randomizerBan = TRUE,
-	},
-#endif
-#ifdef SPECIES_ETERNATUS_ETERNAMAX
-	[SPECIES_ETERNATUS_ETERNAMAX] =
 	{
 		.randomizerBan = TRUE,
 	},
