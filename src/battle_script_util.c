@@ -1849,6 +1849,11 @@ void TransferLastUsedItem(void)
 	}
 }
 
+void WipeSwitchInEffectsState(void)
+{
+	gNewBS->switchInEffectsState = 0;
+}
+
 void TryToStopNewMonFromSwitchingInAfterSRHurt(void)
 {
 	if (gNewBS->endTurnDone)
@@ -1857,7 +1862,7 @@ void TryToStopNewMonFromSwitchingInAfterSRHurt(void)
 		gBattlescriptCurrInstr = BattleScript_EntryHazardsHurtReturn - 5; //Continue the switch in effects
 	}
 
-	gNewBS->switchInEffectsState = 0;
+	WipeSwitchInEffectsState();
 }
 
 void ClearSwitchInEffectsState(void)
@@ -1865,9 +1870,9 @@ void ClearSwitchInEffectsState(void)
 	if (!gNewBS->endTurnDone)
 	{
 		gBattlescriptCurrInstr = BattleScript_HandleFaintedMonDoublesSwitchInEffects - 5;
-		gNewBS->switchInEffectsState = 0;
+		WipeSwitchInEffectsState();
 	}
-};
+}
 
 void UpdatePrimalAbility(void)
 {
