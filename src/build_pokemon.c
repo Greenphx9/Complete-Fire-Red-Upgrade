@@ -5141,10 +5141,10 @@ bool8 HasCreationTrio(void) {
 	u16 j = 0;
 	for (int i = 0; i < gPlayerPartyCount; i++) {
 		struct Pokemon* mon = &gPlayerParty[i];
-		if (mon->species == SPECIES_DIALGA || mon->species == SPECIES_DIALGA_PRIMAL) {
+		if (mon->species == SPECIES_DIALGA || mon->species == SPECIES_DIALGA_ORIGIN) {
 			j++;
 		}
-		if (mon->species == SPECIES_PALKIA || mon->species == SPECIES_PALKIA_PRIMAL) {
+		if (mon->species == SPECIES_PALKIA || mon->species == SPECIES_PALKIA_ORIGIN) {
 			j++;
 		}
 		if (mon->species == SPECIES_GIRATINA || mon->species == SPECIES_GIRATINA_ORIGIN) {

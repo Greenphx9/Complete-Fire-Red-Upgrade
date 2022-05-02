@@ -29380,7 +29380,7 @@ const struct BaseStats gBaseStats2[] =
 		.hiddenAbility = ABILITY_NONE,
 		.noFlip = TRUE,
 	},
-	[SPECIES_DIALGA_PRIMAL] =
+	[SPECIES_DIALGA_ORIGIN] =
 	{
 		.baseHP = 100,
 		.baseAttack = 100,
@@ -29412,7 +29412,7 @@ const struct BaseStats gBaseStats2[] =
 		.hiddenAbility = ABILITY_TELEPATHY,
 		.noFlip = TRUE,
 	},
-	[SPECIES_PALKIA_PRIMAL] =
+	[SPECIES_PALKIA_ORIGIN] =
 	{
 		.baseHP = 90,
 		.baseAttack = 100,

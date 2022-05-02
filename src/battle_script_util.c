@@ -2614,3 +2614,9 @@ void SkipUseNextPkmnPromptIfCantRun(void)
 	if (AreAllKindsOfRunningPrevented())
 		gBattlescriptCurrInstr = BattleScript_FaintedMonTryChooseAnother - 5;
 }
+
+/*void TryRaiseHigherDefensesOverOffenses(void)
+{
+	if (AreDefensesHigherThanOffenses(gBankAttacker))
+		gBattlescriptCurrInstr = BattleScript_HigherDefensesUp - 5;
+}*/

@@ -410,7 +410,7 @@ bool8 IsMegaSpecies(u16 species)
 bool8 IsBluePrimalSpecies(unusedArg u16 species)
 {
 	#ifdef SPECIES_KYOGRE_PRIMAL
-	return (species == SPECIES_KYOGRE_PRIMAL || species == SPECIES_DIALGA_PRIMAL || species == SPECIES_PALKIA_PRIMAL);
+	return (species == SPECIES_KYOGRE_PRIMAL || species == SPECIES_DIALGA_ORIGIN || species == SPECIES_PALKIA_ORIGIN);
 	#else
 	return FALSE;
 	#endif

@@ -314,6 +314,38 @@ bool8 TryFormRevert(struct Pokemon* mon)
 		TryRevertGiratinaOrigin(mon, FALSE);
 	}
 	#endif
+	#if (defined SPECIES_ETERNATUS && defined SPECIES_ETERNATUS_ETERNAMAX)
+	else if (mon->species == SPECIES_ETERNATUS_ETERNAMAX) //If it was hacked in
+	{
+		mon->species = SPECIES_ETERNATUS;
+		CalculateMonStats(mon);
+		return TRUE;
+	}
+	#endif
+	#if (defined SPECIES_ZACIAN && defined SPECIES_ZACIAN_CROWNED)
+	else if (mon->species == SPECIES_ZACIAN_CROWNED) //If it was hacked in
+	{
+		mon->species = SPECIES_ZACIAN;
+		u8 moveIndex = FindMovePositionInMonMoveset(MOVE_BEHEMOTHBLADE, mon);
+		if (moveIndex < MAX_MON_MOVES)
+		{
+			u16 newMove = MOVE_IRONHEAD; //Zacian's Behemoth Blade changes to Iron Head in its base forme
+			SetMonData(mon, MON_DATA_MOVE1 + moveIndex, &newMove);
+		}
+	}
+	#endif
+	#if (defined SPECIES_ZAMAZENTA && defined SPECIES_ZAMAZENTA_CROWNED)
+	else if (mon->species == SPECIES_ZAMAZENTA_CROWNED) //If it was hacked in
+	{
+		mon->species = SPECIES_ZAMAZENTA;
+		u8 moveIndex = FindMovePositionInMonMoveset(MOVE_BEHEMOTHBASH, mon);
+		if (moveIndex < MAX_MON_MOVES)
+		{
+			u16 newMove = MOVE_IRONHEAD; //Zamazenta's Behemoth Bash changes to Iron Head in its base forme
+			SetMonData(mon, MON_DATA_MOVE1 + moveIndex, &newMove);
+		}
+	}
+	#endif
 
 	return FALSE;
 }
@@ -531,17 +563,17 @@ void HoldItemFormChange(struct Pokemon* mon, u16 item)
 	switch(species) {
 		case SPECIES_DIALGA:
 			if (itemEffect == ITEM_EFFECT_ADAMANT_ORB)
-				targetSpecies = SPECIES_DIALGA_PRIMAL;
+				targetSpecies = SPECIES_DIALGA_ORIGIN;
 			break;
-		case SPECIES_DIALGA_PRIMAL:
+		case SPECIES_DIALGA_ORIGIN:
 			if (itemEffect != ITEM_EFFECT_ADAMANT_ORB)
 				targetSpecies = SPECIES_DIALGA;
 			break;
 		case SPECIES_PALKIA:
 			if (itemEffect == ITEM_EFFECT_LUSTROUS_ORB)
-				targetSpecies = SPECIES_PALKIA_PRIMAL;
+				targetSpecies = SPECIES_PALKIA_ORIGIN;
 			break;
-		case SPECIES_PALKIA_PRIMAL:
+		case SPECIES_PALKIA_ORIGIN:
 			if (itemEffect != ITEM_EFFECT_LUSTROUS_ORB)
 				targetSpecies = SPECIES_PALKIA;
 			break;

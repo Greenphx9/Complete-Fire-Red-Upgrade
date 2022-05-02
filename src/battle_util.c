@@ -675,6 +675,16 @@ bool8 AnyStatGreaterThan(u8 bank, u8 amount)
 	return FALSE;
 }
 
+bool8 AreDefensesHigherThanOffenses(u8 bank)
+{
+	u16 atk = gBattleMons[bank].attack;
+	u16 spAtk = gBattleMons[bank].spAttack;
+	u16 def = gBattleMons[bank].defense;
+	u16 spDef = gBattleMons[bank].spDefense;
+
+	return def + spDef > atk + spAtk;
+}
+
 u8 CountBoosts(u8 bank)
 {
 	u8 sum = 0;

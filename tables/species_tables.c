@@ -1014,7 +1014,6 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	[SPECIES_ETERNATUS_ETERNAMAX] =
 	{
 		.battleTowerStandardBan = TRUE,
-		.gsCupLegendaries = TRUE,
 		.smogonOUBan = TRUE,
 		.smogonNationalDexOUBan = TRUE,
 		.smogonOUDoublesBan = TRUE,
@@ -1059,6 +1058,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	[SPECIES_CALYREX] =
 	{
 		.battleTowerStandardBan = TRUE,
+		.gsCupLegendaries = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 	},
@@ -1067,6 +1067,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	[SPECIES_CALYREX_ICE_RIDER] =
 	{
 		.battleTowerStandardBan = TRUE,
+		.gsCupLegendaries = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 	},
@@ -1075,6 +1076,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	[SPECIES_CALYREX_SHADOW_RIDER] =
 	{
 		.battleTowerStandardBan = TRUE,
+		.gsCupLegendaries = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 	},
@@ -5335,14 +5337,14 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.randomizerBan = TRUE,
 	},
 #endif
-#ifdef SPECIES_DIALGA_PRIMAL
-	[SPECIES_DIALGA_PRIMAL] =
+#ifdef SPECIES_DIALGA_ORIGIN
+	[SPECIES_DIALGA_ORIGIN] =
 	{
 		.randomizerBan = TRUE,
 	},
 #endif
-#ifdef SPECIES_PALKIA_PRIMAL
-	[SPECIES_PALKIA_PRIMAL] =
+#ifdef SPECIES_PALKIA_ORIGIN
+	[SPECIES_PALKIA_ORIGIN] =
 	{
 		.randomizerBan = TRUE,
 	},

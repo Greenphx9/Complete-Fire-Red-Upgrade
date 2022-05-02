@@ -4753,6 +4753,7 @@ BS_208_BulkUp:
 	attackstring
 	ppreduce
 	jumpifmove MOVE_COIL CoilBS
+	jumpifmove MOVE_VICTORYDANCE VictoryDanceBS
 	
 BulkUpBS:
 	jumpifstat BANK_TARGET LESSTHAN STAT_ATK STAT_MAX BulkUp_Atk
@@ -4804,6 +4805,39 @@ Coil_Def:
 
 Coil_Acc:
 	setstatchanger STAT_ACC | INCREASE_1
+	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
+	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
+	printfromtable gStatUpStringIds
+	waitmessage DELAY_1SECOND
+	goto BS_MOVE_END
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+VictoryDanceBS: @;Physical Quiver Dance
+	jumpifstat BANK_ATTACKER LESSTHAN STAT_ATK STAT_MAX VictoryDance_Atk
+	jumpifstat BANK_ATTACKER LESSTHAN STAT_DEF STAT_MAX VictoryDance_Atk
+	jumpifstat BANK_ATTACKER EQUALS STAT_SPD STAT_MAX BattleScript_CantRaiseMultipleStats
+
+VictoryDance_Atk:
+	attackanimation
+	waitanimation
+	setbyte STAT_ANIM_PLAYED 0x0
+	playstatchangeanimation BANK_ATTACKER, STAT_ANIM_ATK | STAT_ANIM_DEF | STAT_ANIM_SPD, STAT_ANIM_UP | STAT_ANIM_IGNORE_ABILITIES
+	setstatchanger STAT_ATK | INCREASE_1
+	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN VictoryDance_Def
+	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 VictoryDance_Def
+	printfromtable gStatUpStringIds
+	waitmessage DELAY_1SECOND
+
+VictoryDance_Def:
+	setstatchanger STAT_DEF | INCREASE_1
+	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN VictoryDance_Speed
+	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 VictoryDance_Speed
+	printfromtable gStatUpStringIds
+	waitmessage DELAY_1SECOND
+
+VictoryDance_Speed:
+	setstatchanger STAT_SPD | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
 	printfromtable gStatUpStringIds
@@ -4922,41 +4956,6 @@ Shelter_RaiseDef1:
 
 Shelter_RaiseEv1:
 	setstatchanger STAT_EVASION | INCREASE_1
-	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
-	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE57C
-	waitmessage DELAY_1SECOND
-	goto BS_MOVE_END
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-VictoryDanceBS:
-	attackstring
-	ppreduce
-	jumpifstat BANK_ATTACKER LESSTHAN STAT_ATK STAT_MAX VictoryDance_RaiseAtk1
-	jumpifstat BANK_ATTACKER LESSTHAN STAT_DEF STAT_MAX VictoryDance_RaiseAtk1
-	jumpifstat BANK_ATTACKER EQUALS STAT_SPD STAT_MAX 0x81D85E7
-
-VictoryDance_RaiseAtk1:
-	attackanimation
-	waitanimation
-	setbyte STAT_ANIM_PLAYED 0x0
-	playstatchangeanimation BANK_ATTACKER, STAT_ANIM_ATK | STAT_ANIM_DEF | STAT_ANIM_SPD, STAT_ANIM_UP | STAT_ANIM_IGNORE_ABILITIES
-	setstatchanger STAT_ATK | INCREASE_1
-	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN VictoryDance_RaiseDef1
-	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 VictoryDance_RaiseDef1
-	printfromtable 0x83FE57C
-	waitmessage DELAY_1SECOND
-
-VictoryDance_RaiseDef1:
-	setstatchanger STAT_DEF | INCREASE_1
-	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN VictoryDance_RaiseSpd1
-	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 VictoryDance_RaiseSpd1
-	printfromtable 0x83FE57C
-	waitmessage DELAY_1SECOND
-
-VictoryDance_RaiseSpd1:
-	setstatchanger STAT_SPD | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
 	printfromtable 0x83FE57C

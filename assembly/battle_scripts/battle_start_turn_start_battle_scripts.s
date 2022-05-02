@@ -127,8 +127,8 @@ BattleScript_Primal:
 BattleScript_PrimalSub:
 	jumpifspecies BANK_ATTACKER SPECIES_GROUDON_PRIMAL PGroudonAnim
 	jumpifspecies BANK_ATTACKER SPECIES_KYOGRE_PRIMAL PKyogreAnim
-	jumpifspecies BANK_ATTACKER SPECIES_DIALGA_PRIMAL PKyogreAnim
-	jumpifspecies BANK_ATTACKER SPECIES_PALKIA_PRIMAL PKyogreAnim
+	jumpifspecies BANK_ATTACKER SPECIES_DIALGA_ORIGIN PKyogreAnim
+	jumpifspecies BANK_ATTACKER SPECIES_PALKIA_ORIGIN PKyogreAnim
 	playanimation BANK_ATTACKER ANIM_TRANSFORM 0x0
 
 RegularPrimalAnim:
