@@ -126,8 +126,6 @@ void UpdateQuickClawRandomNumber(u8 bank);
 void GiveOmniboost(u8 bank);
 bool8 WillPoltergeistFail(u16 item, u8 ability);
 bool8 IsChoiceItemEffectOrAbility(u8 itemEffect, u8 ability);
-u8 GetImposterBank(u8 bank);
-bool8 ImposterWorks(u8 bankAtk, bool8 checkingMonAtk);
 bool8 WillSyncronoiseFail(u8 bankAtk, u8 bankDef);
 bool8 WillSyncronoiseFailByAttackerTypesAndBank(u8 atkType1, u8 atkType2, u8 atkType3, u8 bankDef);
 bool8 WillSyncronoiseFailByAttackerAnd3DefTypesAndItemEffect(u8 bankAtk, u8 defType1, u8 defType2, u8 defType3, u8 defItemEffect);
@@ -138,6 +136,8 @@ bool8 IsMonAffectedByElectricTerrain(struct Pokemon* mon);
 bool8 WeatherHasEffect(void);
 bool8 IsChoiceAbility(u8 ability);
 bool8 IsChoiceItemEffectOrAbility(u8 itemEffect, u8 ability);
+u8 GetImposterBank(u8 bank);
+bool8 ImposterWorks(u8 bankAtk, bool8 checkingMonAtk);
 
 void ClearBankStatus(u8 bank);
 bool8 IsSleepClauseInEffect(u8 bankToPutToSleep);

@@ -826,7 +826,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 						moveType = GetExceptionMoveType(FOE(bank), move);
 
 					if (MOVE_RESULT_SUPER_EFFECTIVE &
-						TypeCalc(move, FOE(bank), bank, 0, 0))
+						TypeCalc(move, FOE(bank), bank, NULL))
 					{
 						++effect;
 						break;
@@ -849,7 +849,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 						moveType = GetExceptionMoveType(PARTNER(FOE(bank)), move);
 
 					if (MOVE_RESULT_SUPER_EFFECTIVE &
-						TypeCalc(move, PARTNER(FOE(bank)), bank, 0, 0))
+						TypeCalc(move, PARTNER(FOE(bank)), bank, NULL))
 					{
 						++effect;
 						break;
@@ -1046,21 +1046,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 			}
 			break;
 
-		case ABILITY_IMPOSTER: ;
-			u8 transformBank = BATTLE_OPPOSITE(bank);
-
-			if (IsRaidBattle() && SIDE(bank) == B_SIDE_PLAYER)
-				transformBank = BANK_RAID_BOSS;
-
-			if (BATTLER_ALIVE(transformBank)
-			&& !(gBattleMons[transformBank].status2 & (STATUS2_TRANSFORMED | STATUS2_SUBSTITUTE))
-			&& !(gStatuses3[transformBank] & (STATUS3_SEMI_INVULNERABLE | STATUS3_ILLUSION))
-			&& !IS_TRANSFORMED(bank)
-			#ifdef UNBOUND
-			&& SPECIES(transformBank) != SPECIES_SHADOW_WARRIOR
-			#endif
-			&& !HasRaidShields(transformBank))
+		case ABILITY_IMPOSTER:
+			if (ImposterWorks(bank, FALSE))
 			{
+				u8 transformBank = GetImposterBank(bank);
 				gBankAttacker = bank;
 				gBankTarget = transformBank;
 
@@ -1075,6 +1064,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 					TransformPokemon(bank, gBankTarget);
 					BattleScriptPushCursorAndCallback(BattleScript_ImposterActivates);
 				}
+
 				effect++;
 			}
 			break;
