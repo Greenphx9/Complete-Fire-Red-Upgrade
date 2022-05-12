@@ -1147,7 +1147,7 @@ enum ProtectQueries ShouldProtect(u8 bankAtk, u8 bankDef, u16 move)
 	if ((!isAtkDynamaxed && BankHoldingUsefulItemToProtectFor(bankAtk))
 	||  (!isAtkDynamaxed && BankHasAbilityUsefulToProtectFor(bankAtk, bankDef))
 	||  (!isAtkDynamaxed && WillFaintFromSecondaryDamage(bankDef)) //Don't protect if you're Dynamaxed because Max Moves can have beneficial side effects
-	||  (!isAtkDynamaxed && IsTrapped(bankDef, TRUE) && IsTakingSecondaryDamage(bankDef)) //Not like the foe will be able to go anywhere
+	||  (!isAtkDynamaxed && IsTrapped(bankDef, TRUE) && IsTakingSecondaryDamage(bankDef, FALSE)) //Not like the foe will be able to go anywhere
 	||  (IsDynamaxed(bankDef) && (!IsRaidBattle() || bankDef != BANK_RAID_BOSS) && !IsDynamaxed(bankAtk) && !ShouldAIDynamax(bankAtk, bankDef) && SPLIT(predictedMove) != SPLIT_STATUS) //Foe is going to attack with a Max Move and ai won't be dynamaxed
 	||  predictedMoveEffect == EFFECT_EXPLOSION
 	|| (predictedMoveEffect == EFFECT_SEMI_INVULNERABLE && BATTLER_SEMI_INVULNERABLE(bankDef) //Foe coming down
@@ -1170,7 +1170,7 @@ enum ProtectQueries ShouldProtect(u8 bankAtk, u8 bankDef, u16 move)
 		{
 			if (!isAtkDynamaxed && !CanKnockOutAfterHealing(bankDef, bankAtk, healAmount, 1, FALSE))
 				return USE_PROTECT;
-			else if (!isAtkDynamaxed && IsTakingSecondaryDamage(bankDef))
+			else if (!isAtkDynamaxed && IsTakingSecondaryDamage(bankDef, FALSE))
 				return USE_PROTECT;
 			else
 				return USE_STATUS_THEN_PROTECT;
@@ -1179,7 +1179,7 @@ enum ProtectQueries ShouldProtect(u8 bankAtk, u8 bankDef, u16 move)
 		{
 			if (!isAtkDynamaxed && !CanKnockOutAfterHealing(bankDef, bankAtk, healAmount, 2, FALSE))
 				return USE_PROTECT;
-			else if (!isAtkDynamaxed && IsTakingSecondaryDamage(bankDef))
+			else if (!isAtkDynamaxed && IsTakingSecondaryDamage(bankDef, FALSE))
 				return USE_PROTECT;
 			else
 				return USE_STATUS_THEN_PROTECT;
