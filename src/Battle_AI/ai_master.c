@@ -147,7 +147,7 @@ void BattleAI_SetupAIData(u8 defaultScoreMoves)
 	else
 		gBankTarget = gBankAttacker ^ BIT_SIDE;
 
-	moveLimitations = CheckMoveLimitations(gActiveBattler, 0, AdjustMoveLimitationFlagsForAI(gBankAttacker, gBankTarget));
+	moveLimitations = CheckMoveLimitations(gActiveBattler, 0, AdjustMoveLimitationFlagsForAI(gBankAttacker));
 
 	// Ignore moves that aren't possible to use.
 	for (i = 0; i < MAX_MON_MOVES; i++)
@@ -396,13 +396,12 @@ static u8 ChooseMoveOrAction_Singles(struct AIScript* aiScriptData)
 	{
 		if (gBattleMons[gBankAttacker].moves[i] != MOVE_NONE)
 		{
-			// In ruby, the order of these if statements is reversed.
 			if (currentMoveArray[0] == AI_THINKING_STRUCT->score[i])
 			{
 				currentMoveArray[numOfBestMoves] = AI_THINKING_STRUCT->score[i];
 				consideredMoveArray[numOfBestMoves++] = i;
 			}
-			if (currentMoveArray[0] < AI_THINKING_STRUCT->score[i])
+			else if (currentMoveArray[0] < AI_THINKING_STRUCT->score[i])
 			{
 				numOfBestMoves = 1;
 				currentMoveArray[0] = AI_THINKING_STRUCT->score[i];

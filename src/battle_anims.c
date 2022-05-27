@@ -589,6 +589,21 @@ const union AffineAnimCmd* const gSpriteAffineAnimTable_HydroCannonBall[] =
 {
 	sSpriteAffineAnim_HydroCannonBall,
 };
+//Focus Blast//
+#define AnimSuperpowerOrb_Step ((void*) (0x80B111C | 1))
+void SpriteCB_FocusBlastOrb(struct Sprite* sprite)
+{
+	sprite->pos1.x = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_X_2);
+	sprite->pos1.y = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_Y_PIC_OFFSET);
+    sprite->data[0] = 0;
+    sprite->data[1] = 12;
+    sprite->data[2] = 8;
+	sprite->data[7] = gBattleAnimTarget;
+    sprite->callback = AnimSuperpowerOrb_Step;
+}
+
+
+//Force Palm//
 
 static const union AffineAnimCmd sSpriteAffineAnim_AuraSphereBall[] =
 {

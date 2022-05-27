@@ -1753,7 +1753,7 @@ u8 TrySetCantSelectMoveBattleScript(void)
 		return FALSE;
 
 	if (IsDynamaxed(gActiveBattler) || gNewBS->dynamaxData.toBeUsed[gActiveBattler])
-		move = gCurrentMove = GetMaxMove(gActiveBattler, gBattleBufferB[gActiveBattler][2]);
+		move = gCurrentMove = GetMaxMoveByMove(gActiveBattler, move);
 
 	if (IsAnyMaxMove(move))
 		isAnyMaxMove = TRUE; //Save time later

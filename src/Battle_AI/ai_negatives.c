@@ -3149,29 +3149,12 @@ SKIP_CHECK_TARGET:
 			}
 			break;
 
-		case EFFECT_SUCKER_PUNCH: ;
-			//TODO: MAKE SURE LOGIC IS ALSO HANDLED IN AI BEST MOVE CALC
-			//		If AI is dumb AI or semi-smart use regular logic
-			//		If AI hasn't used Sucker Punch yet, regular logic
-			//		If Bank is controlled by Player use regular logic
-			//		If AI has revealed Sucker Punch (maybe check PP?)
-			//			If foe can use a status move
-			//				50% chance to pick Sucker Punch
-			if (predictedMove != MOVE_NONE)
-			{
-				if (SPLIT(predictedMove) == SPLIT_STATUS
-				|| !MoveWouldHitFirst(move, bankAtk, bankDef))
-				{
-					DECREASE_VIABILITY(10);
-					break;
-				}
-			}
-			else if ( Random() % 2 == 0) {
-				DECREASE_VIABILITY(10);
-			}
-
-			//If the foe has move prediction, assume damage move for now.
-			goto AI_STANDARD_DAMAGE;
+		case EFFECT_SUCKER_PUNCH:
+			if (!IsSuckerPunchOkayToUseThisRound(move, bankAtk, bankDef))
+				DECREASE_VIABILITY(9); //Not 10 because still usable if no other moves are viable
+			else
+				goto AI_STANDARD_DAMAGE;
+			break;
 
 		case EFFECT_TEAM_EFFECTS:
 			switch (move) {

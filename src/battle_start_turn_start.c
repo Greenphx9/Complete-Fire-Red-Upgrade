@@ -1186,12 +1186,13 @@ void RunTurnActionsFunctions(void)
 		{
 			gActiveBattler = gBanksByTurnOrder[gBattleStruct->focusPunchBank];
 			++gBattleStruct->focusPunchBank;
-			u16 chosenMove = gChosenMovesByBanks[gActiveBattler];
+			u16 chosenMove = gActionsByTurnOrder[gActiveBattler] == ACTION_USE_MOVE ? gChosenMovesByBanks[gActiveBattler] : MOVE_NONE;
 			if ((chosenMove == MOVE_FOCUSPUNCH || chosenMove == MOVE_BEAKBLAST || chosenMove == MOVE_SHELLTRAP)
-				&& !(gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP)
-				&& !(gDisableStructs[gActiveBattler].truantCounter)
-				&& !(gProtectStructs[gActiveBattler].onlyStruggle)
-				&& !IsDynamaxed(gActiveBattler))
+			&& !(gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP)
+			&& !(gDisableStructs[gActiveBattler].truantCounter)
+			&& !(gProtectStructs[gActiveBattler].onlyStruggle)
+			&& !gNewBS->zMoveData.toBeUsed[gActiveBattler]
+			&& !IsDynamaxed(gActiveBattler))
 			{
 				gBankAttacker = gBattleScripting.bank = gActiveBattler;
 				if (chosenMove == MOVE_BEAKBLAST && !(gNewBS->BeakBlastByte & gBitTable[gActiveBattler]))

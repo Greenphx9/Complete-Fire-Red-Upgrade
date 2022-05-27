@@ -26,7 +26,7 @@ void SetMonPokedexFlags(struct Pokemon* mon);
 u16 GetNationalPokedexCount(u8 caseID);
 bool8 CanEvolve(struct Pokemon* mon);
 bool8 CouldHaveEvolvedViaLevelUp(struct Pokemon* mon);
-void EvolveSpeciesByLevel(u16* species, u8 level);
+bool8 EvolveSpeciesByLevel(u16* species, u8 level);
 u32 GetBaseStatsTotal(const u16 species);
 u8 FindMovePositionInMonMoveset(u16 move, struct Pokemon* mon);
 bool8 MoveInMonMoveset(u16 move, struct Pokemon* mon);

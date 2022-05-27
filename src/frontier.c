@@ -8,6 +8,7 @@
 
 #include "../include/new/build_pokemon.h"
 #include "../include/new/util2.h"
+#include "../include/new/damage_calc.h"
 #include "../include/new/frontier.h"
 #include "../include/new/mega.h"
 #include "../include/new/pokemon_storage_system.h"
@@ -715,6 +716,30 @@ bool8 IsMegaZMoveBannedBattle(void)
 	&& FlagGet(FLAG_BATTLE_FACILITY)
 	&& (AreMegasZMovesBannedInTier(VarGet(VAR_BATTLE_FACILITY_TIER))
 	 || (gBattleTypeFlags & BATTLE_TYPE_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_DYNAMAX));
+}
+
+bool8 IsMoveBannedInRingChallenge(u16 move, u8 bank)
+{
+	if (FlagGet(FLAG_BATTLE_FACILITY) && gBattleMoves[move].effect == EFFECT_PERISH_SONG)
+		return TRUE;
+
+	u8 moveType = GetMoveTypeSpecial(bank, move);
+
+	return gNewBS->ringChallengeBannedTypes[0] == moveType
+		|| gNewBS->ringChallengeBannedTypes[1] == moveType
+		|| gNewBS->ringChallengeBannedTypes[2] == moveType;
+}
+
+bool8 IsMoveBannedInRingChallengeByMon(u16 move, struct Pokemon* mon)
+{
+	if (FlagGet(FLAG_BATTLE_FACILITY) && gBattleMoves[move].effect == EFFECT_PERISH_SONG)
+		return TRUE;
+
+	u8 moveType = GetMonMoveTypeSpecial(mon, move);
+
+	return gNewBS->ringChallengeBannedTypes[0] == moveType
+		|| gNewBS->ringChallengeBannedTypes[1] == moveType
+		|| gNewBS->ringChallengeBannedTypes[2] == moveType;
 }
 
 //@Details: Generates a tower trainer id and name for the requested trainer.

@@ -968,14 +968,17 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 		highestPlayerLevel = 0;
 		canEvolveMon = FALSE;
 		#endif
+
+		#ifdef FLAG_POKEMON_RANDOMIZER
 		setCustomMoves = FlagGet(FLAG_BATTLE_FACILITY) //Don't set custom moves when the species wouldn't be randomized normally
-					#ifdef FLAG_POKEMON_RANDOMIZER
-					|| !FlagGet(FLAG_POKEMON_RANDOMIZER) //Or when species are randomized
-					#endif
+					|| !FlagGet(FLAG_POKEMON_RANDOMIZER) //Or when species aren't randomized
 					#ifdef FLAG_TEMP_DISABLE_RANDOMIZER
 					|| FlagGet(FLAG_TEMP_DISABLE_RANDOMIZER) //Unless the randomizer is disabled
 					#endif
 					;
+		#else
+		setCustomMoves = TRUE;
+		#endif
 
 		//Create each Pokemon
 		for (i = 0, trainerNameLengthOddness = StringLength(trainer->trainerName) & 1, nameHash = 0; i < monsCount; ++i)
@@ -1094,7 +1097,15 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 			//Try Evolve Randomized Mon
 			#if (defined FLAG_POKEMON_RANDOMIZER && defined FLAG_TEMP_DISABLE_RANDOMIZER && defined VAR_GAME_DIFFICULTY)
 			if (FlagGet(FLAG_POKEMON_RANDOMIZER) && !FlagGet(FLAG_TEMP_DISABLE_RANDOMIZER) && gameDifficulty != OPTIONS_EASY_DIFFICULTY) //Allow Trainers to grow naturally
-				EvolveSpeciesByLevel(&mon->species, mon->level);
+			{
+				if (EvolveSpeciesByLevel(&mon->species, mon->level))
+				{
+					//Fix nickname in case it changed after evolving
+					u8 speciesName[POKEMON_NAME_LENGTH + 1];
+					GetSpeciesName(speciesName, mon->species);
+					SetMonData(mon, MON_DATA_NICKNAME, speciesName);
+				}
+			}
 			#endif
 
 			//Give EVs
