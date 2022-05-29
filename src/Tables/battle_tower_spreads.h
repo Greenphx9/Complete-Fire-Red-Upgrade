@@ -46164,7 +46164,7 @@ const struct BattleTowerSpread gFrontierLegendarySpreads[] =
 		.modifyMovesDoubles = FALSE,
 	},
 	{
-		.species = SPECIES_DIALGA,
+		.species = SPECIES_DIALGA_ORIGIN,
 		.nature = NATURE_RELAXED,
 		.hpIv = 31,
 		.atkIv = 0,
@@ -46268,7 +46268,7 @@ const struct BattleTowerSpread gFrontierLegendarySpreads[] =
 		.modifyMovesDoubles = TRUE,
 	},
 	{
-		.species = SPECIES_PALKIA,
+		.species = SPECIES_PALKIA_ORIGIN,
 		.nature = NATURE_MODEST,
 		.hpIv = 31,
 		.atkIv = 0,

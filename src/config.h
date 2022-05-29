@@ -612,6 +612,7 @@ enum //These vars need to be one after the other (hence the enum)
 #define PICKUP_ITEMS_STRAIGHT_TO_BAG //Items obtained with Pickup or Honey Gather are placed right in the bag
 #define FROSTBITE //Replaces the Freeze status condition with the Frostbite status condition from PLA
 #define TAKE_WILD_MON_ITEM_ON_CAPTURE //Items held by Wild Pokemon when caught can be placed in the bag at the player's request
+#define PLA_HELD_ORIGIN_ORBS
 
 /*===== Mystery Gift Flags =====*/
 #define MYSTERY_GIFT_FLAGS_START 0x1700 //New flags = MYSTERY_GIFT_FLAGS_START + gift index. 0x1700 == Entei
