@@ -1288,6 +1288,10 @@ void ClearSwitchBytes(u8 bank)
 	gNewBS->chiStrikeCritBoosts[bank] = 0;
 	gNewBS->sandblastCentiferno[bank] = 0;
 	gNewBS->disguisedAs[bank] = 0;
+	gNewBS->splinterTimer[bank] = 0;
+	gNewBS->splinterAttackerBank[bank] = 0;
+	gNewBS->splinterAttackerMonId[bank] = 0;
+	gNewBS->splinterMove[bank] = 0;
 	gNewBS->tookAbilityFrom[bank] = 0;
 
 	gProtectStructs[bank].KingsShield = 0;	//Necessary because could be sent away with Roar

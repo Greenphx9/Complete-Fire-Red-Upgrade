@@ -67,6 +67,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	[SPECIES_MEW] =
 	{
 		.battleTowerStandardBan = TRUE,
+		.smogonCamomonsBan = TRUE,
 		.smogonRUBan = TRUE,
 		.badForUbers = TRUE,
 		.setPerfectXIVs = TRUE,
@@ -216,6 +217,20 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smartWild = TRUE,
 	},
 #endif
+#ifdef SPECIES_DIALGA_ORIGIN
+	[SPECIES_DIALGA_ORIGIN] =
+	{
+		.battleTowerStandardBan = TRUE,
+		.gsCupLegendaries = TRUE,
+		.smogonOUBan = TRUE,
+		.smogonNationalDexOUBan = TRUE,
+		.smogonOUDoublesBan = TRUE,
+		.smogonMonotypeBan = TRUE,
+		.setPerfectXIVs = TRUE,
+		.smartWild = TRUE,
+		.randomizerBan = TRUE,
+	},
+#endif
 #ifdef SPECIES_PALKIA
 	[SPECIES_PALKIA] =
 	{
@@ -227,6 +242,20 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smogonMonotypeBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
+	},
+#endif
+#ifdef SPECIES_PALKIA_ORIGIN
+	[SPECIES_PALKIA_ORIGIN] =
+	{
+		.battleTowerStandardBan = TRUE,
+		.gsCupLegendaries = TRUE,
+		.smogonOUBan = TRUE,
+		.smogonNationalDexOUBan = TRUE,
+		.smogonOUDoublesBan = TRUE,
+		.smogonMonotypeBan = TRUE,
+		.setPerfectXIVs = TRUE,
+		.smartWild = TRUE,
+		.randomizerBan = TRUE,
 	},
 #endif
 #ifdef SPECIES_GIRATINA
@@ -595,7 +624,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.battleTowerStandardBan = TRUE,
 		.gsCupLegendaries = TRUE,
 		.smogonNationalDexOUBan = TRUE,
-		.smogonCamomonsBan = TRUE,
+		.smogonMonotypeBan = TRUE,
 		.smogonUUBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
@@ -943,6 +972,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	[SPECIES_MELMETAL] =
 	{
 		.battleTowerStandardBan = TRUE,
+		.smogonOUDoublesBan = TRUE,
 		.smogonUUBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
@@ -956,6 +986,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smogonOUBan = TRUE,
 		.smogonNationalDexOUBan = TRUE,
 		.smogonOUDoublesBan = TRUE,
+		.smogonMonotypeBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 	},
@@ -968,6 +999,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smogonOUBan = TRUE,
 		.smogonNationalDexOUBan = TRUE,
 		.smogonOUDoublesBan = TRUE,
+		.smogonMonotypeBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 		.randomizerBan = TRUE,
@@ -981,6 +1013,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smogonOUBan = TRUE,
 		.smogonNationalDexOUBan = TRUE,
 		.smogonOUDoublesBan = TRUE,
+		.smogonMonotypeBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 	},
@@ -993,6 +1026,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smogonOUBan = TRUE,
 		.smogonNationalDexOUBan = TRUE,
 		.smogonOUDoublesBan = TRUE,
+		.smogonMonotypeBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 		.randomizerBan = TRUE,
@@ -1006,6 +1040,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smogonOUBan = TRUE,
 		.smogonNationalDexOUBan = TRUE,
 		.smogonOUDoublesBan = TRUE,
+		.smogonMonotypeBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 	},
@@ -1017,6 +1052,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smogonOUBan = TRUE,
 		.smogonNationalDexOUBan = TRUE,
 		.smogonOUDoublesBan = TRUE,
+		.smogonMonotypeBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 		.randomizerBan = TRUE,
@@ -1042,6 +1078,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	[SPECIES_URSHIFU_SINGLE] =
 	{
 		.battleTowerStandardBan = TRUE,
+		.smogonMonotypeBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 	},
@@ -1050,6 +1087,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	[SPECIES_URSHIFU_RAPID] =
 	{
 		.battleTowerStandardBan = TRUE,
+		.smogonMonotypeBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 	},
@@ -1068,6 +1106,9 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	{
 		.battleTowerStandardBan = TRUE,
 		.gsCupLegendaries = TRUE,
+		.smogonOUBan = TRUE,
+		.smogonOUDoublesBan = TRUE,
+		.smogonMonotypeBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 	},
@@ -1077,6 +1118,9 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	{
 		.battleTowerStandardBan = TRUE,
 		.gsCupLegendaries = TRUE,
+		.smogonOUBan = TRUE,
+		.smogonOUDoublesBan = TRUE,
+		.smogonMonotypeBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 	},
@@ -1085,6 +1129,8 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	[SPECIES_SPECTRIER] =
 	{
 		.battleTowerStandardBan = TRUE,
+		.smogonOUBan = TRUE,
+		.smogonNationalDexOUBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 	},
@@ -1110,7 +1156,6 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	[SPECIES_BLAZIKEN] =
 	{
 		.smogonOUBan = TRUE,
-		.smogonNationalDexOUBan = TRUE,
 		.smogonMonotypeBan = TRUE,
 		.smogonUUBan = TRUE,
 	},
@@ -1120,6 +1165,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	{
 		.smogonOUBan = TRUE,
 		.smogonNationalDexOUBan = TRUE,
+		.smogonMonotypeBan = TRUE,
 		.smogonUUBan = TRUE,
 		.goodForUbers = TRUE,
 		.setPerfectXIVs = TRUE,
@@ -1150,11 +1196,62 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smartWild = TRUE,
 	},
 #endif
-#ifdef SPECIES_SNORLAX
-	[SPECIES_SNORLAX] =
+#ifdef SPECIES_CINDERACE
+	[SPECIES_CINDERACE] =
+	{
+		.smogonOUBan = TRUE,
+		.smogonNationalDexOUBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_DRACOVISH
+	[SPECIES_DRACOVISH] =
+	{
+		.smogonOUBan = TRUE,
+		.smogonNationalDexOUBan = TRUE,
+		.smogonMonotypeBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_URSHIFU_SINGLE_STRIKE
+	[SPECIES_URSHIFU_SINGLE_STRIKE] =
+	{
+		.smogonOUBan = TRUE,
+		.smogonNationalDexOUBan = TRUE,
+		.smogonOUDoublesBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_DARMANITAN_G
+	[SPECIES_DARMANITAN_G] =
+	{
+		.smogonOUBan = TRUE,
+		.smogonNationalDexOUBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_DRAGAPULT
+	[SPECIES_DRAGAPULT] =
+	{
+		.smogonNationalDexOUBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_TORNADUS_THERIAN
+	[SPECIES_TORNADUS_THERIAN] =
+	{
+		.smogonNationalDexOUBan = TRUE,
+		.smogonUUBan = TRUE,
+		.setPerfectXIVs = TRUE,
+		.smartWild = TRUE,
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_KARTANA
+	[SPECIES_KARTANA] =
 	{
 		.smogonOUDoublesBan = TRUE,
-		.smogonNUBan = TRUE,
+		.smogonMonotypeBan = TRUE,
+		.smogonCamomonsBan = TRUE,
+		.smogonUUBan = TRUE,
+		.goodForUbers = TRUE,
+		.setPerfectXIVs = TRUE,
+		.smartWild = TRUE,
 	},
 #endif
 #ifdef SPECIES_ABRA
@@ -3471,27 +3568,6 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.middleCup = TRUE,
 	},
 #endif
-#ifdef SPECIES_KARTANA
-	[SPECIES_KARTANA] =
-	{
-		.smogonMonotypeBan = TRUE,
-		.smogonCamomonsBan = TRUE,
-		.smogonUUBan = TRUE,
-		.goodForUbers = TRUE,
-		.setPerfectXIVs = TRUE,
-		.smartWild = TRUE,
-	},
-#endif
-#ifdef SPECIES_TAPU_LELE
-	[SPECIES_TAPU_LELE] =
-	{
-		.smogonMonotypeBan = TRUE,
-		.smogonUUBan = TRUE,
-		.goodForUbers = TRUE,
-		.setPerfectXIVs = TRUE,
-		.smartWild = TRUE,
-	},
-#endif
 #ifdef SPECIES_DRAGONITE
 	[SPECIES_DRAGONITE] =
 	{
@@ -3504,6 +3580,12 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	{
 		.smogonCamomonsBan = TRUE,
 		.smogonScalemonsBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_SLOWKING_G
+	[SPECIES_SLOWKING_G] =
+	{
+		.smogonCamomonsBan = TRUE,
 	},
 #endif
 #ifdef SPECIES_SMEARGLE
@@ -3684,13 +3766,13 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smartWild = TRUE,
 	},
 #endif
-#ifdef SPECIES_TORNADUS_THERIAN
-	[SPECIES_TORNADUS_THERIAN] =
+#ifdef SPECIES_TAPU_LELE
+	[SPECIES_TAPU_LELE] =
 	{
 		.smogonUUBan = TRUE,
+		.goodForUbers = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
-		.randomizerBan = TRUE,
 	},
 #endif
 #ifdef SPECIES_TOXAPEX
@@ -4399,6 +4481,12 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 #endif
 #ifdef SPECIES_SLOWBRO
 	[SPECIES_SLOWBRO] =
+	{
+		.smogonNUBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_SNORLAX
+	[SPECIES_SNORLAX] =
 	{
 		.smogonNUBan = TRUE,
 	},
@@ -5333,18 +5421,6 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 #endif
 #ifdef SPECIES_DIANCIE_MEGA
 	[SPECIES_DIANCIE_MEGA] =
-	{
-		.randomizerBan = TRUE,
-	},
-#endif
-#ifdef SPECIES_DIALGA_ORIGIN
-	[SPECIES_DIALGA_ORIGIN] =
-	{
-		.randomizerBan = TRUE,
-	},
-#endif
-#ifdef SPECIES_PALKIA_ORIGIN
-	[SPECIES_PALKIA_ORIGIN] =
 	{
 		.randomizerBan = TRUE,
 	},

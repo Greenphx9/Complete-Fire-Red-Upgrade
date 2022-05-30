@@ -330,6 +330,16 @@ void FutureSightDamageCalc(void)
 	gNewBS->DamageTaken[gBankTarget] = gBattleMoveDamage;
 }
 
+s32 ConfusionDamageCalc(void)
+{
+	struct DamageCalc data = {0};
+	data.bankAtk = data.bankDef = gBankAttacker;
+	data.move = MOVE_POUND;
+	data.specialFlags |= FLAG_CONFUSION_DAMAGE;
+	gBattleMoveDamage = CalculateBaseDamage(&data);
+	return gBattleMoveDamage;
+}
+
 static bool8 IsSplinterAttackerOnField(u8 bankDef, u8 possibleUser)
 {
 	u8 monIdAttacker = gNewBS->splinterAttackerMonId[bankDef];
@@ -377,16 +387,6 @@ u32 SplintersDamageCalc(u8 bankAtk, u8 bankDef, u16 move)
 
 	gBattleMoveDamage = CalculateBaseDamage(&data);
 	TypeCalc(move, data.bankAtk, bankDef, data.monAtk);
-	return gBattleMoveDamage;
-}
-
-s32 ConfusionDamageCalc(void)
-{
-	struct DamageCalc data = {0};
-	data.bankAtk = data.bankDef = gBankAttacker;
-	data.move = MOVE_POUND;
-	data.specialFlags |= FLAG_CONFUSION_DAMAGE;
-	gBattleMoveDamage = CalculateBaseDamage(&data);
 	return gBattleMoveDamage;
 }
 
@@ -4163,7 +4163,7 @@ static u16 AdjustBasePower(struct DamageCalc* data, u16 power)
 			&& (data->moveType == TYPE_WATER || data->moveType == TYPE_DRAGON))
 				power = (power * 12) / 10;
 			break;
-		#endif*/
+		#endif
 
 		#ifdef NATIONAL_DEX_GIRATINA
 		case ITEM_EFFECT_GRISEOUS_ORB:
