@@ -294,9 +294,13 @@ UpdateFoughtRoamerHPStatus 8141FE8 1
 SetFoughtRoamerInactive 814201C 1
 
 ##Save Expansion Hooks
+SaveWriteToFlash 80D97D0 2
 HandleWriteSector 80D9870 2
 HandleLoadSector 80D9E54 2
+GetSaveValidStatus 80D9F0C 1
+TryLoadSaveSector 80DA120 3
 HandleSavingData 80DA248 1
+LinkTradeSaveHook 805415E 0
 LinkBattleSaveHook 806FC84 0
 NewGameSaveClearHook 8054A60 0
 ExpandedVarsHook 806E454 1
@@ -665,14 +669,14 @@ ItemUseCB_RareCandy 081262AC 2
 
 DrawMoveInfoUIMarkers 08133404 0
 TMCase_MoveCursor_UpdatePrintedDescription 08131F0C 1
-CreateTMSprite 0813368c 1
+NullFunc 0813368c 1
 InitWindowTemplatesAndPals 08133244 1
 PrintStringTMCaseOnWindow3 081333c4 0
-SetTMSpriteAnim 08133714 2
-TintTMSpriteByType 08133730 1
-UpdateTMSpritePosition 08133790 2
-InitSelectedTMSpriteData 081337e4 2
-SpriteCB_MoveTMSpriteInCase 08133810 1
+NullFunc 08133714 2
+NullFunc 08133730 1
+NullFunc 08133790 2
+NullFunc 081337e4 2
+NullFunc 08133810 1
 
 ##CreateTMCaseSpriteHook 8131B94 0
 ##TMCaseMonIconPalChangeHook 8131E5C 0 
