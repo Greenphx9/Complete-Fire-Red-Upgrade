@@ -4,6 +4,7 @@
 #include "global.h"
 
 #define CHAR_SPACE          0x00
+#define CHAR_LV             0x34
 #define CHAR_PLUS           0x2E
 #define CHAR_ARROW_UP       0x79
 #define CHAR_ARROW_DOWN     0x7A

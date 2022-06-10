@@ -1110,16 +1110,6 @@ void HandleItemRegistration(u16 item)
 #error "The total number of bag items has exceeded 650! Please reduce the possible number of items in the bag."
 #endif
 
-struct ListBuffer1
-{
-	struct ListMenuItem subBuffers[LARGEST_POCKET_NUM];
-};
-
-struct ListBuffer2
-{
-	s8 name[LARGEST_POCKET_NUM][20]; //Really 19 but make it 20 just to be safe
-};
-
 struct BagSlots
 {
 	struct ItemSlot bagPocket_Items[NUM_REGULAR_ITEMS];
@@ -1151,14 +1141,29 @@ void SetMemoryForBagStorage(void)
 	*gBagPockets = sBagPocketArrangement;
 }
 
-#define sListBuffer1 (*((struct ListBuffer1**) 0x203AD18))
-#define sListBuffer2 (*((struct ListBuffer2**) 0x203AD1C))
+extern void* sBagBgTilemapBuffer;
+extern struct ListMenuItem* sBagListMenuItems;
+extern u8 (*sBagListMenuItemStrings)[22];
 
-void AllocateBagItemListBuffers(void)
+bool8 AllocateBagItemListBuffers(void)
 {
 	sItemDescriptionPocket = 0; //Reset item description printer
-	sListBuffer1 = Malloc(sizeof(struct ListBuffer1));
-	sListBuffer2 = Malloc(sizeof(struct ListBuffer2));
+
+	/*if (sBagBgTilemapBuffer != NULL)
+	{
+		Free(sBagBgTilemapBuffer);
+		sBagBgTilemapBuffer = NULL;
+	}*/
+
+	sBagListMenuItems = Malloc((LARGEST_POCKET_NUM + 1) * sizeof(struct ListMenuItem));
+	if (sBagListMenuItems == NULL)
+		return FALSE;
+
+	sBagListMenuItemStrings = Malloc((LARGEST_POCKET_NUM + 1) * sizeof(*sBagListMenuItemStrings));
+	if (sBagListMenuItemStrings == NULL)
+		return FALSE;
+
+	return TRUE;
 }
 
 extern struct ListMenuItem* sBerryPouchListMenuItems;
@@ -2245,7 +2250,6 @@ bool8 MonCanLearnHM(void) {
 }
 
 extern const u8 sListItemTextColor_TmCase_BerryPouch[];
-extern const u8 sListItemTextColor_RegularItem[];
 extern const u8 sPowerItemLevel1[];
 extern const u8 sPowerItemLevel2[];
 extern const u8 sPowerItemLevel3[];
@@ -2256,7 +2260,7 @@ extern const u8 sPowerItemLevel6[];
 void BagListMenuGetItemNameColored(u8 *dest, u16 itemId)
 {
 	
-	if (itemId == ITEM_POWER_BRACER || itemId == ITEM_POWER_BELT || itemId == ITEM_POWER_LENS || itemId == ITEM_POWER_BAND || itemId == ITEM_POWER_ANKLET || itemId == ITEM_POWER_WEIGHT) 
+	/*if (itemId == ITEM_POWER_BRACER || itemId == ITEM_POWER_BELT || itemId == ITEM_POWER_LENS || itemId == ITEM_POWER_BAND || itemId == ITEM_POWER_ANKLET || itemId == ITEM_POWER_WEIGHT) 
 	{
 		if(VarGet(VAR_POWER_ITEM_LEVEL) == 0) 
 		{
@@ -2301,6 +2305,43 @@ void BagListMenuGetItemNameColored(u8 *dest, u16 itemId)
     else
         StringCopy(dest, sListItemTextColor_RegularItem);
     StringAppend(dest, ItemId_GetName(itemId));
+	*/
+	if (itemId == ITEM_TM_CASE || itemId == ITEM_BERRY_POUCH)
+		StringCopy(dest, sListItemTextColor_TmCase_BerryPouch);
+	else
+		dest[0] = EOS; //No special item colour
+
+	dest = StringAppend(dest, ItemId_GetName(itemId));
+
+	u8 levelToAppend = 0;
+	u8 minUpgradedLevel = 1;
+	switch (itemId)
+	{
+		case ITEM_POWER_WEIGHT:
+		case ITEM_POWER_BRACER:
+		case ITEM_POWER_BELT:
+		case ITEM_POWER_LENS:
+		case ITEM_POWER_BAND:
+		case ITEM_POWER_ANKLET:
+			if(VarGet(VAR_POWER_ITEM_LEVEL) == 0) 
+			{
+				VarSet(VAR_POWER_ITEM_LEVEL, 1);
+			}
+			if(VarGet(VAR_POWER_ITEM_LEVEL) != 6 && FlagGet(FLAG_NO_GRINDING_EV))
+			{
+				VarSet(VAR_POWER_ITEM_LEVEL, 6);
+			}
+			levelToAppend = VarGet(VAR_POWER_ITEM_LEVEL);
+			break;
+	}
+
+	if (levelToAppend >= minUpgradedLevel)
+	{
+		dest = StringCopy(dest, sListItemTextColor_TmCase_BerryPouch);
+		*dest++ = CHAR_SPACE;
+		*dest++ = CHAR_LV;
+		ConvertIntToDecimalStringN(dest, levelToAppend, STR_CONV_MODE_LEFT_ALIGN, 2);
+	}
 }
 
 bool8 HasItemsRequiredToLevelUpPowerItem(void)

@@ -616,6 +616,7 @@ BerryIdFromItemId 809C8E4 1
 PrintRegisteredItemInBagHook 810872C 0
 AllocateBagItemListBuffers 81083F4 0
 Bag_BuildListMenuTemplate 810842C 1
+BagListMenuGetItemNameColored 8108560 2
 PrintItemDescriptionOnMessageWindow 8108818 1
 PocketCalculateInitialCursorPosAndItemsAbove 81089F4 1
 #OpenBagBugFix1 8108A1C 1
@@ -722,8 +723,6 @@ NullFunc 08133810 1
 
 CreateTMCaseSpriteHook 8131B94 0
 TMCaseMonIconPalChangeHook 8131E5C 0 
-
-BagListMenuGetItemNameColored 08108560 2
 
 SetUpFieldMove_Cut 08097898 0
 FieldMoveCallback_CutGrass 08097A20 0
