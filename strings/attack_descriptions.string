@@ -623,7 +623,7 @@ Using an odd shock\nwave, the user\ndamages same-type\nPok\emon in the\nsurround
 The user hurls an\nelectric orb. The\nfaster the user is\nthan the foe, the\ngreater the damage.
 
 #org @DESC_FOULPLAY
-The user turns the\ntarget's power\nagainst it. Power\nincreases with the\nfoe's Attack stat.
+The user turns the\nfoe's power against\nit. This uses the\nfoe's Attack stat.
 
 #org @DESC_ENTRAINMENT
 The user dances\nwith an odd rhythm,\nmaking the target's\nAbility the same as\nthe user's Ability.
