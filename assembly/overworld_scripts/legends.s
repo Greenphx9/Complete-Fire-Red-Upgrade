@@ -61,7 +61,7 @@
 .equ FLAG_DIANCIE, 0x1013
 .equ FLAG_GOT_DARKRAI, 0x1016
 .equ FLAG_CRESSELIA_SPRITE, 0x1017
-.equ FLAG_GOT_CRESSELIA, 0x1018
+.equ FLAG_GOT_CRESSELIA, 0x101E
 
 .global EventScript_RegicePuzzleForce
 EventScript_RegicePuzzleForce:
@@ -85,7 +85,10 @@ EventScript_RegiceMove:
 .global EventScript_RegicePuzzleBraille
 EventScript_RegicePuzzleBraille:
 	lock
-	msgbox gText_RegicePuzzle MSG_SIGN
+	braillemessage 0x8931020
+	waitkeypress
+	braillemessage 0x8931040
+	waitkeypress
 	release
 	end
 
@@ -853,13 +856,29 @@ EventScript_Darkrai:
 EventScript_Cresselia:
 	lock
 	cry SPECIES_CRESSELIA 0x0
-	msgbox gText_Darkrai MSG_FACE
+	msgbox gText_Cresselia MSG_FACE
 	waitcry
 	wildbattle SPECIES_CRESSELIA 75 0x0 
 	fadescreen FADEOUT_BLACK
-	hidesprite 14
+	hidesprite 1
 	setflag FLAG_GOT_CRESSELIA
 	fadescreen 0x0
+	pause 0x20
+	fadescreen FADEOUT_BLACK
+	pause 0x10
+	fadescreen 0x0
+	pause 0x20
+	fadescreen FADEOUT_BLACK
+	pause 0x10
+	fadescreen 0x0
+	pause 0x20
+	fadescreen FADEOUT_BLACK
+	pause 0x40
+	warpmuted 4 1 0xFF 0x2 0x5
+	fadescreen 0x0
+	pause 0x10
+	special 0x0
+	waitfanfare
 	release
 	end
 

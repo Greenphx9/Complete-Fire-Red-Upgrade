@@ -9,6 +9,7 @@
 .equ FLAG_AUTO_HMS, 0x998
 .equ FLAG_GOT_CHARMS, 0x99E
 .equ FLAG_GOT_DARKRAI, 0x1016
+.equ FLAG_GOT_CRESSELIA, 0x101E
 
 .global EventScript_PalletTown_MapScript
 
@@ -1117,16 +1118,31 @@ EventScript_GiveCharmsTellPlayerXern:
 EventScript_HealOrDarkrai:
 	lock
 	checkflag 0x827
-	if SET _goto EventScript_CheckDarkrai
+	if SET _goto EventScript_CheckCresselia
 	goto EventScript_HealInBed
 	release
 	end
 
-EventScript_CheckDarkrai:
-	checkflag FLAG_GOT_DARKRAI
-	if SET _goto EventScript_HealInBed
+EventScript_CheckCresselia:
+	checkflag FLAG_GOT_CRESSELIA
+	if SET _goto EventScript_CheckIfCresseliaInParty
 	fadescreen FADEOUT_BLACK
 	msgbox gText_PlayerFellASleepDarkrai MSG_KEEPOPEN
+	closeonkeypress
+	warpmuted 43 21 0xFF 0xB 0x14
+	fadescreen 0x0
+	release
+	end
+
+EventScript_CheckIfCresseliaInParty:
+	checkflag FLAG_GOT_DARKRAI
+	if SET _goto EventScript_HealInBed
+	callasm IsCresseliaInParty
+	compare LASTRESULT 0x0
+	if equal _goto EventScript_HealInBed
+	fadescreen FADEOUT_BLACK
+	msgbox gText_PlayerFellASleepDarkrai MSG_KEEPOPEN
+	closeonkeypress
 	warpmuted 43 19 0xFF 0x13 0x15
 	fadescreen 0x0
 	release

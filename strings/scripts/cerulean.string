@@ -102,3 +102,12 @@ I miss [BUFFER2]\nYour [BUFFER1] is doing fine.
 
 #org @gText_MySonOldAmber
 My son in [GREEN]Fuschia City[BLUE] can turn Old\nAmbers into Pok\emon.\pIf you ever find an Old Amber, you\nshould ask him to restore it.
+
+#org @gText_DefeatedMisty
+Wow!\nYou're too much!
+
+#org @gText_GiveCascadeBadge
+All right!\nYou can have the CascadeBadge to\lshow you beat me.
+
+#org @gText_GiveCascadeBadge2
+[BLACK][PLAYER] received the\nCascadeBadge from Misty!

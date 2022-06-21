@@ -147,3 +147,18 @@ Now, the \$500, please.
 
 #org @gText_ComeBackHealBell
 Come back if you need [GREEN]Heal\nBell[RED] taught to any other Pok\emon.
+
+#org @gText_BrockDefeated
+I took you for granted, and so\nI lost.
+
+#org @gText_BrockGiveBoulderBadge
+As proof of your victory, I confer\non you this[.]the official Pok\emon\lLeague BoulderBadge.
+
+#org @gText_GiveBoulderBadge
+[BLACK][PLAYER] received the\nBoulderBadge from Brock!
+
+#org @gText_GiveTM39
+The BoulderBadge enables the\nuse of the move Flash outside of\lbattle.\pOf course, a Pok\emon must know the\nmove Flash to use it.
+
+#org @gText_BeforeYouGoTakeTM39
+Before you go, take this with you.

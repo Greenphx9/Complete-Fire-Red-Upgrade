@@ -96,14 +96,23 @@ static const struct CharacterCustomizationPaletteSwitch sCharacterPalSwitchTable
 #else //Modify this
 	// create 255 OW tables
 
-	extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Cresselia;
-	extern const u16 gEventObjectPic_CresseliaPal[];
-	extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Darkrai;
-	extern const u16 gEventObjectPic_DarkraiPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Cresselia;
+extern const u16 gEventObjectPic_CresseliaPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Darkrai;
+extern const u16 gEventObjectPic_DarkraiPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Pidgeot;
+extern const u16 gEventObjectPic_PidgeotPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Chansey;
+extern const u16 gEventObjectPic_ChanseyPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Regirock;
+extern const u16 gEventObjectPic_RegirockPal[];
 
 	static NPCPtr sOverworldTable2[] = { 
 		&gEventObjectGraphicsInfo_Cresselia,
 		&gEventObjectGraphicsInfo_Darkrai,
+		&gEventObjectGraphicsInfo_Pidgeot,
+		&gEventObjectGraphicsInfo_Chansey,
+		&gEventObjectGraphicsInfo_Regirock,
 	};
 
 	const struct EventObjectGraphicsInfo** const gOverworldTableSwitcher[255] =
@@ -117,6 +126,9 @@ static const struct CharacterCustomizationPaletteSwitch sCharacterPalSwitchTable
 	static const struct SpritePalette sObjectEventSpritePalettes12[] = {
 		{gEventObjectPic_CresseliaPal, 0x1201},
 		{gEventObjectPic_DarkraiPal, 0x1202},
+		{gEventObjectPic_PidgeotPal, 0x1203},
+		{gEventObjectPic_ChanseyPal, 0x1204},
+		{gEventObjectPic_RegirockPal, 0x1205},
 		{NULL, 0x11FF},
 	};
 	const struct SpritePalette* const gObjectEventSpritePalettesSwitcher[255] = {

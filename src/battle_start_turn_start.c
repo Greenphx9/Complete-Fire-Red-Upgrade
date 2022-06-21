@@ -671,8 +671,16 @@ void RunTurnActionsFunctions(void)
 			{
 				gNewBS->CustapQuickClawIndicator &= ~(gBitTable[i]);
 
+
 				if (gActionsByTurnOrder[i] != ACTION_USE_ITEM)
 				{
+					if(ABILITY(i) == ABILITY_QUICKDRAW) 
+					{
+						gBattleScripting.bank = i;
+						BattleScriptExecute(BattleScript_QuickDraw);
+						gCurrentActionFuncId = savedActionFuncId;
+						return;
+					}
 					gBattleScripting.bank = i;
 					gLastUsedItem = ITEM(i);
 					if (ITEM_EFFECT(i) != ITEM_EFFECT_CUSTAP_BERRY)

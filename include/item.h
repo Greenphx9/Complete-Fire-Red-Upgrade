@@ -55,6 +55,7 @@ bool8 __attribute__((long_call)) CheckBagHasSpace(u16 itemId, u16 count);
 u16 __attribute__((long_call)) BagGetItemIdByPocketPosition(u8 pocketId, u16 itemId);
 ItemUseFunc __attribute__((long_call)) ItemId_GetFieldFunc(u16 itemId);
 void __attribute__((long_call)) ClearItemSlots(struct ItemSlot *itemSlots, u8 b);
+bool8 __attribute__((long_call)) TryAllocItemIconTilesBuffers(void);
 
 /*
 void GetBerryCountString(u8* dst, const u8* berryName, u32 quantity);

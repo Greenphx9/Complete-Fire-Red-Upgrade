@@ -24,6 +24,7 @@
 #include "../include/new/util2.h"
 #include "../include/new/z_move_effects.h"
 #include "../include/base_stats.h"
+#include "../include/constants/pokedex.h"
 
 /*
 move_menu.c
@@ -749,6 +750,7 @@ static void MoveSelectionDisplayMoveType(void)
 	txtPtr[0] = 1;
 	txtPtr++;
 	txtPtr = StringCopy(txtPtr, formatting);
+
 
 	StringCopy(txtPtr, gTypeNames[moveType]);
 	BattlePutTextOnWindow(gDisplayedStringBattle, 8);

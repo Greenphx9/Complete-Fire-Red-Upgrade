@@ -25,20 +25,6 @@ EventScript_GirlBlockingDoor:
 	closeonkeypress
 	special 0xE5
 	setflag 0x1008
-	setvar 0x8000 0xFFFF
-	setvar 0x8001 0xFFFF
-	setvar 0x8002 0xFFFF
-	setvar 0x8003 0xFFFF
-	setvar 0x8004 0x0
-	setvar 0x8005 0x0
-	setvar 0x8006 31
-	setvar 0x8007 31
-	setvar 0x8008 31
-	setvar 0x8009 31
-	setvar 0x800A 31
-	setvar 0x800B 31
-	givepokemon SPECIES_DARMANITAN_G 100 0x0 0x0 0x1
-	setflag 0x997
 	msgbox gText_HeresRustySwordShield MSG_KEEPOPEN
 	giveitem ITEM_RUSTED_SWORD 0x1 MSG_OBTAIN
 	giveitem ITEM_RUSTED_SHIELD 0x1 MSG_OBTAIN
@@ -55,6 +41,7 @@ EventScript_DescribeReins:
 .global EventScript_MegaSeller
 EventScript_MegaSeller:
 	lock
+	clearflag 0x997
 	msgbox gText_SellMegaStones MSG_FACE
 	pokemart EventScript_MegaMart
 	release

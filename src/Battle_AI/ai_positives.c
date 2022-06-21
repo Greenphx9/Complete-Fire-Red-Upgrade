@@ -295,6 +295,8 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			break;
 		if (MoveInMovesetWithAccuracyLessThan(bankAtk, bankDef, 90, TRUE) && defAbility != ABILITY_CONTRARY)
 			INCREASE_STAT_VIABILITY(STAT_STAGE_ACC, STAT_STAGE_MAX, 2);
+		else if (ABILITY(bankAtk) == ABILITY_HUSTLE)
+			INCREASE_STAT_VIABILITY(STAT_STAGE_ACC, STAT_STAGE_MAX, 2);
 		break;
 
 	case EFFECT_EVASION_UP:
@@ -1006,6 +1008,15 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 		case MOVE_G_MAX_STONESURGE_S:
 		case MOVE_G_MAX_STEELSURGE_P:
 		case MOVE_G_MAX_STEELSURGE_S:
+			if((data->atkItemEffect == ITEM_EFFECT_FOCUS_BAND
+			|| ABILITY(bankAtk) == ABILITY_STURDY) //Most likely suicide lead
+			&& (ABILITY(bankDef) != ABILITY_MAGICBOUNCE
+			&& MoveInMoveset(MOVE_DEFOG, bankDef)))
+			{
+				INCREASE_VIABILITY(10);
+				INCREASE_STATUS_VIABILITY(10);
+				break;
+			}
 			for (i = 0; i < PARTY_SIZE; ++i)
 			{
 				if (GetMonData(&defParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE
@@ -1233,6 +1244,16 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				INCREASE_VIABILITY(3);
 			else if (IsPredictedToUsePursuitableMove(bankDef, bankAtk) && !MoveWouldHitFirst(move, bankAtk, bankDef)) //Pursuit against fast U-Turn
 				INCREASE_VIABILITY(3);
+		}
+		if (MoveKnocksOutXHits(move, bankAtk, bankDef, 1))
+		{
+			if (IS_SINGLE_BATTLE)
+			{
+				if (MoveWouldHitFirst(move, bankAtk, bankDef))
+					INCREASE_VIABILITY(9);
+				else
+					INCREASE_VIABILITY(3); //Past strongest move
+			}
 		}
 		break;
 
@@ -1573,7 +1594,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 		if (SPLIT(predictedMove) == SPLIT_STATUS)
 			INCREASE_STATUS_VIABILITY(3);
 		else if (StatusMoveInMoveset(bankDef))
-			INCREASE_STATUS_VIABILITY(2);
+			INCREASE_STATUS_VIABILITY(6);
 		break;
 
 	case EFFECT_TRICK: //+ Bestwo
@@ -2384,6 +2405,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 					|| !WillFaintFromSecondaryDamage(bankDef)
 					|| IsMovePredictionHealingMove(bankDef, bankAtk)
 					|| atkAbility == ABILITY_MOXIE
+					|| atkAbility == ABILITY_GRIMNEIGH
 					|| atkAbility == ABILITY_BEASTBOOST)
 					INCREASE_VIABILITY(2);
 			}
@@ -2525,6 +2547,7 @@ u8 AIScript_SemiSmart(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 					|| !WillFaintFromSecondaryDamage(bankDef)
 					|| IsMovePredictionHealingMove(bankDef, bankAtk)
 					|| data->atkAbility == ABILITY_MOXIE
+					|| data->atkAbility == ABILITY_GRIMNEIGH
 					|| data->atkAbility == ABILITY_BEASTBOOST)
 					INCREASE_VIABILITY(2);
 			}

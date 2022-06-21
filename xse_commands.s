@@ -1910,12 +1910,13 @@ map \map
 	dowildbattle
 .endm
 
-/*.macro braillemessage_wait text:req
+	.macro braillemessage_wait text:req
 	setvar 0x8006, 0
 	braillemessage \text
 	getbraillestringwidth \text
 	call EventScript_BrailleCursorWaitButton
-.endm*/
+	.endm
+
 
 .macro multichoiceoption text:req num:req
 	setvar 0x8006 \num
@@ -1959,4 +1960,17 @@ map \map
 .macro levelscript var:req val:req script:req
 .hword \var, \val
 .word \script
+.endm
+
+.macro giveitem_msg msg:req, item:req, amount=1, fanfare=257
+additem \item, \amount
+msgreceiveditem \msg, \item, \amount, \fanfare
+.endm
+
+.macro msgreceiveditem msg:req, item:req, amount=1, fanfare=257
+loadword 0, \msg
+setorcopyvar 0x8000, \item
+setorcopyvar 0x8001, \amount
+setorcopyvar 0x8002, \fanfare
+callstd 9
 .endm

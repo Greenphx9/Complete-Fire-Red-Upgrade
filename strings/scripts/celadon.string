@@ -132,3 +132,12 @@ I can teach the move Liquidation to\nyour Pok\emon.\pDo you want me to?
 
 #org @gText_LiquidationTaught
 Your Pok\emon now knows the move\nLiquidation.\pI hope you use it to it's full\npotential.
+
+#org @gText_DefeatedErika
+Oh!\nI concede defeat.\lYou are remarkably strong.
+
+#org @gText_TakeRainbowBadge
+I must confer on you the\nRainbowBadge.
+
+#org @gText_GiveRainbowBadge
+[BLACK][PLAYER] received the\nRainbowBadge from Erika! 

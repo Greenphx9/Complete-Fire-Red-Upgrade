@@ -27,7 +27,7 @@ const struct TrainersWithEvs gTrainersWithEvsSpreads[] =
 		.ball = TRAINER_EV_CLASS_BALL,
 		.ability = Ability_Random_1_2,
 	},
-	[3] =
+	[3] = 
 	{ //Special Sweeper: Power Based
 		.nature = NATURE_MODEST,
 		.ivs = 31,
@@ -1426,6 +1426,16 @@ const struct TrainersWithEvs gTrainersWithEvsSpreads[] =
 		.nature = NATURE_NAIVE,
 		.ivs = 31,
 		.ability = Ability_Hidden,
+	},
+	[160] = {
+		.nature = NATURE_RELAXED,
+		.ivs = 31,
+		.ability = Ability_Hidden,
+	},
+	[161] = {
+		.nature = NATURE_SASSY,
+		.ivs = 31,
+		.ability = Ability_2,
 	},
 };
 //#endif

@@ -333,10 +333,18 @@ u32 GetAIFlags(void)
 	{
 		if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS)
 			flags = gTrainers[gTrainerBattleOpponent_A].aiFlags | gTrainers[VarGet(VAR_SECOND_OPPONENT)].aiFlags;
-		else if (FlagGet(FLAG_HARD_MODE) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-			flags = 7; 
 		else
 			flags = gTrainers[gTrainerBattleOpponent_A].aiFlags;
+		if (FlagGet(FLAG_HARD_MODE) == OPTIONS_EXPERT_DIFFICULTY)
+		{
+			if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+			{
+				if (!(flags & AI_SCRIPT_CHECK_GOOD_MOVE)) //Not Trainers who are already smart
+					flags |= 7; //Regular Trainers are always smart in expert mode
+			}
+			else
+				flags = AI_SCRIPT_CHECK_BAD_MOVE; //Even Wild Pokemon are moderately smart in expert mode
+		}
 
 #ifdef VAR_GAME_DIFFICULTY
 		if (difficulty == OPTIONS_EASY_DIFFICULTY && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
@@ -2129,6 +2137,15 @@ u8 CalcMostSuitableMonToSwitchInto(void)
 
 								if (move == MOVE_FELLSTINGER
 									&& !(gBitTable[k] & moveLimitations))
+								{
+									if (MoveKnocksOutXHitsFromParty(move, &party[i], foe, 1, &damageData))
+									{
+										scores[i] += SWITCHING_INCREASE_REVENGE_KILL;
+										break;
+									}
+								}
+								else if (move == MOVE_PURSUIT
+								&&  !(gBitTable[k] & moveLimitations))
 								{
 									if (MoveKnocksOutXHitsFromParty(move, &party[i], foe, 1, &damageData))
 									{

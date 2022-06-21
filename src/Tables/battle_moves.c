@@ -669,7 +669,7 @@ const struct BattleMove gBattleMoves[] =
 	[MOVE_TWINEEDLE] =
 	{
 		.effect = EFFECT_POISON_HIT,
-		.power = 50,
+		.power = 40,
 		.type = TYPE_BUG,
 		.accuracy = 100,
 		.pp = 20,
@@ -14632,7 +14632,7 @@ const struct BattleMove gBattleMoves[] =
 				.priority = 0,
 				.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
 				.z_move_power = 175,
-				.split = SPLIT_SPECIAL,
+				.split = SPLIT_PHYSICAL,
 				.z_move_effect = 0
 		},
 		[MOVE_BADDYBAD] =

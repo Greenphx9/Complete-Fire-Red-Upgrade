@@ -667,10 +667,10 @@ ItemUseCB_RareCandy 081262AC 2
 
 
 
-DrawMoveInfoUIMarkers 08133404 0
-TMCase_MoveCursor_UpdatePrintedDescription 08131F0C 1
-NullFunc 0813368c 1
-InitWindowTemplatesAndPals 08133244 1
+##DrawMoveInfoUIMarkers 08133404 0
+##TMCase_MoveCursor_UpdatePrintedDescription 08131F0C 1
+NullFunc 0813368C 1
+##InitWindowTemplatesAndPals 08133244 1
 PrintStringTMCaseOnWindow3 081333c4 0
 NullFunc 08133714 2
 NullFunc 08133730 1
@@ -678,5 +678,10 @@ NullFunc 08133790 2
 NullFunc 081337e4 2
 NullFunc 08133810 1
 
-##CreateTMCaseSpriteHook 8131B94 0
-##TMCaseMonIconPalChangeHook 8131E5C 0 
+CreateTMCaseSpriteHook 8131B94 0
+TMCaseMonIconPalChangeHook 8131E5C 0 
+
+BagListMenuGetItemNameColored 08108560 2
+
+SetUpFieldMove_Cut 08097898 0
+FieldMoveCallback_CutGrass 08097A20 0

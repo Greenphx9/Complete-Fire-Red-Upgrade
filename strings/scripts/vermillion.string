@@ -227,4 +227,16 @@ Oh, hello there.\nI'm the master of trapping moves.\pI can teach the moves [GREE
 Which of these trapping moves do you\nwant to learn?
 
 #org @gText_ComeBackAnyTrapping
-Well then, come back if you ever\nneed any trapping moves.
+Well then, come back if you ever\nneed any trapping moves. 
+
+#org @gText_DefeatedSurge
+Now that's a shocker!\pYou're the real deal, kid!
+
+#org @gText_TakeThunderBadge
+Fine, then, take the ThunderBadge!
+
+#org @gText_GiveThunderBadge
+[BLACK][PLAYER] received the\nThunderBadge from Lt. Surge!
+
+#org @gText_GiveTM34
+The ThunderBadge lets your Pok\emon\nFly lightning-quick anytime, kid!\pYou're special, kid!\nTake this!

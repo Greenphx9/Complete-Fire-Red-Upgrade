@@ -1165,11 +1165,11 @@ const u8* GetAbilityNameByMon(u8 ability, u16 species)
 	return ptr;
 }
 
-const u8* GetAbilityNameDex(const u8 ability)
+const u8* GetItemName(const u8 item)
 {
-	u16 species = sPokedexScreenData->dexSpecies;
+	const u8* ptr = gItems[item].name;
 
-	return GetAbilityNameByMon(ability, species);
+	return ptr;
 }
 
 void CopyAbilityName(u8* dst, const u8 ability)
@@ -1177,10 +1177,19 @@ void CopyAbilityName(u8* dst, const u8 ability)
 	StringCopy(dst, GetAbilityName(ability));
 }
 
+const u8* GetAbilityNameDex(const u8 ability)
+{
+	u16 species = sPokedexScreenData->dexSpecies;
+
+	return GetAbilityNameByMon(ability, species);
+}
+
 void CopyAbilityNameByMon(u8* dst, const u8 ability, u16 species)
 {
 	StringCopy(dst, GetAbilityNameByMon(ability, species));
 }
+
+
 
 #ifdef OPEN_WORLD_TRAINERS
 static u8* GetOpenWorldTrainerName(bool8 female)

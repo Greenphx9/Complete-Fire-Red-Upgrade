@@ -20,6 +20,166 @@ tables to edit:
 
 */
 
+const struct BattleTowerSpread gMultiTowerSpread_Milo[] =
+{
+	{
+		.species = SPECIES_RAICHU_A,
+		.nature = NATURE_TIMID,
+		.hpIv = 31,
+		.atkIv = 31,
+		.defIv = 31,
+		.spAtkIv = 31,
+		.spDefIv = 31,
+		.spdIv = 31,
+		.atkEv = 4,
+		.spAtkEv = 252,
+		.spdEv = 252,
+		.ability = FRONTIER_ABILITY_1, //ABILITY_SURGESURFER
+		.item = ITEM_ALORAICHIUM_Z,
+		.moves =
+		{
+			MOVE_THUNDERBOLT,
+			MOVE_PSYCHIC,
+			MOVE_FAKEOUT,
+			MOVE_PROTECT,
+		},
+		.ball = BALL_TYPE_QUICK_BALL,
+		.forSingles = TRUE,
+		.forDoubles = TRUE,
+		.modifyMovesDoubles = FALSE,
+	},
+	{
+		.species = SPECIES_RAICHU,
+		.nature = NATURE_HASTY,
+		.hpIv = 31,
+		.atkIv = 31,
+		.defIv = 31,
+		.spAtkIv = 31,
+		.spDefIv = 31,
+		.spdIv = 31,
+		.atkEv = 4,
+		.spAtkEv = 252,
+		.spdEv = 252,
+		.ability = FRONTIER_ABILITY_HIDDEN, //ABILITY_LIGHTNINGROD
+		.item = ITEM_ASSAULT_VEST,
+		.moves =
+		{
+			MOVE_VOLTSWITCH,
+			MOVE_ELECTROWEB,
+			MOVE_FEINT,
+			MOVE_FAKEOUT,
+		},
+		.ball = BALL_TYPE_QUICK_BALL,
+		.forSingles = TRUE,
+		.forDoubles = TRUE,
+		.modifyMovesDoubles = FALSE,
+	},
+	{
+		.species = SPECIES_MR_MIME,
+		.nature = NATURE_TIMID,
+		.hpIv = 31,
+		.atkIv = 0,
+		.defIv = 31,
+		.spAtkIv = 31,
+		.spDefIv = 31,
+		.spdIv = 31,
+		.hpEv = 252,
+		.spAtkEv = 4,
+		.spdEv = 252,
+		.ability = FRONTIER_ABILITY_1, //ABILITY_SOUNDPROOF
+		.item = ITEM_LIGHT_CLAY,
+		.moves =
+		{
+			MOVE_ICYWIND,
+			MOVE_HYPNOSIS,
+			MOVE_REFLECT,
+			MOVE_LIGHTSCREEN,
+		},
+		.ball = BALL_TYPE_QUICK_BALL,
+		.forSingles = TRUE,
+		.forDoubles = TRUE,
+		.modifyMovesDoubles = FALSE,
+	},
+	{
+		.species = SPECIES_AUDINO,
+		.nature = NATURE_CALM,
+		.hpIv = 31,
+		.atkIv = 0,
+		.defIv = 31,
+		.spAtkIv = 31,
+		.spDefIv = 31,
+		.spdIv = 31,
+		.hpEv = 252,
+		.spAtkEv = 4,
+		.spDefEv = 252,
+		.ability = FRONTIER_ABILITY_2, //ABILITY_REGENERATOR
+		.item = ITEM_AUDINITE,
+		.moves =
+		{
+			MOVE_DAZZLINGGLEAM,
+			MOVE_HEALPULSE,
+			MOVE_WISH,
+			MOVE_HEALBELL,
+		},
+		.ball = BALL_TYPE_QUICK_BALL,
+		.forSingles = TRUE,
+		.forDoubles = TRUE,
+		.modifyMovesDoubles = FALSE,
+	},
+	{
+		.species = SPECIES_CLEFABLE,
+		.nature = NATURE_CALM,
+		.hpIv = 31,
+		.atkIv = 0,
+		.defIv = 31,
+		.spAtkIv = 31,
+		.spDefIv = 31,
+		.spdIv = 31,
+		.hpEv = 252,
+		.spAtkEv = 4,
+		.spDefEv = 252,
+		.ability = FRONTIER_ABILITY_1, //ABILITY_CUTECHARM
+		.item = ITEM_LEFTOVERS,
+		.moves =
+		{
+			MOVE_MOONBLAST,
+			MOVE_STEALTHROCK,
+			MOVE_FOLLOWME,
+			MOVE_PROTECT,
+		},
+		.ball = BALL_TYPE_QUICK_BALL,
+		.forSingles = TRUE,
+		.forDoubles = TRUE,
+		.modifyMovesDoubles = FALSE,
+	},
+	{
+		.species = SPECIES_LATIOS,
+		.nature = NATURE_TIMID,
+		.hpIv = 31,
+		.atkIv = 0,
+		.defIv = 31,
+		.spAtkIv = 31,
+		.spDefIv = 31,
+		.spdIv = 31,
+		.spAtkEv = 252,
+		.spDefEv = 4,
+		.spdEv = 252,
+		.ability = FRONTIER_ABILITY_1, //ABILITY_LEVITATE
+		.item = ITEM_LATIOSITE,
+		.moves =
+		{
+			MOVE_DRAGONPULSE,
+			MOVE_PSYSHOCK,
+			MOVE_TAILWIND,
+			MOVE_PROTECT,
+		},
+		.ball = BALL_TYPE_QUICK_BALL,
+		.forSingles = TRUE,
+		.forDoubles = TRUE,
+		.modifyMovesDoubles = FALSE,
+	},
+};
+
 
 #ifdef UNBOUND
 extern const u8 sTrainerName_Milo[];

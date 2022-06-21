@@ -25646,7 +25646,7 @@ ANIM_MAX_QUAKE:
 	waitanimation
 	launchtemplate Template_DigMound TEMPLATE_ATTACKER | 0x1, 0x3 0x0 0x0 0xb4
 	launchtemplate Template_DigMound TEMPLATE_ATTACKER | 0x1, 0x3 0x0 0x1 0xb4
-	pokespritetoBG2 bank_attacker
+	@@pokespritetoBG2 bank_attacker
 	pause 0x1
 	launchtask 0x80b8e95 0x2 0x1 0x0
 	pause 0x6

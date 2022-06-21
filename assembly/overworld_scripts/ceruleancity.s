@@ -172,7 +172,7 @@ EventScript_Misty:
 	lock
 	checkflag 0x821
 	if 0x1 _goto EventScript_MistyBeat
-	trainerbattle1 0x1 0x19F 0x0 0x81921EF 0x819242D EventScript_WonMisty
+	trainerbattle1 0x1 0x19F 0x0 0x81921EF gText_DefeatedMisty EventScript_WonMisty
 	release
 	end
 
@@ -185,8 +185,17 @@ EventScript_WonMisty:
 	sethealingplace 0x4
 	setvar 0x8008 0x2
 	goto EventScript_MistyGiveItems
+	end
 
 EventScript_MistyGiveItems:
+	msgbox gText_GiveCascadeBadge MSG_KEEPOPEN
+	fanfare 260
+	setvar 0x8004 0x1
+	setvar 0x8006 0x0
+	callasm ShowBadgeAfterBeatingLeader
+	msgbox gText_GiveCascadeBadge2 MSG_KEEPOPEN
+	waitfanfare
+	callasm HideBadgeAfterBeatingLeader
 	msgbox 0x81922F7 MSG_KEEPOPEN 
 	additem ITEM_TM83 0x1
 	setvar 0x8004 ITEM_TM83

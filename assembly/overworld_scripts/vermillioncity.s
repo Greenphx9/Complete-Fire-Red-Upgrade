@@ -629,7 +629,40 @@ EventScript_Surge:
 	lock
 	checkflag 0x822
 	if 0x1 _goto EventScript_SurgeBeat
-	trainerbattle1 0x1 0x1A0 0x0 0x8194BA4 0x8194E03 0x816B97C
+	trainerbattle1 0x1 0x1A0 0x0 0x8194BA4 gText_DefeatedSurge EventScript_DefeatedSurge
+	release
+	end
+
+EventScript_DefeatedSurge:
+	setvar 0x8004 0x4
+	setvar 0x8005 0x1
+	special 0x173
+	checkflag 0x23B
+	if 0x0 _call 0x816B9AB
+	clearflag 0xA0
+	setflag 0x4B2
+	setflag 0x822
+	setvar 0x8008 0x3
+	call 0x81A6B18
+	goto EventScript_GiveTM34
+	end
+
+EventScript_GiveTM34:
+	msgbox gText_TakeThunderBadge MSG_KEEPOPEN
+	fanfare 260
+	setvar 0x8004 0x2
+	setvar 0x8006 0x0
+	callasm ShowBadgeAfterBeatingLeader
+	msgbox gText_GiveThunderBadge MSG_KEEPOPEN
+	waitfanfare
+	callasm HideBadgeAfterBeatingLeader
+	msgbox gText_GiveTM34 MSG_KEEPOPEN 
+	checkitemspace 0x142 0x1
+	compare LASTRESULT 0x0
+	if 0x1 _goto 0x816B9F0
+	giveitem_msg 0x8194D87 ITEM_TM34
+	setflag 0x231
+	msgbox 0x8194DA8 MSG_KEEPOPEN 
 	release
 	end
 

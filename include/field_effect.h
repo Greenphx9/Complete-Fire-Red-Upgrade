@@ -44,6 +44,10 @@ void __attribute__((long_call)) ReturnToFieldFromFlyMapSelect(void);
 u8 __attribute__((long_call)) MapTransitionIsExit(u8 lightLevel, u8 mapType);
 u8 __attribute__((long_call)) MapTransitionIsEnter(u8 mapType1, u8 mapType2);
 void __attribute__((long_call)) StartSweetScentFieldEffect(void);
+bool8 __attribute__((long_call)) CutMoveRuinValleyCheck(void);
+void __attribute__((long_call)) FieldCallback_CutGrass(void);
+void __attribute__((long_call)) FieldCallback_CutTree(void);
+u8 __attribute__((long_call)) MetatileAtCoordsIsGrassTile(s16 x, s16 y);
 
 /*
 bool8 FieldEffectActiveListContains(u8 id);

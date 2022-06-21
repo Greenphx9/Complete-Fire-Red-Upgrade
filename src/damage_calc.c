@@ -1140,6 +1140,7 @@ TYPE_LOOP_AI:
 
 static void ModulateDmgByType(u8 multiplier, const u16 move, const u8 moveType, const u8 defType, const u8 bankDef, u8 atkAbility, u8* flags, struct Pokemon* monDef, bool8 checkMonDef)
 {
+	//u16 i;
 	if (IsInverseBattle())
 	{
 		switch (multiplier) {
@@ -1183,6 +1184,9 @@ static void ModulateDmgByType(u8 multiplier, const u16 move, const u8 moveType, 
 		multiplier = TYPE_MUL_SUPER_EFFECTIVE;
 
 	if (moveType == TYPE_FIRE && gNewBS->tarShotBits & gBitTable[bankDef]) //Fire always Super-Effective if covered in tar
+		multiplier = TYPE_MUL_SUPER_EFFECTIVE;
+
+	if (atkAbility == ABILITY_UNOWNPOWER)
 		multiplier = TYPE_MUL_SUPER_EFFECTIVE;
 
 	if (checkMonDef)
@@ -2029,7 +2033,10 @@ static s32 CalculateBaseDamage(struct DamageCalc* data)
 		//1.5x Boost
 			if (WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_SUN_ANY)
 			&& data->atkItemEffect != ITEM_EFFECT_UTILITY_UMBRELLA)
+			{
 				attack = (attack * 15) / 10;
+				spAttack = (spAttack * 15) / 10;
+			}
 			break;
 
 		case ABILITY_PLUS:
@@ -2141,8 +2148,11 @@ static s32 CalculateBaseDamage(struct DamageCalc* data)
 	switch (data->atkPartnerAbility) {
 		case ABILITY_FLOWERGIFT:
 			if (WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_SUN_ANY)
-			&& ITEM_EFFECT(PARTNER(bankAtk)) != ITEM_EFFECT_UTILITY_UMBRELLA)
+			&& ITEM_EFFECT(PARTNER(bankAtk)) != ITEM_EFFECT_UTILITY_UMBRELLA) 
+			{
 				attack = (attack * 15) / 10;
+				spAttack = (spAttack * 15) / 10;
+			}
 			break;
 	}
 
@@ -2174,7 +2184,7 @@ static s32 CalculateBaseDamage(struct DamageCalc* data)
 			data->defense *= 2;
 			break;
 
-		case ABILITY_PORTALPOWER:
+		case ABILITY_UNOWNPOWER:
 		//0.75x Decrement
 		#ifdef PORTAL_POWER
 			if ((useMonAtk && !CheckContactByMon(move, data->monAtk))

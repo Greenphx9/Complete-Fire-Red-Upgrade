@@ -232,7 +232,38 @@ EventScript_Erika:
 	lock
 	checkflag 0x823
 	if 0x1 _goto EventScript_ErikaBeat
-	trainerbattle1 0x1 0x1A1 0x0 0x8197114 0x8197260 0x816D0A0
+	trainerbattle1 0x1 0x1A1 0x0 0x8197114 gText_DefeatedErika EventScript_DefeatedErika
+	release
+	end
+
+EventScript_DefeatedErika:
+	setvar 0x8004 0x5
+	setvar 0x8005 0x1
+	special 0x173
+	clearflag 0x9E
+	setflag 0x4B3
+	setflag 0x823
+	setvar 0x8008 0x4
+	call 0x81A6B18
+	goto EventScript_GiveTM19
+	end
+
+EventScript_GiveTM19:
+	msgbox gText_TakeRainbowBadge MSG_KEEPOPEN
+	fanfare 260
+	setvar 0x8004 0x3
+	setvar 0x8006 0x0
+	callasm ShowBadgeAfterBeatingLeader
+	msgbox gText_GiveRainbowBadge MSG_KEEPOPEN
+	waitfanfare
+	callasm HideBadgeAfterBeatingLeader
+	msgbox gText_TakeTM09 MSG_KEEPOPEN
+	checkitemspace 0x133 0x1
+	compare LASTRESULT 0x0
+	if 0x1 _goto 0x816D107
+	giveitem_msg 0x81973BA ITEM_TM19
+	setflag 0x293
+	msgbox 0x81973D7 MSG_KEEPOPEN
 	release
 	end
 

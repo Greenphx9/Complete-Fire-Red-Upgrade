@@ -186,7 +186,7 @@ extern const u16 gNumSpecialTowerTrainers;
 
 struct BattleTowerSpread
 {
-    u16 species;
+    u16 species; 
 	u8 nature;
 	u8 ball;
 	u32 hpIv : 5;

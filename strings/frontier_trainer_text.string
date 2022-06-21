@@ -9,8 +9,6 @@ I guess dropping out of school\nwasn't so smart[.]
 #org @sFrontierText_Youngster_PlayerLose_1
 Heh, I told you I wasn't a\npushover!
 
-#ifdef UNBOUND
-
 #org @sFrontierText_Youngster_PreBattle_2
 I left school to be here[.]\pI won't let you stand between me\nand greatness!
 
@@ -1386,5 +1384,3 @@ What? Me, lose?!
 
 #org @sFrontierText_Giovanni_PlayerLose
 Ha!\nThat was a truly intense fight!
-
-#endif

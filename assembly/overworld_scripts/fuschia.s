@@ -200,7 +200,39 @@ EventScript_Koga:
 	lock
 	checkflag 0x824
 	if 0x1 _goto EventScript_KogaBeat
-	trainerbattle1 0x1 0x1A2 0x0 0x819832E 0x8198444 0x816D580
+	trainerbattle1 0x1 0x1A2 0x0 0x819832E gText_DefeatedKoga EventScript_DefeatedKoga
+	release
+	end
+
+EventScript_DefeatedKoga:
+	setvar 0x8004 0x6
+	setvar 0x8005 0x1
+	special 0x173
+	clearflag 0x9F
+	setflag 0x4B4
+	setflag 0x824
+	setvar 0x8008 0x5
+	call 0x81A6B18
+	goto EventScript_GiveTM06
+	end
+
+EventScript_GiveTM06:
+	msgbox gText_TakeSoulBadge MSG_FACE
+	fanfare 260
+	setvar 0x8004 0x4
+	setvar 0x8006 0x0
+	callasm ShowBadgeAfterBeatingLeader
+	msgbox gText_GiveSoulBadge MSG_KEEPOPEN
+	waitfanfare
+	callasm HideBadgeAfterBeatingLeader
+	msgbox 0x819850E MSG_KEEPOPEN
+	checkitemspace 0x126 0x1
+	compare LASTRESULT 0x0
+	if 0x1 _goto 0x816D5E7
+	additem 0x126 0x1
+	giveitem_msg 0x819858F 0x126
+	setflag 0x259
+	msgbox 0x81985AB MSG_KEEPOPEN
 	release
 	end
 

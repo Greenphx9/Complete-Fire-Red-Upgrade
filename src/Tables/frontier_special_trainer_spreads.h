@@ -6827,7 +6827,7 @@ const struct BattleTowerSpread gSpecialTowerSpread_Skeli[] =
 		.atkEv = 252,
 		.defEv = 252,
 		.spdEv = 4,
-		.ability = FRONTIER_ABILITY_HIDDEN, //ABILITY_PORTALPOWER
+		.ability = FRONTIER_ABILITY_HIDDEN, //ABILITY_UNOWNPOWER
 		.item = ITEM_DARKINIUM_Z,
 		.moves =
 		{
@@ -6853,7 +6853,7 @@ const struct BattleTowerSpread gSpecialTowerSpread_Skeli[] =
 		.defEv = 4,
 		.spAtkEv = 252,
 		.spdEv = 252,
-		.ability = FRONTIER_ABILITY_HIDDEN, //ABILITY_PORTALPOWER
+		.ability = FRONTIER_ABILITY_HIDDEN, //ABILITY_UNOWNPOWER
 		.item = ITEM_CHOICE_SCARF,
 		.moves =
 		{
@@ -6879,7 +6879,7 @@ const struct BattleTowerSpread gSpecialTowerSpread_Skeli[] =
 		.atkEv = 252,
 		.defEv = 4,
 		.spdEv = 252,
-		.ability = FRONTIER_ABILITY_HIDDEN, //ABILITY_PORTALPOWER
+		.ability = FRONTIER_ABILITY_HIDDEN, //ABILITY_UNOWNPOWER
 		.item = ITEM_GHOSTIUM_Z,
 		.moves =
 		{

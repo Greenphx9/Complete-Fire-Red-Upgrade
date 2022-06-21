@@ -43,6 +43,7 @@ void OpponentHandleChooseMove(void)
 	||  difficulty == OPTIONS_EXPERT_DIFFICULTY
 	#endif
 	|| FlagGet(FLAG_HARD_MODE)
+	|| !FlagGet(FLAG_HARD_MODE)
 	|| (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) && WildMonIsSmart(gActiveBattler))
 	|| (IsRaidBattle() && gRaidBattleStars >= 6))
 	{

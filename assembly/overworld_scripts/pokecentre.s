@@ -21,7 +21,7 @@ EventScript_pokecentre_0X16A2CF:
 
 	@---------------
 EventScript_pokecentre_0X1A6578:
-	call GiveAllMons
+	@@call GiveAllMons
 	special 0x187
 	compare LASTRESULT 0x2
 	if 0x1 _goto EventScript_pokecentre_0X1A7AE0

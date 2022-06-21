@@ -980,6 +980,9 @@ bool8 CanTransferItem(u16 species, u16 item)
 	if (IsMail(item))
 		return FALSE;
 
+	if (item == ITEM_RUSTED_SWORD || item == ITEM_RUSTED_SHIELD)
+		return FALSE;
+
 	switch (effect) {
 		case ITEM_EFFECT_Z_CRYSTAL:
 			return FALSE;
@@ -1029,6 +1032,8 @@ bool8 CanTransferItem(u16 species, u16 item)
 					return FALSE;
 			}
 			break;
+
+		
 	}
 
 	return TRUE;

@@ -9,6 +9,10 @@
 #include "../include/sound.h"
 #include "../include/constants/region_map_sections.h"
 #include "../include/constants/songs.h"
+#include "../include/field_player_avatar.h"
+#include "../include/script.h"
+#include "../include/party_menu.h"
+#include "../include/new/overworld_data.h"
 
 #include "../include/new/dexnav.h"
 #include "../include/new/overworld.h"
@@ -42,6 +46,7 @@ static void FldEff_Sparkles(void);
 static void FldEff_LavaBubbles(void);
 static void FldEff_MiningScanRing(void);
 static void SpriteCB_MiningScanRing(struct Sprite* sprite);
+void FieldMoveCallback_CutGrass(void);
 
 #ifdef UNBOUND //For Pokemon Unbound - Feel free to remove
 #define AUTUMN_GRASS_PALETTE_TAG 0x1215
@@ -646,3 +651,90 @@ const struct FieldEffectScript FieldEffectScript_MiningScanRing =
 	FLDEFF_CALLASM, FldEff_MiningScanRing,
 	FLDEFF_END,
 };
+
+
+
+bool8 IsInRockTunnel() 
+{
+	u8 currRegionMapSecId = GetCurrentRegionMapSectionId();
+	if(currRegionMapSecId == MAPSEC_ROCK_TUNNEL)
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+	return FALSE;
+}
+
+extern bool8 sScheduleOpenDottedHole;
+extern const struct MapPosition gPlayerFacingPosition;
+
+bool8 SetUpFieldMove_Cut(void)
+{
+    s16 x, y;
+    u8 i, j;
+    sScheduleOpenDottedHole = FALSE;
+    if (CutMoveRuinValleyCheck() == TRUE)
+    {
+        sScheduleOpenDottedHole = TRUE;
+        gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
+        gPostMenuFieldCallback = FieldCallback_CutGrass;
+        return TRUE;
+    }
+
+	if (IsInRockTunnel() == TRUE) 
+	{
+        gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
+        gPostMenuFieldCallback = FieldCallback_CutGrass;
+		return TRUE;
+	}
+
+    if (CheckObjectGraphicsInFrontOfPlayer(95) == TRUE)
+    {
+        gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
+        gPostMenuFieldCallback = FieldCallback_CutTree;
+        return TRUE;
+    }
+    
+    else
+    {
+        PlayerGetDestCoords(&gPlayerFacingPosition.x, &gPlayerFacingPosition.y);
+    
+        for (i = 0; i < 3; i++)
+        {
+            y = gPlayerFacingPosition.y - 1 + i;
+            for (j = 0; j < 3; j++)
+            {
+                x = gPlayerFacingPosition.x - 1 + j;
+                if (MapGridGetZCoordAt(x, y) == gPlayerFacingPosition.height)
+                {
+                    if (MetatileAtCoordsIsGrassTile(x, y) == TRUE)
+                    {
+                        gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
+                        gPostMenuFieldCallback = FieldCallback_CutGrass;
+                        return TRUE;
+                    }
+                }
+            }
+        }
+        return FALSE;
+    }
+}
+
+extern const u8 EventScript_OpenRegirockDoor[];
+
+void FieldMoveCallback_CutGrass(void)
+{
+    FieldEffectActiveListRemove(FLDEFF_USE_CUT_ON_GRASS);
+    if (sScheduleOpenDottedHole == TRUE)
+        CutMoveOpenDottedHoleDoor();
+    else if (IsInRockTunnel() == TRUE)
+	{
+		ScriptContext1_SetupScript(EventScript_OpenRegirockDoor);
+		ScriptContext2_Disable();
+	}
+	else
+        FieldEffectStart(FLDEFF_CUT_GRASS);
+}

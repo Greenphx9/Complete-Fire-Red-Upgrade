@@ -410,8 +410,8 @@ bool8 CanMonLearnTutorMove(struct Pokemon* mon, u8 tutorId)
 	u16 dexNum = SpeciesToNationalPokedexNum(species);
 	switch (tutorId) {
 	case TUTOR_SPECIAL_DRACO_METEOR:
-		return GetMonData(mon, MON_DATA_FRIENDSHIP, NULL) >= MAX_FRIENDSHIP
-			&& (gBaseStats2[species].type1 == TYPE_DRAGON
+		//return GetMonData(mon, MON_DATA_FRIENDSHIP, NULL) >= MAX_FRIENDSHIP
+			return (gBaseStats2[species].type1 == TYPE_DRAGON
 				|| gBaseStats2[species].type2 == TYPE_DRAGON);
 #ifdef NATIONAL_DEX_KELDEO
 	case TUTOR_SPECIAL_SECRET_SWORD:
@@ -494,8 +494,8 @@ u8 TryHandleExcuseForDracoMeteorTutor(unusedArg struct Pokemon* mon)
 		if (gBaseStats2[species].type1 != TYPE_DRAGON
 			&& gBaseStats2[species].type2 != TYPE_DRAGON)
 			Var8005 = 3;
-		else if (GetMonData(mon, MON_DATA_FRIENDSHIP, NULL) < MAX_FRIENDSHIP) //Dragon-type not at max friendship
-			Var8005 = 5;
+		//else if (GetMonData(mon, MON_DATA_FRIENDSHIP, NULL) < MAX_FRIENDSHIP) //Dragon-type not at max friendship
+		//	Var8005 = 5;
 
 		return 1;
 	}
@@ -2115,4 +2115,24 @@ bool8 MonCanLearnHM(void) {
 	}
 	gSpecialVar_LastResult = FALSE;
 	return FALSE;
+}
+
+extern const u8 sListItemTextColor_TmCase_BerryPouch[];
+extern const u8 sListItemTextColor_RegularItem[];
+extern const u8 sPowerItemLevel1[];
+
+void BagListMenuGetItemNameColored(u8 *dest, u16 itemId)
+{
+	if (itemId == ITEM_POWER_BRACER || itemId == ITEM_POWER_BELT || itemId == ITEM_POWER_LENS || itemId == ITEM_POWER_BAND || itemId == ITEM_POWER_ANKLET || itemId == ITEM_POWER_WEIGHT) 
+	{
+		StringCopy(dest, ItemId_GetName(itemId));
+		StringAppend(dest, sPowerItemLevel1);
+		//StringAppend(dest, ItemId_GetName(itemId));
+		return;
+	}
+    else if (itemId == ITEM_TM_CASE || itemId == ITEM_BERRY_POUCH)
+        StringCopy(dest, sListItemTextColor_TmCase_BerryPouch);
+    else
+        StringCopy(dest, sListItemTextColor_RegularItem);
+    StringAppend(dest, ItemId_GetName(itemId));
 }

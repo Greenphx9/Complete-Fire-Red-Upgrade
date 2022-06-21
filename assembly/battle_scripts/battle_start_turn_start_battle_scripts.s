@@ -22,6 +22,7 @@ battle_start_turn_start_battle_scripts.s
 .global BattleScript_MistyTerrainBattleBegin
 .global BattleScript_PsychicTerrainBattleBegin
 .global BattleScript_QuickClaw
+.global BattleScript_QuickDraw
 .global BattleScript_FocusPunchSetUp
 .global BattleScript_BeakBlastSetUp
 .global BattleScript_ShellTrapSetUp
@@ -144,7 +145,6 @@ BattleScript_QuickClaw:
 	setword BATTLE_STRING_LOADER StringNull
 	printstring 0x184
 	setword BATTLE_STRING_LOADER gText_ItemIncreasedSpeedBracket
-	jumpifability BANK_ATTACKER ABILITY_QUICKDRAW QuickDrawBS
 	jumpifhelditemeffect 0xA ITEM_EFFECT_QUICK_CLAW QuickClawBS
 	playanimation 0xA ANIM_BERRY_EAT 0x0
 	printstring 0x184
@@ -158,12 +158,17 @@ QuickClawBS:
 	waitmessage DELAY_HALFSECOND
 	end3
 
-QuickDrawBS:
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+BattleScript_QuickDraw:
+	setword BATTLE_STRING_LOADER StringNull
+	printstring 0x184
 	setword BATTLE_STRING_LOADER gText_AbilityIncreasedSpeedBracket
 	playanimation 0xA ANIM_ITEM_USE 0x0
 	printstring 0x184
 	waitmessage DELAY_HALFSECOND
 	end3
+
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 

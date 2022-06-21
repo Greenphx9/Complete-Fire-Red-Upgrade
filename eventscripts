@@ -76,7 +76,6 @@ npc 3 22 10 EventScript_DeoxysFormChange
 npc 3 22 11 EventScript_TM58
 npc 3 22 12 EventScript_TM94
 map 3 22 EventScript_Route4MapScript
-npc 3 22 13 EventScript_Cresselia
 
 ## Mt Moon
 npc 1 1 14 EventScript_MtMoonRootFossil
@@ -373,7 +372,7 @@ npc 1 0 16 EventScript_BeginARaidBattle
 ## Legends
 tile 43 1 0 EventScript_RegicePuzzleForce
 tile 43 1 1 EventScript_RegicePuzzleForce
-sign 43 1 0 EventScript_RegicePuzzleBraille
+##sign 43 1 0 EventScript_RegicePuzzleBraille
 sign 43 1 1 EventScript_RegicePuzzle
 npc 43 2 0 EventScript_Regice
 npc 1 82 26 EventScript_Regirock
@@ -410,6 +409,7 @@ npc 3 44 15 EventScript_ArceusPortal
 tile 43 18 0 EventScript_ArceusScript
 npc 43 18 0 EventScript_ArceusPortal2
 npc 43 20 0 EventScript_Darkrai
+npc 43 22 0 EventScript_Cresselia
 
 npc 3 30 16 EventScript_ForbidYouEntering
 npc 3 37 13 EventScript_ForbidYouEntering
@@ -635,3 +635,9 @@ sign 10 14 30 EventScript_SlotMachine
 sign 10 14 31 EventScript_SlotMachine
 sign 10 14 32 EventScript_SlotMachine
 sign 10 14 33 EventScript_SlotMachine
+
+
+
+
+### Battle Frontier Testing
+npc 2 10 3 EventScript_FrontierTest

@@ -389,8 +389,8 @@ Hurts sleeping foes.
 #org @DESC_PICKPOCKET
 Steals foe's item when hit.
 
-#org @DESC_PORTALPOWER
-Weakens non-contact moves.
+#org @DESC_UNOWNPOWER
+Hidden.P is always super-effective.
 
 #org @DESC_POISONTOUCH
 Can poison foe on contact.

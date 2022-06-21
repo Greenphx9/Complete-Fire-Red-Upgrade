@@ -8,6 +8,7 @@
 #include "../include/new/item.h"
 #include "../include/new/util2.h"
 #include "../include/base_stats.h"
+#include "../include/pokemon.h"
 
 void DebugMenu_ProcessSetFlag(void)
 {
@@ -33,7 +34,7 @@ void DebugMenu_ProcessSetFlag(void)
 			break;
 		case 4: //Custom Flag and Var - Modify this number
 			//FlagSet(0x152D);
-			VarSet(0x500C, 0x28);
+			//VarSet(0x500C, 0x28);
 			//FlagClear(0x15AC);
 			break;
 	}

@@ -48,6 +48,7 @@
 #include "../include/new/Vanilla_functions_battle.h"
 #include "../include/new/wild_encounter.h"
 #include "../include/base_stats.h"
+#include "../include/decompress.h"
 /*
 scripting.c
 	handles all scripting specials or other functions associated with scripts
@@ -2821,6 +2822,183 @@ static void ShowItemSpriteOnFind(unusedArg u16 itemId, unusedArg u8* spriteId)
 	*spriteId = iconSpriteId;
 	#endif
 }
+extern const u8 Brock_BadgeTiles[];
+extern const u8 Brock_BadgePal[];
+extern const u8 Misty_BadgeTiles[];
+extern const u8 Misty_BadgePal[];
+extern const u8 Surge_BadgeTiles[];
+extern const u8 Surge_BadgePal[];
+extern const u8 Erika_BadgeTiles[];
+extern const u8 Erika_BadgePal[];
+extern const u8 Koga_BadgeTiles[];
+extern const u8 Koga_BadgePal[];
+extern const u8 Sabrina_BadgeTiles[];
+extern const u8 Sabrina_BadgePal[];
+extern const u8 Blaine_BadgeTiles[];
+extern const u8 Blaine_BadgePal[];
+extern const u8 Giovanni_BadgeTiles[];
+extern const u8 Giovanni_BadgePal[];
+static const void *const sBadgeSpritesPtrs[][2] =
+{
+	{Brock_BadgeTiles, Brock_BadgePal},
+	{Misty_BadgeTiles, Misty_BadgePal},
+	{Surge_BadgeTiles, Surge_BadgePal},
+	{Erika_BadgeTiles, Erika_BadgePal},
+	{Koga_BadgeTiles, Koga_BadgePal},
+	{Sabrina_BadgeTiles, Sabrina_BadgePal},
+	{Blaine_BadgeTiles, Blaine_BadgePal},
+	{Giovanni_BadgeTiles, Giovanni_BadgePal},
+};
+
+const void * GetBadgeSpriteGfxPtr(u16 itemId, u8 unk)
+{
+    return sBadgeSpritesPtrs[itemId][unk];
+}
+
+extern void * sItemIconTilesBuffer;
+extern void * sItemIconTilesBufferPadded;
+extern const struct SpriteTemplate sSpriteTemplate_ItemIcon;
+u8 AddBadgeObject(u16 tilesTag, u16 paletteTag, u8 badge)
+{
+    struct SpriteTemplate template;
+    struct SpriteSheet spriteSheet;
+    struct CompressedSpritePalette spritePalette;
+    u8 spriteId;
+
+    if (!TryAllocItemIconTilesBuffers())
+        return MAX_SPRITES;
+
+    LZDecompressWram(GetBadgeSpriteGfxPtr(badge, 0), sItemIconTilesBuffer);
+    CopyItemIconPicTo4x4Buffer(sItemIconTilesBuffer, sItemIconTilesBufferPadded);
+    spriteSheet.data = sItemIconTilesBufferPadded;
+    spriteSheet.size = 0x200;
+    spriteSheet.tag = tilesTag;
+    LoadSpriteSheet(&spriteSheet);
+
+    spritePalette.data = GetBadgeSpriteGfxPtr(badge, 1);
+    spritePalette.tag = paletteTag;
+    LoadCompressedSpritePalette(&spritePalette);
+
+    CpuCopy16(&sSpriteTemplate_ItemIcon, &template, sizeof(struct SpriteTemplate));
+    template.tileTag = tilesTag;
+    template.paletteTag = paletteTag;
+    spriteId = CreateSprite(&template, 0, 0, 0);
+
+    Free(sItemIconTilesBuffer);
+    Free(sItemIconTilesBufferPadded);
+    return spriteId;
+}
+
+
+#define BADGE_TAG 0xFDF4
+static void ShowBadgeSpriteOnFind(u8 badgeSprite, u8* spriteId)
+{
+	static const union AffineAnimCmd sSpriteAffineAnim_KeyItemTM[] =
+	{
+		AFFINEANIMCMD_FRAME(0, 0, 128, 1), //Start rotated left
+		AFFINEANIMCMD_FRAME(16, 16, -8, 16), //Double sprite size + rotate right
+		AFFINEANIMCMD_FRAME(0, 0, -3, 8), //End at right 24
+		AFFINEANIMCMD_FRAME(0, 0, 3, 16), //End at left 24
+		AFFINEANIMCMD_FRAME(0, 0, -3, 16), //End at right 24
+		AFFINEANIMCMD_FRAME(0, 0, 3, 16), //End at left 24
+		AFFINEANIMCMD_FRAME(0, 0, -3, 8), //End at 0
+		AFFINEANIMCMD_FRAME(12, 12, 0, 16), //Double sprite size
+		AFFINEANIMCMD_FRAME(-12, -12, 0, 16),
+		AFFINEANIMCMD_FRAME(12, 12, 0, 16), //Double sprite size
+		AFFINEANIMCMD_FRAME(-12, -12, 0, 16),
+		AFFINEANIMCMD_FRAME(12, 12, 0, 16), //Double sprite size
+		AFFINEANIMCMD_FRAME(-12, -12, 0, 16),
+		AFFINEANIMCMD_FRAME(12, 12, 0, 16), //Double sprite size
+		AFFINEANIMCMD_FRAME(-12, -12, 0, 16),
+		AFFINEANIMCMD_FRAME(12, 12, 0, 16), //Double sprite size
+		AFFINEANIMCMD_FRAME(-12, -12, 0, 16),
+		AFFINEANIMCMD_FRAME(12, 12, 0, 16), //Double sprite size
+		AFFINEANIMCMD_FRAME(-12, -12, 0, 16),
+		AFFINEANIMCMD_END,
+	};
+	
+	static const union AffineAnimCmd* const sSpriteAffineAnimTable_KeyItemTM[] =
+	{
+		sSpriteAffineAnim_KeyItemTM,
+	};
+
+	s16 x, y;
+	u8 iconSpriteId;
+
+	//if (itemId == ITEM_TM59_DRAGON_PULSE && ITEM_TM59_DRAGON_PULSE == 0x177) //Replaced the arrow
+	//	iconSpriteId = AddItemIconSprite(ITEM_TAG, ITEM_TAG, ITEM_TM02_DRAGON_CLAW); //Replace the close bag arrow with a Dragon TM sprite
+	//else
+	iconSpriteId = AddBadgeObject(BADGE_TAG, BADGE_TAG, badgeSprite);
+
+	if (iconSpriteId != MAX_SPRITES)
+	{
+		//u8 pocket = GetPocketByItemId(itemId);
+		//if (pocket == POCKET_KEY_ITEMS || pocket == POCKET_TM_CASE)
+		//{ 	//Double the size of the item and place it in the centre of the screen
+			gSprites[iconSpriteId].oam.priority = 0; //Highest priority
+			x = 96 + 16;
+			y = 48 + 16;
+			gSprites[iconSpriteId].oam.affineMode = ST_OAM_AFFINE_DOUBLE;
+			gSprites[iconSpriteId].oam.matrixNum = AllocOamMatrix();
+			gSprites[iconSpriteId].affineAnims = sSpriteAffineAnimTable_KeyItemTM;
+			StartSpriteAffineAnim(&gSprites[iconSpriteId], 0);
+		//}
+		/*else
+		{
+			#ifdef ITEM_DESCRIPTION_ACQUIRE
+			if (GetSetItemObtained(itemId, FLAG_GET_OBTAINED))
+			{
+				//Place the item in the bottom right hand corner of the textbox
+				x = 197 + 16;
+				y = 124 + 16;
+				sHeaderBoxWindowId = 0xFF;
+			}
+			else //Show description
+			{
+				x = ITEM_ICON_X;
+				y = ITEM_ICON_Y;
+				ShowObtainedItemDescription(itemId);
+			}
+			#else
+			//Place the item in the bottom right hand corner of the textbox
+			x = 197 + 16;
+			y = 124 + 16;
+			sHeaderBoxWindowId = 0xFF;
+			#endif
+		}*/
+
+		gSprites[iconSpriteId].pos2.x = x;
+		gSprites[iconSpriteId].pos2.y = y;
+		gSprites[iconSpriteId].oam.priority = 0; //Highest priority
+	}
+
+	*spriteId = iconSpriteId;
+}
+
+void ShowBadgeAfterBeatingLeader(void)
+{
+	ShowBadgeSpriteOnFind(Var8004, (u8*) &Var8006);
+}
+
+static void ClearBadgeSpriteAfterFind(unusedArg u8 spriteId)
+{
+	FreeSpriteTilesByTag(BADGE_TAG);
+	FreeSpritePaletteByTag(BADGE_TAG);
+	FreeSpriteOamMatrix(&gSprites[spriteId]);
+	DestroySprite(&gSprites[spriteId]);
+	
+	if (sHeaderBoxWindowId != 0xFF) //Description was shown
+	{
+		ClearDialogWindowAndFrame(sHeaderBoxWindowId, TRUE);
+		RemoveWindow(sHeaderBoxWindowId);
+	}
+}
+
+void HideBadgeAfterBeatingLeader(void)
+{
+	ClearBadgeSpriteAfterFind(Var8006);
+}
+
 
 static void ClearItemSpriteAfterFind(unusedArg u8 spriteId)
 {

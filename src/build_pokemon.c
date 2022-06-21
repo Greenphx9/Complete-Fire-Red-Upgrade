@@ -829,7 +829,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 				CreateMon(&party[i], speciesToCreate, openWorldLevel, STANDARD_IV, TRUE, personalityValue, otIdType, otid);
 			}
 			else
-#endif
+#endif 
 			{
 				switch (trainer->partyFlags) {
 				case 0:
@@ -1591,7 +1591,7 @@ static u8 BuildFrontierParty(struct Pokemon* const party, const u16 trainerId, c
 			else //Double Battle
 			{
 				if (!spread->forDoubles) //Certain spreads are only for single battles
-					continue;
+					continue; 
 			}
 
 			if (tier == BATTLE_FACILITY_MEGA_BRAWL && !IsMegaStone(item))
@@ -3965,14 +3965,14 @@ u8 GetMonAbility(const struct Pokemon* mon)
 
 	if (mon->hiddenAbility && gBaseStats2[species].hiddenAbility != ABILITY_NONE)
 		return TryRandomizeAbility(gBaseStats2[species].hiddenAbility, species);
-
+ 
 	u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
 	if ((personality & 1) == 0 || gBaseStats2[species].ability2 == ABILITY_NONE)
 		ability = gBaseStats2[species].ability1;
 	else
 		ability = gBaseStats2[species].ability2;
 
-	return TryRandomizeAbility(ability, species);
+	return TryRandomizeAbility(ability, species); 
 }
 
 void SetMonExpWithMaxLevelCheck(struct Pokemon* mon, u16 species, unusedArg u8 unused, u32 data)
@@ -4473,4 +4473,17 @@ void PokeSum_PrintAbilityNameAndDesc(void)
 
 	AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], 2, 4, 0, sLevelNickTextColors[0], TEXT_SPEED_FF,
 		sMonSummaryScreen->summary.abilityDescStrBuf);
+}
+
+bool8 IsCresseliaInParty(void) {
+	u8 i;
+	for(i = 0; i < gPlayerPartyCount; i++) {
+		struct Pokemon mon = gPlayerParty[i];
+		if(GetMonData(&mon, MON_DATA_SPECIES, 0) == SPECIES_CRESSELIA) {
+			gSpecialVar_LastResult = TRUE;
+			return TRUE;
+		}
+	}
+	gSpecialVar_LastResult = FALSE;
+	return FALSE;
 }

@@ -13,6 +13,7 @@ void BufferStringBattle(u16 stringID);
 const u8* GetAbilityName(u8 ability);
 const u8* GetAbilityNameByMon(u8 ability, u16 species);
 const u8* GetAbilityNameDex(const u8 ability);
+const u8* GetItemName(u8 item);
 void CopyAbilityName(u8* dst, const u8 ability);
 void CopyAbilityNameByMon(u8* dst, const u8 ability, u16 species);
 

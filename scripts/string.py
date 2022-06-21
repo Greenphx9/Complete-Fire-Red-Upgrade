@@ -29,6 +29,7 @@ SpecialBuffers = {
     "BUFFER2": ["FD", "03"],
     "BUFFER3": ["FD", "04"],
     "RIVAL": ["FD", "06"],
+    "TRANSPARENT": ["FC", "01", "00"],
     "WHITE": ["FC", "01", "01"],
     "BLACK": ["FC", "01", "02"],
     "GRAY": ["FC", "01", "03"],
@@ -40,6 +41,7 @@ SpecialBuffers = {
     "LIGHT_BLUE": ["FC", "01", "09"],
     "MAIN_COLOUR": ["FC", "01"],
     "SHADOW_COLOUR": ["FC", "03"],
+    "COLOR_HIGHLIGHT_SHADOW": ["FC", "04"],
 
     "ARROW_UP": ["79"],
     "ARROW_DOWN": ["7A"],

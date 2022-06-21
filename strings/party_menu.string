@@ -75,3 +75,7 @@ Remove the Gigantamax factor from\n[BUFFER1]?
 
 #org @gText_PastCap
 It won't have any effect.\n(You're at the level cap).[PAUSE_UNTIL_PRESS]
+
+
+#org @sPowerItemLevel1
+[SHRINK]  Lv1

@@ -41,8 +41,6 @@ extern const u8 sFrontierText_Youngster_PlayerLose_2[];
 extern const u8 sFrontierText_Youngster_PreBattle_3[];
 extern const u8 sFrontierText_Youngster_PlayerWin_3[];
 extern const u8 sFrontierText_Youngster_PlayerLose_3[];
-
-#ifdef UNBOUND
 extern const u8 sFrontierText_Bugcatcher_PreBattle_1[];
 extern const u8 sFrontierText_Bugcatcher_PlayerWin_1[];
 extern const u8 sFrontierText_Bugcatcher_PlayerLose_1[];
@@ -461,6 +459,7 @@ extern const u8 sFrontierText_Rancher_PreBattle_6[];
 extern const u8 sFrontierText_Rancher_PlayerWin_6[];
 extern const u8 sFrontierText_Rancher_PlayerLose_6[];
 
+#ifdef UNBOUND
 extern const u8 sTrainerName_Palmer[];
 extern const u8 sTrainerName_Pat[];
 extern const u8 sTrainerName_Pablo[];
@@ -2284,6 +2283,105 @@ const u8 gNumFrontierMultiTrainers = NELEMS(gFrontierMultiBattleTrainers);
 			.preBattleText = 	sFrontierText_Youngster_PreBattle_1,
 			.playerWinText = 	sFrontierText_Youngster_PlayerWin_1,
 			.playerLoseText = 	sFrontierText_Youngster_PlayerLose_1,
+		},
+		{
+			.owNum = 			EVENT_OBJ_GFX_YOUNGSTER,
+			.trainerClass = 	CLASS_YOUNGSTER,
+			.trainerSprite = 	TRAINER_PIC_YOUNGSTER,
+			.gender = 			BATTLE_FACILITY_MALE,
+			.preBattleText = 	sFrontierText_Youngster_PreBattle_2,
+			.playerWinText = 	sFrontierText_Youngster_PlayerWin_2,
+			.playerLoseText = 	sFrontierText_Youngster_PlayerLose_2,
+		},
+		{
+			.owNum = 			EVENT_OBJ_GFX_YOUNGSTER,
+			.trainerClass = 	CLASS_YOUNGSTER,
+			.trainerSprite = 	TRAINER_PIC_YOUNGSTER,
+			.gender = 			BATTLE_FACILITY_MALE,
+			.preBattleText = 	sFrontierText_Youngster_PreBattle_3,
+			.playerWinText = 	sFrontierText_Youngster_PlayerWin_3,
+			.playerLoseText = 	sFrontierText_Youngster_PlayerLose_3,
+		},
+		{
+			.owNum = 			EVENT_OBJ_GFX_BUG_CATCHER,
+			.trainerClass = 	CLASS_BUG_CATCHER,
+			.trainerSprite = 	TRAINER_PIC_BUG_CATCHER,
+			.gender = 			BATTLE_FACILITY_MALE,
+			.preBattleText = 	sFrontierText_Bugcatcher_PreBattle_1,
+			.playerWinText = 	sFrontierText_Bugcatcher_PlayerWin_1,
+			.playerLoseText = 	sFrontierText_Bugcatcher_PlayerLose_1,
+		},
+		{
+			.owNum = 			EVENT_OBJ_GFX_BUG_CATCHER,
+			.trainerClass = 	CLASS_BUG_CATCHER,
+			.trainerSprite = 	TRAINER_PIC_BUG_CATCHER,
+			.gender = 			BATTLE_FACILITY_MALE,
+			.preBattleText = 	sFrontierText_Bugcatcher_PreBattle_2,
+			.playerWinText = 	sFrontierText_Bugcatcher_PlayerWin_2,
+			.playerLoseText = 	sFrontierText_Bugcatcher_PlayerLose_2,
+		},
+		{
+			.owNum = 			EVENT_OBJ_GFX_BUG_CATCHER,
+			.trainerClass = 	CLASS_BUG_CATCHER,
+			.trainerSprite = 	TRAINER_PIC_BUG_CATCHER,
+			.gender = 			BATTLE_FACILITY_MALE,
+			.preBattleText = 	sFrontierText_Bugcatcher_PreBattle_3,
+			.playerWinText = 	sFrontierText_Bugcatcher_PlayerWin_3,
+			.playerLoseText = 	sFrontierText_Bugcatcher_PlayerLose_3,
+		},
+		{
+			.owNum = 			EVENT_OBJ_GFX_LASS,
+			.trainerClass = 	CLASS_LASS,
+			.trainerSprite = 	TRAINER_PIC_LASS,
+			.gender = 			BATTLE_FACILITY_FEMALE,
+			.preBattleText = 	sFrontierText_Lass_PreBattle_1,
+			.playerWinText = 	sFrontierText_Lass_PlayerWin_1,
+			.playerLoseText = 	sFrontierText_Lass_PlayerLose_1,
+		},
+		{
+			.owNum = 			EVENT_OBJ_GFX_LASS,
+			.trainerClass = 	CLASS_LASS,
+			.trainerSprite = 	TRAINER_PIC_LASS,
+			.gender = 			BATTLE_FACILITY_FEMALE,
+			.preBattleText = 	sFrontierText_Lass_PreBattle_2,
+			.playerWinText = 	sFrontierText_Lass_PlayerWin_2,
+			.playerLoseText = 	sFrontierText_Lass_PlayerLose_2,
+		},
+		{
+			.owNum = 			EVENT_OBJ_GFX_LASS,
+			.trainerClass = 	CLASS_LASS,
+			.trainerSprite = 	TRAINER_PIC_LASS,
+			.gender = 			BATTLE_FACILITY_FEMALE,
+			.preBattleText = 	sFrontierText_Lass_PreBattle_3,
+			.playerWinText = 	sFrontierText_Lass_PlayerWin_3,
+			.playerLoseText = 	sFrontierText_Lass_PlayerLose_3,
+		},
+		{
+			.owNum = 			EVENT_OBJ_GFX_SAILOR,
+			.trainerClass = 	CLASS_SAILOR,
+			.trainerSprite = 	TRAINER_PIC_SAILOR,
+			.gender = 			BATTLE_FACILITY_MALE,
+			.preBattleText = 	sFrontierText_Sailor_PreBattle_1,
+			.playerWinText = 	sFrontierText_Sailor_PlayerWin_1,
+			.playerLoseText = 	sFrontierText_Sailor_PlayerLose_1,
+		},
+		{
+			.owNum = 			EVENT_OBJ_GFX_SAILOR,
+			.trainerClass = 	CLASS_SAILOR,
+			.trainerSprite = 	TRAINER_PIC_SAILOR,
+			.gender = 			BATTLE_FACILITY_MALE,
+			.preBattleText = 	sFrontierText_Sailor_PreBattle_2,
+			.playerWinText = 	sFrontierText_Sailor_PlayerWin_2,
+			.playerLoseText = 	sFrontierText_Sailor_PlayerLose_2,
+		},
+		{
+			.owNum = 			EVENT_OBJ_GFX_SAILOR,
+			.trainerClass = 	CLASS_SAILOR,
+			.trainerSprite = 	TRAINER_PIC_SAILOR,
+			.gender = 			BATTLE_FACILITY_MALE,
+			.preBattleText = 	sFrontierText_Sailor_PreBattle_3,
+			.playerWinText = 	sFrontierText_Sailor_PlayerWin_3,
+			.playerLoseText = 	sFrontierText_Sailor_PlayerLose_3,
 		},
 	};
 

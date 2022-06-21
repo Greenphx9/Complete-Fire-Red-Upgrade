@@ -53,6 +53,8 @@
 #include "../include/new/read_keys.h"
 #include "../include/new/wild_encounter.h"
 
+#include "../include/constants/field_effects.h"
+
 /*
 overworld.c
 	functions for anything regarding the overworld, such as trainer spotting, whiteout, step counters, etc.

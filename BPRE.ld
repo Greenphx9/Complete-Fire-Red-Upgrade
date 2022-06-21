@@ -843,7 +843,11 @@ MoveRelearnerCursorCallback = 0x80E553C | 1;
 
 
 /* Item Functions */
+sItemIconTilesBuffer = 0x2039884;
+sItemIconTilesBufferPadded = 0x2039888;
+sSpriteTemplate_ItemIcon = 0x83d427C;
 IsMail = 0x80980F8 | 1;
+CopyItemIconPicTo4x4Buffer = 0x809872C | 1;
 AddItemIconSprite = 0x8098758 | 1;
 AddCustomItemIconSprite = 0x809881C | 1;
 GetBagItemQuantity = 0x8099DA0 | 1;
@@ -853,6 +857,7 @@ CheckBagHasSpace = 0x809A000 | 1;
 AddBagItem = 0x809A084 | 1;
 RemoveBagItem = 0x809A1D8 | 1;
 ClearItemSlots = 0x809A274 | 1;
+TryAllocItemIconTilesBuffers = 0x80986EC | 1;
 BagGetItemIdByPocketPosition = 0x809A798 | 1;
 CountTotalItemQuantityInBag = 0x809A7DC | 1;
 //SanitizeItemId = 0x809A8A4 | 1;
@@ -1911,9 +1916,19 @@ ListMenuLoadStdPalAt = 0x8107d38 | 1;
 gTMCaseMainWindowPalette = 0x841f408;
 sPal3Override = 0x8463180;
 
-spriteIdData = 0x2039934;
-spriteIdPalette = 0x203993A ;
-
 SetMonIconTransparency = 0x808cfc4 | 1;
 gText_TMCase = 0x84166d3;
 SetPartyHPBarSprite = 0x8097414 | 1;
+
+/* OTHER */
+sListItemTextColor_RegularItem = 0x8452F60;
+sListItemTextColor_TmCase_BerryPouch = 0x8452F66;
+
+/* REGI PUZZLE STUFF */
+CutMoveOpenDottedHoleDoor = 0x80CCDD0 | 1;
+sScheduleOpenDottedHole = 0x2039874;
+CutMoveRuinValleyCheck = 0x80CCD84 | 1;
+FieldCallback_CutGrass = 0x8097984 | 1;
+FieldCallback_CutTree = 0x80979D0 | 1;
+gPlayerFacingPosition = 0x2039A04;
+MetatileAtCoordsIsGrassTile = 0x8097874 | 1;

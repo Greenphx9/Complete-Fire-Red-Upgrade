@@ -246,7 +246,41 @@ EventScript_Brock:
 	lock
 	checkflag 0x820
 	if 0x1 _goto EventScript_BrockBeat
-	trainerbattle1 0x1 0x19E 0x0 0x8190CD4 0x8190E4F 0x816A5C5
+	trainerbattle1 0x1 0x19E 0x0 0x8190CD4 gText_BrockDefeated EventScript_DefeatedBrock
+	release
+	end
+
+EventScript_DefeatedBrock:
+	setvar 0x8004 0x2
+	setvar 0x8005 0x1
+	special 0x173
+	setflag 0x4B0
+	setflag 0x820
+	setvar 0x406C 0x1
+	setflag 0x2E
+	clearflag 0x92
+	setvar 0x8008 0x1
+	call 0x81A6B18
+	goto EventScript_GiveTM39
+	end
+
+EventScript_GiveTM39:
+	msgbox gText_BrockGiveBoulderBadge MSG_KEEPOPEN
+	fanfare 260
+	setvar 0x8004 0x0
+	setvar 0x8006 0x0
+	callasm ShowBadgeAfterBeatingLeader
+	msgbox gText_GiveBoulderBadge MSG_KEEPOPEN 
+	waitfanfare
+	callasm HideBadgeAfterBeatingLeader
+	msgbox gText_GiveTM39 MSG_FACE
+	msgbox gText_BeforeYouGoTakeTM39 MSG_KEEPOPEN
+	checkitemspace 0x147 0x1
+	compare LASTRESULT 0x0
+	if 0x1 _goto 0x816A634
+	giveitem_msg 0x8190FDB ITEM_TM39
+	setflag 0x254
+	msgbox 0x8190FF8 MSG_KEEPOPEN
 	release
 	end
 
@@ -313,12 +347,12 @@ EventScript_CheckMoneyFeebas:
 	setvar 0x8003 0xFFFF
 	setvar 0x8004 0x0
 	setvar 0x8005 0x0
-	setvar 0x8006 25
-	setvar 0x8007 25
-	setvar 0x8008 25
-	setvar 0x8009 25
-	setvar 0x800A 25
-	setvar 0x800B 25
+	setvar 0x8006 31
+	setvar 0x8007 31
+	setvar 0x8008 31
+	setvar 0x8009 31
+	setvar 0x800A 31
+	setvar 0x800B 31
 	givepokemon SPECIES_FEEBAS 10 0x0 0x0 0x1
 	fanfare 0x101
 	msgbox gText_RecieveFeebas MSG_FACE

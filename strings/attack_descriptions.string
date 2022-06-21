@@ -7,6 +7,9 @@ No move information.
 #org @DESC_FLASH
 A blast of light\nthat deals damage.\nIt also illuminates\ncaves.
 
+#org @DESC_HIDDENPOWER
+An attack that\nvaries in type and\nintensity depending on\nthe user.
+
 #org @DESC_STRENGTH
 The foe is slugged\nat maximum power.\nThis move is super\neffective on Rock\ntypes.
 
