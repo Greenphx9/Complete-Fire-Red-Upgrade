@@ -884,6 +884,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	[SPECIES_MAGEARNA] =
 	{
 		.battleTowerStandardBan = TRUE,
+		.smogonOUBan = TRUE,
 		.smogonOUDoublesBan = TRUE,
 		.smogonMonotypeBan = TRUE,
 		.smogonUUBan = TRUE,
@@ -895,6 +896,10 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	[SPECIES_MAGEARNA_P] =
 	{
 		.battleTowerStandardBan = TRUE,
+		.smogonOUBan = TRUE,
+		.smogonOUDoublesBan = TRUE,
+		.smogonMonotypeBan = TRUE,
+		.smogonUUBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 		.randomizerBan = TRUE,
@@ -1111,6 +1116,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smogonMonotypeBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
+		.randomizerBan = TRUE,
 	},
 #endif
 #ifdef SPECIES_CALYREX_SHADOW_RIDER
@@ -1123,6 +1129,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smogonMonotypeBan = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
+		.randomizerBan = TRUE,
 	},
 #endif
 #ifdef SPECIES_SPECTRIER
@@ -5589,6 +5596,12 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 #endif
 #ifdef SPECIES_DARMANITAN_G_ZEN
 	[SPECIES_DARMANITAN_G_ZEN] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_ZARUDE_DADA
+	[SPECIES_ZARUDE_DADA] =
 	{
 		.randomizerBan = TRUE,
 	},
