@@ -12,7 +12,6 @@ For this tutorial, we will be using Chilling Neigh over Moxie as an example. Thi
 
 ```
 #org @NAME_<ABILITY_NAME>.
-
 Ability Name
 ```
 
@@ -20,7 +19,6 @@ To add Chilling Neigh, add this:
 
 ```
 #org @NAME_CHILLING_NEIGH.
-
 Chilling Neigh
 ```
 
