@@ -10,19 +10,25 @@ For this tutorial, we will be using Chilling Neigh over Moxie as an example. Thi
 
 1. Add the ability name to `strings/ability_name_table.string`, following the format below. Replace any spaces with underscores.
 
+```
 #org @NAME_<ABILITY_NAME>.
 
 Ability Name
+```
 
 To add Chilling Neigh, add this:
 
+```
 #org @NAME_CHILLING_NEIGH.
 
 Chilling Neigh
+```
 
 2. Open `src/tables/duplicate_abilities.h`. You'll see a bunch of `extern const u8`s at the top. Add a new one, using the name of the ability in step 1. To add Chilling Neigh, add this:
 
+```
 extern const u8 NAME_CHILLING_NEIGH[];
+```
 
 3. Add the Pokemon, it's current, duplicate ability, and the replacement ability name to the array, following the format below.
 
@@ -42,7 +48,7 @@ extern const u8 NAME_CHILLING_NEIGH[];
  
  To add Chilling Neigh, add this to the bottom of the array (you can add `SPECIES_CALYREX_ICE_RIDER` as well):
  
-    ``` 
+   
     {
     
         .species = SPECIES_GLASTRIER,
@@ -52,7 +58,7 @@ extern const u8 NAME_CHILLING_NEIGH[];
         .replaceAbilityString = NAME_CHILLING_NEIGH,
         
     },
-    ```
+   
  
  4. Go to `src/build_pokemon.c` and hit Control + S. This will save the file, making the compiler recompile it, meaning the Duplicate Ability file will actually change.
  5. It should be working!
