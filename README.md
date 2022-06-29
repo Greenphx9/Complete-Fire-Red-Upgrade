@@ -1,11 +1,13 @@
 # Complete Fire Red Upgrade
 
-## Duplicate Ability System
+# Duplicate Ability System
 
-# What is this branch for?
+## Huge Credits to SkiDY#5130 for the Duplicate Abillity Code. I made it into a branch, and used an array instead of a switch statement.
+
+## What is this branch for?
 This adds an array of duplicate abilities, and changes the name of the ability for specific Pokemon. This creates the illusion of multiple abilities, even though only 1 is actually defined. This saves ability space (you can only have 255, all 255 are being used currently).
 
-# How can I add a new one to the array?
+## How can I add a new one to the array?
 For this tutorial, we will be using Chilling Neigh over Moxie as an example. This tutorial assumes you've already given the Pokemon the duplicate ability / ability to be replaced.
 
 1. Add the ability name to `strings/ability_name_table.string`, following the format below. Replace any spaces with underscores.
