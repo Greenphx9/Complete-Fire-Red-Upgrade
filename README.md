@@ -1,5 +1,48 @@
 # Complete Fire Red Upgrade
 
+## Duplicate Ability System
+
+# What is this branch for?
+This adds an array of duplicate abilities, and changes the name of the ability for specific Pokemon. This creates the illusion of multiple abilities, even though only 1 is actually defined. This saves ability space (you can only have 255, all 255 are being used currently).
+
+# How can I add a new one to the array?
+For this tutorial, we will be using Chilling Neigh over Moxie as an example. This tutorial assumes you've already given the Pokemon the duplicate ability / ability to be replaced.
+
+1. Add the ability name to `strings/ability_name_table.string`, following the format below. Replace any spaces with underscores.
+`#org @NAME_<ABILITY_NAME>.
+Ability Name`
+
+To add Chilling Neigh, add this:
+
+`#org @NAME_CHILLING_NEIGH.
+Chilling Neigh`
+
+2. Open `src/tables/duplicate_abilities.h`. You'll see a bunch of `extern const u8`s at the top. Add a new one, using the name of the ability in step 1. To add Chilling Neigh, add this:
+
+`extern const u8 NAME_CHILLING_NEIGH[];`
+
+3. Add the Pokemon, it's current, duplicate ability, and the replacement ability name to the array, following the format below.
+
+`
+    {
+        .species = SPECIES_MEDITITE, //Mon
+        .currAbility = ABILITY_HUGEPOWER, //The original abilitiy
+        .replaceAbilityString = NAME_PURE_POWER, //The new ability name
+    },
+ `
+ To add Chilling Neigh, add this to the bottom of the array (you can add `SPECIES_CALYREX_ICE_RIDER` as well):
+ 
+ `    
+    {
+        .species = SPECIES_GLASTRIER,
+        .currAbility = ABILITY_MOXIE,
+        .replaceAbilityString = NAME_CHILLING_NEIGH,
+    },
+ `
+ 4. Go to `src/build_pokemon.c` and hit Control + S. This will save the file, making the compiler recompile it, meaning the Duplicate Ability file will actually change.
+ 5. It should be working!
+ 
+
 ## What is this?
 A complete upgrade for FireRed, including an upgraded Battle Engine. By using this or any assets from this repository, you consent to never making money off your game (unless you have my explicit permission). That includes both pay-walls **as well as optional donations** (which includes ko-fi, Patreon, etc.). If you have a problem with this, feel free to send me a Discord message (Skeli#3917) and I will give you my PayPal so you can pay me $100000 for the hundreds if not thousands of hours I poured into this for **free** (I don't actually want your money - I'm trying to make a point). Not to mention it's illegal to profit off of an IP you don't own.
 
