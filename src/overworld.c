@@ -1829,7 +1829,7 @@ s32 DoPoisonFieldEffect(void)
 		u8 ability = GetMonAbility(mon);
 		if (GetMonData(mon, MON_DATA_SPECIES, NULL) != SPECIES_NONE
 		&& GetMonPrimaryAilments(mon->condition) == AILMENT_PSN
-		&& ability != ABILITY_POISONHEAL && ability != ABILITY_MAGICGUARD)
+		&& ability != ABILITY_POISONHEAL && ability != ABILITY_MAGICGUARD && ability != ABILITY_TOXICBOOST)
 		{
 			hp = mon->hp;
 

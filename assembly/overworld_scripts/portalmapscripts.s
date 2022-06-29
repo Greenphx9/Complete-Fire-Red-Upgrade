@@ -31,7 +31,8 @@
 .equ FLAG_ARCEUS_BATTLED, 0x9AB
 .equ FLAG_HIDE_ARCEUS_PORTAL, 0x1014
 .equ FLAG_CRESSELIA_SPRITE, 0x1017
-.equ FLAG_GOT_CRESSELIA, 0x1018
+.equ FLAG_GOT_CRESSELIA, 0x101F
+.equ FLAG_SHOW_SC_BASEMENT, 0x1021
 
 .global EventScript_Route3MapScript
 EventScript_Route3MapScript:
@@ -344,3 +345,27 @@ EventScript_HideCresseliaPortal2:
 	hidesprite 14
 	setflag FLAG_CRESSELIA_SPRITE
 	end
+
+.global EventScript_SilphCoMapScript
+EventScript_SilphCoMapScript:
+	mapscript MAP_SCRIPT_ON_TRANSITION EventScript_SilphCoSetMapFlag
+	mapscript MAP_SCRIPT_ON_LOAD EventScript_ShowSilphCoBasement
+	.byte MAP_SCRIPT_TERMIN
+
+EventScript_SilphCoSetMapFlag:
+	setworldmapflag 0x8AC
+	end
+
+EventScript_ShowSilphCoBasement:
+	checkflag FLAG_SHOW_SC_BASEMENT
+	if SET _goto EventScript_ShowSilphCoBasementSetmaptile
+	end
+
+EventScript_ShowSilphCoBasementSetmaptile:
+	setmaptile 0x0 0x14 0x35A 0x0
+	setmaptile 0x0 0x13 0x352 0x0
+	setmaptile 0x1 0x14 0x35B 0x0
+	setmaptile 0x1 0x13 0x353 0x0
+	setmaptile 0x2 0x13 0x3FA 0x0
+	special 0x8E
+	end 

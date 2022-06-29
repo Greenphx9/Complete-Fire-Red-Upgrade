@@ -5763,6 +5763,172 @@ static const struct BattleTowerSpread sRaidPartnerSpread_May2_Rank6[] =
 	},
 };
 
+static const struct BattleTowerSpread sRaidPartnerSpread_Laphicet_Rank5[] =
+{
+	{
+		.species = SPECIES_FLOETTE_ETERNAL,
+		.nature = NATURE_TIMID,
+		.hpIv = 31,
+		.atkIv = 31,
+		.defIv = 31,
+		.spAtkIv = 31,
+		.spDefIv = 31,
+		.spdIv = 31,
+		.spAtkEv = 252,
+		.spdEv = 252,
+		.spDefEv = 4,
+		.ability = FRONTIER_ABILITY_1,
+		.item = ITEM_LIFE_ORB,
+		.moves =
+		{
+			MOVE_LIGHTOFRUIN,
+			MOVE_ENERGYBALL,
+			MOVE_PSYCHIC,
+			MOVE_FLASH,
+		},
+		.ball = BALL_TYPE_RANDOM,
+		.forSingles = TRUE,
+		.forDoubles = TRUE,
+		.modifyMovesDoubles = FALSE,
+	},
+	{
+		.species = SPECIES_TAPU_LELE,
+		.nature = NATURE_TIMID,
+		.hpIv = 31,
+		.atkIv = 31,
+		.defIv = 31,
+		.spAtkIv = 31,
+		.spDefIv = 31,
+		.spdIv = 31,
+		.hpEv = 4,
+		.spAtkEv = 252,
+		.spdEv = 252,
+		.ability = FRONTIER_ABILITY_1, //ABILITY_PSYCHICSURGE
+		.item = ITEM_CHOICE_SPECS,
+		.moves =
+		{
+			MOVE_MOONBLAST,
+			MOVE_PSYSHOCK,
+			MOVE_FOCUSBLAST,
+			MOVE_THUNDERBOLT,
+		},
+		.ball = BALL_TYPE_RANDOM,
+		.forSingles = TRUE,
+		.forDoubles = TRUE,
+		.modifyMovesDoubles = FALSE,
+		.shiny = TRUE,
+	},
+	{
+		.species = SPECIES_ZACIAN_CROWNED,
+		.nature = NATURE_JOLLY,
+		.hpIv = 31,
+		.atkIv = 31,
+		.defIv = 31,
+		.spAtkIv = 31,
+		.spDefIv = 31,
+		.spdIv = 31,
+		.atkEv = 252,
+		.spDefEv = 4,
+		.spdEv = 252,
+		.ability = FRONTIER_ABILITY_1, //ABILITY_INTREPIDSWORD
+		.item = ITEM_RUSTED_SWORD,
+		.moves =
+		{
+			MOVE_BEHEMOTHBLADE,
+			MOVE_WILDCHARGE,
+			MOVE_PLAYROUGH,
+			MOVE_CLOSECOMBAT,
+		},
+		.ball = BALL_TYPE_RANDOM,
+		.forSingles = TRUE,
+		.forDoubles = TRUE,
+		.modifyMovesDoubles = FALSE,
+	},
+};
+
+static const struct BattleTowerSpread sRaidPartnerSpread_Laphicet_Rank6[] =
+{
+	{
+		.species = SPECIES_FLOETTE_ETERNAL,
+		.nature = NATURE_TIMID,
+		.hpIv = 31,
+		.atkIv = 31,
+		.defIv = 31,
+		.spAtkIv = 31,
+		.spDefIv = 31,
+		.spdIv = 31,
+		.spAtkEv = 252,
+		.spdEv = 252,
+		.spDefEv = 4,
+		.ability = FRONTIER_ABILITY_1,
+		.item = ITEM_LIFE_ORB,
+		.moves =
+		{
+			MOVE_LIGHTOFRUIN,
+			MOVE_ENERGYBALL,
+			MOVE_PSYCHIC,
+			MOVE_FLASH,
+		},
+		.ball = BALL_TYPE_RANDOM,
+		.forSingles = TRUE,
+		.forDoubles = TRUE,
+		.modifyMovesDoubles = FALSE,
+	},
+	{
+		.species = SPECIES_TAPU_LELE,
+		.nature = NATURE_TIMID,
+		.hpIv = 31,
+		.atkIv = 31,
+		.defIv = 31,
+		.spAtkIv = 31,
+		.spDefIv = 31,
+		.spdIv = 31,
+		.hpEv = 4,
+		.spAtkEv = 252,
+		.spdEv = 252,
+		.ability = FRONTIER_ABILITY_1, //ABILITY_PSYCHICSURGE
+		.item = ITEM_CHOICE_SPECS,
+		.moves =
+		{
+			MOVE_MOONBLAST,
+			MOVE_PSYSHOCK,
+			MOVE_FOCUSBLAST,
+			MOVE_THUNDERBOLT,
+		},
+		.ball = BALL_TYPE_RANDOM,
+		.forSingles = TRUE,
+		.forDoubles = TRUE,
+		.modifyMovesDoubles = FALSE,
+		.shiny = TRUE,
+	},
+	{
+		.species = SPECIES_ZACIAN_CROWNED,
+		.nature = NATURE_JOLLY,
+		.hpIv = 31,
+		.atkIv = 31,
+		.defIv = 31,
+		.spAtkIv = 31,
+		.spDefIv = 31,
+		.spdIv = 31,
+		.atkEv = 252,
+		.spDefEv = 4,
+		.spdEv = 252,
+		.ability = FRONTIER_ABILITY_1, //ABILITY_INTREPIDSWORD
+		.item = ITEM_RUSTED_SWORD,
+		.moves =
+		{
+			MOVE_BEHEMOTHBLADE,
+			MOVE_WILDCHARGE,
+			MOVE_PLAYROUGH,
+			MOVE_CLOSECOMBAT,
+		},
+		.ball = BALL_TYPE_RANDOM,
+		.forSingles = TRUE,
+		.forDoubles = TRUE,
+		.modifyMovesDoubles = FALSE,
+	},
+};
+
 extern const u8 sTrainerName_Greg[];
 extern const u8 sTrainerName_Tasha[];
 extern const u8 sTrainerName_Catherine[];
@@ -5778,6 +5944,7 @@ extern const u8 sTrainerName_Cynthia[];
 extern const u8 sTrainerName_Mei[];
 extern const u8 sTrainerName_Fernando[];
 extern const u8 sTrainerName_May[];
+extern const u8 sTrainerName_Laphicet[];
 
 const struct MultiRaidTrainer gRaidPartners[] =
 {
@@ -6136,6 +6303,26 @@ const struct MultiRaidTrainer gRaidPartners[] =
 			[ONE_STAR_RAID ... THREE_STAR_RAID] = NELEMS(sRaidPartnerSpread_May2_Rank2),
 			[FOUR_STAR_RAID ... FIVE_STAR_RAID] = NELEMS(sRaidPartnerSpread_May2_Rank5),
 			[SIX_STAR_RAID] = NELEMS(sRaidPartnerSpread_May2_Rank6),
+		},
+	},
+	{
+		.owNum = 263,
+		.trainerClass = CLASS_DUNCE,
+		.backSpriteId = TRAINER_BACK_PIC_MAY,
+		.gender = FEMALE,
+		.otId = 0x87116209,
+		.name = sTrainerName_Laphicet,
+		.spreads =
+		{
+			//[ONE_STAR_RAID ... THREE_STAR_RAID] = sRaidPartnerSpread_May2_Rank2,
+			//[FOUR_STAR_RAID ... FIVE_STAR_RAID] = sRaidPartnerSpread_May2_Rank5,
+			[SIX_STAR_RAID] = sRaidPartnerSpread_Laphicet_Rank6,
+		},
+		.spreadSizes =
+		{
+			//[ONE_STAR_RAID ... THREE_STAR_RAID] = NELEMS(sRaidPartnerSpread_May2_Rank2),
+			//[FOUR_STAR_RAID ... FIVE_STAR_RAID] = NELEMS(sRaidPartnerSpread_May2_Rank5),
+			[SIX_STAR_RAID] = NELEMS(sRaidPartnerSpread_Laphicet_Rank6),
 		},
 	},
 };

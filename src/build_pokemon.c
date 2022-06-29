@@ -39,6 +39,7 @@
 #include "Tables/raid_partners.h"
 #include "Tables/trainers_with_evs_table.h"
 #include "Tables/hard_mode_trainers.h"
+#include "Tables/replace_abilities.h"
 
 #include "../include/pokemon_summary_screen.h"
 #include "../include/menu.h"
@@ -243,7 +244,7 @@ bool8 ShouldTrainerMugshot()
 		return TRUE;
 	}
 
-	if (trainerClass == CLASS_BOSS || trainerClass == CLASS_CHAMPION || trainerClass == CLASS_RUIN_MANIAC_RS || trainerClass == CLASS_RIVAL_2 || trainerClass == CLASS_AQUA_LEADER || trainerClass == CLASS_TEAM_AQUA || trainerClass == CLASS_AROMA_LADY_RS || trainerClass == CLASS_PKMN_TRAINER_2 || trainerClass == CLASS_LEADER || trainerClass == CLASS_ELITE_4
+	if (trainerClass == CLASS_BOSS || trainerClass == CLASS_CHAMPION || trainerClass == CLASS_DUNCE || trainerClass == CLASS_RIVAL_2 || trainerClass == CLASS_AQUA_LEADER || trainerClass == CLASS_TEAM_AQUA || trainerClass == CLASS_AROMA_LADY_RS || trainerClass == CLASS_PKMN_TRAINER_2 || trainerClass == CLASS_LEADER || trainerClass == CLASS_ELITE_4
 		|| trainerClass == CLASS_MAGMA_ADMIN || trainerClass == CLASS_MAGMA_LEADER || trainerClass == CLASS_BUG_MANIAC)
 	{
 		return FALSE;
@@ -1826,7 +1827,7 @@ static void BuildFrontierMultiParty(u8 multiId)
 
 		CreateFrontierMon(&gPlayerParty[i], level, spread, BATTLE_FACILITY_MULTI_TRAINER_TID, 2, multiPartner->gender, FALSE);
 	}
-
+ 
 	TryShuffleMovesForCamomons(gPlayerParty, tier, BATTLE_FACILITY_MULTI_TRAINER_TID);
 }
 
@@ -4359,106 +4360,16 @@ static const u8 sLevelNickTextColors[][3] =
 	{0, 11, 10},
 };
 
-extern const u8 gReplaceAbilityNames[][ABILITY_NAME_LENGTH + 1];
-
 void DoDuplicateAbiltiyStuff(void) {
 	struct Pokemon* mon = &(sMonSummaryScreen->currentMon);
 	u8 ability = GetMonAbility(mon);
 	u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
-	switch (ability) {
-		case ABILITY_MOXIE:
-			switch (species) {
-				case SPECIES_GLASTRIER:
-				case SPECIES_CALYREX_ICE_RIDER:
-					StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, gReplaceAbilityNames[0]);
-					break;
-				
-			}
-			break;
-		case ABILITY_ROUGHSKIN:
-			switch (species) {
-				case SPECIES_FERROSEED:
-				case SPECIES_FERROTHORN:
-				case SPECIES_TOGEDEMARU:
-					StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, gReplaceAbilityNames[1]);
-					break;
-					
-			}
-			break;
-		case ABILITY_GOOEY:
-			switch (species) {
-			case SPECIES_DIGLETT_A:
-			case SPECIES_DUGTRIO_A:
-				StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, gReplaceAbilityNames[2]);
-				break;
-
-			}
-			break;
-
-		case ABILITY_SHELLARMOR:
-			switch (species) {
-			case SPECIES_CUBONE:
-			case SPECIES_MAROWAK:
-			case SPECIES_KABUTO:
-			case SPECIES_KABUTOPS:
-			case SPECIES_ANORITH:
-			case SPECIES_ARMALDO:
-			case SPECIES_SKORUPI:
-			case SPECIES_DRAPION:
-			case SPECIES_TYPE_NULL:
-			case SPECIES_PERRSERKER:
-			case SPECIES_FALINKS:
-				StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, gReplaceAbilityNames[3]);
-				break;
-
-			}
-			break;
-		case ABILITY_MULTISCALE:
-			switch (species) {
-			case SPECIES_LUNALA:
-				StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, gReplaceAbilityNames[4]);
-				break;
-				
-			}
-			break;
-		case ABILITY_PROTEAN:
-			switch (species) {
-			case SPECIES_SCORBUNNY:
-			case SPECIES_RABOOT:
-			case SPECIES_CINDERACE:
-				StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, gReplaceAbilityNames[5]);
-				break;
-
-			}
-			break;
-		case ABILITY_RECEIVER:
-			switch (species)
-			{
-			case SPECIES_GRIMER_A:
-			case SPECIES_MUK_A:
-				StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, gReplaceAbilityNames[6]);
-				break;
-			}
-			break;
-		case ABILITY_QUEENLYMAJESTY:
-			switch (species)
-			{
-			case SPECIES_BRUXISH:
-			case SPECIES_LUMINEON:
-				StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, gReplaceAbilityNames[7]);
-				break;
-			}
-			break;
-		case ABILITY_GORILLATACTICS:
-			switch (species)
-			{
-			case SPECIES_KINGLER:
-			case SPECIES_KINGLER_GIGA:
-			case SPECIES_CRABOMINABLE:
-				StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, gReplaceAbilityNames[8]);
-				break;
-			}
-			break;
+	for(u8 i = 0; i < ARRAY_COUNT(sReplaceAbilities); i++)
+	{
+		if(ability == sReplaceAbilities[i].currAbility && species == sReplaceAbilities[i].species)
+		{
+			StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, sReplaceAbilities[i].replaceAbilityString);
+		}
 	}
 }
 

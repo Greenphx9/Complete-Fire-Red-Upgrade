@@ -1,2 +1,11 @@
 #org @gText_RockDoorOpened
 It sounded like a door\nopened!
+
+#org @gText_StairOpened
+It sounded like a staircase\nappeared!
+
+#org @gText_RegirockBraille
+[BRAILLE]THOSE THAT\nUSE CUT WILL\nFIND THE ROCK\nTITAN
+
+#org @gText_RegiceBraille
+[BRAILLE]PRESS A TWO\nTILES DOWN TO\nREACH THE ICE\nTITAN

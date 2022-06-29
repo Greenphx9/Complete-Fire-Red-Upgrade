@@ -14652,18 +14652,18 @@ const struct BattleMove gBattleMoves[] =
 		},
 		[MOVE_DARKINTENTS] =
 		{
-					.effect = EFFECT_HIT,
-					.power = 80,
-					.type = TYPE_DARK,
-					.accuracy = 100,
-					.pp = 10,
-					.secondaryEffectChance = 0,
-					.target = MOVE_TARGET_SELECTED,
-					.priority = 0,
-					.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
-					.z_move_power = 165,
-					.split = SPLIT_PHYSICAL,
-					.z_move_effect = 0
+			.effect = EFFECT_HIT,
+			.power = 80,
+			.type = TYPE_DARK,
+			.accuracy = 100,
+			.pp = 10,
+			.secondaryEffectChance = 0,
+			.target = MOVE_TARGET_SELECTED,
+			.priority = 0,
+			.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+			.z_move_power = 165,
+			.split = SPLIT_PHYSICAL,
+			.z_move_effect = 0
 		},
 		[MOVE_FIERYDOOM] =
 		{

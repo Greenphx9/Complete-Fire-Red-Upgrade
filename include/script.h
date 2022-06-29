@@ -51,6 +51,7 @@ void __attribute__((long_call)) ScriptContext2_Enable(void);
 void __attribute__((long_call)) ScriptContext2_Disable(void);
 void __attribute__((long_call)) ScriptContext1_Stop(void);
 void __attribute__((long_call)) SetupNativeScript(struct ScriptContext *ctx, bool8 (*ptr)(void));
+bool8 __attribute__((long_call)) ScrCmd_lock(struct ScriptContext *ctx);
 
 /*
 void InitScriptContext(struct ScriptContext *ctx, void *cmdTable, void *cmdTableEnd);

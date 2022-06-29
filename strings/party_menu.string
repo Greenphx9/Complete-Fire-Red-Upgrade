@@ -78,4 +78,22 @@ It won't have any effect.\n(You're at the level cap).[PAUSE_UNTIL_PRESS]
 
 
 #org @sPowerItemLevel1
-[SHRINK]  Lv1
+[SHRINK] Lv1
+
+#org @sPowerItemLevel2
+[SHRINK] Lv2
+
+#org @sPowerItemLevel3
+[SHRINK] Lv3
+
+#org @sPowerItemLevel4
+[SHRINK] Lv4
+
+#org @sPowerItemLevel5
+[SHRINK] Lv5
+
+#org @sPowerItemLevel6
+[SHRINK] Lv6
+
+#org @sShrinkText
+[SHRINK]

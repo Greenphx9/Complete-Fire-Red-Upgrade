@@ -1,17 +1,20 @@
 #org @gText_RegiceForce
-There's an invisible force stopping\nyou from reaching the ladder.
+There's an invisible force stopping\nyou from reaching the Ice Titan.
 
 #org @gText_RegicePuzzle
 There's faint text on the sign.\nIt reads:\pFro[.] he ladd r:\nFa e d wn\lWa k down 3 ti m s\lPre s [A_BUTTON]
+
+#org @gText_BrailleRegicePuzzle
+ TEST
 
 #org @gText_RegiceMoved
 [.][.]\nSomething moved.
 
 #org @gText_Regice
-[BLACK]Regi-ice-re-regi-ice!
+[BLACK]Jakiih!
 
 #org @gText_Regirock
-[BLACK]Re-regi-rock!
+[BLACK]Zaza zari za[.]
 
 #org @gText_Nihilego
 [BLACK]Venomenon!
@@ -35,7 +38,7 @@ There's faint text on the sign.\nIt reads:\pFro[.] he ladd r:\nFa e d wn\lWa k d
 [BLACK]Guzzzzz!
 
 #org @gText_Registeel
-[BLACK]Regi-re-regi-steel[.]
+[BLACK]Ji-ji-ze-ji-zoh.
 
 #org @gText_Mew
 [BLACK]Mew!
@@ -96,3 +99,6 @@ Dodogyuuun!
 
 #org @gText_ForbidYOu
 An extremely powerful Pok\emon lives\nin this cave.\pI forbid you from entering.
+
+#org @gText_Regieleki
+[BLACK]Zizi zizizi.

@@ -11,6 +11,13 @@
  *		  setting of Pokemon data.
  */
 
+struct ReplaceAbility
+{
+	u16 species;
+	u8 currAbility;
+	const u8* replaceAbilityString;
+};
+
 void __attribute__ ((long_call)) CB2_ReturnToTradeMenuFromSummary(void);
 u8 __attribute__((long_call)) StatusToAilment(u32 status);
 

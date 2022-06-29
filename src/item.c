@@ -2120,14 +2120,49 @@ bool8 MonCanLearnHM(void) {
 extern const u8 sListItemTextColor_TmCase_BerryPouch[];
 extern const u8 sListItemTextColor_RegularItem[];
 extern const u8 sPowerItemLevel1[];
+extern const u8 sPowerItemLevel2[];
+extern const u8 sPowerItemLevel3[];
+extern const u8 sPowerItemLevel4[];
+extern const u8 sPowerItemLevel5[];
+extern const u8 sPowerItemLevel6[];
 
 void BagListMenuGetItemNameColored(u8 *dest, u16 itemId)
 {
+	
 	if (itemId == ITEM_POWER_BRACER || itemId == ITEM_POWER_BELT || itemId == ITEM_POWER_LENS || itemId == ITEM_POWER_BAND || itemId == ITEM_POWER_ANKLET || itemId == ITEM_POWER_WEIGHT) 
 	{
-		StringCopy(dest, ItemId_GetName(itemId));
-		StringAppend(dest, sPowerItemLevel1);
-		//StringAppend(dest, ItemId_GetName(itemId));
+		if(VarGet(VAR_POWER_ITEM_LEVEL) == 0) 
+		{
+			VarSet(VAR_POWER_ITEM_LEVEL, 1);
+		}
+		//unefficent, but i don't think buffers work
+		switch(VarGet(VAR_POWER_ITEM_LEVEL)) 
+		{
+			case 1:
+				StringCopy(dest, ItemId_GetName(itemId));
+				StringAppend(dest, sPowerItemLevel1);
+				break;
+			case 2:
+				StringCopy(dest, ItemId_GetName(itemId));
+				StringAppend(dest, sPowerItemLevel2);
+				break;
+			case 3:
+				StringCopy(dest, ItemId_GetName(itemId));
+				StringAppend(dest, sPowerItemLevel3);
+				break;
+			case 4:
+				StringCopy(dest, ItemId_GetName(itemId));
+				StringAppend(dest, sPowerItemLevel4);
+				break;
+			case 5:
+				StringCopy(dest, ItemId_GetName(itemId));
+				StringAppend(dest, sPowerItemLevel5);
+				break;
+			case 6:
+				StringCopy(dest, ItemId_GetName(itemId));
+				StringAppend(dest, sPowerItemLevel6);
+				break;
+		}
 		return;
 	}
     else if (itemId == ITEM_TM_CASE || itemId == ITEM_BERRY_POUCH)

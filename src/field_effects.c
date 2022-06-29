@@ -738,3 +738,55 @@ void FieldMoveCallback_CutGrass(void)
 	else
         FieldEffectStart(FLDEFF_CUT_GRASS);
 }
+
+bool8 IsInPowerPlant() 
+{
+	u8 currRegionMapSecId = GetCurrentRegionMapSectionId();
+	if(currRegionMapSecId == MAPSEC_POWER_PLANT)
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+	return FALSE;
+}
+
+extern const u8 EventScript_OpenRegielekiDoor[];
+
+void OpenRegielekiDoor(void) 
+{
+	PlaySE(200);
+	ScriptContext1_SetupScript(EventScript_OpenRegielekiDoor);
+	ScriptContext2_Disable();
+}
+
+void FieldCallback_OpenRegielekiDoor(void)
+{
+	u8 taskId = CreateFieldEffectShowMon();
+    gFieldEffectArguments[0] = GetCursorSelectionMonId();
+	gTasks[taskId].data[8] = ((uintptr_t)OpenRegielekiDoor) >> 16;
+    gTasks[taskId].data[9] = ((uintptr_t)OpenRegielekiDoor);
+}
+
+bool8 SetUpFieldMove_Flash(void)
+{
+    if (IsInPowerPlant() == TRUE) 
+	{
+		gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
+		gPostMenuFieldCallback = FieldCallback_OpenRegielekiDoor;
+		return TRUE;
+	}
+
+    if (gMapHeader.cave != TRUE)
+        return FALSE;
+
+    if (FlagGet(FLAG_SYS_FLASH_ACTIVE))
+        return FALSE;
+
+    gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
+    gPostMenuFieldCallback = FieldCallback_Flash;
+    return TRUE;
+}
+

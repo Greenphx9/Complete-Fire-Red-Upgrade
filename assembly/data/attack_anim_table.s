@@ -25646,7 +25646,7 @@ ANIM_MAX_QUAKE:
 	waitanimation
 	launchtemplate Template_DigMound TEMPLATE_ATTACKER | 0x1, 0x3 0x0 0x0 0xb4
 	launchtemplate Template_DigMound TEMPLATE_ATTACKER | 0x1, 0x3 0x0 0x1 0xb4
-	@@pokespritetoBG2 bank_attacker
+	pokespritetoBG2 bank_attacker
 	pause 0x1
 	launchtask 0x80b8e95 0x2 0x1 0x0
 	pause 0x6
@@ -25673,7 +25673,11 @@ ANIM_MAX_QUAKE:
 	waitanimation
 	pokespritefromBG bank_target
 	resetblends
-	endanimation
+    pause 0x1
+    pokespritetoBG2 bank_attacker
+    pause 0x1
+    pokespritefromBG2 bank_attacker
+    endanimation
 
 DIRT_GEYSER:
 	launchtemplate TECTONIC_EXPLODE TEMPLATE_TARGET | 2, 0x4 0x0003 0x0005 0x1 0x0

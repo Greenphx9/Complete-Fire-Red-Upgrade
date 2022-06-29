@@ -50,6 +50,7 @@
 #include "../include/new/overworld.h"
 #include "../include/new/wild_encounter.h"
 #include "../include/base_stats.h"
+#include "../include/new/item.h"
 /*
 dexnav.c
 	Functions for the simplified DexNav system
@@ -65,7 +66,7 @@ dexnav.c
 #define IS_NEWER_UNOWN_LETTER(species) (species >= SPECIES_UNOWN_B && species <= SPECIES_UNOWN_QUESTION)
 
 //This file's functions:
-static void DexNavGetMon(u16 species, u8 potential, u8 level, u8 ability, u16* moves, u8 searchLevel, u8 chain);
+static void DexNavGetMon(u16 species, u8 potential, u8 level, u8 ability, u16* moves, u8 searchLevel, u8 chain, u16 item);
 static u8 FindHeaderIndexWithLetter(u16 species, u8 letter);
 static u8 PickTileScreen(u8 targetBehaviour, u8 areaX, u8 areaY, s16* xBuff, s16* yBuff, u8 smallScan);
 static u8 DexNavPickTile(u8 environment, u8 xSize, u8 ySize, bool8 smallScan);
@@ -98,7 +99,7 @@ void InitDexNavHUD(u16 species, u8 environment);
 static void ExecDexNavHUD(void);
 
 //GUI Functions
-static void CleanWindow(u8 windowId);
+void CleanWindow(u8 windowId);
 static void CommitWindow(u8 windowId);
 static void PrintDexNavMessage(u8 messageId);
 static void PrintDexNavError(void);
@@ -133,7 +134,7 @@ static void CB2_DexNav(void);
 // ===== Dex Nav Pokemon Generator ===== //
 // ===================================== //
 
-void DexNavGetMon(u16 species, u8 potential, u8 level, u8 ability, u16* moves, u8 searchLevel, u8 chain)
+void DexNavGetMon(u16 species, u8 potential, u8 level, u8 ability, u16* moves, u8 searchLevel, u8 chain, u16 item)
 {
 	struct Pokemon* mon = &gEnemyParty[0];
 
@@ -203,6 +204,9 @@ void DexNavGetMon(u16 species, u8 potential, u8 level, u8 ability, u16* moves, u
 		mon->hiddenAbility = TRUE;
 	else if (gBaseStats2[species].ability2 != ABILITY_NONE) //Helps fix a bug where Unown would crash the game in the below function
 		GiveMonNatureAndAbility(mon, GetNature(mon), (gBaseStats2[species].ability2 == ability) ? 1 : 0, IsMonShiny(mon), TRUE, TRUE); //Make sure details match what was on the HUD
+
+	if (item)
+        SetMonData(mon, MON_DATA_HELD_ITEM, &item);
 
 	//Set moves
 	for (i = 0; i < MAX_MON_MOVES; ++i)
@@ -793,7 +797,7 @@ static void DexNavIconsVisionUpdate(u8 proximity, u8 searchLevel)
 			// show ability, move, hide others
 			if (sDexNavHudPtr->spriteIdAbility < MAX_SPRITES)
 				gSprites[sDexNavHudPtr->spriteIdAbility].invisible = FALSE;
-			if (sDexNavHudPtr->heldItem)
+			if (sDexNavHudPtr->heldItem != ITEM_NONE)
 			{
 				// toggle item view
 				if (sDexNavHudPtr->spriteIdItem < MAX_SPRITES)
@@ -903,8 +907,7 @@ static void Task_ManageDexNavHUD(u8 taskId)
 	if (sDexNavHudPtr->proximity < 1)
 	{
 		DexNavGetMon(sDexNavHudPtr->species, sDexNavHudPtr->potential, sDexNavHudPtr->pokemonLevel,
-			sDexNavHudPtr->ability, sDexNavHudPtr->moveId, sDexNavHudPtr->searchLevel, gCurrentDexNavChain);
-		DestroyTask(taskId);
+			sDexNavHudPtr->ability, sDexNavHudPtr->moveId, sDexNavHudPtr->searchLevel, gCurrentDexNavChain, sDexNavHudPtr->heldItem);
 
 		// increment the search level
 		u16 dexNum = SpeciesToNationalPokedexNum(sDexNavHudPtr->species);
@@ -912,11 +915,11 @@ static void Task_ManageDexNavHUD(u8 taskId)
 			sSearchLevels[dexNum] += 1;
 
 		// Freeing only the state, objects and hblank cleared on battle start.
-		Free(sDexNavHudPtr);
-
 		gDexNavStartedBattle = TRUE;
 		DismissMapNamePopup();
 		ScriptContext1_SetupScript(SystemScript_StartDexNavBattle);
+		Free(sDexNavHudPtr);
+		DestroyTask(taskId);
 		/*
 				// exclamation point animation over the player
 				PlaySE(SE_EXCLAIM);
@@ -1570,7 +1573,7 @@ bool8 IsDexNavHudActive(void)
 //General Util
 
 //Cleans the windows
-static void CleanWindow(u8 windowId)
+void CleanWindow(u8 windowId)
 {
 	FillWindowPixelBuffer(windowId, PIXEL_FILL(0));
 }
@@ -2075,25 +2078,26 @@ static void PrintGUISearchLevel(u16 species)
 	CommitWindow(WIN_SEARCH_LEVEL);
 }
 
-static void PrintGUILevelBonus(u16 species)
+extern const u8 sShrinkText[];
+
+static void PrintGUILevelBonus(u16 species) 
 {
 	const u8* text;
 	u16 dexNum = SpeciesToNationalPokedexNum(species);
 	CleanWindow(WIN_LEVEL_BONUS);
 
-	if (species == SPECIES_NONE)
-		text = gText_DexNav_NoInfo;
-	else
+	if(GetSetPokedexFlag(dexNum, FLAG_GET_CAUGHT) || species == SPECIES_NONE)
 	{
-		u8 searchLevelBonus = 0;
-		if ((sSearchLevels[dexNum] >> 2) > 20)
-			searchLevelBonus = 20;
+		if (species != SPECIES_NONE && gBaseStats2[species].item1 != ITEM_NONE)
+		{
+			text = ItemId_GetName(gBaseStats2[species].item1);
+		}
 		else
-			searchLevelBonus = (sSearchLevels[dexNum] >> 2);
-
-		ConvertIntToDecimalStringN(gStringVar4, searchLevelBonus, 0, 4);
-		text = gStringVar4;
+			text = gText_DexNav_NoInfo;
 	}
+	else
+		text = gText_DexNav_CaptureToSee;
+	
 
 	WindowPrint(WIN_LEVEL_BONUS, 0, 0, 4, &sDexNav_BlackText, 0, text);
 	CommitWindow(WIN_LEVEL_BONUS);
@@ -2101,7 +2105,7 @@ static void PrintGUILevelBonus(u16 species)
 
 static void PrintGUIHiddenAbility(u16 species)
 {
-	const u8* text;
+	const u8* text; 
 	u16 dexNum = SpeciesToNationalPokedexNum(species);
 
 	CleanWindow(WIN_HIDDEN_ABILITY);

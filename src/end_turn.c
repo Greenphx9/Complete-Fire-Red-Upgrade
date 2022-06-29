@@ -593,7 +593,8 @@ u8 TurnBasedEffects(void)
 
 			case ET_Poison:
 				if (BATTLER_ALIVE(gActiveBattler)
-				&& ABILITY(gActiveBattler) != ABILITY_MAGICGUARD)
+				&& ABILITY(gActiveBattler) != ABILITY_MAGICGUARD
+				&& ABILITY(gActiveBattler) != ABILITY_TOXICBOOST)
 				{
 					if (gBattleMons[gActiveBattler].status1 & (STATUS_POISON | STATUS_TOXIC_POISON))
 					{
@@ -1663,7 +1664,8 @@ u32 GetPoisonDamage(u8 bank)
 	u8 ability = ABILITY(bank);
 
 	if (ability != ABILITY_MAGICGUARD
-	&& ability != ABILITY_POISONHEAL)
+	&& ability != ABILITY_POISONHEAL
+	&& ability != ABILITY_TOXICBOOST)
 	{
 		if (gBattleMons[bank].status1 & STATUS_POISON)
 		{

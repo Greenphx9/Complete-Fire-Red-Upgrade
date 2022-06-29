@@ -370,10 +370,10 @@ npc 3 37 12 EventScript_BeginARaidBattle
 npc 1 0 16 EventScript_BeginARaidBattle
 
 ## Legends
-tile 43 1 0 EventScript_RegicePuzzleForce
-tile 43 1 1 EventScript_RegicePuzzleForce
-##sign 43 1 0 EventScript_RegicePuzzleBraille
-sign 43 1 1 EventScript_RegicePuzzle
+tile 43 2 0 EventScript_MovePlayerRegiceUp
+tile 43 2 1 EventScript_MovePlayerRegiceRight
+tile 43 2 2 EventScript_MovePlayerRegiceLeft
+tile 43 2 3 EventScript_MovePlayerRegiceDown
 npc 43 2 0 EventScript_Regice
 npc 1 82 26 EventScript_Regirock
 npc 43 3 0 EventScript_Nihilego
@@ -383,7 +383,7 @@ npc 43 6 0 EventScript_Xurkitree
 npc 43 7 0 EventScript_Celesteela
 npc 43 8 0 EventScript_Kartana
 npc 43 9 0 EventScript_Guzzlord
-npc 1 95 8 EventScript_Registeel
+npc 1 95 8 EventScript_Regieleki
 npc 43 10 0 EventScript_Mew
 npc 43 11 9 EventScript_Groudon
 npc 43 12 0 EventScript_Kyogre
@@ -410,6 +410,13 @@ tile 43 18 0 EventScript_ArceusScript
 npc 43 18 0 EventScript_ArceusPortal2
 npc 43 20 0 EventScript_Darkrai
 npc 43 22 0 EventScript_Cresselia
+tile 1 81 0 EventScript_RegirockSign
+sign 1 81 1 EventScript_RegirockSign
+sign 1 95 2 EventScript_RegielekiSign
+sign 1 95 3 EventScript_RegielekiSign
+sign 1 95 4 EventScript_RegielekiSign
+sign 1 47 0 EventScript_RegisteelSign
+map 1 47 EventScript_SilphCoMapScript
 
 npc 3 30 16 EventScript_ForbidYouEntering
 npc 3 37 13 EventScript_ForbidYouEntering

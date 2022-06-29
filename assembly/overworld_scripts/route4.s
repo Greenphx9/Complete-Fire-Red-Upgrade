@@ -290,7 +290,6 @@ EventScript_ElementalTeach:
 .global EventScript_DeoxysFormChange
 EventScript_DeoxysFormChange:
 	lock
-	givepokemon SPECIES_DEOXYS 100 0x0 0x0 0x0
 	callasm IsDeoxys
 	compare LASTRESULT 0x1
 	if equal _goto EventScript_SelectDeoxys

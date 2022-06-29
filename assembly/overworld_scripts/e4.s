@@ -41,7 +41,10 @@ EventScript_DescribeReins:
 .global EventScript_MegaSeller
 EventScript_MegaSeller:
 	lock
-	clearflag 0x997
+	givepokemon SPECIES_FERROSEED 100 0x0 0x0
+	givepokemon SPECIES_FERROTHORN 100 0x0 0x0
+	givepokemon SPECIES_TOGEDEMARU 100 0x0 0x0
+	givepokemon SPECIES_SHARPEDO 100 0x0 0x0
 	msgbox gText_SellMegaStones MSG_FACE
 	pokemart EventScript_MegaMart
 	release
@@ -58,6 +61,10 @@ EventScript_Chansey:
 	release
 	end
 
+.global EventScript_EVIVMenu
+EventScript_EVIVMenu:
+	callasm Call_EvIv
+	end
 
 
 

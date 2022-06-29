@@ -38,7 +38,7 @@
 #include "../include/new/item.h"
 #include "../include/new_menu_helpers.h"
 #include "../include/new/multi.h"
-#include "../include/new/overworld.h"
+#include "../include/new/overworld.h" 
 #include "../include/new/pokemon_storage_system.h"
 #include "../include/new/ram_locs_battle.h"
 #include "../include/new/read_keys.h"
@@ -49,6 +49,7 @@
 #include "../include/new/wild_encounter.h"
 #include "../include/base_stats.h"
 #include "../include/decompress.h"
+#include "../include/text_window.h"
 /*
 scripting.c
 	handles all scripting specials or other functions associated with scripts
@@ -138,6 +139,9 @@ extern const species_t gSkyBattleBannedSpeciesList[];
 #ifdef AUTO_NAMING_SCREEN_SWAP
 static u8 GetTextCaretPosition(void);
 #endif
+
+void CloseBrailleWindow();
+u8 GetFontAttribute(u8 fontId, u8 attributeId);
 
 //Pokemon Specials//
 ///////////////////////////////////////////////////////////////////////////////////
@@ -4187,3 +4191,382 @@ void SetScrollingListSize(unusedArg u8 taskId)
 	gTasks[taskId].data[4] = 0xC;	//width?
 #endif
 }
+
+extern u8 sBrailleWindowId;
+
+bool8 ScrCmd_braillemessage(struct ScriptContext *ctx)
+{
+    u8 *ptr = (u8 *)ScriptReadWord(ctx);
+    struct WindowTemplate winTemplate;
+    s32 i;
+    u8 width, height;
+    u8 xWindow, yWindow, xText, yText;
+    u8 temp;
+
+    // + 6 for the 6 bytes at the start of a braille message (brailleformat macro)
+    // In RS these bytes are used to position the text and window, but
+    // in Emerald they are unused and position is calculated below instead
+      StringExpandPlaceholders(gStringVar4, ptr);
+
+    width = GetStringWidth(6, gStringVar4, -1) / 8u;
+
+    if (width > 28)
+        width = 28;
+
+    for (i = 0, height = 4; gStringVar4[i] != EOS;)
+    {
+        if (gStringVar4[i++] == CHAR_NEWLINE)
+            height += 3;
+    }
+
+    if (height > 18)
+        height = 18;
+
+    temp = width + 2;
+    xWindow = (30 - temp) / 2;
+
+    temp = height + 2;
+    yText = (20 - temp) / 2;
+
+    xText = xWindow;
+    xWindow += 1;
+
+    yWindow = yText;
+    yText += 2;
+
+    xText = (xWindow - xText - 1) * 8 + 3;
+    yText = (yText - yWindow - 1) * 8;
+
+    winTemplate = SetWindowTemplateFields(0, xWindow, yWindow + 1, width, height, 0xF, 0x1);
+    sBrailleWindowId = AddWindow(&winTemplate);
+    LoadUserWindowBorderGfx(sBrailleWindowId, 0x214, 0xE0);
+    DrawStdWindowFrame(sBrailleWindowId, 0);
+    PutWindowTilemap(sBrailleWindowId);
+    FillWindowPixelBuffer(sBrailleWindowId, PIXEL_FILL(1));
+    AddTextPrinterParameterized(sBrailleWindowId, 6, gStringVar4, xText, yText, 0xFF, NULL);
+    CopyWindowToVram(sBrailleWindowId, COPYWIN_BOTH);
+    return FALSE;
+}
+
+bool8 ScrCmd_closebraillemessage()
+{
+    CloseBrailleWindow();
+    return FALSE;
+}
+
+void CloseBrailleWindow() 
+{
+    ClearStdWindowAndFrame(sBrailleWindowId, 1);
+    RemoveWindow(sBrailleWindowId);
+}
+
+const struct FontInfo gFontInfos[] = 
+{
+    {
+        .fontFunction = (void*)(0x800537C | 1),
+        .maxLetterWidth = 0x8,
+        .maxLetterHeight = 0xD,
+        .letterSpacing = 0x0,
+        .lineSpacing = 0x0,
+        .unk = 0x0,
+        .fgColor = 0x2,
+        .bgColor = 0x1,
+        .shadowColor = 0x3,
+    },
+    {
+        .fontFunction = (void*)(0x80053B0 | 1),
+        .maxLetterWidth = 0x8,
+        .maxLetterHeight = 0xE,
+        .letterSpacing = 0x0,
+        .lineSpacing = 0x0,
+        .unk = 0x0,
+        .fgColor = 0x2,
+        .bgColor = 0x1,
+        .shadowColor = 0x3,
+    },
+    {
+        .fontFunction = (void*)(0x80053E8 | 1),
+        .maxLetterWidth = 0xA,
+        .maxLetterHeight = 0xE,
+        .letterSpacing = 0x1,
+        .lineSpacing = 0x0,
+        .unk = 0x0,
+        .fgColor = 0x2,
+        .bgColor = 0x1,
+        .shadowColor = 0x3,
+    },
+    {
+        .fontFunction = (void*)(0x8005420 | 1),
+        .maxLetterWidth = 0xA,
+        .maxLetterHeight = 0xE,
+        .letterSpacing = 0x1,
+        .lineSpacing = 0x0,
+        .unk = 0x0,
+        .fgColor = 0x2,
+        .bgColor = 0x1,
+        .shadowColor = 0x3,
+    },
+    {
+        .fontFunction = (void*)(0x8005458 | 1),
+        .maxLetterWidth = 0xA,
+        .maxLetterHeight = 0xE,
+        .letterSpacing = 0x0,
+        .lineSpacing = 0x0,
+        .unk = 0x0,
+        .fgColor = 0x2,
+        .bgColor = 0x1,
+        .shadowColor = 0x3,
+    },
+    {
+        .fontFunction = (void*)(0x8005490 | 1),
+        .maxLetterWidth = 0xA,
+        .maxLetterHeight = 0xE,
+        .letterSpacing = 0x0,
+        .lineSpacing = 0x0,
+        .unk = 0x0,
+        .fgColor = 0x2,
+        .bgColor = 0x1,
+        .shadowColor = 0x3,
+    },
+    {
+        .fontFunction = (void*)(0x814F884 | 1),
+        .maxLetterWidth = 0x8,
+        .maxLetterHeight = 0x16,
+        .letterSpacing = 0x0,
+        .lineSpacing = 0x2,
+        .unk = 0x0,
+        .fgColor = 0x2,
+        .bgColor = 0x1,
+        .shadowColor = 0x3,
+    },
+    {
+        .fontFunction = NULL,
+        .maxLetterWidth = 0x8,
+        .maxLetterHeight = 0x8,
+        .letterSpacing = 0x0,
+        .lineSpacing = 0x0,
+        .unk = 0x0,
+        .fgColor = 0x1,
+        .bgColor = 0x2,
+        .shadowColor = 0xF,
+    }
+};
+
+void SetDefaultFontsPointer(void)
+{
+    SetFontsPointer(&gFontInfos[0]);
+}
+
+u8 GetFontAttribute(u8 fontId, u8 attributeId)
+{
+    int result = 0;
+
+    switch (attributeId)
+    {
+    case FONTATTR_MAX_LETTER_WIDTH:
+        result = gFontInfos[fontId].maxLetterWidth;
+        break;
+    case FONTATTR_MAX_LETTER_HEIGHT:
+        result = gFontInfos[fontId].maxLetterHeight;
+        break;
+    case FONTATTR_LETTER_SPACING:
+        result = gFontInfos[fontId].letterSpacing;
+        break;
+    case FONTATTR_LINE_SPACING:
+        result = gFontInfos[fontId].lineSpacing;
+        break;
+    case FONTATTR_UNKNOWN:
+        result = gFontInfos[fontId].unk;
+        break;
+    case FONTATTR_COLOR_FOREGROUND:
+        result = gFontInfos[fontId].fgColor;
+        break;
+    case FONTATTR_COLOR_BACKGROUND:
+        result = gFontInfos[fontId].bgColor;
+        break;
+    case FONTATTR_COLOR_SHADOW:
+        result = gFontInfos[fontId].shadowColor;
+        break;
+    }
+    return result;
+}
+
+
+/*FontFunc_Braille(struct TextPrinter *textPrinter)
+{
+    u16 char_;
+    struct TextPrinterSubStruct *subStruct;
+    subStruct = (struct TextPrinterSubStruct *)(&textPrinter->subUnion.fields);
+
+    switch (textPrinter->state)
+    {
+    case 0:
+        if (JOY_HELD(A_BUTTON | B_BUTTON) && subStruct->hasPrintBeenSpedUp)
+        {
+            textPrinter->delayCounter = 0;
+        }
+        if (textPrinter->delayCounter && textPrinter->textSpeed)
+        {
+            textPrinter->delayCounter --;
+            if (gTextFlags.canABSpeedUpPrint && JOY_NEW(A_BUTTON | B_BUTTON))
+            {
+                subStruct->hasPrintBeenSpedUp = TRUE;
+                textPrinter->delayCounter = 0;
+            }
+            return 3;
+        }
+        if (gTextFlags.autoScroll)
+            textPrinter->delayCounter = 3;
+        else
+            textPrinter->delayCounter = textPrinter->textSpeed;
+
+        char_ = *textPrinter->printerTemplate.currentChar++;
+        switch (char_)
+        {
+        case EOS:
+            return 1;
+        case CHAR_NEWLINE:
+            textPrinter->printerTemplate.currentX = textPrinter->printerTemplate.x;
+            textPrinter->printerTemplate.currentY += gFonts[textPrinter->printerTemplate.fontId].maxLetterHeight + textPrinter->printerTemplate.lineSpacing;
+            return 2;
+        case PLACEHOLDER_BEGIN:
+            textPrinter->printerTemplate.currentChar++;
+            return 2;
+        case EXT_CTRL_CODE_BEGIN:
+            char_ = *textPrinter->printerTemplate.currentChar++;
+            switch (char_)
+            {
+            case EXT_CTRL_CODE_COLOR:
+                textPrinter->printerTemplate.fgColor = *textPrinter->printerTemplate.currentChar++;
+                GenerateFontHalfRowLookupTable(textPrinter->printerTemplate.fgColor, textPrinter->printerTemplate.bgColor, textPrinter->printerTemplate.shadowColor);
+                return 2;
+            case EXT_CTRL_CODE_HIGHLIGHT:
+                textPrinter->printerTemplate.bgColor = *textPrinter->printerTemplate.currentChar++;
+                GenerateFontHalfRowLookupTable(textPrinter->printerTemplate.fgColor, textPrinter->printerTemplate.bgColor, textPrinter->printerTemplate.shadowColor);
+                return 2;
+            case EXT_CTRL_CODE_SHADOW:
+                textPrinter->printerTemplate.shadowColor = *textPrinter->printerTemplate.currentChar++;
+                GenerateFontHalfRowLookupTable(textPrinter->printerTemplate.fgColor, textPrinter->printerTemplate.bgColor, textPrinter->printerTemplate.shadowColor);
+                return 2;
+            case EXT_CTRL_CODE_COLOR_HIGHLIGHT_SHADOW:
+                textPrinter->printerTemplate.fgColor = *textPrinter->printerTemplate.currentChar;
+                textPrinter->printerTemplate.bgColor = *++textPrinter->printerTemplate.currentChar;
+                textPrinter->printerTemplate.shadowColor = *++textPrinter->printerTemplate.currentChar;
+                textPrinter->printerTemplate.currentChar++;
+
+                GenerateFontHalfRowLookupTable(textPrinter->printerTemplate.fgColor, textPrinter->printerTemplate.bgColor, textPrinter->printerTemplate.shadowColor);
+                return 2;
+            case EXT_CTRL_CODE_PALETTE:
+                textPrinter->printerTemplate.currentChar++;
+                return 2;
+            case EXT_CTRL_CODE_FONT:
+                subStruct->glyphId = *textPrinter->printerTemplate.currentChar;
+                textPrinter->printerTemplate.currentChar++;
+                return 2;
+            case EXT_CTRL_CODE_RESET_FONT:
+                return 2;
+            case 0x8:
+                textPrinter->delayCounter = *textPrinter->printerTemplate.currentChar++;
+                textPrinter->state = 6;
+                return 2;
+            case 9:
+                textPrinter->state = 1;
+                if (gTextFlags.autoScroll)
+                    subStruct->autoScrollDelay = 0;
+                return 3;
+            case EXT_CTRL_CODE_WAIT_SE:
+                textPrinter->state = 5;
+                return 3;
+            case EXT_CTRL_CODE_PLAY_BGM:
+            case EXT_CTRL_CODE_PLAY_SE:
+                textPrinter->printerTemplate.currentChar += 2;
+                return 2;
+            case EXT_CTRL_CODE_ESCAPE:
+                char_ = *++textPrinter->printerTemplate.currentChar;
+                break;
+            case 13:
+                textPrinter->printerTemplate.currentX = textPrinter->printerTemplate.x + *textPrinter->printerTemplate.currentChar++;
+                return 2;
+            case EXT_CTRL_CODE_SHIFT_DOWN:
+                textPrinter->printerTemplate.currentY = textPrinter->printerTemplate.y + *textPrinter->printerTemplate.currentChar++;
+                return 2;
+            case EXT_CTRL_CODE_FILL_WINDOW:
+                FillWindowPixelBuffer(textPrinter->printerTemplate.windowId, PIXEL_FILL(textPrinter->printerTemplate.bgColor));
+                return 2;
+            }
+            break;
+        case CHAR_PROMPT_CLEAR:
+            textPrinter->state = 2;
+            TextPrinterInitDownArrowCounters(textPrinter);
+            return 3;
+        case CHAR_PROMPT_SCROLL:
+            textPrinter->state = 3;
+            TextPrinterInitDownArrowCounters(textPrinter);
+            return 3;
+        case 0xF9:
+            char_ = *textPrinter->printerTemplate.currentChar++| 0x100;
+            break;
+        case 0xF8:
+            textPrinter->printerTemplate.currentChar++;
+            return 0;
+        }
+        DecompressGlyphFont6(char_);
+        CopyGlyphToWindow(textPrinter);
+        textPrinter->printerTemplate.currentX += gGlyphInfo.width + textPrinter->printerTemplate.letterSpacing;
+        return 0;
+    case 1:
+        if (TextPrinterWait(textPrinter))
+            textPrinter->state = 0;
+        return 3;
+    case 2:
+        if (TextPrinterWaitWithDownArrow(textPrinter))
+        {
+            FillWindowPixelBuffer(textPrinter->printerTemplate.windowId, PIXEL_FILL(textPrinter->printerTemplate.bgColor));
+            textPrinter->printerTemplate.currentX = textPrinter->printerTemplate.x;
+            textPrinter->printerTemplate.currentY = textPrinter->printerTemplate.y;
+            textPrinter->state = 0;
+        }
+        return 3;
+    case 3:
+        if (TextPrinterWaitWithDownArrow(textPrinter))
+        {
+            TextPrinterClearDownArrow(textPrinter);
+            textPrinter->scrollDistance = gFonts[textPrinter->printerTemplate.fontId].maxLetterHeight + textPrinter->printerTemplate.lineSpacing;
+            textPrinter->printerTemplate.currentX = textPrinter->printerTemplate.x;
+            textPrinter->state = 4;
+        }
+        return 3;
+    case 4:
+        if (textPrinter->scrollDistance)
+        {
+            if (textPrinter->scrollDistance < sScrollDistances[gSaveBlock2->optionsTextSpeed])
+            {
+                ScrollWindow(textPrinter->printerTemplate.windowId, 0, textPrinter->scrollDistance, PIXEL_FILL(textPrinter->printerTemplate.bgColor));
+                textPrinter->scrollDistance = 0;
+            }
+            else
+            {
+                ScrollWindow(textPrinter->printerTemplate.windowId, 0, sScrollDistances[gSaveBlock2->optionsTextSpeed], PIXEL_FILL(textPrinter->printerTemplate.bgColor));
+                textPrinter->scrollDistance -= sScrollDistances[gSaveBlock2->optionsTextSpeed];
+            }
+            CopyWindowToVram(textPrinter->printerTemplate.windowId, COPYWIN_GFX);
+        }
+        else
+        {
+            textPrinter->state = 0;
+        }
+        return 3;
+    case 5:
+        if (!IsSEPlaying())
+            textPrinter->state = 0;
+        return 3;
+    case 6:
+        if (textPrinter->delayCounter)
+            textPrinter->delayCounter --;
+        else
+            textPrinter->state = 0;
+        return 3;
+    }
+    return 1;
+}
+*/

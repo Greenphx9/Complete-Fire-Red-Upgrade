@@ -109,9 +109,30 @@
 #define CHAR_NO            0x08
 #define CHAR_UNDERSCORE    0x09
 
-#define EXT_CTRL_CODE_COLOR     0x1
-#define EXT_CTRL_CODE_HIGHLIGHT 0x2
-#define EXT_CTRL_CODE_SHADOW    0x3
+#define EXT_CTRL_CODE_COLOR                   0x1
+#define EXT_CTRL_CODE_HIGHLIGHT               0x2
+#define EXT_CTRL_CODE_SHADOW                  0x3
+#define EXT_CTRL_CODE_COLOR_HIGHLIGHT_SHADOW  0x4
+#define EXT_CTRL_CODE_PALETTE                 0x5
+#define EXT_CTRL_CODE_FONT                    0x6
+#define EXT_CTRL_CODE_RESET_FONT              0x7
+#define EXT_CTRL_CODE_PAUSE                   0x8
+#define EXT_CTRL_CODE_WAIT_BUTTON             0x9
+#define EXT_CTRL_CODE_WAIT_SE                 0xA
+#define EXT_CTRL_CODE_PLAY_BGM                0xB
+#define EXT_CTRL_CODE_ESCAPE                  0xC
+#define EXT_CTRL_CODE_SHIFT_RIGHT             0xD
+#define EXT_CTRL_CODE_SHIFT_DOWN              0xE
+#define EXT_CTRL_CODE_FILL_WINDOW             0xF
+#define EXT_CTRL_CODE_PLAY_SE                0x10
+#define EXT_CTRL_CODE_CLEAR                  0x11
+#define EXT_CTRL_CODE_SKIP                   0x12
+#define EXT_CTRL_CODE_CLEAR_TO               0x13
+#define EXT_CTRL_CODE_MIN_LETTER_SPACING     0x14
+#define EXT_CTRL_CODE_JPN                    0x15
+#define EXT_CTRL_CODE_ENG                    0x16
+#define EXT_CTRL_CODE_STOP_BGM               0x17
+#define EXT_CTRL_CODE_RESUME_BGM             0x18
 //
 #define EXT_CTRL_CODE_UNKNOWN_7 0x7
 //
@@ -279,8 +300,26 @@ extern struct Struct_03002F90 gUnknown_03002F90;
 
 u16 __attribute__((long_call)) AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8 *str, u8 x, u8 y, u8 speed, void (*callback)(struct TextPrinterTemplate *, u16));
 s32 __attribute__((long_call)) GetStringWidth(u8 fontId, const u8 *str, s16 letterSpacing);
-u8 __attribute__((long_call)) GetFontAttribute(u8 fontId, u8 attributeId);
+//u8 __attribute__((long_call)) GetFontAttribute(u8 fontId, u8 attributeId);
 void __attribute__((long_call)) RunTextPrinters(void);
+void __attribute__((long_call)) GenerateFontHalfRowLookupTable(u8 fgColor, u8 bgColor, u8 shadowColor);
+void __attribute__((long_call)) TextPrinterInitDownArrowCounters(struct TextPrinter *textPrinter);
+void __attribute__((long_call)) DecompressGlyphFont6(u16 glyph);
+bool8 __attribute__((long_call)) TextPrinterWaitAutoMode(struct TextPrinter *textPrinter);
+bool16 __attribute__((long_call)) TextPrinterWaitWithDownArrow(struct TextPrinter *textPrinter);
+bool16 __attribute__((long_call)) TextPrinterWait(struct TextPrinter *textPrinter);
+void __attribute__((long_call)) TextPrinterClearDownArrow(struct TextPrinter *textPrinter);
+void __attribute__((long_call)) CopyGlyphToWindow(struct TextPrinter *x);
+void __attribute__((long_call)) SetFontsPointer(const struct FontInfo *fonts);
+
+struct GlyphInfo
+{
+    u8 pixels[0x80];
+    u8 width;
+    u8 height;
+};
+
+extern struct GlyphInfo gGlyphInfo;
 
 /*
 extern u8 gStringVar1[];

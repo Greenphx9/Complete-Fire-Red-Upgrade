@@ -15,7 +15,7 @@
 .equ FLAG_UB_5_FOUGHT, 0x974
 .equ FLAG_UB_6_FOUGHT, 0x975
 .equ FLAG_UB_7_FOUGHT, 0x976
-.equ FLAG_REGISTEEL_BEAT, 0x978
+.equ FLAG_REGIELEKI_BEAT, 0x1020
 .equ VAR_PSYCHIC_FORCE, 0x5108
 .equ FLAG_MEW_BEAT, 0x97A
 .equ FLAG_GROUDON_BEAT, 0x97B
@@ -61,25 +61,52 @@
 .equ FLAG_DIANCIE, 0x1013
 .equ FLAG_GOT_DARKRAI, 0x1016
 .equ FLAG_CRESSELIA_SPRITE, 0x1017
-.equ FLAG_GOT_CRESSELIA, 0x101E
+.equ FLAG_GOT_CRESSELIA, 0x101F
+.equ FLAG_REGISTEEL_BEAT, 0x978
 
 .global EventScript_RegicePuzzleForce
-EventScript_RegicePuzzleForce:
-	lockall
-	checkflag FLAG_REGICE_PUZZLE
-	if 0x0 _goto EventScript_MovePlayerRegice
-	releaseall
-	end
-
-EventScript_MovePlayerRegice:
+EventScript_MovePlayerRegiceDown:
 	msgbox gText_RegiceForce MSG_NORMAL
-	applymovement 0xFF EventScript_RegiceMove
+	applymovement 0xFF EventScript_RegiceMoveDown
 	waitmovement 0x0
 	releaseall
 	end
 
-EventScript_RegiceMove:
+EventScript_RegiceMoveDown:
 	.byte walk_down
+	.byte 0xFE
+
+EventScript_MovePlayerRegiceUp:
+	msgbox gText_RegiceForce MSG_NORMAL
+	applymovement 0xFF EventScript_RegiceMoveUp
+	waitmovement 0x0
+	releaseall
+	end
+
+EventScript_RegiceMoveUp:
+	.byte walk_up
+	.byte 0xFE
+
+EventScript_MovePlayerRegiceLeft:
+	msgbox gText_RegiceForce MSG_NORMAL
+	applymovement 0xFF EventScript_RegiceMoveLeft
+	waitmovement 0x0
+	releaseall
+	end
+
+EventScript_RegiceMoveLeft:
+	.byte walk_left
+	.byte 0xFE
+
+EventScript_MovePlayerRegiceRight:
+	msgbox gText_RegiceForce MSG_NORMAL
+	applymovement 0xFF EventScript_RegiceMoveRight
+	waitmovement 0x0
+	releaseall
+	end
+
+EventScript_RegiceMoveRight:
+	.byte walk_right
 	.byte 0xFE
 
 .global EventScript_RegicePuzzleBraille
@@ -102,6 +129,7 @@ EventScript_RegicePuzzle:
 
 EventScript_SetRegiceFlag:
 	setflag FLAG_REGICE_PUZZLE
+	setvar 0x5102 0x1
 	sound 0x12
 	msgbox gText_RegiceMoved MSG_SIGN
 	release
@@ -214,14 +242,14 @@ EventScript_Guzzlord:
 	release
 	end
 
-.global EventScript_Registeel
-EventScript_Registeel:
+.global EventScript_Regieleki
+EventScript_Regieleki:
 	lock
 	faceplayer
-	cry SPECIES_REGISTEEL 0x0
-	msgbox gText_Registeel MSG_NORMAL
-	wildbattle SPECIES_REGISTEEL 65 ITEM_METAL_COAT
-	setflag FLAG_REGISTEEL_BEAT
+	cry SPECIES_REGIELEKI 0x0
+	msgbox gText_Regieleki MSG_NORMAL
+	wildbattle SPECIES_REGIELEKI 65 ITEM_MAGNET
+	setflag FLAG_REGIELEKI_BEAT
 	hidesprite 9
 	release
 	end
@@ -886,5 +914,17 @@ EventScript_Cresselia:
 EventScript_ForbidYouEntering:
 	lock
 	msgbox gText_ForbidYOu MSG_FACE
+	release
+	end
+
+.global EventScript_Registeel
+EventScript_Registeel:
+	lock
+	faceplayer
+	cry SPECIES_REGISTEEL 0x0
+	msgbox gText_Registeel MSG_NORMAL
+	wildbattle SPECIES_REGISTEEL 65 ITEM_METAL_COAT
+	setflag FLAG_REGISTEEL_BEAT
+	hidesprite 1
 	release
 	end

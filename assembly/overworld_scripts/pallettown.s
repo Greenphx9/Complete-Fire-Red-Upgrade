@@ -9,7 +9,7 @@
 .equ FLAG_AUTO_HMS, 0x998
 .equ FLAG_GOT_CHARMS, 0x99E
 .equ FLAG_GOT_DARKRAI, 0x1016
-.equ FLAG_GOT_CRESSELIA, 0x101E
+.equ FLAG_GOT_CRESSELIA, 0x101F
 
 .global EventScript_PalletTown_MapScript
 
@@ -223,28 +223,6 @@ EventScript_ProfOak_0X169595:
 	msgbox gText_ProfOak_0X18E116 MSG_KEEPOPEN @"Oak: Now, [player].\pInside those ..."
 	release
 	end
-
-.equ RANGE_START, 1
-.equ RANGE_END, 1200
-
-.global GiveAllMons
-GiveAllMons:
-    setvar 0x8002 RANGE_START
-    goto give_all_items
-    return
-
-give_all_items:
-    givepokemon 0x8002 100 0x0 0x0 0x0
-    addvar 0x8002 1
-    compare 0x8002 RANGE_END
-    if equal _goto finish_giving
-    @compare 0x800D TRUE
-    @if equal _goto finish_giving
-    goto give_all_items
-    end
-
-finish_giving:
-    end
 
 	@---------------
 EventScript_ProfOak_0X169600:

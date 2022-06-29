@@ -106,6 +106,14 @@ extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Chansey;
 extern const u16 gEventObjectPic_ChanseyPal[];
 extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Regirock;
 extern const u16 gEventObjectPic_RegirockPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Regieleki;
+extern const u16 gEventObjectPic_RegielekiPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Registeel;
+extern const u16 gEventObjectPic_RegisteelPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_ShinySlowbro;
+extern const u16 gEventObjectPic_ShinySlowbroPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Tamer;
+extern const u16 gEventObjectPic_TamerPal[];
 
 	static NPCPtr sOverworldTable2[] = { 
 		&gEventObjectGraphicsInfo_Cresselia,
@@ -113,6 +121,10 @@ extern const u16 gEventObjectPic_RegirockPal[];
 		&gEventObjectGraphicsInfo_Pidgeot,
 		&gEventObjectGraphicsInfo_Chansey,
 		&gEventObjectGraphicsInfo_Regirock,
+		&gEventObjectGraphicsInfo_Regieleki,
+		&gEventObjectGraphicsInfo_Registeel,
+		&gEventObjectGraphicsInfo_ShinySlowbro,
+		&gEventObjectGraphicsInfo_Tamer,
 	};
 
 	const struct EventObjectGraphicsInfo** const gOverworldTableSwitcher[255] =
@@ -129,6 +141,10 @@ extern const u16 gEventObjectPic_RegirockPal[];
 		{gEventObjectPic_PidgeotPal, 0x1203},
 		{gEventObjectPic_ChanseyPal, 0x1204},
 		{gEventObjectPic_RegirockPal, 0x1205},
+		{gEventObjectPic_RegielekiPal, 0x1206},	
+		{gEventObjectPic_RegisteelPal, 0x1207},
+		{gEventObjectPic_ShinySlowbroPal, 0x1208},
+		{gEventObjectPic_TamerPal, 0x1209},
 		{NULL, 0x11FF},
 	};
 	const struct SpritePalette* const gObjectEventSpritePalettesSwitcher[255] = {

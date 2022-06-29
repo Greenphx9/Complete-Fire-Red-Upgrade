@@ -685,3 +685,9 @@ BagListMenuGetItemNameColored 08108560 2
 
 SetUpFieldMove_Cut 08097898 0
 FieldMoveCallback_CutGrass 08097A20 0
+
+ScrCmd_braillemessage 0806BC04 1
+
+SetDefaultFontsPointer 080F79C8 0
+GetFontAttribute 080F79D8 2
+SetUpFieldMove_Flash 080C9B2C 0

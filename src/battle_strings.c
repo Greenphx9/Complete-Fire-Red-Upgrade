@@ -21,6 +21,9 @@
 #include "../include/new/ability_tables.h"
 #include "../include/new/util2.h"
 #include "../include/pokedex.h"
+#include "../include/new/build_pokemon.h"
+
+#include "Tables/replace_abilities.h"
 
 /*
 battle_strings.c
@@ -30,7 +33,6 @@ battle_strings.c
 extern u8 gMoveNames[][MOVE_NAME_LENGTH + 1];
 extern u8 gLongMoveNames[][MOVE_NAME_LENGTH + 5];
 extern const u8 gAbilityNames[][ABILITY_NAME_LENGTH + 1];
-extern const u8 gReplaceAbilityNames[][ABILITY_NAME_LENGTH + 1];
 
 extern u8 gStatusConditionString_DisableProblem[];
 extern u8 gStatusConditionString_EncoreProblem[];
@@ -1061,99 +1063,12 @@ const u8* GetAbilityName(const u8 ability)
 const u8* GetAbilityNameByMon(u8 ability, u16 species)
 {
 	const u8* ptr = NULL;
-	switch (ability) {
-	case ABILITY_MOXIE:
-		switch (species) {
-		case SPECIES_GLASTRIER:
-		case SPECIES_CALYREX_ICE_RIDER:
-			ptr = gReplaceAbilityNames[0];
-			break;
-
-		}
-		break;
-	case ABILITY_ROUGHSKIN:
-		switch (species) {
-		case SPECIES_FERROSEED:
-		case SPECIES_FERROTHORN:
-		case SPECIES_TOGEDEMARU:
-			ptr = gReplaceAbilityNames[1];
-			break;
-
-		}
-		break;
-	case ABILITY_GOOEY:
-		switch (species) {
-		case SPECIES_DIGLETT_A:
-		case SPECIES_DUGTRIO_A:
-			ptr = gReplaceAbilityNames[2];
-			break;
-
-		}
-		break;
-	case ABILITY_SHELLARMOR:
-		switch (species) {
-		case SPECIES_CUBONE:
-		case SPECIES_MAROWAK:
-		case SPECIES_KABUTO:
-		case SPECIES_KABUTOPS:
-		case SPECIES_ANORITH:
-		case SPECIES_ARMALDO:
-		case SPECIES_SKORUPI:
-		case SPECIES_DRAPION:
-		case SPECIES_TYPE_NULL:
-		case SPECIES_PERRSERKER:
-		case SPECIES_FALINKS:
-			ptr = gReplaceAbilityNames[3];
-			break;
-
-		}
-		break;
-	case ABILITY_MULTISCALE:
-		switch (species) {
-		case SPECIES_LUNALA:
-			ptr = gReplaceAbilityNames[4];
-			break;
-
-		}
-		break;
-	case ABILITY_PROTEAN:
-		switch (species) {
-		case SPECIES_SCORBUNNY:
-		case SPECIES_RABOOT:
-		case SPECIES_CINDERACE:
-			ptr = gReplaceAbilityNames[5];
-			break;
-
-		}
-		break;
-	case ABILITY_RECEIVER:
-		switch (species)
+	for(u8 i = 0; i < ARRAY_COUNT(sReplaceAbilities); i++)
+	{
+		if(ability == sReplaceAbilities[i].currAbility && species == sReplaceAbilities[i].species)
 		{
-		case SPECIES_GRIMER_A:
-		case SPECIES_MUK_A:
-			ptr = gReplaceAbilityNames[6];
-			break;
+			ptr = sReplaceAbilities[i].replaceAbilityString;
 		}
-		break;
-	case ABILITY_QUEENLYMAJESTY:
-		switch (species)
-		{
-		case SPECIES_BRUXISH:
-		case SPECIES_LUMINEON:
-			ptr = gReplaceAbilityNames[7];
-			break;
-		}
-		break;
-	case ABILITY_GORILLATACTICS:
-		switch (species)
-		{
-		case SPECIES_KINGLER:
-		case SPECIES_KINGLER_GIGA:
-		case SPECIES_CRABOMINABLE:
-			ptr = gReplaceAbilityNames[8];
-			break;
-		}
-		break;
 	}
 	if (ptr == NULL)
 		ptr = gAbilityNames[ability];

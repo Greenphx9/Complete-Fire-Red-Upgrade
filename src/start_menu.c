@@ -115,18 +115,13 @@ static bool8 ReloadStartMenuItems(void);
 void DestroySafariZoneStatsWindow();
 
 void DrawTime(void);
+static void UpdateTimeText(void);
+static void TryUpdateTimeText(u8 taskId);
+static void RemoveTimeBox(void);
 
-extern u8 sSafariZoneStatsWindowId;
+extern u8 sTimeWindowId;
 
-static const struct WindowTemplate sSafariZoneStatsWindowTemplate = {
-	.bg = 0,
-	.tilemapLeft = 1,
-	.tilemapTop = 1,
-	.width = 10,
-	.height = 2,
-	.paletteNum = 15,
-	.baseBlock = 0x008
-};
+
 
 const struct MenuAction sStartMenuActionTable[] =
 {
@@ -246,7 +241,6 @@ static void SetUpStartMenu_SafariZone(void)
 static void BuildPokeToolsMenu(void)
 {
 	sNumStartMenuItems = 0;
-	DestroySafariZoneStatsWindow();
 	DrawTime();
 
 #ifdef FLAG_SYS_DEXNAV
@@ -278,18 +272,17 @@ void SetUpStartMenu(void)
 		SetUpStartMenu_NormalField();
 }
 
+extern u8 sRTCFrameCount;
+
 bool8 StartCB_HandleInput(void)
 {
 	ForceClockUpdate(); //To help with the clock in the start menu routine
 
-	if (!FlagGet(FLAG_SYS_SAFARI_MODE) && (sStartMenuOpen == START_MENU_NORMAL || (sSafariZoneStatsWindowId != 0 && sSafariZoneStatsWindowId != 0xFF))) {
-		ConvertIntToDecimalStringN(gStringVar1, gClock.hour, STR_CONV_MODE_LEFT_ALIGN, 3);
-		ConvertIntToDecimalStringN(gStringVar2, gClock.minute, STR_CONV_MODE_LEADING_ZEROS, 2);
-		ConvertIntToDecimalStringN(gStringVar3, gClock.second, STR_CONV_MODE_LEADING_ZEROS, 2);
-		StringExpandPlaceholders(gStringVar4, gText_Time);
-		//ClearStdWindowAndFrameToTransparent(sSafariZoneStatsWindowId, 1);
-		AddTextPrinterParameterized(sSafariZoneStatsWindowId, 2, gStringVar4, 4, 3, 0xFF, NULL);
-		CopyWindowToVram(sSafariZoneStatsWindowId, COPYWIN_GFX);
+	if (!FlagGet(FLAG_SYS_SAFARI_MODE) && (sStartMenuOpen == START_MENU_NORMAL || (sTimeWindowId != 0 && sTimeWindowId != 0xFF))) {
+		if(sRTCFrameCount == 0) 
+		{
+			UpdateTimeText();
+		}
 	}
 
 	if (JOY_NEW(DPAD_UP))
@@ -346,6 +339,7 @@ bool8 StartCB_HandleInput(void)
 	else if (JOY_NEW(B_BUTTON | START_BUTTON))
 	{
 		DestroySafariZoneStatsWindow();
+		RemoveTimeBox();
 		DestroyHelpMessageWindow_();
 		CloseStartMenu();
 		return TRUE;
@@ -373,16 +367,88 @@ static bool8 ReloadStartMenu(void)
 }
 
 void DrawTime(void) {
-	sSafariZoneStatsWindowId = AddWindow(&sSafariZoneStatsWindowTemplate);
-	PutWindowTilemap(sSafariZoneStatsWindowId);
-	DrawStdWindowFrame(sSafariZoneStatsWindowId, FALSE);
-	ConvertIntToDecimalStringN(gStringVar1, gClock.hour, STR_CONV_MODE_LEFT_ALIGN, 3);
-	ConvertIntToDecimalStringN(gStringVar2, gClock.minute, STR_CONV_MODE_LEADING_ZEROS, 2);
-	ConvertIntToDecimalStringN(gStringVar3, gClock.second, STR_CONV_MODE_LEADING_ZEROS, 2);
-	StringExpandPlaceholders(gStringVar4, gText_Time);
-	FillWindowPixelBuffer(sSafariZoneStatsWindowId, PIXEL_FILL(1));
-	AddTextPrinterParameterized(sSafariZoneStatsWindowId, 2, gStringVar4, 4, 3, 0xFF, NULL);
-	CopyWindowToVram(sSafariZoneStatsWindowId, COPYWIN_GFX);
+	u8 palNum = 15;
+	u16 width = 10;
+	u16 height = 2;
+
+	//Create Window
+	struct WindowTemplate template = SetWindowTemplateFields(0, 1, 1, width, height, palNum, 0x008); //Total Size: 20
+	sTimeWindowId = AddWindow(&template);
+	if (sTimeWindowId != 0xFF)
+	{
+		DrawStdWindowFrame(sTimeWindowId, FALSE);
+		FillWindowPixelBuffer(sTimeWindowId, PIXEL_FILL(1));
+		PutWindowTilemap(sTimeWindowId);
+		CopyWindowToVram(sTimeWindowId, COPYWIN_BOTH);
+	}
+
+	//Print Text
+	UpdateTimeText();
+}
+
+static const struct TextColor sTextColour = {0, 3, 4};
+extern u8* sDayNames[];
+
+static void UpdateTimeText(void)
+{
+	//#ifdef HR12_CLOCK
+	const u8* amPMString = (gClock.hour >= 12) ? gText_StartMenu_PM : gText_StartMenu_AM;
+
+	//Prepare string: "DOW. HH:MM AM"
+	ConvertIntToDecimalStringN(gStringVar1, (gClock.hour == 0) ? 12 : (gClock.hour > 12) ? gClock.hour - 12 : gClock.hour, STR_CONV_MODE_RIGHT_ALIGN, 2); //Hour - 12hr format
+	ConvertIntToDecimalStringN(gStringVar2, gClock.minute, STR_CONV_MODE_LEADING_ZEROS, 2); //Minute
+
+	StringCopy(gStringVar3, amPMString);
+
+	StringCopy(gStringVarC, (gClock.dayOfWeek >= 7) ? gText_StartMenu_Error : sDayNames[gClock.dayOfWeek]); //Day of Week
+	StringExpandPlaceholders(gStringVar4, gText_StartMenu_TimeBase_12Hr);
+	/*#else
+	//Prepare string: "DOW. HH:MM:SS"
+	ConvertIntToDecimalStringN(gStringVar1, gClock.hour, STR_CONV_MODE_LEADING_ZEROS, 2); //Hour - 24hr format
+	ConvertIntToDecimalStringN(gStringVar2, gClock.minute, STR_CONV_MODE_LEADING_ZEROS, 2); //Minute
+	ConvertIntToDecimalStringN(gStringVar3, gClock.second, STR_CONV_MODE_LEADING_ZEROS, 2); //Seconds
+	StringCopy(gStringVarC, (gClock.dayOfWeek >= 7) ? gText_StartMenu_Error : sDayNames[gClock.dayOfWeek]); //Day of Week
+	StringExpandPlaceholders(gStringVar4, gText_StartMenu_TimeBase);
+	/#endif*/
+
+	FillWindowPixelBuffer(sTimeWindowId, PIXEL_FILL(1));
+	AddTextPrinterParameterized(sTimeWindowId, 2, gStringVar4, 4, 3, 0xFF, NULL);
+	//WindowPrint(sTimeWindowId, 1, 3, 1, &sTextColour, 0xFF, gStringVar4);
+	CopyWindowToVram(sTimeWindowId, COPYWIN_GFX);
+}
+
+static void TryUpdateTimeText(u8 taskId)
+{
+	struct Task* task = &gTasks[taskId];
+	u8 prevSecond = task->data[1];
+	u8 prevMinute = task->data[2];
+	u8 prevHour = task->data[3];
+	u8 prevDayOfWeek = task->data[4];
+
+	if (prevSecond != gClock.second
+	|| prevMinute != gClock.minute
+	|| prevHour != gClock.hour
+	|| prevDayOfWeek != gClock.dayOfWeek) //Time has changed
+	{
+		//Update last time printed
+		task->data[1] = gClock.second;
+		task->data[2] = gClock.minute;
+		task->data[3] = gClock.hour;
+		task->data[4] = gClock.dayOfWeek;
+
+		//Print new time
+		UpdateTimeText();
+	}
+}
+
+static void RemoveTimeBox(void)
+{
+	if (sTimeWindowId != 0xFF)
+	{
+		CleanWindow(sTimeWindowId);
+		RemoveWindow(sTimeWindowId);
+		sTimeWindowId = 0xFF;
+	}
 }
 
 static bool8 ReloadStartMenuItems(void)
@@ -406,7 +472,7 @@ static bool8 ReloadStartMenuItems(void)
 
 void DestroySafariZoneStatsWindow(void)
 {
-	ClearStdWindowAndFrameToTransparent(sSafariZoneStatsWindowId, FALSE);
-	CopyWindowToVram(sSafariZoneStatsWindowId, COPYWIN_GFX);
-	RemoveWindow(sSafariZoneStatsWindowId);
+	ClearStdWindowAndFrameToTransparent(sTimeWindowId, FALSE);
+	CopyWindowToVram(sTimeWindowId, COPYWIN_GFX);
+	RemoveWindow(sTimeWindowId);
 }

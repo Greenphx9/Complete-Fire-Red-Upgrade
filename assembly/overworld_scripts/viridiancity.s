@@ -407,7 +407,6 @@ EventScript_NurseJoyHeal:
 	lock
 	msgbox gText_TakeARestJoy MSG_FACE
 	fadescreen 0x1
-	@@givepokemon SPECIES_ZOROARK_H 70 0x0 0x0 0x0
 	setflag 0x94E
 	sound 0x1
 	special 0x0

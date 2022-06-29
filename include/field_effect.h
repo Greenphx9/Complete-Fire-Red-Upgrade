@@ -48,6 +48,7 @@ bool8 __attribute__((long_call)) CutMoveRuinValleyCheck(void);
 void __attribute__((long_call)) FieldCallback_CutGrass(void);
 void __attribute__((long_call)) FieldCallback_CutTree(void);
 u8 __attribute__((long_call)) MetatileAtCoordsIsGrassTile(s16 x, s16 y);
+u8 __attribute__((long_call)) CreateFieldEffectShowMon(void);
 
 /*
 bool8 FieldEffectActiveListContains(u8 id);

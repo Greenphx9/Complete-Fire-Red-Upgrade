@@ -159,6 +159,7 @@ void __attribute__((long_call)) sub_8124DC0(u8 taskId);
 void __attribute__((long_call)) ItemUseCB_RareCandyStep(u8 taskId, UNUSED TaskFunc func);
 void __attribute__((long_call)) Task_DisplayLevelUpStatsPg1(u8);
 void __attribute__((long_call)) GetMonLevelUpWindowStats(struct Pokemon *mon, u16 *currStats);
+void __attribute__((long_call)) FieldCallback_Flash(void);
 
 void __attribute__((long_call)) AnimatePartySlot(u8 slot, u8 b);
 u16 __attribute__((long_call)) PartyMenuButtonHandler(s8 *ptr);

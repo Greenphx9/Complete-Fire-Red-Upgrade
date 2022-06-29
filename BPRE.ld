@@ -205,7 +205,8 @@ gLoadPointer = 0x03000f14;
 sScriptContext2Enabled = 0x3000F28;
 
 /* Text RAM */
-gTextflags = 0x3003E50;
+gTextFlags = 0x3003E50;
+gFonts = 0x3003D90;
 
 /* Save RAM */
 gSaveDataBuffer = 0x02039A38;
@@ -289,7 +290,7 @@ sNumStartMenuItems = 0x20370F5;
 sStartMenuOrder = 0x20370F6;
 sDrawStartMenuState = 0x20370FF;
 sTimeWindowTemplate = 0x83a738c;
-sSafariZoneStatsWindowId = 0x2037101;
+sTimeWindowId = 0x2037101;
 
 /* Other RAM */
 sWarpDestination = 0x2031DBC;
@@ -1432,6 +1433,7 @@ ClearStdWindowAndFrameToTransparent = 0x810F4D8 | 1;
 RboxChoiceUpdate = 0x810FA04 | 1;
 SetWindowTemplateFields = 0x810FE50 | 1;
 CreateWindowTemplate = 0x810FF04 | 1;
+CreateWindowTemplate2 = 0x810FF04 | 1;
 OakTutorialCreateWindow = 0x81220D4 | 1;
 WindowPrint = 0x812E51C | 1;
 TextWindow_SetStdFrame0_WithPal = 0x814FF2C | 1;
@@ -1797,7 +1799,7 @@ SpriteCB_GetOnScreenAndAnimate = 0x80F3870 | 1;
 AddTextPrinterParameterized2 = 0x80F6CD0 | 1;
 AddTextPrinterParameterized3 = 0x812E51C | 1;
 NewMenuHelpers_DrawDialogueFrame = 0x80F6EE4 | 1;
-GetFontAttribute = 0x80F79D8 | 1;
+/*GetFontAttribute = 0x80F79D8 | 1;*/
 dp13_810BB8C = 0x810BB8C | 1;
 HofPC_CreateWindow = 0x810F558 | 1;
 HofPC_PutText = 0x810F650 | 1;
@@ -1932,3 +1934,28 @@ FieldCallback_CutGrass = 0x8097984 | 1;
 FieldCallback_CutTree = 0x80979D0 | 1;
 gPlayerFacingPosition = 0x2039A04;
 MetatileAtCoordsIsGrassTile = 0x8097874 | 1;
+ScrCmd_lock = 0x806B704 |1;
+GenerateFontHalfRowLookupTable = 0x8002EA8 | 1;
+gGlyphInfo = 0x3003DA0;
+TextPrinterInitDownArrowCounters = 0x80054C8 | 1;
+DecompressGlyphFont6 = 0x814FC9C | 1;
+TextPrinterWaitAutoMode = 0x8005608 | 1;
+TextPrinterWaitWithDownArrow  = 0x8005634 | 1;
+TextPrinterWait = 0x8005680 | 1;
+TextPrinterClearDownArrow = 0x80055D4 | 1;
+CopyGlyphToWindow = 0x8003014 | 1;
+SetFontsPointer = 0x8002C1C | 1;
+FieldCallback_Flash = 0x80C9B74 | 1;
+CreateFieldEffectShowMon = 0x80C97FC | 1;
+
+/* EV-IV**/
+CB2_ReturnToFieldFromDiploma = 0x80568FC | 1;
+DecompressAndCopyTileDataToVram = 0x80F6878 | 1;
+FreeTempTileDataBuffersIfPossible = 0x80F682C | 1;
+stdpal_get = 0x8150408 | 1;
+PlayCry7 = 0x8071F24 | 1;
+CreateMonSprite_FieldMove = 0x80839D4 | 1;
+FreeResourcesAndDestroySprite = 0x8083A5C | 1;
+gEvIv = 0x0203FFF0;
+QuestLog_CutRecording = 0x8112364 | 1;
+sBrailleWindowId = 0x203EFF0;

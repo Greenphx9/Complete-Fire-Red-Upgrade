@@ -1138,7 +1138,9 @@ map \map
 .byte \a
 .endm
 
-@ Displays the string at pointer as braille text in a standard message box. The string must be formatted to use braille characters.
+@ Displays the given string as braille text in a standard message box. The string should use the .braille directive
+@ to convert text to braille, and be preceded by brailleformat. The brailleformat data is skipped over (in RS, these
+@ bytes determined the box's size and position, but in Emerald these are calculated automatically).
 .macro braillemessage text:req
 .byte 0x78
 .4byte \text
@@ -1916,6 +1918,15 @@ map \map
 	getbraillestringwidth \text
 	call EventScript_BrailleCursorWaitButton
 	.endm
+
+	@ Prints a braille message, waits for an A or B press, then closes the message.
+	.macro braillemsgbox text:req
+	braillemessage \text
+	waitkeypress
+	closeonkeypress
+	callasm ScrCmd_closebraillemessage
+	.endm
+
 
 
 .macro multichoiceoption text:req num:req
