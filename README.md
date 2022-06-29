@@ -10,7 +10,7 @@ This adds an array of duplicate abilities, and changes the name of the ability f
 ## How can I add a new one to the array?
 For this tutorial, we will be using Chilling Neigh over Moxie as an example. This tutorial assumes you've already given the Pokemon the duplicate ability / ability to be replaced.
 
-1. Add the ability name to `strings/ability_name_table.string`, following the format below. Replace any spaces with underscores.
+1. Add the ability name to `strings/duplicate_ability_name_table.string`, following the format below. Replace any spaces with underscores.
 
 ```
 #org @NAME_<ABILITY_NAME>.
