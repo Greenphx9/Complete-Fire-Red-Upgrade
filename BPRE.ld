@@ -988,6 +988,7 @@ CB2_ReturnToFieldFromMultiplayer = 0x8056854 | 1;
 CB2_ReturnToFieldWithOpenMenu = 0x80568A8 | 1;
 CB2_ReturnToFieldContinueScript = 0x80568C4 | 1;
 CB2_ReturnToFieldContinueScriptPlayMapMusic = 0x80568E0 | 1;
+SetFieldVBlankCallback = 0x8056A04 | 1;
 MapGridGetZCoordAt = 0x8058D44 | 1;
 MapGridIsImpassableAt = 0x8058DC4 | 1;
 MapGridGetMetatileIdAt = 0x8058E48 | 1;

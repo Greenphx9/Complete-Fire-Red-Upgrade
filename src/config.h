@@ -244,6 +244,7 @@
 #define VAR_POWER_ITEM_LEVEL 0x5105
 #define VAR_TEST_VAR 0x5107 //braille var test
 #define VAR_REGICE_FORCE 0x5102
+#define VAR_POWER_ITEM_EV_VALUE 0x5110
 
 #define FLAG_SCALEMONS 0x1200 //Sets every Pokemon's BST to 600.
 /*===== General Vars =====*/

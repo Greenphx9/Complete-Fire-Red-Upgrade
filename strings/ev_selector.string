@@ -1,0 +1,11 @@
+#org @gText_EvSelectorMain
+EVs: [BUFFER3]\n[BUFFER1]    \n\n[BUFFER2]
+
+#org @digitInidicator_1
+[LEFT_ARROW_2]+1[RIGHT_ARROW_2]
+
+#org @digitInidicator_10
+[LEFT_ARROW_2]+10[RIGHT_ARROW_2]
+
+#org @digitInidicator_100
+[LEFT_ARROW_2]+100[RIGHT_ARROW_2]

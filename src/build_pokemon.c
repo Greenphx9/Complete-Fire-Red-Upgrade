@@ -4398,3 +4398,8 @@ bool8 IsCresseliaInParty(void) {
 	gSpecialVar_LastResult = FALSE;
 	return FALSE;
 }
+
+
+
+
+

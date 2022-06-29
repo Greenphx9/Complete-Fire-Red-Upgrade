@@ -978,3 +978,8 @@ SystemScript_DebugMenu_Level100Team:
 SystemScript_DebugMenu_MaxCoinage:
 	callasm DebugMenu_MaxMoneyAndCoins
 	goto SystemScript_DebugMenu
+
+.global SystemScript_ReleaseAll
+SystemScript_ReleaseAll:
+	releaseall
+	end

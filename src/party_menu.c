@@ -2668,3 +2668,10 @@ void ItemUseCB_RareCandy(u8 taskId, TaskFunc func)
 		gTasks[taskId].func = Task_DisplayLevelUpStatsPg1;
     }
 }
+
+
+
+
+
+
+

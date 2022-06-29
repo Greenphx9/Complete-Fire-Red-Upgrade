@@ -40,15 +40,13 @@ EventScript_DescribeReins:
 
 .global EventScript_MegaSeller
 EventScript_MegaSeller:
-	lock
-	givepokemon SPECIES_FERROSEED 100 0x0 0x0
-	givepokemon SPECIES_FERROTHORN 100 0x0 0x0
-	givepokemon SPECIES_TOGEDEMARU 100 0x0 0x0
-	givepokemon SPECIES_SHARPEDO 100 0x0 0x0
-	msgbox gText_SellMegaStones MSG_FACE
-	pokemart EventScript_MegaMart
+	callasm CB2_EVSelector
 	release
 	end
+	@@msgbox gText_SellMegaStones MSG_FACE
+	@@pokemart EventScript_MegaMart
+	@@release
+	@@end
 
 .global EventScript_Chansey
 EventScript_Chansey:
