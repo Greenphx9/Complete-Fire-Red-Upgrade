@@ -27,7 +27,8 @@ extern const u8 NAME_CHILLING_NEIGH[];
 3. Add the Pokemon, it's current, duplicate ability, and the replacement ability name to the array, following the format below.
 
 
-    `{
+    ```
+    {
     
         .species = SPECIES_MEDITITE, //Mon
         
@@ -35,12 +36,13 @@ extern const u8 NAME_CHILLING_NEIGH[];
         
         .replaceAbilityString = NAME_PURE_POWER, //The new ability name
         
-    },`
+    },
+    ```
     
  
  To add Chilling Neigh, add this to the bottom of the array (you can add `SPECIES_CALYREX_ICE_RIDER` as well):
  
-     
+    ``` 
     {
     
         .species = SPECIES_GLASTRIER,
@@ -50,6 +52,7 @@ extern const u8 NAME_CHILLING_NEIGH[];
         .replaceAbilityString = NAME_CHILLING_NEIGH,
         
     },
+    ```
  
  4. Go to `src/build_pokemon.c` and hit Control + S. This will save the file, making the compiler recompile it, meaning the Duplicate Ability file will actually change.
  5. It should be working!
