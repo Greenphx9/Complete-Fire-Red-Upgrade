@@ -58,7 +58,8 @@ extern const u8 NAME_CHILLING_NEIGH[];
     },
    
  
- 4. Go to `src/build_pokemon.c` and hit Control + S. This will save the file, making the compiler recompile it, meaning the Duplicate Ability file will actually change.
+ 4. Run `python scripts/clean.py`, to recompile the duplicate abillity file.
+ 
  5. It should be working!
  
 
