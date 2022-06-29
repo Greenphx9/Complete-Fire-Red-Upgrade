@@ -292,7 +292,6 @@ sMapOpenCloseAnim = 0x20399E0;
 sMapCursor = 0x20399E4;
 sMapIcons = 0x20399EC;
 sCreditsMgr = 0x203AB40;
-sMonSummaryScreen = 0x203B140;
 gKeypadInitialCountdown = 0x030030e0;
 gKeypadFollowUpCountdown = 0x0300352c;
 gSoftResetDisabled = 0x03003530;
@@ -302,6 +301,7 @@ gTotalCameraPixelOffsetX = 0x300506C;
 gInputToStoreInQuestLogMaybe = 0x3005078;
 gCB2_AfterEvolution = 0x300537C;
 gItemUseCB = 0x3005E98;
+sPokedexScreenData = 0x203ACF0;
 
 /*==========================
 ===========ROM==============
@@ -1829,3 +1829,7 @@ DMA0_SRC = 0x40000B0;
 DMA0_DST = 0x40000B4;
 DMA0_CNT_L = 0x40000B8;
 DMA0_CNT_H = 0x40000BA;
+
+/* Duplicate Abilities */
+sMonSummaryScreen = 0x203B140;
+AddTextPrinterParameterized3 = 0x812E51C | 1;

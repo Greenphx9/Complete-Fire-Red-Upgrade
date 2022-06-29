@@ -8,6 +8,8 @@
 #include "../include/script.h"
 #include "../include/string_util.h"
 #include "../include/wild_encounter.h"
+#include "../include/menu.h"
+#include "../include/pokemon_summary_screen.h"
 #include "../include/constants/event_objects.h"
 #include "../include/constants/items.h"
 #include "../include/constants/maps.h"
@@ -38,6 +40,7 @@
 #include "Tables/raid_encounters.h"
 #include "Tables/raid_partners.h"
 #include "Tables/trainers_with_evs_table.h"
+#include "Tables/duplicate_abilities.h"
 
 /*
 build_pokemon.c
@@ -3939,4 +3942,53 @@ void PartySpreadPokerus(struct Pokemon *party)
 			}
 		}
 	}
+}
+
+static const u8 sLevelNickTextColors[][3] =
+{
+	{0, 14, 10},
+	{0, 1, 2},
+	{0, 9, 8},
+	{0, 5, 4},
+	{0, 2, 3},
+	{0, 11, 10},
+};
+
+void HandleDuplicateNames_SummaryScreen()
+{
+    struct Pokemon* mon = &(sMonSummaryScreen->currentMon);
+    u8 ability = GetMonAbility(mon);
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+	for(u8 i = 0; i < ARRAY_COUNT(sDuplicateAbilities); i++)
+	{
+		if(ability == sDuplicateAbilities[i].currAbility && species == sDuplicateAbilities[i].species)
+		{
+			StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, sDuplicateAbilities[i].replaceAbilityString);
+		}
+	}
+}
+
+void PokeSum_PrintAbilityNameAndDesc(void)
+{
+	HandleDuplicateNames_SummaryScreen();
+
+
+	//COMMENT THIS IF YOU ARE USING THE DEFAULT SUMMARY SCREEN
+	FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
+
+	AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[4], 2, 4, 2, sLevelNickTextColors[0], TEXT_SPEED_FF,
+		sMonSummaryScreen->summary.abilityNameStrBuf);
+
+	AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], 2, 4, 0, sLevelNickTextColors[0], TEXT_SPEED_FF,
+		sMonSummaryScreen->summary.abilityDescStrBuf);
+
+	//UNCOMMENT THIS IF YOU ARE USING THE DEFAULT SUMMARY SCREEN
+	/*FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
+
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], 2,
+                                 66, 1, sLevelNickTextColors[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.abilityNameStrBuf);
+
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], 2,
+                                 2, 15, sLevelNickTextColors[0], TEXT_SPEED_FF,
+                                 sMonSummaryScreen->summary.abilityDescStrBuf);*/
 }

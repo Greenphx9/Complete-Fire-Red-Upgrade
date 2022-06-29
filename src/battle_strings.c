@@ -8,6 +8,7 @@
 #include "../include/constants/flags.h"
 #include "../include/constants/trainers.h"
 
+#include "../include/new/build_pokemon.h"
 #include "../include/new/battle_strings.h"
 #include "../include/new/battle_strings_2.h"
 #include "../include/new/battle_util.h"
@@ -18,6 +19,8 @@
 #include "../include/new/multi.h"
 #include "../include/new/set_z_effect.h"
 #include "../include/new/text.h"
+
+#include "Tables/duplicate_abilities.h"
 
 /*
 battle_strings.c
@@ -419,6 +422,7 @@ u32 BattleStringExpandPlaceholders(const u8* src, u8* dst)
 	int i;
 	u8 multiplayerId;
 	u8 text[30];
+	u16 species;
 
 	u32 dstID = 0; // if they used dstID, why not use srcID as well?
 	const u8* toCpy = NULL;
@@ -569,16 +573,20 @@ u32 BattleStringExpandPlaceholders(const u8* src, u8* dst)
 				toCpy = GetAbilityName(gLastUsedAbility);
 				break;
 			case B_TXT_ATK_ABILITY: // attacker ability
-				toCpy = GetAbilityName(gAbilitiesPerBank[gBankAttacker]);
+				species = GetBankPartyData(gBankAttacker)->species;
+				toCpy = GetAbilityNameByMon(gAbilitiesPerBank[gBankAttacker], species);
 				break;
 			case B_TXT_DEF_ABILITY: // target ability
-				toCpy = GetAbilityName(gAbilitiesPerBank[gBankTarget]);
+				species = GetBankPartyData(gBankTarget)->species;
+				toCpy = GetAbilityNameByMon(gAbilitiesPerBank[gBankTarget], species);
 				break;
 			case B_TXT_SCR_ACTIVE_ABILITY: // scripting active ability
-				toCpy = GetAbilityName(gAbilitiesPerBank[gBattleScripting.bank]);
+				species = GetBankPartyData(gBattleScripting.bank)->species;
+				toCpy = GetAbilityNameByMon(gAbilitiesPerBank[gBattleScripting.bank], species);
 				break;
 			case B_TXT_EFF_ABILITY: // effect battlerId ability
-				toCpy = GetAbilityName(gAbilitiesPerBank[gEffectBank]);
+				species = GetBankPartyData(gEffectBank)->species;
+				toCpy = GetAbilityNameByMon(gAbilitiesPerBank[gEffectBank], species);
 				break;
 			case B_TXT_TRAINER1_CLASS: // trainer class name
 				if (gTrainerBattleOpponent_A == 0x400) //Lol Secret Bases
@@ -1045,9 +1053,41 @@ const u8* GetAbilityName(const u8 ability)
 	return ptr;
 }
 
+const u8* GetAbilityNameByMon(u8 ability, u16 species)
+{
+	const u8* ptr = NULL;
+	for(u8 i = 0; i < ARRAY_COUNT(sDuplicateAbilities); i++)
+	{
+		if(ability == sDuplicateAbilities[i].currAbility && species == sDuplicateAbilities[i].species)
+		{
+			ptr = sDuplicateAbilities[i].replaceAbilityString;
+		}
+	}
+	if (ptr == NULL)
+		ptr = gAbilityNames[ability];
+	
+
+	if (ptr[3] == 0x8 || ptr[3] == 0x9) //Expanded Ability Names
+		ptr = T1_READ_PTR(ptr);
+
+	return ptr;
+}
+
+const u8* GetAbilityNameDex(const u8 ability)
+{
+	u16 species = sPokedexScreenData->dexSpecies;
+
+	return GetAbilityNameByMon(ability, species);
+}
+
 void CopyAbilityName(u8* dst, const u8 ability)
 {
 	StringCopy(dst, GetAbilityName(ability));
+}
+
+void CopyAbilityNameByMon(u8* dst, const u8 ability, u16 species)
+{
+	StringCopy(dst, GetAbilityNameByMon(ability, species));
 }
 
 #ifdef OPEN_WORLD_TRAINERS

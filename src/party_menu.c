@@ -2207,7 +2207,7 @@ static void ItemUseCB_AbilityCapsule(u8 taskId, TaskFunc func)
 	if (changeTo != ABILITY_NONE) //Ability can be changed
 	{
 		GetMonNickname(mon, gStringVar1);
-		CopyAbilityName(gStringVar2, changeTo);
+		CopyAbilityNameByMon(gStringVar2, changeTo, mon->species);
 		StringExpandPlaceholders(gStringVar4, gText_AbilityCapsuleOfferChange);
 		DisplayPartyMenuMessage(gStringVar4, TRUE);
 		ScheduleBgCopyTilemapToVram(2);
@@ -2331,7 +2331,7 @@ static void Task_ChangeAbility(u8 taskId)
 	}
 
 	GetMonNickname(mon, gStringVar1);
-	CopyAbilityName(gStringVar2, GetMonAbility(mon));
+	CopyAbilityNameByMon(gStringVar2, GetMonAbility(mon), mon->species);
 	StringExpandPlaceholders(gStringVar4, gText_AbilityCapsuleChangedAbility);
 	DisplayPartyMenuMessage(gStringVar4, TRUE);
 	ScheduleBgCopyTilemapToVram(2);

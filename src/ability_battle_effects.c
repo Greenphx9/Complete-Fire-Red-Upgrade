@@ -2702,9 +2702,9 @@ static void PrintBattlerOnAbilityPopUp(u8 battlerId, u8 spriteId1, u8 spriteId2)
 						2, 7, 1);
 }
 
-static void PrintAbilityOnAbilityPopUp(u32 ability, u8 spriteId1, u8 spriteId2)
+static void PrintAbilityOnAbilityPopUp(u32 ability, u8 spriteId1, u8 spriteId2, u16 species)
 {
-	const u8* abilityName = GetAbilityName(ability);
+	const u8* abilityName = GetAbilityNameByMon(ability, species);
 
 	PrintOnAbilityPopUp(abilityName,
 						(void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32) + 256,
@@ -2891,9 +2891,10 @@ void AnimTask_LoadAbilityPopUp(u8 taskId)
 
 	StartSpriteAnim(&gSprites[spriteId1], 0);
 	StartSpriteAnim(&gSprites[spriteId2], 0);
+	u16 species = GetBankPartyData(gBattleAnimAttacker)->species;
 
 	PrintBattlerOnAbilityPopUp(gBattleAnimAttacker, spriteId1, spriteId2);
-	PrintAbilityOnAbilityPopUp(ability, spriteId1, spriteId2);
+	PrintAbilityOnAbilityPopUp(ability, spriteId1, spriteId2, species);
 	RestoreOverwrittenPixels((void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32));
 
 	DestroyAnimVisualTask(taskId);

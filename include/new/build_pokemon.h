@@ -45,3 +45,10 @@ enum TierBanCheckingType
 	CHECK_BATTLE_TOWER_SPREADS,
 	CHECK_PARTY_OFFSET,
 };
+
+struct DuplicateAbility
+{
+	u16 species;
+	u8 currAbility;
+	const u8* replaceAbilityString;
+};

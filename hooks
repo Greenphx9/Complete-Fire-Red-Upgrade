@@ -643,3 +643,6 @@ ActivateMGBAPrint 81E381C 0
 FixInstantTextOptionSpeed 08002D10 0
 RunTextPrintersForInstantTextHook 08002DEE 0
 #endif
+
+##Duplicate Ability System
+PokeSum_PrintAbilityNameAndDesc 08137C18 0
