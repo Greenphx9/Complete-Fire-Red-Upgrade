@@ -564,8 +564,8 @@ static void Task_ScriptShowMonPic(u8 taskId)
 
 */
 
-#define PS_X        4
-#define BS_X        54
+#define PS_X        6
+#define BS_X        51
 #define EV_X        BS_X + 30
 #define IV_X        EV_X + 30
 
@@ -801,7 +801,7 @@ static void PrintWindow2(u16 species, u8 isEgg, u8 friendship)
 
     if(!isEgg)
     {
-        AddTextPrinterParameterized3(WIN_BOTTOM_BOX, 2, 14, 4, gBlackTextColor, 0, gText_Total);
+        AddTextPrinterParameterized3(WIN_BOTTOM_BOX, 2, 12, 4, gBlackTextColor, 0, gText_Total);
 
         ConvertIntToDecimalStringN(gStringVar1, gTotalStatsBS, STR_CONV_MODE_RIGHT_ALIGN, 3);
         ConvertIntToDecimalStringN(gStringVar2, gTotalStatsEV, STR_CONV_MODE_RIGHT_ALIGN, 3);
@@ -827,7 +827,7 @@ static void PrintWindow2(u16 species, u8 isEgg, u8 friendship)
         StringAppend(gStringVar4, gStringVar2);
         
         StringAppend(gStringVar4, gText_Happy);
-        AddTextPrinterParameterized3(WIN_BOTTOM_BOX, 2, 14, 18, gBlackTextColor, 0, gStringVar4);
+        AddTextPrinterParameterized3(WIN_BOTTOM_BOX, 2, 12, 18, gBlackTextColor, 0, gStringVar4);
         
     }else
     {

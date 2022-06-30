@@ -793,12 +793,7 @@ static void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies)
 			evIncrease *= 2;
 		if (holdEffect == ITEM_EFFECT_MACHO_BRACE && itemQuality > 0 && itemQuality - 1 == stat)
 		{
-			if (FlagGet(FLAG_NO_GRINDING_EV)) {
-				AddEVs(mon, stat, 252); //Power items always add to requested stat
-			}
-			else {
-				AddEVs(mon, stat, POWER_ITEM_EV_YIELD); //Power items always add to requested stat
-			}
+			AddEVs(mon, stat, VarGet(VAR_POWER_ITEM_EV_VALUE)); //Power items always add to requested stat
 		}
 		else {
 			AddEVs(mon, stat, evIncrease);

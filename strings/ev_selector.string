@@ -1,11 +1,35 @@
 #org @gText_EvSelectorMain
-EVs: [BUFFER3]\n[BUFFER1]    \n\n[BUFFER2]
+EVs: [BUFFER3]\n[BUFFER1]    \n[BUFFER2]
 
 #org @digitInidicator_1
-[LEFT_ARROW_2]+1[RIGHT_ARROW_2]
+[LEFT_ARROW]+1 [RIGHT_ARROW]
 
 #org @digitInidicator_10
-[LEFT_ARROW_2]+10[RIGHT_ARROW_2]
+[LEFT_ARROW]+10 [RIGHT_ARROW]
 
 #org @digitInidicator_100
-[LEFT_ARROW_2]+100[RIGHT_ARROW_2]
+[LEFT_ARROW]+100 [RIGHT_ARROW]
+
+#org @gText_PowerItemLevel1
+Power Item\nLevel: 1
+
+#org @gText_PowerItemLevel2
+Power Item\nLevel: 2
+
+#org @gText_PowerItemLevel3
+Power Item\nLevel: 3
+
+#org @gText_PowerItemLevel4
+Power Item\nLevel: 4
+
+#org @gText_PowerItemLevel5
+Power Item\nLevel: 5
+
+#org @gText_PowerItemLevel6
+Power Item\nLevel: 6
+
+#org @gText_ChangesApplied
+[BLACK]CHANGES HAVE BEEN APPLIED.
+
+#org @gText_ChangesDiscarded
+[BLACK]CHANGES DISCARDED.

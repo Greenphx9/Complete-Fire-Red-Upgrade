@@ -120,6 +120,8 @@ u8 __attribute__((long_call)) GetTrainerFacingDirectionMovementType(u8 direction
 
 u8 __attribute__((long_call)) TryLoadObjectPalette(const struct SpritePalette* spritePalette);
 void __attribute__((long_call)) ApplyGlobalFieldPaletteTint(u8 paletteIdx);
+void __attribute__((long_call)) ClearPlayerHeldMovementAndUnfreezeObjectEvents(void);
+void __attribute__((long_call)) CameraUpdate(void);
 
 /*
 extern const struct SpriteFrameImage gEventObjectPicTable_PechaBerryTree[];

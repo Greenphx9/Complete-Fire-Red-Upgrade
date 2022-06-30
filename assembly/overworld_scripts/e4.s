@@ -40,13 +40,11 @@ EventScript_DescribeReins:
 
 .global EventScript_MegaSeller
 EventScript_MegaSeller:
-	callasm CB2_EVSelector
+	lock
+	msgbox gText_SellMegaStones MSG_FACE
+	pokemart EventScript_MegaMart
 	release
 	end
-	@@msgbox gText_SellMegaStones MSG_FACE
-	@@pokemart EventScript_MegaMart
-	@@release
-	@@end
 
 .global EventScript_Chansey
 EventScript_Chansey:

@@ -108,6 +108,8 @@ npc 7 0 1 EventScript_JustTalkSlowbro
 sign 3 44 5 EventScript_BehindBillHouse
 npc 3 3 13 EventScript_TM87
 npc 7 9 0 EventScript_MySonOldAmber
+npc 7 7 3 EventScript_PowerItemLevelUp
+npc 7 7 4 EventScript_PowerItemEVModifier
 
 ## Route 5
 tile 3 23 0 EventScript_R5May

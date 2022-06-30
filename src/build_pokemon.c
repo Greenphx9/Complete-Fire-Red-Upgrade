@@ -3834,7 +3834,7 @@ void CalculateMonStatsNew(struct Pokemon* mon)
 	u32 i;
 	u16 newMaxHP;
 	u8 ivs[NUM_STATS] = { 0 };
-	u8 evs[NUM_STATS] = { 0 };
+	u8 evs[NUM_STATS] = { 0, 0, 0, 0, 0, 0 };
 
 	for (i = STAT_HP; i < NUM_STATS; ++i)
 	{

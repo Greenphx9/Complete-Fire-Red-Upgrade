@@ -121,7 +121,15 @@ static void RemoveTimeBox(void);
 
 extern u8 sTimeWindowId;
 
-
+static const struct WindowTemplate sTimeBoxWindowTemplate = {
+	.bg = 0,
+	.tilemapLeft = 1,
+	.tilemapTop = 1,
+	.width = 10,
+	.height = 2,
+	.paletteNum = 15,
+	.baseBlock = 0x008
+};
 
 const struct MenuAction sStartMenuActionTable[] =
 {
@@ -176,8 +184,6 @@ static bool8 CanSetUpSecondaryStartMenu(void)
 
 static void SetUpStartMenu_NormalField(void)
 {
-	DrawTime();
-
 	if (FlagGet(FLAG_SYS_POKEDEX_GET))
 		AppendToStartMenuItems(STARTMENU_POKEDEX);
 
@@ -206,6 +212,9 @@ static void SetUpStartMenu_NormalField(void)
 		AppendToStartMenuItems(STARTMENU_EXIT_RIGHT);
 	else
 		AppendToStartMenuItems(STARTMENU_EXIT);
+				
+	DrawTime();
+
 }
 
 static void SetUpStartMenu_SafariZone(void)
@@ -241,7 +250,6 @@ static void SetUpStartMenu_SafariZone(void)
 static void BuildPokeToolsMenu(void)
 {
 	sNumStartMenuItems = 0;
-	DrawTime();
 
 #ifdef FLAG_SYS_DEXNAV
 	if (FlagGet(FLAG_SYS_DEXNAV) && FlagGet(FLAG_SYS_POKEDEX_GET))
@@ -254,6 +262,8 @@ static void BuildPokeToolsMenu(void)
 #endif
 
 	AppendToStartMenuItems(STARTMENU_EXIT_LEFT);
+
+	DrawTime();
 }
 
 void SetUpStartMenu(void)
@@ -276,13 +286,11 @@ extern u8 sRTCFrameCount;
 
 bool8 StartCB_HandleInput(void)
 {
+	u8 taskId;
 	ForceClockUpdate(); //To help with the clock in the start menu routine
 
-	if (!FlagGet(FLAG_SYS_SAFARI_MODE) && (sStartMenuOpen == START_MENU_NORMAL || (sTimeWindowId != 0 && sTimeWindowId != 0xFF))) {
-		if(sRTCFrameCount == 0) 
-		{
-			UpdateTimeText();
-		}
+	if (!FlagGet(FLAG_SYS_SAFARI_MODE) && sTimeWindowId != 0xFF) {
+		UpdateTimeText();
 	}
 
 	if (JOY_NEW(DPAD_UP))
@@ -338,7 +346,8 @@ bool8 StartCB_HandleInput(void)
 	}
 	else if (JOY_NEW(B_BUTTON | START_BUTTON))
 	{
-		DestroySafariZoneStatsWindow();
+		//DestroyTask(FindTaskIdByFunc(TryUpdateTimeText));
+		//DestroySafariZoneStatsWindow();
 		RemoveTimeBox();
 		DestroyHelpMessageWindow_();
 		CloseStartMenu();
@@ -367,19 +376,13 @@ static bool8 ReloadStartMenu(void)
 }
 
 void DrawTime(void) {
-	u8 palNum = 15;
-	u16 width = 10;
-	u16 height = 2;
-
-	//Create Window
-	struct WindowTemplate template = SetWindowTemplateFields(0, 1, 1, width, height, palNum, 0x008); //Total Size: 20
-	sTimeWindowId = AddWindow(&template);
+	sTimeWindowId = AddWindow(&sTimeBoxWindowTemplate);
 	if (sTimeWindowId != 0xFF)
 	{
 		DrawStdWindowFrame(sTimeWindowId, FALSE);
-		FillWindowPixelBuffer(sTimeWindowId, PIXEL_FILL(1));
 		PutWindowTilemap(sTimeWindowId);
-		CopyWindowToVram(sTimeWindowId, COPYWIN_BOTH);
+		FillWindowPixelBuffer(sTimeWindowId, PIXEL_FILL(1));
+		//CopyWindowToVram(sTimeWindowId, COPYWIN_BOTH);
 	}
 
 	//Print Text
@@ -412,8 +415,9 @@ static u8* sDayNames[] =
     gText_StartMenu_Saturday,
 };
 
-static void UpdateTimeText(void)
+static void UpdateTimeText()
 {
+
 	//#ifdef HR12_CLOCK
 	const u8* amPMString = (gClock.hour >= 12) ? gText_StartMenu_PM : gText_StartMenu_AM;
 
@@ -434,7 +438,7 @@ static void UpdateTimeText(void)
 	StringExpandPlaceholders(gStringVar4, gText_StartMenu_TimeBase);
 	/#endif*/
 
-	FillWindowPixelBuffer(sTimeWindowId, PIXEL_FILL(1));
+	//FillWindowPixelBuffer(sTimeWindowId, PIXEL_FILL(1));
 	AddTextPrinterParameterized(sTimeWindowId, 2, gStringVar4, 4, 3, 0xFF, NULL);
 	//WindowPrint(sTimeWindowId, 1, 3, 1, &sTextColour, 0xFF, gStringVar4);
 	CopyWindowToVram(sTimeWindowId, COPYWIN_GFX);
@@ -468,9 +472,9 @@ static void RemoveTimeBox(void)
 {
 	if (sTimeWindowId != 0xFF)
 	{
-		CleanWindow(sTimeWindowId);
+		ClearStdWindowAndFrameToTransparent(sTimeWindowId, FALSE);
+		CopyWindowToVram(sTimeWindowId, COPYWIN_GFX);
 		RemoveWindow(sTimeWindowId);
-		sTimeWindowId = 0xFF;
 	}
 }
 

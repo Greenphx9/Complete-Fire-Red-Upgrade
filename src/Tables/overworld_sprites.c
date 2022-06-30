@@ -333,3 +333,30 @@ const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Tamer =
     .images = gEventObjectPicTable_Tamer,
     .affineAnims = gDummySpriteAffineAnimTable,
 };
+
+extern const u8 gEventObjectPic_PC2Tiles[];
+
+static const struct SpriteFrameImage gEventObjectPicTable_PC2[] =
+{
+    overworld_frame(gEventObjectPic_PC2Tiles, 4, 4, 0),
+};
+
+const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_PC2 =
+{
+    .tileTag = 0xFFFF,
+    .paletteTag1 = 0x120A,
+    .paletteTag2 = EVENT_OBJ_PAL_TAG_NONE,
+    .size = (32 * 32) / 2,
+    .width = 32,
+    .height = 32,
+    .shadowSize = SHADOW_SIZE_M, //Can also be SHADOW_SIZE_S, SHADOW_SIZE_L, or SHADOW_SIZE_XL
+    .inanimate = FALSE,
+    .disableReflectionPaletteLoad = FALSE,
+    .tracks = TRACKS_FOOT, //Can also be TRACKS_TIRE
+    .gender = MALE, //Can also be FEMALE
+    .oam = gEventObjectBaseOam_32x32,
+    .subspriteTables = gEventObjectSpriteOamTables_32x32,
+    .anims = gEventObjectImageAnimTable_Standard,
+    .images = gEventObjectPicTable_PC2,
+    .affineAnims = gDummySpriteAffineAnimTable,
+};

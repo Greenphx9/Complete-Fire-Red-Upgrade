@@ -29,6 +29,8 @@
 #include "../include/constants/moves.h"
 #include "../include/constants/region_map_sections.h"
 #include "../include/constants/songs.h"
+#include "../include/event_object_movement.h"
+#include "../include/script.h"
 
 #include "../include/new/battle_strings.h"
 #include "../include/new/build_pokemon.h"
@@ -42,42 +44,8 @@
 #include "../include/base_stats.h"
 #include "../include/new/exp.h"
 
-void EVSelector_Start(u8 taskId);
-static void EVSelector_SelectEVs(u8 taskId);
-void CB2_ShowEvIv(void);
-void CB2_EVSelector(void);
-void CB2_EVSelector2(void);
-static void DestroyEVSelectorMenu(u8);
-
-void Call_EVSelector(void)
-{
-    PlaySE(244);
-    SetVBlankCallback(NULL);
-    SetMainCallback2(CB2_EVSelector);
-    ScriptContext2_Enable();
-}
-
-void CB2_EVSelector(void)
-{
-    CreateTask(EVSelector_Start, 0);
-    SetMainCallback2(CB2_EVSelector2);
-}
-
-void CB2_EVSelector2(void) 
-{
-    RunTasks();
-    AnimateSprites();
-    BuildOamBuffer();
-    UpdatePaletteFade();
-}
-
-extern const u8 gText_EvSelectorMain[];
-extern const u8 digitInidicator_1[];
-extern const u8 digitInidicator_10[];
-extern const u8 digitInidicator_100[];
-
 #define DEBUG_MAIN_MENU_WIDTH 13
-#define DEBUG_MAIN_MENU_HEIGHT 8
+#define DEBUG_MAIN_MENU_HEIGHT 7
 
 #define DEBUG_NUMBER_DISPLAY_WIDTH 10
 #define DEBUG_NUMBER_DISPLAY_HEIGHT 4
@@ -90,6 +58,16 @@ extern const u8 digitInidicator_100[];
 #define DEBUG_NUMBER_DIGITS_ITEMS 4
 #define DEBUG_NUMBER_DIGITS_ITEM_QUANTITY 2
 
+void EVSelector_Start(u8 taskId);
+static void EVSelector_SelectEVs(u8 taskId);
+void CB2_ShowEvIv(void);
+void CB2_EVSelector(void);
+void CB2_EVSelector2(void);
+static void DestroyEVSelectorMenu(u8);
+static u8 GetMaxEVs(void);
+void Call_EVSelector();
+const u8* GetPowerItemEVLevelString(void);
+
 static const struct WindowTemplate sDebugNumberDisplayWindowTemplate =
 {
     .bg = 0,
@@ -100,6 +78,33 @@ static const struct WindowTemplate sDebugNumberDisplayWindowTemplate =
     .paletteNum = 15,
     .baseBlock = 1,
 };
+
+void Call_EVSelector()
+{
+    PlaySE(244);
+    //SetVBlankCallback(NULL);
+    SetMainCallback2(CB2_EVSelector);
+    //ScriptContext2_Enable();
+}
+
+void CB2_EVSelector(void)
+{
+    u8 taskId = CreateTask(EVSelector_Start, 3);
+    SetMainCallback2(CB2_EVSelector2);
+    gTasks[taskId].data[3] = 1;
+}
+
+void CB2_EVSelector2(void) 
+{
+    RunTasks();
+    AnimateSprites();
+    BuildOamBuffer();
+}
+
+extern const u8 gText_EvSelectorMain[];
+extern const u8 digitInidicator_1[];
+extern const u8 digitInidicator_10[];
+extern const u8 digitInidicator_100[];
 
 const u8 * const gText_DigitIndicator[] =
 {
@@ -114,7 +119,14 @@ static const s32 sPowersOfTen[] =
            100,
 };
 
-#define gText_EmptyString2 (const u8*) 0x84161cd
+extern const u8 gText_PowerItemLevel1[];
+extern const u8 gText_PowerItemLevel2[];
+extern const u8 gText_PowerItemLevel3[];
+extern const u8 gText_PowerItemLevel4[];
+extern const u8 gText_PowerItemLevel5[];
+extern const u8 gText_PowerItemLevel6[];
+extern const u8 EventScript_PowerItemEVFadescreen[];
+extern const u8 EventScript_PowerItemEVFadescreen2[];
 
 void EVSelector_Start(u8 taskId)
 {
@@ -126,9 +138,10 @@ void EVSelector_Start(u8 taskId)
     CopyWindowToVram(windowId, 3);
 
     //Display initial ID
+    
     StringCopy(gStringVar2, gText_DigitIndicator[0]);
     ConvertIntToDecimalStringN(gStringVar3, 1, STR_CONV_MODE_LEADING_ZEROS, 3);
-    StringCopy(gStringVar1,  gText_EmptyString2);
+    StringCopy(gStringVar1,  GetPowerItemEVLevelString());
     StringCopyPadded(gStringVar1, gStringVar1, CHAR_SPACE, 15);
     StringExpandPlaceholders(gStringVar4, gText_EvSelectorMain);
     AddTextPrinterParameterized(windowId, 1, gStringVar4, 1, 1, 0, NULL);
@@ -144,6 +157,7 @@ void EVSelector_Start(u8 taskId)
 
 extern const u8 SystemScript_ReleaseAll[];
 
+
 static void EVSelector_SelectEVs(u8 taskId)
 {
     if (gMain.newKeys & DPAD_ANY)
@@ -153,8 +167,8 @@ static void EVSelector_SelectEVs(u8 taskId)
         if(gMain.newKeys & DPAD_UP)
         {
             gTasks[taskId].data[3] += sPowersOfTen[gTasks[taskId].data[4]];
-            if(gTasks[taskId].data[3] >= 252)
-                gTasks[taskId].data[3] = 252;
+            if(gTasks[taskId].data[3] >= GetMaxEVs())
+                gTasks[taskId].data[3] = GetMaxEVs();
         }
         if(gMain.newKeys & DPAD_DOWN)
         {
@@ -171,16 +185,15 @@ static void EVSelector_SelectEVs(u8 taskId)
         }
         if(gMain.newKeys & DPAD_RIGHT)
         {
-            if(gTasks[taskId].data[4] < 4-1)
+            if(gTasks[taskId].data[4] < DEBUG_NUMBER_DIGITS_ITEMS-1)
                 gTasks[taskId].data[4] += 1;
-            if(gTasks[taskId].data[4] > 100)
-                gTasks[taskId].data[4] = 100;
+            if(gTasks[taskId].data[4] > 2)
+                gTasks[taskId].data[4] = 2;
         }
-		//ConvertIntToDecimalStringN(gStringVar4, gTasks[taskId].data[3])
         StringCopy(gStringVar2, gText_DigitIndicator[gTasks[taskId].data[4]]);
         //StringCopy(gStringVar1, gStringVar4); //CopyItemName(gTasks[taskId].data[3], gStringVar1);
         StringCopyPadded(gStringVar1, gStringVar1, CHAR_SPACE, 15);
-        ConvertIntToDecimalStringN(gStringVar3, gTasks[taskId].data[3], STR_CONV_MODE_LEADING_ZEROS, 4);
+        ConvertIntToDecimalStringN(gStringVar3, gTasks[taskId].data[3], STR_CONV_MODE_LEADING_ZEROS, 3);
         StringExpandPlaceholders(gStringVar4, gText_EvSelectorMain);
         AddTextPrinterParameterized(gTasks[taskId].data[2], 1, gStringVar4, 1, 1, 0, NULL);
     }
@@ -190,13 +203,23 @@ static void EVSelector_SelectEVs(u8 taskId)
         gTasks[taskId].data[3] = 1;
         gTasks[taskId].data[4] = 0;
 
-        PlaySE(5);
+        PlaySE(2);
         DestroyEVSelectorMenu(taskId);
+        EnableBothScriptContexts();
+        FadeScreen(FADE_TO_BLACK, 0);
+        ScriptContext1_SetupScript(EventScript_PowerItemEVFadescreen);
+        ScriptContext2_Enable();
+        SetMainCallback2(CB2_ReturnToFieldFromDiploma);
     }
     else if (gMain.newKeys & B_BUTTON)
     {
-        PlaySE(5);
+        PlaySE(3);
         DestroyEVSelectorMenu(taskId);
+        EnableBothScriptContexts();
+        FadeScreen(FADE_TO_BLACK, 0);
+        ScriptContext1_SetupScript(EventScript_PowerItemEVFadescreen2);
+        ScriptContext2_Enable();
+        SetMainCallback2(CB2_ReturnToFieldFromDiploma);
     }
 }
 
@@ -208,9 +231,63 @@ static void DestroyEVSelectorMenu(u8 taskId)
     ClearStdWindowAndFrame(gTasks[taskId].data[2], TRUE);
     RemoveWindow(gTasks[taskId].data[2]);
 
-    EnableBothScriptContexts();
-    FreeAllWindowBuffers();
-    ClearStdWindowAndFrame(gTasks[taskId].data[1], TRUE);
-    RemoveWindow(gTasks[taskId].data[1]);
     DestroyTask(taskId);
+    EnableBothScriptContexts();
+}
+
+static u8 GetMaxEVs(void) 
+{
+    u8 evs = 0;
+    switch(VarGet(VAR_POWER_ITEM_LEVEL))
+    {
+        case 1:
+            evs = 8;
+            break;
+        case 2:
+            evs = 16;
+            break;
+        case 3:
+            evs = 32;
+            break;
+        case 4:
+            evs = 64;
+            break;
+        case 5:
+            evs = 128;
+            break;
+        case 6:
+            evs = 252;
+            break;
+    }
+    return evs;
+}
+
+const u8* GetPowerItemEVLevelString(void)
+{
+    const u8* string;
+    switch(VarGet(VAR_POWER_ITEM_LEVEL)) //Buffer doesn't work for some reason
+    {
+        case 1:
+            string = gText_PowerItemLevel1;
+            break;
+        case 2:
+            string = gText_PowerItemLevel2;
+            break;
+        case 3:
+            string = gText_PowerItemLevel3;
+            break;
+        case 4:
+            string = gText_PowerItemLevel4;
+            break;
+        case 5:
+            string = gText_PowerItemLevel5;
+            break;
+        case 6:
+            string = gText_PowerItemLevel6;
+            break;
+        default:
+            string = gText_PowerItemLevel1;
+            break;
+    }
+    return string;
 }

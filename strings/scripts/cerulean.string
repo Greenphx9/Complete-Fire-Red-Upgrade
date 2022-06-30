@@ -111,3 +111,15 @@ All right!\nYou can have the CascadeBadge to\lshow you beat me.
 
 #org @gText_GiveCascadeBadge2
 [BLACK][PLAYER] received the\nCascadeBadge from Misty!
+
+#org @gText_EVSelectorHello
+Hello.\pI assume you want to edit your\nPower Item EV Gain.\pIf so, you've come to the right\nperson.
+
+#org @gText_EVSelectorComeBackLater
+Come back whenever you want to edit\nyour Power Item EV Gain.
+
+#org @gText_ApplyingChangesPleaseWait
+APPLYING CHANGES[.]\nPLEASE WAIT[.]
+
+#org @gText_HelloCurrentlyLevelBuffer
+Hello there.\nI can upgrade your Power Item's\lLevel.\pYour Power Items are currently level\n[BUFFER1]. Do you want me to\lupgrade them?

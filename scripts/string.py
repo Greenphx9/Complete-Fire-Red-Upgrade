@@ -25,6 +25,7 @@ SpecialBuffers = {
     "BUFFER1": ["FD", "02"],
     "BUFFER2": ["FD", "03"],
     "BUFFER3": ["FD", "04"],
+    "BUFFER4": ["FD", "05"],
     "RIVAL": ["FD", "06"],
 
     "LV": ["34"],
@@ -81,6 +82,9 @@ SpecialBuffers = {
     "DPAD_LEFT_RIGHT": ["F8", "0B"],
     "DPAD": ["F8", "0C"],
 
+
+    "LEFT_ARROW": ["7B", "00"],
+    "RIGHT_ARROW": ["7C", "00"],
     "UP_ARROW_2": ["F9", "00"],
     "DOWN_ARROW_2": ["F9", "01"],
     "LEFT_ARROW_2": ["F9", "02"],

@@ -405,6 +405,42 @@ EventScript_MySonOldAmber:
 	release
 	end
 
+.global EventScript_PowerItemEVModifier
+EventScript_PowerItemEVModifier:
+	lockall
+	callasm Call_EVSelector
+	releaseall
+	end
+
+.global EventScript_PowerItemEVFadescreen
+EventScript_PowerItemEVFadescreen:
+	msgbox gText_ChangesApplied MSG_KEEPOPEN
+	closeonkeypress
+	end
+
+.global EventScript_PowerItemEVFadescreen2
+EventScript_PowerItemEVFadescreen2:
+	msgbox gText_ChangesDiscarded MSG_KEEPOPEN
+	closeonkeypress
+	end
+
+.global EventScript_PowerItemLevelUp
+EventScript_PowerItemLevelUp:
+	lock
+	faceplayer
+	copyvar 0x8004 0x5105
+	buffernumber 0x0 0x8004
+	msgbox gText_HelloCurrentlyLevelBuffer MSG_YESNO
+	compare LASTRESULT 0x1
+	if equal _goto EventScript_ItemsRequired
+	release
+	end
+
+EventScript_ItemsRequired:
+	
+	release
+	end
+
 
 .align 1
 EventScript_CeruleanPowerItemsShop:

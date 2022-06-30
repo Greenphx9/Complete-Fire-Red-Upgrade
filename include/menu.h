@@ -54,3 +54,4 @@ u8 __attribute__((long_call)) Menu_InitCursor(u8 windowId, u8 fontId, u8 left, u
 void __attribute__((long_call)) Menu_LoadStdPalAt(u16 arg0);
 s8 __attribute__((long_call)) Menu_ProcessInputNoWrapClearOnChoose(void);
 void __attribute__((long_call)) Menu_PrintFormatIntlPlayerName(u8 windowId, const u8 * src, u16 x, u16 y);
+void __attribute__((long_call)) CloseBagWindow(u8 whichWindow);
