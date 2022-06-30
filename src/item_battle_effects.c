@@ -672,7 +672,6 @@ u8 ItemBattleEffects(u8 caseID, u8 bank, bool8 moveTurn, bool8 doPluck)
 					}
 				}
 			}
-
 			if (effect)
 			{
 				if (GetPocketByItemId(gLastUsedItem) == POCKET_BERRY_POUCH)

@@ -187,6 +187,7 @@ const s8 gAbilityRatings[ABILITIES_COUNT] =
 	[ABILITY_QUEENLYMAJESTY] = 6,
 	[ABILITY_QUICKFEET] = 5,
 	[ABILITY_RAINDISH] = 3,
+	[ABILITY_GARBAGEABSORB] = 3,
 	[ABILITY_RATTLED] = 3,
 	[ABILITY_RECEIVER] = 0,
 	[ABILITY_RECKLESS] = 6,
@@ -269,7 +270,7 @@ const s8 gAbilityRatings[ABILITIES_COUNT] =
 	[ABILITY_WATERCOMPACTION] = 4,
 	[ABILITY_WATERVEIL] = 4,
 	[ABILITY_WEAKARMOR] = 2,
-	[ABILITY_WHITESMOKE] = 4,
+	//[ABILITY_WHITESMOKE] = 4,
 //	[ABILITY_WIMPOUT] = 3,
 	[ABILITY_WONDERGUARD] = 10,
 	[ABILITY_WONDERSKIN] = 4,
@@ -341,7 +342,7 @@ const bool8 gMoldBreakerIgnoredAbilities[] =
 	[ABILITY_VOLTABSORB] =		TRUE,
 	[ABILITY_WATERABSORB] =		TRUE,
 	[ABILITY_WATERVEIL] =		TRUE,
-	[ABILITY_WHITESMOKE] =		TRUE,
+	//[ABILITY_WHITESMOKE] =		TRUE,
 	[ABILITY_WONDERGUARD] =		TRUE,
 	[ABILITY_BIGPECKS] =		TRUE,
 	[ABILITY_CONTRARY] =		TRUE,
@@ -1223,6 +1224,16 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 					{
 						BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
 						gBattleMoveDamage = MathMax(1, GetBaseMaxHP(bank) / 16);
+						gBattleMoveDamage *= -1;
+						effect++;
+					}
+					break;
+
+				case ABILITY_GARBAGEABSORB:
+					if(!BATTLER_MAX_HP(bank))
+					{
+						BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
+						gBattleMoveDamage = MathMax(1, GetBaseMaxHP(bank) / 12);
 						gBattleMoveDamage *= -1;
 						effect++;
 					}

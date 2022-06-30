@@ -3114,7 +3114,7 @@ static const struct BattleTowerSpread sRaidPartnerSpread_Hailey_Rank6[] =
 		.spDefEv = 4,
 		.spdEv = 252,
 		.ability = FRONTIER_ABILITY_HIDDEN, //ABILITY_SNOWCLOAK
-		.item = ITEM_FLYINIUM_Z,
+		.item = ITEM_LIFE_ORB,
 		.moves =
 		{
 			MOVE_FREEZEDRY,

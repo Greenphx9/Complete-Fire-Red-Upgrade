@@ -427,6 +427,8 @@ EventScript_PowerItemEVFadescreen2:
 .global EventScript_PowerItemLevelUp
 EventScript_PowerItemLevelUp:
 	lock
+	givepokemon SPECIES_MELMETAL 100 0x0 0x0
+	giveitem 0x24A 0x1 MSG_FIND
 	faceplayer
 	copyvar 0x8004 0x5105
 	buffernumber 0x0 0x8004

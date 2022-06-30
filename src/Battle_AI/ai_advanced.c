@@ -2584,8 +2584,8 @@ bool32 ShouldLowerStat(u8 battler, u16 battlerAbility, u8 stat)
     if ((gBattleMons[battler].statStages[stat] > 0 && battlerAbility != ABILITY_CONTRARY)
       || (battlerAbility == ABILITY_CONTRARY && gBattleMons[battler].statStages[stat] < 12))
     {
-        if (battlerAbility == ABILITY_CLEARBODY
-         || battlerAbility == ABILITY_WHITESMOKE)
+        if (battlerAbility == ABILITY_CLEARBODY)
+         //|| battlerAbility == ABILITY_WHITESMOKE)
             return FALSE;
 
         if (stat == STAT_ATK && (battlerAbility == ABILITY_HYPERCUTTER || battlerAbility == ABILITY_DEFIANT))

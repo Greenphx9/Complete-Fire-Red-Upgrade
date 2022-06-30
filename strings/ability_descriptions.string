@@ -90,6 +90,12 @@ Restores HP if poisoned.
 #org @DESC_ICEBODY
 Slight HP recovery in hail.
 
+#org @DESC_GARBAGEABSORB
+Slight HP recovery at turn end.
+
+#org @DESC_CLEARBODY
+Prevents stat reduction.
+
 #org @DESC_MOODY
 Raises one stat and lowers another.
 

@@ -447,3 +447,24 @@ AceTrainerBothPal 8239E1C
 EventScript_EVIVMenu 8904058
 
 ##gEventObjectGraphicsInfo_Bug_Catcher 8EB1050
+
+Bag_Butterfreenite_SpriteTiles 093C9320
+Bag_Butterfreenite_SpritePal 093C9324
+
+Bag_Machampite_SpriteTiles 093C9328
+Bag_Machampite_SpritePal 093C932C
+
+Bag_Kinglerite_SpriteTiles 093C9330
+Bag_Kinglerite_SpritePal 093C9334
+
+Bag_Laprasite_SpriteTiles 093C9338
+Bag_Laprasite_SpritePal 093C933C
+
+Bag_Snorlaxite_SpriteTiles 093C9340
+Bag_Snorlaxite_SpritePal 093C9344
+
+Bag_Garbodorite_SpriteTiles 093C9348
+Bag_Garbodorite_SpritePal 093C934C
+
+Bag_Melmetalite_SpriteTiles 093C9350
+Bag_Melmetalite_SpritePal 093C9354

@@ -221,8 +221,8 @@ Arena Trap
 #org @NAME_VITAL_SPIRIT
 Vital Spirit
 
-#org @NAME_WHITE_SMOKE
-White Smoke
+#org @NAME_GARBAGE_ABSORB
+Garbage Absorb
 
 #org @NAME_NEUTRALISING_GAS
 Neutralize Gas
@@ -767,5 +767,46 @@ Screen Cleaner
 #org @NAME_PASTEL_VEIL
 Pastel Veil
 
+
+
 #org @NAME_IRON_BARBS
 Iron Barbs
+
+#org @NAME_PURE_POWER
+Pure Power
+
+#org @NAME_LIBERO
+Libero
+
+#org @NAME_WIMP_OUT
+Wimp Out
+
+#org @NAME_PROPELLER_TAIL
+Propeller Tail
+
+#org @NAME_CHILLING_NEIGH
+Chilling Neigh
+
+#org @NAME_TANGLING_HAIR
+Tangling Hair
+
+#org @NAME_BATTLE_ARMOR
+Battle Armor
+
+#org @NAME_SHADOW_SHIELD
+Shadow Shield
+
+#org @NAME_POWER_OF_ALCHEMY
+Power Of Alchemy
+
+#org @NAME_DAZZLING
+Dazzling
+
+#org @NAME_CRABBY_TACTICS
+Crabby Tactics
+
+#org @NAME_FULL_METAL_BODY
+Full Metal Body
+
+#org @NAME_WHITE_SMOKE
+White Smoke

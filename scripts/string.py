@@ -68,6 +68,10 @@ SpecialBuffers = {
     "PAUSE_MUSIC": ["FC", "17"],
     "RESUME_MUSIC": ["FC", "18"],
 
+    "TARGET_NAME": ["FD", "3B"],
+    "TARGET_PARTNER_NAME": ["FD", "3C"],
+    "DEF_PREFIX_5": ["FD", "3D"],
+
     "A_BUTTON": ["F8", "00"],
     "B_BUTTON": ["F8", "01"],
     "L_BUTTON": ["F8", "02"],

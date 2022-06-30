@@ -319,6 +319,7 @@ u8 TurnBasedEffects(void)
 						case ABILITY_DRYSKIN:
 						case ABILITY_ICEBODY:
 						case ABILITY_SOLARPOWER:
+						case ABILITY_GARBAGEABSORB:
 							if (AbilityBattleEffects(ABILITYEFFECT_ENDTURN, gActiveBattler, 0, 0, 0))
 								effect++;
 							break;

@@ -613,13 +613,13 @@ enum
 //Z-Crystals
 enum
 {
-	ITEM_NORMALIUM_Z = 0x244, 		//All items after this will be 0x244 + 1, 0x244 + 2...
-	ITEM_FIGHTINIUM_Z, 		//0x245 //Put the Z-Crystals in order
-	ITEM_FLYINIUM_Z,		//0x246
-	ITEM_POISONIUM_Z,		//0x247
-	ITEM_GROUNDIUM_Z,		//0x248
-	ITEM_ROCKIUM_Z,			//0x249
-	ITEM_BUGINIUM_Z,		//0x24A
+	ITEM_BUTTERFREENITE = 0x244, 		//All items after this will be 0x244 + 1, 0x244 + 2...
+	ITEM_MACHAMPITE, 		//0x245 //Put the Z-Crystals in order
+	ITEM_KINGLERITE,		//0x246
+	ITEM_LAPRASITE,		//0x247
+	ITEM_SNORLAXITE,		//0x248
+	ITEM_GARBODORITE,			//0x249
+	ITEM_MELMETALITE,		//0x24A
 	ITEM_GHOSTIUM_Z,		//0x24B
 	ITEM_STEELIUM_Z,		//0x24C
 	ITEM_FIRIUM_Z,			//0x24D

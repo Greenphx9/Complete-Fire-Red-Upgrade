@@ -116,7 +116,7 @@ void DestroySafariZoneStatsWindow();
 
 void DrawTime(void);
 static void UpdateTimeText(void);
-static void TryUpdateTimeText(u8 taskId);
+//static void TryUpdateTimeText(u8 taskId);
 static void RemoveTimeBox(void);
 
 extern u8 sTimeWindowId;
@@ -286,7 +286,6 @@ extern u8 sRTCFrameCount;
 
 bool8 StartCB_HandleInput(void)
 {
-	u8 taskId;
 	ForceClockUpdate(); //To help with the clock in the start menu routine
 
 	if (!FlagGet(FLAG_SYS_SAFARI_MODE) && sTimeWindowId != 0xFF) {
@@ -346,8 +345,6 @@ bool8 StartCB_HandleInput(void)
 	}
 	else if (JOY_NEW(B_BUTTON | START_BUTTON))
 	{
-		//DestroyTask(FindTaskIdByFunc(TryUpdateTimeText));
-		//DestroySafariZoneStatsWindow();
 		RemoveTimeBox();
 		DestroyHelpMessageWindow_();
 		CloseStartMenu();
@@ -444,7 +441,7 @@ static void UpdateTimeText()
 	CopyWindowToVram(sTimeWindowId, COPYWIN_GFX);
 }
 
-static void TryUpdateTimeText(u8 taskId)
+/*static void TryUpdateTimeText(u8 taskId)
 {
 	struct Task* task = &gTasks[taskId];
 	u8 prevSecond = task->data[1];
@@ -466,7 +463,7 @@ static void TryUpdateTimeText(u8 taskId)
 		//Print new time
 		UpdateTimeText();
 	}
-}
+}*/
 
 static void RemoveTimeBox(void)
 {
