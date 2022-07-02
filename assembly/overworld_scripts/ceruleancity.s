@@ -427,9 +427,8 @@ EventScript_PowerItemEVFadescreen2:
 .global EventScript_PowerItemLevelUp
 EventScript_PowerItemLevelUp:
 	lock
-	givepokemon SPECIES_FLAPPLE 100 0x0 0x0
-	givepokemon SPECIES_APPLETUN 100 0x0 0x0
-	giveitem 0x252 0x2 MSG_FIND
+	givepokemon SPECIES_SANDACONDA 100 0x0 0x0
+	giveitem 0x253 0x2 MSG_FIND
 	faceplayer
 	copyvar 0x8004 0x5105
 	buffernumber 0x0 0x8004

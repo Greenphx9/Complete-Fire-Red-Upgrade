@@ -1963,7 +1963,8 @@ static void SetWildMonHeldItem(void)
 		var2 = 80;
 	}
 
-	if (!(gBattleTypeFlags & (BATTLE_TYPE_POKE_DUDE | BATTLE_TYPE_SCRIPTED_WILD_1 | BATTLE_TYPE_TRAINER)))
+	if (!(gBattleTypeFlags & (BATTLE_TYPE_POKE_DUDE | BATTLE_TYPE_SCRIPTED_WILD_1 | BATTLE_TYPE_TRAINER))
+	&& gDexNavStartedBattle)
 	{
 		for (int i = 0; i < 2; ++i) //Two possible wild opponents
 		{
