@@ -4570,3 +4570,45 @@ u8 GetFontAttribute(u8 fontId, u8 attributeId)
     return 1;
 }
 */
+
+extern const u8 gText_WelcomeToHOF[];
+extern const u8 gText_NormalModeHOF[];
+extern const u8 gText_HardModeHOF[];
+extern const u8 gText_NoIVGrinding[];
+extern const u8 gText_Scalemons[];
+
+static const u8 sTextColors[][4] = {
+    { 0, 1, 2 },
+    { 0, 2, 3 },
+    { 4, 5, 0 }
+};
+
+#define gText_EmptyString2 (const u8*) 0x84161cd
+
+void HallOfFame_PrintWelcomeText(u8 not, u8 used)
+{
+	StringCopy(gStringVar1, gText_EmptyString2);
+	if(!FlagGet(FLAG_HARD_MODE))
+	{
+		StringAppend(gStringVar1, gText_NormalModeHOF);
+	}
+	else
+	{
+		StringAppend(gStringVar1, gText_HardModeHOF);
+	}
+	if(FlagGet(FLAG_SCALEMONS))
+	{
+		StringAppend(gStringVar1, gText_Scalemons);
+	}
+	if(FlagGet(FLAG_NO_GRINDING_IV) || FlagGet(FLAG_NO_GRINDING_EV))
+	{
+		StringAppend(gStringVar1, gText_NoIVGrinding);
+	}
+    u8 x = (0xD0 - GetStringWidth(2, gText_WelcomeToHOF, 0)) / 2;
+	u8 x2 = (0xD0 - GetStringWidth(2, gStringVar1, 0)) / 2;
+    FillWindowPixelBuffer(0, PIXEL_FILL(0));
+    PutWindowTilemap(0);
+    AddTextPrinterParameterized3(0, 2, x, 1, sTextColors[0], 0, gText_WelcomeToHOF);
+	AddTextPrinterParameterized3(0, 2, x2, 4, sTextColors[0], 0, gStringVar1);
+    CopyWindowToVram(0, COPYWIN_BOTH);
+}

@@ -3882,7 +3882,7 @@ void CalculateMonStatsNew(struct Pokemon* mon)
 	SetMonData(mon, MON_DATA_MAX_HP, &newMaxHP);
 
 	u8 nature = GetNature(mon);
-	if (IsScaleMonsBattle())
+	if (IsScaleMonsBattle() && !CanEvolve(mon))
 	{
 		for (i = STAT_ATK; i < NUM_STATS; ++i) //HP doesn't change in Scalemons
 		{

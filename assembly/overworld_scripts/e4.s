@@ -41,6 +41,7 @@ EventScript_DescribeReins:
 .global EventScript_MegaSeller
 EventScript_MegaSeller:
 	lock
+	special 0x110
 	msgbox gText_SellMegaStones MSG_FACE
 	pokemart EventScript_MegaMart
 	release

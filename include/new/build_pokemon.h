@@ -49,6 +49,7 @@ void CreateMonWithNatureLetter(struct Pokemon* mon, u16 species, u8 level, u8 fi
 void SetMonExpWithMaxLevelCheck(struct Pokemon* mon, u16 species, u8 unused, u32 data);
 void UpdatePartyPokerusTime(u16 days);
 u16 GetRandomizedSpecies(u16 species);
+u16 CalcScalemonsStats(struct Pokemon* mon, u8 stat);
 
 //Exported Constants
 enum TierBanCheckingType

@@ -225,3 +225,19 @@ Purchased
 
 #org @gText_StopZooming
 Stop zooming!
+
+
+#org @gText_WelcomeToHOF
+Welcome to the Hall Of Fame!
+
+#org @gText_NormalModeHOF
+\n[SHRINK]Normal Mode
+
+#org @gText_HardModeHOF
+\n[SHRINK]Hard Mode
+
+#org @gText_NoIVGrinding
+ No Grinding Mode
+
+#org @gText_Scalemons
+ Scalemons

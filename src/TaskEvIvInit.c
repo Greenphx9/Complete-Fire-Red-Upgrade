@@ -23,6 +23,10 @@
 #include "../include/base_stats.h"
 #include "../include/field_weather.h"
 #include "../include/text_window.h"
+#include "../include/new/build_pokemon.h"
+#include "../include/new/build_pokemon_2.h"
+#include "../include/new/util.h"
+#include "../include/new/util2.h"
 
 #define FIRERED
 
@@ -264,6 +268,7 @@ static void Task_WaitForExit(u8 taskId)
             else
                 gCurrentMon++;
             HidePokemonPic2(gSpriteTaskId);
+            
             ShowSprite(&gPlayerParty[gCurrentMon]);
             EvIvPrintText(&gPlayerParty[gCurrentMon]);
         }
@@ -657,27 +662,22 @@ static void EvIvPrintText(struct Pokemon *mon)
     gStats_bs[STAT_HP] = gBaseStats2[species].baseHP;
     gStats_ev[STAT_HP] = GetMonData(mon,MON_DATA_HP_EV, 0);
     gStats_iv[STAT_HP] = GetMonData(mon,MON_DATA_HP_IV, 0);
-
     //STAT_ATK
     gStats_bs[STAT_ATK] = gBaseStats2[species].baseAttack;
     gStats_ev[STAT_ATK] = GetMonData(mon,MON_DATA_ATK_EV,0);
     gStats_iv[STAT_ATK] = GetMonData(mon,MON_DATA_ATK_IV,0);
-
     //STAT_DEF
     gStats_bs[STAT_DEF] = gBaseStats2[species].baseDefense;
     gStats_ev[STAT_DEF] = GetMonData(mon,MON_DATA_DEF_EV,0);
     gStats_iv[STAT_DEF] = GetMonData(mon,MON_DATA_DEF_IV,0);
-
     //STAT_SPATK
     gStats_bs[STAT_SPATK] = gBaseStats2[species].baseSpAttack;
     gStats_ev[STAT_SPATK] = GetMonData(mon,MON_DATA_SPATK_EV,0);
     gStats_iv[STAT_SPATK] = GetMonData(mon,MON_DATA_SPATK_IV,0);
-    
     //STAT_SPDEF
     gStats_bs[STAT_SPDEF] = gBaseStats2[species].baseSpDefense;
     gStats_ev[STAT_SPDEF] = GetMonData(mon,MON_DATA_SPDEF_EV,0);
     gStats_iv[STAT_SPDEF] = GetMonData(mon,MON_DATA_SPDEF_IV,0);
-    
     //STAT_SPEED
     gStats_bs[STAT_SPEED] = gBaseStats2[species].baseSpeed;
     gStats_ev[STAT_SPEED] = GetMonData(mon,MON_DATA_SPEED_EV,0);

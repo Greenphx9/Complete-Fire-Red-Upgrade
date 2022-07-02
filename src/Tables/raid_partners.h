@@ -3006,7 +3006,7 @@ static const struct BattleTowerSpread sRaidPartnerSpread_Hailey_Rank5[] =
 		.spDefEv = 4,
 		.spdEv = 252,
 		.ability = FRONTIER_ABILITY_HIDDEN, //ABILITY_SWIFTSWIM
-		.item = ITEM_ICIUM_Z,
+		.item = ITEM_LIFE_ORB,
 		.moves =
 		{
 			MOVE_ICICLECRASH,
@@ -3032,7 +3032,7 @@ static const struct BattleTowerSpread sRaidPartnerSpread_Hailey_Rank5[] =
 		.spDefEv = 4,
 		.spdEv = 252,
 		.ability = FRONTIER_ABILITY_HIDDEN, //ABILITY_SNOWWARNING
-		.item = ITEM_ICIUM_Z,
+		.item = ITEM_LIFE_ORB,
 		.moves =
 		{
 			MOVE_BLIZZARD,

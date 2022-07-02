@@ -2549,6 +2549,13 @@ static s32 CalculateBaseDamage(struct DamageCalc* data)
 				damage = (damage * 75) / 100;
 			break;
 
+		case ABILITY_STEAMENGINE:
+		//0.75x Decrement
+			if (data->moveType == TYPE_WATER || data->moveType == TYPE_FIRE)
+				damage = (damage * 75) / 100;
+			break;
+
+
 		case ABILITY_HEATPROOF:
 		case ABILITY_WATERBUBBLE:
 		//0.5x Decrement

@@ -66,6 +66,11 @@ static struct ReplaceAbility sReplaceAbilities[] =
         .replaceAbilityString = NAME_LIBERO,
     },
     {
+        .species = SPECIES_CINDERACE_GIGA,
+        .currAbility = ABILITY_PROTEAN,
+        .replaceAbilityString = NAME_LIBERO,
+    },
+    {
         .species = SPECIES_WIMPOD,
         .currAbility = ABILITY_EMERGENCYEXIT,
         .replaceAbilityString = NAME_WIMP_OUT,
