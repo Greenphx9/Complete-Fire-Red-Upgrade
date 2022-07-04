@@ -187,6 +187,7 @@ EventScript_PalletTown_AskDynamax:
 	if 0x1 _goto EventScript_PalletTown_EnableDynamax
 	setflag 0x101C
 	sound 0x3
+	goto EventScript_PalletTown_AskScalemons
 	release
 	end
 
@@ -194,6 +195,23 @@ EventScript_PalletTown_EnableDynamax:
 	sound 0x2
 	msgbox gText_DynamaxEnabled MSG_KEEPOPEN
 	clearflag 0x101C
+	goto EventScript_PalletTown_AskScalemons
+	release
+	end
+
+EventScript_PalletTown_AskScalemons:
+	msgbox gText_AskScalemons MSG_YESNO
+	compare LASTRESULT 0x1
+	goto_if_eq EventScript_PalletTown_EnableScalemons
+	sound 0x3
+	release
+	end
+
+EventScript_PalletTown_EnableScalemons:
+	sound 0x2
+	msgbox gText_ScalemonsEnabled MSG_KEEPOPEN
+	closeonkeypress
+	setflag 0x1200 @@Scalemons
 	release
 	end
 

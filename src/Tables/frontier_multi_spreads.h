@@ -20,6 +20,9 @@ tables to edit:
 
 */
 
+
+#ifdef UNBOUND
+
 const struct BattleTowerSpread gMultiTowerSpread_Milo[] =
 {
 	{
@@ -180,8 +183,6 @@ const struct BattleTowerSpread gMultiTowerSpread_Milo[] =
 	},
 };
 
-
-#ifdef UNBOUND
 extern const u8 sTrainerName_Milo[];
 extern const u8 sTrainerName_Marlon[];
 extern const u8 sTrainerName_Jax[];

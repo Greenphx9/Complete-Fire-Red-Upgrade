@@ -709,7 +709,7 @@ const item_t gSmogonNationalDexOU_ItemBanList[] =
 const item_t gSmogonOUDoubles_ItemBanList[] =
 {
 	ITEM_GENGARITE,
-	ITEM_EEVIUM_Z,
+	//ITEM_EEVIUM_Z,
 	ITEM_KANGASKHANITE,
 	ITEM_RED_ORB,
 	ITEM_BLUE_ORB,
@@ -1030,7 +1030,7 @@ const move_t gSmogonLittleCup_MoveBanList[] =
 
 const item_t gSmogonLittleCup_ItemBanList[] =
 {
-	ITEM_EEVIUM_Z,
+	//ITEM_EEVIUM_Z,
 	ITEM_TABLES_TERMIN
 };
 
@@ -1309,7 +1309,7 @@ const item_t gSmogon350Cup_ItemBanList[] =
 	ITEM_DEEP_SEA_TOOTH,
 	ITEM_LIGHT_BALL,
 	ITEM_EVIOLITE,
-	ITEM_EEVIUM_Z,
+	//ITEM_EEVIUM_Z,
 	ITEM_TABLES_TERMIN
 };
 
@@ -1333,7 +1333,7 @@ const item_t gSmogonScalemons_ItemBanList[] =
 {
 	ITEM_DEEP_SEA_SCALE,
 	ITEM_DEEP_SEA_TOOTH,
-	ITEM_EEVIUM_Z,
+	//ITEM_EEVIUM_Z,
 	ITEM_EVIOLITE,
 	ITEM_LIGHT_BALL,
 	ITEM_THICK_CLUB,

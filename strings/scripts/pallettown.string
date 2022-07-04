@@ -43,6 +43,12 @@ Would you like to enable hard\nmode?\pThis makes gym leaders and bosses\nsmarter
 #org @gText_HardModeEnabled
 Hard Mode enabled.
 
+#org @gText_AskScalemons
+Would you like to enable Scalemons\nmode?\pThis mode scales every fully\nevolved Pok\emon's BST up/down to\l600.
+
+#org @gText_ScalemonsEnabled
+Scalemons enabled.
+
 
 #org @gText_ProfOak_0X18E116
 Oak: Now, [PLAYER].\pInside those three Pok\e Balls are\nPok\emon.\pWhich one will you choose for\nyourself?
