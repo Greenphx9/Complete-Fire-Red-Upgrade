@@ -19,6 +19,7 @@ extern const u8 NAME_FULL_METAL_BODY[];
 extern const u8 NAME_WHITE_SMOKE[];
 extern const u8 NAME_BRAIN_BOND[];
 extern const u8 NAME_HUNDRED_LEGS[];
+extern const u8 NAME_SOLID_STEEL[];
 
 static struct ReplaceAbility sReplaceAbilities[] =
 {
@@ -246,5 +247,10 @@ static struct ReplaceAbility sReplaceAbilities[] =
         .species = SPECIES_CENTISKORCH_GIGA,
         .currAbility = ABILITY_PARENTALBOND,
         .replaceAbilityString = NAME_HUNDRED_LEGS,
+    },
+    {
+        .species = SPECIES_DURALUDON_GIGA,
+        .currAbility = ABILITY_SOLIDROCK,
+        .replaceAbilityString = NAME_SOLID_STEEL,
     },
 };
