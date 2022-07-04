@@ -395,65 +395,104 @@ EventScript_AIOMan_0X16B345:
 
 .global EventScript_PC
 EventScript_PC:
-	special 0x187
-	compare LASTRESULT 0x2
-	if 0x1 _goto EventScript_ReleaseEnd
+	@@goto_if_questlog EventScript_ReleaseEnd
 	lockall
-	checkflag 0x841
-	if 0x1 _goto EventScript_PCDisabled
-	setvar 0x8004 0x1B
+	goto_if_set 0x841 EventScript_PCDisabled
+	setvar 0x8004 27
 	special 0x17D
-	setvar 0x8004 0x0
+	setvar 0x8004 0
 	special 0xD6
-	sound 0x4
-	msgbox 0x81A5075 MSG_KEEPOPEN
+	playse 4
+	msgbox 0x81A5075 MSG_NORMAL
 	goto EventScript_PCMainMenu
 	end
 
-EventScript_ReleaseEnd:
-	release
-	end
-
-
+@ For when the player first arrives on One Island
 EventScript_PCDisabled:
-	msgbox 0x81A1390 MSG_KEEPOPEN
+	msgbox 0x81A1390 MSG_NORMAL
 	releaseall
 	end
 
 EventScript_PCMainMenu:
-	preparemsg 0x81A508A
-	waitmsg
+	message 0x81A508A
+	waitmessage
 	special 0x106
 	waitstate
 	goto EventScript_ChoosePCMenu
 	end
 
-
 EventScript_ChoosePCMenu:
-	copyvar 0x8000 LASTRESULT
-	compare 0x8000 0x0
-	if 0x1 _goto 0x81A6A05
-	compare 0x8000 0x1
-	if 0x1 _goto 0x81A69F0
-	compare 0x8000 0x2
-	if 0x1 _goto 0x81A6A7A
-	compare 0x8000 0x3
-	if 0x1 _goto 0x81A6A56
-	compare 0x8000 0x4
-	if 0x1 _goto EventScript_TurnOffPC
-	compare 0x8000 0x7F
-	if 0x1 _goto EventScript_TurnOffPC
+	switch LASTRESULT
+	case 0, EventScript_AccessPokemonStorage
+	case 1, EventScript_AccessPlayersPC
+	case 2, EventScript_AccessProfOaksPC
+	case 3, EventScript_AccessHallOfFame
+	case 4, EventScript_TurnOffPC
+	case 127, EventScript_TurnOffPC
 	end
 
+EventScript_AccessPlayersPC:
+	playse 2
+	msgbox 0x81A50DD MSG_NORMAL
+	special 0xFA
+	waitstate
+	goto EventScript_PCMainMenu
+	end
+
+EventScript_AccessPokemonStorage:
+	playse 2
+	call_if_unset 0x834 EventScript_AccessSomeonesPC
+	call_if_set 0x834 EventScript_AccessBillsPC
+	msgbox 0x81A50BE MSG_NORMAL
+	special 0x3C
+	waitstate
+	setvar 0x8004 27
+	special 0x17D
+	goto EventScript_PCMainMenu
+	end
+
+EventScript_AccessSomeonesPC:
+	msgbox 0x81A50A7 MSG_NORMAL
+	return
+
+EventScript_AccessBillsPC:
+	msgbox 0x81A50EF MSG_NORMAL
+	return
+
 EventScript_TurnOffPC:
-	msgbox 0x81A1390 MSG_KEEPOPEN
 	setvar 0x8004 0
-	playse 0x3
+	playse 3
 	special 0xD7
 	special 0x190
 	releaseall
 	end
 
-EventScript_CableClub_WirelessTrade:
-	msgbox gText_LinkNurse_NoTradingUseUnboundCloud MSG_FACE
-	goto EventScript_CableClub_AbortLink
+EventScript_AccessHallOfFame:
+	goto_if_unset 0x82C EventScript_TurnOffPC
+	playse 2
+	setvar 0x8004 31
+	special 0x17E
+	special 0x17D
+	special 0x107
+	waitstate
+	special 0x17F
+	goto EventScript_ChoosePCMenu
+	end
+
+EventScript_AccessProfOaksPC:
+	goto_if_unset 0x829 EventScript_TurnOffPC
+	playse 2
+	msgbox 0x81A5BC6 MSG_NORMAL
+	msgbox 0x81A5C03, MSG_YESNO
+	compare LASTRESULT 0x0
+	goto_if_eq EventScript_ExitOaksPC
+	setflag 0x2FF
+	call 0x81A73E0
+	clearflag 0x2FF
+	goto EventScript_ExitOaksPC
+	end
+
+EventScript_ExitOaksPC:
+	msgbox 0x81A5C2E MSG_NORMAL
+	goto EventScript_PCMainMenu
+	end

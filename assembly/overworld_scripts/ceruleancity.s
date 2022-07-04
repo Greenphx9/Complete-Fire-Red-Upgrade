@@ -427,19 +427,19 @@ EventScript_PowerItemEVFadescreen2:
 .global EventScript_PowerItemLevelUp
 EventScript_PowerItemLevelUp:
 	lock
-	givepokemon SPECIES_SANDACONDA 100 0x0 0x0
-	giveitem 0x253 0x2 MSG_FIND
+	givepokemon SPECIES_GRIMMSNARL 100 0x0 0x0
+	giveitem 0x257 0x1 MSG_FIND
 	faceplayer
 	copyvar 0x8004 0x5105
 	buffernumber 0x0 0x8004
 	msgbox gText_HelloCurrentlyLevelBuffer MSG_YESNO
-	compare LASTRESULT 0x1
-	if equal _goto EventScript_ItemsRequired
+	compare LASTRESULT 1
+	goto_if_eq EventScript_ItemsRequired
 	release
 	end
 
 EventScript_ItemsRequired:
-	
+	msgbox gText_HelloCurrentlyLevelBuffer MSG_YESNO
 	release
 	end
 

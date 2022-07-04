@@ -66,7 +66,7 @@ dexnav.c
 #define IS_NEWER_UNOWN_LETTER(species) (species >= SPECIES_UNOWN_B && species <= SPECIES_UNOWN_QUESTION)
 
 //This file's functions:
-static void DexNavGetMon(u16 species, u8 potential, u8 level, u8 ability, u16* moves, u8 searchLevel, u8 chain);
+static void DexNavGetMon(u16 species, u8 potential, u8 level, u8 ability, u16* moves, u8 searchLevel, u8 chain, u16 item);
 static u8 FindHeaderIndexWithLetter(u16 species, u8 letter);
 static u8 PickTileScreen(u8 targetBehaviour, u8 areaX, u8 areaY, s16* xBuff, s16* yBuff, u8 smallScan);
 static u8 DexNavPickTile(u8 environment, u8 xSize, u8 ySize, bool8 smallScan);
@@ -134,7 +134,7 @@ static void CB2_DexNav(void);
 // ===== Dex Nav Pokemon Generator ===== //
 // ===================================== //
 
-void DexNavGetMon(u16 species, u8 potential, u8 level, u8 ability, u16* moves, u8 searchLevel, u8 chain)
+void DexNavGetMon(u16 species, u8 potential, u8 level, u8 ability, u16* moves, u8 searchLevel, u8 chain, u16 item)
 {
 	struct Pokemon* mon = &gEnemyParty[0];
 
@@ -204,6 +204,9 @@ void DexNavGetMon(u16 species, u8 potential, u8 level, u8 ability, u16* moves, u
 		mon->hiddenAbility = TRUE;
 	else if (gBaseStats2[species].ability2 != ABILITY_NONE) //Helps fix a bug where Unown would crash the game in the below function
 		GiveMonNatureAndAbility(mon, GetNature(mon), (gBaseStats2[species].ability2 == ability) ? 1 : 0, IsMonShiny(mon), TRUE, TRUE); //Make sure details match what was on the HUD
+
+	if (item)
+        SetMonData(mon, MON_DATA_HELD_ITEM, &item);
 
 	//Set moves
 	for (i = 0; i < MAX_MON_MOVES; ++i)
@@ -794,7 +797,7 @@ static void DexNavIconsVisionUpdate(u8 proximity, u8 searchLevel)
 			// show ability, move, hide others
 			if (sDexNavHudPtr->spriteIdAbility < MAX_SPRITES)
 				gSprites[sDexNavHudPtr->spriteIdAbility].invisible = FALSE;
-			if (sDexNavHudPtr->heldItem)
+			if (sDexNavHudPtr->heldItem != ITEM_NONE)
 			{
 				// toggle item view
 				if (sDexNavHudPtr->spriteIdItem < MAX_SPRITES)
@@ -901,11 +904,10 @@ static void Task_ManageDexNavHUD(u8 taskId)
 	}*/
 
 	// check for encounter start
-	if (sDexNavHudPtr-> proximity < 1)
+	if (sDexNavHudPtr->proximity < 1)
 	{
 		DexNavGetMon(sDexNavHudPtr->species, sDexNavHudPtr->potential, sDexNavHudPtr->pokemonLevel,
-					sDexNavHudPtr->ability, sDexNavHudPtr->moveId, sDexNavHudPtr->searchLevel, gCurrentDexNavChain);
-		DestroyTask(taskId);
+			sDexNavHudPtr->ability, sDexNavHudPtr->moveId, sDexNavHudPtr->searchLevel, gCurrentDexNavChain, sDexNavHudPtr->heldItem);
 
 		// increment the search level
 		u16 dexNum = SpeciesToNationalPokedexNum(sDexNavHudPtr->species);
@@ -913,18 +915,19 @@ static void Task_ManageDexNavHUD(u8 taskId)
 			sSearchLevels[dexNum] += 1;
 
 		// Freeing only the state, objects and hblank cleared on battle start.
-		Free(sDexNavHudPtr);
-
 		gDexNavStartedBattle = TRUE;
 		DismissMapNamePopup();
 		ScriptContext1_SetupScript(SystemScript_StartDexNavBattle);
-/*
-		// exclamation point animation over the player
-		PlaySE(SE_EXCLAIM);
-		MakeExclamationMark(gEventObjects, &gSprites[gPlayerAvatar->spriteId]);
-		FieldEffectStart(0x0);
-		// do battle
-		DoStandardWildBattle();*/
+		Free(sDexNavHudPtr);
+		DestroyTask(taskId);
+		/*
+				// exclamation point animation over the player
+				PlaySE(SE_EXCLAIM);
+				MakeExclamationMark(gEventObjects, &gSprites[gPlayerAvatar->spriteId]);
+				FieldEffectStart(0x0);
+
+				// do battle
+				DoStandardWildBattle();*/
 	};
 
 	// HUD needs updating iff player has moved
@@ -1057,30 +1060,30 @@ static u8 DexNavGenerateMonLevelScaled(unusedArg u16 species, u8 chainLevel, unu
 
 static u16 DexNavGenerateHeldItem(u16 species, u8 searchLevel)
 {
-	u16 randVal = Random() % 100;
-	u8 searchLevelInfluence = searchLevel >> 1;
-	u16 item1 = gBaseStats[species].item1;
-	u16 item2 = gBaseStats[species].item2;
+    u16 randVal = Random() % 100;
+    u8 searchLevelInfluence = searchLevel >> 1;
+    u16 item1 = gBaseStats[species].item1;
+    u16 item2 = gBaseStats[species].item2;
+    
+    // if both are the same, 100% to hold
+    if (item1 == item2)
+        return item1;
 
-	// if both are the same, 100% to hold
-	if (item1 == item2)
-		return item1;
+    // if no items can be held, then yeah...no items
+    if (item2 == ITEM_NONE && item1 == ITEM_NONE)
+        return ITEM_NONE;
 
-	// if no items can be held, then yeah...no items
-	if (item2 == ITEM_NONE && item1 == ITEM_NONE)
-		return ITEM_NONE;
+    // if only one entry, 50% chance
+    if (item2 == ITEM_NONE && item1 != ITEM_NONE)
+        return (randVal < 50) ? item1 : ITEM_NONE;
 
-	// if only one entry, 50% chance
-	if (item2 == ITEM_NONE && item1 != ITEM_NONE)
-		return (randVal < 50) ? item1 : ITEM_NONE;
+    // if both are distinct item1 = 50% + srclvl/2; item2 = 5% + srchlvl/2
+    if (randVal < (50 + searchLevelInfluence + 5 + searchLevel))
+        return (randVal > 5 + searchLevelInfluence) ? item1 : item2;
+    else
+        return ITEM_NONE;
 
-	// if both are distinct item1 = 50% + srclvl/2; item2 = 5% + srchlvl/2
-	if (randVal < (50 + searchLevelInfluence + 5 + searchLevel))
-		return (randVal > 5 + searchLevelInfluence) ? item1 : item2;
-	else
-		return ITEM_NONE;
-
-	return ITEM_NONE;
+    return ITEM_NONE;
 }
 
 

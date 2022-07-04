@@ -102,12 +102,14 @@ static const u8* const sDefaultWalkingScripts[] =
 };
 #endif
 
+extern const u8 EventScript_PC[];
+
 //Table full of pointers of scripts run when talking to tiles with certain behaviour bytes
 static const u8* const sMetatileInteractionScripts[] =
 {
 	[MB_BOOKSHELF] = (void*) 0x81A7606,
 	[MB_POKEMART_SHELF] = (void*) 0x81A760F,
-	[MB_PC] = (void*) 0x81A6955,
+	[MB_PC] = EventScript_PC,
 	[MB_REGION_MAP] = (void*) 0x81A6C32,
 	[MB_CABINET] = (void*) 0x81A7657,
 	[MB_KITCHEN] = (void*) 0x81A7660,
@@ -158,6 +160,7 @@ static const u8* const sMetatileInteractionScripts[] =
 #ifdef MB_UNDERGROUND_MINING
 	[MB_UNDERGROUND_MINING] = EventScript_UndergroundMining,
 #endif
+	
 };
 
 /*

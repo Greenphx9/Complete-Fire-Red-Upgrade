@@ -155,6 +155,7 @@ struct EvIv
     u16 totalStatsIV;
     u16 totalStatsBS;
     u16 tilemapBuffer[0x400];
+    u16 monSpriteId;
 };
 
 extern struct EvIv *gEvIv;
@@ -268,7 +269,6 @@ static void Task_WaitForExit(u8 taskId)
             else
                 gCurrentMon++;
             HidePokemonPic2(gSpriteTaskId);
-            
             ShowSprite(&gPlayerParty[gCurrentMon]);
             EvIvPrintText(&gPlayerParty[gCurrentMon]);
         }
