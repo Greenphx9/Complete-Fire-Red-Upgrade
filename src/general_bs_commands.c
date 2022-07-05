@@ -3241,10 +3241,15 @@ void atkA3_disablelastusedattack(void)
 	int i;
 	u8 bankDef;
 
-	if (gBattlescriptCurrInstr[1] == BS_GET_TARGET)
+	if(gLastUsedAbility == ABILITY_CURSEDBODY)
+		bankDef = gBankAttacker; //For Cursed Body
+	else
+		bankDef = gBankTarget; //For Disable
+
+	/*if (gBattlescriptCurrInstr[1] == BS_GET_TARGET)
 		bankDef = gBankTarget;
 	else
-		bankDef = gBankAttacker; //For Cursed Body
+		bankDef = gBankAttacker; //For Cursed Body*/
 
 	for (i = 0; i < MAX_MON_MOVES; i++)
 	{
