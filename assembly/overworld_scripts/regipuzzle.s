@@ -101,3 +101,5 @@ EventScript_OpenRegisteelStairs:
 	closeonkeypress
 	release
 	end
+
+@@.global 

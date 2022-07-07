@@ -3036,13 +3036,17 @@ BS_143_PsychUp:
 	jumpifnotmove MOVE_SPECTRALTHIEF 0x81D7A74
 
 SpectralThiefBS:
-	attackcanceler
-	accuracycheck BS_MOVE_MISSED 0x0
-	attackstring
-	ppreduce
-	tryspectralthiefsteal PlaySpectBoost
-	setbyte ANIM_TURN 0x1
-	goto BS_HIT_FROM_DAMAGE_CALC
+    attackcanceler
+    accuracycheck BS_MOVE_MISSED 0x0
+    attackstring
+    ppreduce
+    typecalc2
+    jumpifmovehadnoeffect SpectralThiefBS_SkipSteal
+    bicbyte OUTCOME OUTCOME_SUPER_EFFECTIVE | OUTCOME_NOT_VERY_EFFECTIVE
+    tryspectralthiefsteal PlaySpectBoost
+SpectralThiefBS_SkipSteal:
+    setbyte ANIM_TURN 0x1
+    goto BS_HIT_FROM_DAMAGE_CALC
 
 PlaySpectBoost:
 	attackanimation

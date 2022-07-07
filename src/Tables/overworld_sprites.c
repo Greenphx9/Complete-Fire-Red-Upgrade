@@ -360,3 +360,38 @@ const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_PC2 =
     .images = gEventObjectPicTable_PC2,
     .affineAnims = gDummySpriteAffineAnimTable,
 };
+
+extern const u8 gEventObjectPic_RegidragoTiles[];
+
+static const struct SpriteFrameImage gEventObjectPicTable_Regidrago[] =
+{
+    overworld_frame(gEventObjectPic_RegidragoTiles, 4, 4, 0),
+    overworld_frame(gEventObjectPic_RegidragoTiles, 4, 4, 1),
+    overworld_frame(gEventObjectPic_RegidragoTiles, 4, 4, 2),
+    overworld_frame(gEventObjectPic_RegidragoTiles, 4, 4, 3),
+    overworld_frame(gEventObjectPic_RegidragoTiles, 4, 4, 4),
+    overworld_frame(gEventObjectPic_RegidragoTiles, 4, 4, 5),
+    overworld_frame(gEventObjectPic_RegidragoTiles, 4, 4, 6),
+    overworld_frame(gEventObjectPic_RegidragoTiles, 4, 4, 7),
+    overworld_frame(gEventObjectPic_RegidragoTiles, 4, 4, 8),
+};
+
+const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Regidrago =
+{
+    .tileTag = 0xFFFF,
+    .paletteTag1 = 0x120B,
+    .paletteTag2 = EVENT_OBJ_PAL_TAG_NONE,
+    .size = (32 * 32) / 2,
+    .width = 32,
+    .height = 32,
+    .shadowSize = SHADOW_SIZE_M, //Can also be SHADOW_SIZE_S, SHADOW_SIZE_L, or SHADOW_SIZE_XL
+    .inanimate = FALSE,
+    .disableReflectionPaletteLoad = FALSE,
+    .tracks = TRACKS_FOOT, //Can also be TRACKS_TIRE
+    .gender = MALE, //Can also be FEMALE
+    .oam = gEventObjectBaseOam_32x32,
+    .subspriteTables = gEventObjectSpriteOamTables_32x32,
+    .anims = gEventObjectImageAnimTable_Standard,
+    .images = gEventObjectPicTable_Regidrago,
+    .affineAnims = gDummySpriteAffineAnimTable,
+};

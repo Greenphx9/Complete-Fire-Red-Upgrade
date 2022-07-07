@@ -888,6 +888,10 @@ bool8 SetMoveEffect2(void)
 			{
 				break;
 			}
+			if(gBattleTypeFlags & BATTLE_TYPE_TRAINER || gBattleTypeFlags & BATTLE_TYPE_DYNAMAX)
+			{
+				break;
+			}
 			else if (ITEM(gEffectBank) == 0
 			||  ITEM(gBankAttacker) != 0
 			||  !CanTransferItem(SPECIES(gEffectBank), ITEM(gEffectBank))
@@ -913,18 +917,20 @@ bool8 SetMoveEffect2(void)
 			{
 				gLastUsedItem = gBattleMons[gEffectBank].item;
 				gBattleMons[gEffectBank].item = 0;
-				gBattleMons[gBankAttacker].item = gLastUsedItem;
+				//gBattleMons[gBankAttacker].item = gLastUsedItem;
 				HandleUnburdenBoost(gEffectBank); //Give target Unburden boost
-				HandleUnburdenBoost(gBankAttacker); //Remove attacker's Unburden boost
+				//HandleUnburdenBoost(gBankAttacker); //Remove attacker's Unburden boost
 
-				gActiveBattler = gBankAttacker;
-				EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gLastUsedItem);
-				MarkBufferBankForExecution(gActiveBattler);
+				//Handles giving the mon the new held item, I think
+				//gActiveBattler = gBankAttacker;
+				//EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gLastUsedItem);
+				//MarkBufferBankForExecution(gActiveBattler);
 
 				gActiveBattler = gEffectBank;
 				EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gActiveBattler].item);
 				MarkBufferBankForExecution(gActiveBattler);
 
+				AddBagItem(gLastUsedItem, 1);
 				BattleScriptPushCursor();
 				gBattlescriptCurrInstr = BattleScript_ItemSteal;
 
@@ -959,6 +965,11 @@ bool8 SetMoveEffect2(void)
 				gActiveBattler = gEffectBank;
 				EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gActiveBattler].item);
 				MarkBufferBankForExecution(gActiveBattler);
+
+				if(!(gBattleTypeFlags & BATTLE_TYPE_TRAINER && gBattleTypeFlags & BATTLE_TYPE_DYNAMAX))
+				{
+					AddBagItem(gLastUsedItem, 1);
+				}
 
 				BattleScriptPushCursor();
 				gBattlescriptCurrInstr = BattleScript_KnockedOff;

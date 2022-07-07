@@ -302,7 +302,7 @@ FlameOrbBurnBS:
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 BattleScript_ItemSteal:
-	callasm TransferLastUsedItem
+	@callasm TransferLastUsedItem
 	playanimation BANK_TARGET ANIM_STEAL_ITEM 0x0
 	printstring 0x8E
 	waitmessage DELAY_1SECOND

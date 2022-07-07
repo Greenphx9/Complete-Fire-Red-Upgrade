@@ -11486,7 +11486,6 @@ static const struct LevelUpMove sArcheopsLevelUpLearnset[] = {
 	LEVEL_UP_MOVE(51, MOVE_ROCKSLIDE),
 	LEVEL_UP_MOVE(56, MOVE_DRAGONCLAW),
 	LEVEL_UP_MOVE(61, MOVE_THRASH),
-	LEVEL_UP_MOVE(90, MOVE_DREAMEATER), 
 	LEVEL_UP_END
 };
 static const struct LevelUpMove sTrubbishLevelUpLearnset[] = {
@@ -20897,4 +20896,5 @@ const struct LevelUpMove* const gLevelUpLearnsets[NUM_SPECIES] =
 	[SPECIES_GOODRA_H] = sGoodraHLevelUpLearnset,
 	[SPECIES_ENAMORUS] = sEnamorusLevelUpLearnset,
 	[SPECIES_ENAMORUS_THERIAN] = sEnamorusLevelUpLearnset,
+	[SPECIES_BASCULEGION_F] = sBasculegionLevelUpLearnset,
 };

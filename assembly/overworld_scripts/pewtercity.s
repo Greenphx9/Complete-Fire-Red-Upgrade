@@ -514,3 +514,27 @@ EventScript_NoMoneyHealBell:
 	msgbox gText_No500Money MSG_FACE
 	release
 	end
+
+
+
+
+.global EventScript_PewterMart
+EventScript_PewterMart:
+	lock
+	faceplayer
+	preparemsg 0x81A6211
+	waitmsg
+	pokemart PewterCity_Mart_Items
+	msgbox 0x81A5190 MSG_KEEPOPEN
+	release
+	end
+
+.align 1
+PewterCity_Mart_Items:
+	.hword ITEM_CHERI_BERRY
+	.hword ITEM_CHESTO_BERRY
+	.hword ITEM_PECHA_BERRY
+	.hword ITEM_RAWST_BERRY
+	.hword ITEM_ASPEAR_BERRY
+	.hword ITEM_PERSIM_BERRY
+	.hword 0x0

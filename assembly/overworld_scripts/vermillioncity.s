@@ -1181,12 +1181,12 @@ EventScript_NOTrapMove:
 
 .align 1
 EventScript_VermillionBerriesShop:
-	.hword ITEM_CHERI_BERRY
-	.hword ITEM_CHESTO_BERRY
-	.hword ITEM_PECHA_BERRY
-	.hword ITEM_RAWST_BERRY
-	.hword ITEM_ASPEAR_BERRY
-	.hword ITEM_PERSIM_BERRY
+	.hword ITEM_POMEG_BERRY
+	.hword ITEM_KELPSY_BERRY
+	.hword ITEM_QUALOT_BERRY
+	.hword ITEM_HONDEW_BERRY
+	.hword ITEM_GREPA_BERRY
+	.hword ITEM_TAMATO_BERRY
 	.hword ITEM_LUM_BERRY
 	.hword ITEM_SITRUS_BERRY
 	.hword ITEM_FIGY_BERRY

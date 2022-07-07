@@ -83,6 +83,11 @@ Capture first!
 #org @gText_DexNav_NoInfo
 --------
 
+#org @gText_DexNav_NoInfo_Small
+[SHRINK]--------\n
+
+
+
 #org @gText_DexNav_ChooseMon
 Choose a Pok\emon.
 
@@ -100,6 +105,3 @@ It's too dark to search for a Pok\emon!
 
 #org @gText_MenuCube
 Cube
-
-#org @gText_ReinsOfUnityName
-Reins Of Unity

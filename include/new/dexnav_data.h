@@ -57,6 +57,7 @@ extern const u8 gText_NotFoundNearby[];
 extern const u8 gText_TooDarkForDexNav[];
 extern const u8 gText_DexNavBack[];
 extern const u8 gText_DexNav_NoInfo[];
+extern const u8 gText_DexNav_NoInfo_Small[];
 extern const u8 gText_DexNav_CaptureToSee[];
 extern const u8 gText_DexNav_ChooseMon[];
 extern const u8 gText_DexNav_Invalid[];
@@ -144,7 +145,8 @@ enum
 {
 	WIN_SPECIES,
 	WIN_SEARCH_LEVEL,
-	WIN_LEVEL_BONUS,
+	WIN_ITEM_1,
+	WIN_ITEM_2,
 	WIN_HIDDEN_ABILITY,
 	WIN_MESSAGE,
 	WIN_WATER,
@@ -160,7 +162,7 @@ static const struct WindowTemplate sDexNavWinTemplates[WINDOW_COUNT + 1] =
 	{
         .bg = BG_TEXT,
         .tilemapLeft = 21,
-        .tilemapTop = 6,
+        .tilemapTop = 3,
         .width = 9,
         .height = 2,
         .paletteNum = 15,
@@ -170,19 +172,29 @@ static const struct WindowTemplate sDexNavWinTemplates[WINDOW_COUNT + 1] =
     {
         .bg = BG_TEXT,
         .tilemapLeft = 21,
-        .tilemapTop = 9,
+        .tilemapTop = 6,
         .width = 9,
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 19,
     },
-	[WIN_LEVEL_BONUS] =
+	[WIN_ITEM_1] =
+    {
+        .bg = BG_TEXT,
+        .tilemapLeft = 21,
+        .tilemapTop = 9,
+        .width = 9,
+        .height = 4,
+        .paletteNum = 15,
+        .baseBlock = 32,
+    },
+	[WIN_ITEM_2] =
     {
         .bg = BG_TEXT,
         .tilemapLeft = 21,
         .tilemapTop = 12,
         .width = 9,
-        .height = 3,
+        .height = 4,
         .paletteNum = 15,
         .baseBlock = 64,
     },
@@ -192,7 +204,7 @@ static const struct WindowTemplate sDexNavWinTemplates[WINDOW_COUNT + 1] =
         .tilemapLeft = 21,
         .tilemapTop = 15,
         .width = 12,
-        .height = 3,
+        .height = 4,
         .paletteNum = 15,
         .baseBlock = 91,
     },

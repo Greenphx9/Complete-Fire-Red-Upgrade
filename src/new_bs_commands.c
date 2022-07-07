@@ -21,6 +21,7 @@
 #include "../include/new/new_bs_commands.h"
 #include "../include/new/set_effect.h"
 #include "../include/new/util2.h"
+#include "../include/base_stats.h"
 
 /*
 new_bs_commands.c

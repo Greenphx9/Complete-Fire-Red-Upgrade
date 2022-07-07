@@ -116,7 +116,8 @@ static bool8 SpeciesInArray(u16 species, u8 indexCount, u8 unownLetter);
 static void DexNavPopulateEncounterList(void);
 static void PrintGUISpeciesName(u16 species);
 static void PrintGUISearchLevel(u16 species);
-static void PrintGUILevelBonus(u16 species);
+static void PrintGUIItem1(u16 species);
+static void PrintGUIItem2(u16 species);
 static void PrintGUIHiddenAbility(u16 species);
 static void DexNavDisplaySpeciesData(void);
 static void DexNavLoadAreaNamesAndInstructions(void);
@@ -2080,11 +2081,11 @@ static void PrintGUISearchLevel(u16 species)
 
 extern const u8 sShrinkText[];
 
-static void PrintGUILevelBonus(u16 species) 
+static void PrintGUIItem1(u16 species) 
 {
 	const u8* text;
 	u16 dexNum = SpeciesToNationalPokedexNum(species);
-	CleanWindow(WIN_LEVEL_BONUS);
+	CleanWindow(WIN_ITEM_1);
 
 	if(GetSetPokedexFlag(dexNum, FLAG_GET_CAUGHT) || species == SPECIES_NONE)
 	{
@@ -2099,8 +2100,31 @@ static void PrintGUILevelBonus(u16 species)
 		text = gText_DexNav_CaptureToSee;
 	
 
-	WindowPrint(WIN_LEVEL_BONUS, 0, 0, 4, &sDexNav_BlackText, 0, text);
-	CommitWindow(WIN_LEVEL_BONUS);
+	WindowPrint(WIN_ITEM_1, 0, 0, 4, &sDexNav_BlackText, 0, text);
+	CommitWindow(WIN_ITEM_1);
+}
+
+static void PrintGUIItem2(u16 species) 
+{
+	const u8* text;
+	u16 dexNum = SpeciesToNationalPokedexNum(species);
+	CleanWindow(WIN_ITEM_2);
+
+	if(GetSetPokedexFlag(dexNum, FLAG_GET_CAUGHT) || species == SPECIES_NONE)
+	{
+		if (species != SPECIES_NONE && gBaseStats2[species].item2 != ITEM_NONE)
+		{
+			text = ItemId_GetName(gBaseStats2[species].item2);
+		}
+		else
+			text = gText_DexNav_NoInfo;
+	}
+	else
+		text = gText_DexNav_CaptureToSee;
+	
+
+	WindowPrint(WIN_ITEM_2, 0, 0, 4, &sDexNav_BlackText, 0, text);
+	CommitWindow(WIN_ITEM_2);
 }
 
 static void PrintGUIHiddenAbility(u16 species)
@@ -2131,7 +2155,8 @@ static void DexNavDisplaySpeciesData(void)
 
 	PrintGUISpeciesName(species);
 	PrintGUISearchLevel(species);
-	PrintGUILevelBonus(species);
+	PrintGUIItem1(species);
+	PrintGUIItem2(species);
 	PrintGUIHiddenAbility(species);
 }
 

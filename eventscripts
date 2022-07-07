@@ -66,6 +66,7 @@ npc 6 0 5 EventScript_CosmicPowerTutor
 npc 3 2 7 EventScript_TM110
 npc 6 4 3 EventScript_Steven
 npc 3 2 0 EventScript_HealBellTutor
+npc 6 3 2 EventScript_PewterMart
 
 ## Route 4
 npc 16 0 0 EventScript_pokecentre_0X16A2CF

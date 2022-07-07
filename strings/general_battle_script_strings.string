@@ -384,3 +384,6 @@ Jagged splinters dug into\n[TARGET]!
 
 #org @gText_StormOfLeaves
 A storm of leaves surrounded\n[TARGET]!
+
+#org @gText_StoleItem
+[ATTACKER] stole\n[TARGET]'s [LAST_ITEM]!\pThe [LAST_ITEM] was put in\nthe bag.

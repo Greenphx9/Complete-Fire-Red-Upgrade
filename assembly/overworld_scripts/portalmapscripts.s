@@ -159,6 +159,8 @@ EventScript_HideKyuremPortal2:
 .global EventScript_Route18MapScript
 EventScript_Route18MapScript:
 	mapscript MAP_SCRIPT_ON_LOAD EventScript_HideSolgaleoPortal
+	mapscript MAP_SCRIPT_ON_TRANSITION 0x8168201
+	mapscript MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE 0x8168211
 	.byte MAP_SCRIPT_TERMIN
 
 EventScript_HideSolgaleoPortal:

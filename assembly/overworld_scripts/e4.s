@@ -12,6 +12,12 @@ EventScript_IndigoPlateauMapScript:
 .global EventScript_GirlBlockingDoor
 EventScript_GirlBlockingDoor: 
 	lock
+	givepokemon SPECIES_BASCULIN_H 99 0x0 0x0 0x0
+	givepokemon SPECIES_BASCULIN_H 99 0x0 0x0 0x0
+	givepokemon SPECIES_BASCULIN_H 99 0x0 0x0 0x0
+	givepokemon SPECIES_BASCULEGION 99 0x0 0x0 0x0
+	givepokemon SPECIES_BASCULEGION 99 0x0 0x0 0x0
+	fanfare 0x101
 	checkflag 0x1008
 	if SET _goto EventScript_DescribeReins
 	msgbox gText_IfHaveSteeds MSG_FACE
