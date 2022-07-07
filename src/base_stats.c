@@ -39379,12 +39379,12 @@ const struct BaseStats gBaseStats2[] =
 
 	[SPECIES_ARTICUNO_G] = 
 	{
-		.baseHP 		= 90,
-		.baseAttack 	= 85,
-		.baseDefense 	= 85,
-		.baseSpAttack 	= 125,
-		.baseSpDefense 	= 100,
-		.baseSpeed 		= 95,
+		.baseHP = 90,
+		.baseAttack = 85,
+		.baseDefense = 85,
+		.baseSpAttack = 125,
+		.baseSpDefense = 100,
+		.baseSpeed = 95,
 		.type1 = TYPE_PSYCHIC,
 		.type2 = TYPE_FLYING,
 		.catchRate = 3,
@@ -39412,12 +39412,12 @@ const struct BaseStats gBaseStats2[] =
 					      
 	[SPECIES_ZAPDOS_G] = 
 	{
-		.baseHP 		= 90,
-		.baseAttack 	= 125,
-		.baseDefense 	= 90,
-		.baseSpAttack 	= 85,
-		.baseSpDefense 	= 90,
-		.baseSpeed 		= 100,
+		.baseHP = 90,
+		.baseAttack = 125,
+		.baseDefense = 90,
+		.baseSpAttack = 85,
+		.baseSpDefense = 90,
+		.baseSpeed = 100,
 		.type1 = TYPE_FIGHTING,
 		.type2 = TYPE_FLYING,
 		.catchRate = 3,
@@ -39445,12 +39445,12 @@ const struct BaseStats gBaseStats2[] =
 	
 	[SPECIES_MOLTRES_G] =
 	{
-		.baseHP 		= 90,
-		.baseAttack 	= 85,
-		.baseDefense 	= 90,
-		.baseSpAttack 	= 105,
-		.baseSpDefense 	= 125,
-		.baseSpeed 		= 90,
+		.baseHP = 90,
+		.baseAttack = 85,
+		.baseDefense = 90,
+		.baseSpAttack = 105,
+		.baseSpDefense = 125,
+		.baseSpeed = 90,
 		.type1 = TYPE_DARK,
 		.type2 = TYPE_FLYING,
 		.catchRate = 3,
