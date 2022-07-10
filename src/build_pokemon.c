@@ -4404,3 +4404,56 @@ bool8 IsCresseliaInParty(void) {
 
 
 
+bool8 ShouldOpenRegidragoDoor(void)
+{
+    if (GetMonData(&gPlayerParty[0], MON_DATA_SPECIES2, 0) == SPECIES_DRAGONITE)
+    {
+        CalculatePlayerPartyCount();
+        if (GetMonData(&gPlayerParty[gPlayerPartyCount - 1], MON_DATA_SPECIES2, 0) == SPECIES_DRAGAPULT)
+		{
+			gSpecialVar_LastResult = TRUE;
+			return TRUE;
+		}
+            
+    }
+	gSpecialVar_LastResult = FALSE;
+	return FALSE;
+}
+
+bool8 HasAllFiveRegisInParty(void)
+{
+	u8 i;
+	bool8 rock = FALSE, steel = FALSE, ice = FALSE, elec = FALSE, draco = FALSE;
+	CalculatePlayerPartyCount();
+	for(i = 0; i < gPlayerPartyCount; i++)
+	{
+		struct Pokemon* mon = &gPlayerParty[i];
+		switch(GetMonData(mon, MON_DATA_SPECIES2, NULL))
+		{
+			case SPECIES_REGIROCK:
+				rock = TRUE;
+				break;
+			case SPECIES_REGICE:
+				ice = TRUE;
+				break;
+			case SPECIES_REGISTEEL:
+				steel = TRUE;
+				break;
+			case SPECIES_REGIELEKI:
+				elec = TRUE;
+				break;
+			case SPECIES_REGIDRAGO:
+				draco = TRUE;
+				break;
+			default:
+				break;
+		}
+	}
+	if(rock && ice && steel && elec && draco)
+	{
+		gSpecialVar_LastResult = TRUE;
+		return TRUE;
+	}
+	gSpecialVar_LastResult = FALSE;
+	return FALSE;
+}

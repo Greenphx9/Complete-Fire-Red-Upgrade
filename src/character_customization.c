@@ -3,6 +3,7 @@
 #include "../include/event_object_movement.h"
 #include "../include/field_effect_helpers.h"
 #include "../include/field_player_avatar.h"
+#include "../include/fieldmap.h"
 #include "../include/link.h"
 #include "../include/random.h"
 #include "../include/sprite.h"
@@ -118,6 +119,18 @@ extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_PC2;
 extern const u16 gEventObjectPic_PC2Pal[];
 extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Regidrago;
 extern const u16 gEventObjectPic_RegidragoPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Regigigas;
+extern const u16 gEventObjectPic_RegigigasPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Anabel;
+extern const u16 gEventObjectPic_AnabelPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Ferrothorn;
+extern const u16 gEventObjectPic_FerrothornPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Wes;
+extern const u16 gEventObjectPic_WesPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Steven;
+extern const u16 gEventObjectPic_StevenPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Mira;
+extern const u16 gEventObjectPic_MiraPal[];
 
 	static NPCPtr sOverworldTable2[] = { 
 		&gEventObjectGraphicsInfo_Cresselia,
@@ -131,6 +144,12 @@ extern const u16 gEventObjectPic_RegidragoPal[];
 		&gEventObjectGraphicsInfo_Tamer,
 		&gEventObjectGraphicsInfo_PC2,
 		&gEventObjectGraphicsInfo_Regidrago,
+		&gEventObjectGraphicsInfo_Regigigas,
+		&gEventObjectGraphicsInfo_Anabel,
+		&gEventObjectGraphicsInfo_Ferrothorn,
+		&gEventObjectGraphicsInfo_Wes,
+		&gEventObjectGraphicsInfo_Steven,
+		&gEventObjectGraphicsInfo_Mira,
 	};
 
 	const struct EventObjectGraphicsInfo** const gOverworldTableSwitcher[255] =
@@ -153,6 +172,12 @@ extern const u16 gEventObjectPic_RegidragoPal[];
 		{gEventObjectPic_TamerPal, 0x1209},
 		{gEventObjectPic_PC2Pal, 0x120A},
 		{gEventObjectPic_RegidragoPal, 0x120B},
+		{gEventObjectPic_RegigigasPal, 0x120C},
+		{gEventObjectPic_AnabelPal, 0x120D},
+		{gEventObjectPic_FerrothornPal, 0x120E},
+		{gEventObjectPic_WesPal, 0x120F},
+		{gEventObjectPic_StevenPal, 0x1210},
+		{gEventObjectPic_MiraPal, 0x1211},
 		{NULL, 0x11FF},
 	};
 	const struct SpritePalette* const gObjectEventSpritePalettesSwitcher[255] = {
@@ -552,3 +577,40 @@ static const u8* GetAlternateTrainerSpritePal(void)
 	return NULL;
 }
 #endif
+
+
+u8 ObjectEventCheckForReflectiveSurface(struct EventObject *objEvent)
+{
+    const struct EventObjectGraphicsInfo *info = GetEventObjectGraphicsInfo(GetEventObjectGraphicsId(objEvent));
+
+    // ceil div by tile width?
+    s16 width = 1;
+    s16 height = 2;
+    s16 i;
+    s16 j;
+    u8 result;
+    u8 b;
+    s16 one;
+
+#define RETURN_REFLECTION_TYPE_AT(x, y)              \
+    b = MapGridGetMetatileBehaviorAt(x, y);          \
+    result = GetReflectionTypeByMetatileBehavior(b); \
+    if (result != 0)                                 \
+        return result;
+
+    for (i = 0, one = 1; i < height; i++)
+    {
+        RETURN_REFLECTION_TYPE_AT(objEvent->currentCoords.x, objEvent->currentCoords.y + one)
+        RETURN_REFLECTION_TYPE_AT(objEvent->previousCoords.x, objEvent->previousCoords.y + one)
+        for (j = 1; j < width; j++)
+        {
+            RETURN_REFLECTION_TYPE_AT(objEvent->currentCoords.x + j, objEvent->currentCoords.y + one + i)
+            RETURN_REFLECTION_TYPE_AT(objEvent->currentCoords.x - j, objEvent->currentCoords.y + one + i)
+            RETURN_REFLECTION_TYPE_AT(objEvent->previousCoords.x + j, objEvent->previousCoords.y + one + i)
+            RETURN_REFLECTION_TYPE_AT(objEvent->previousCoords.x - j, objEvent->previousCoords.y + one + i)
+        }
+    }
+    return 0;
+
+#undef RETURN_REFLECTION_TYPE_AT
+}

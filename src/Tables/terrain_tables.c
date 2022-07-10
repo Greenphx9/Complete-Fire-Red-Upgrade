@@ -246,6 +246,15 @@ const struct TerrainTableStruct gTerrainTable[] =
 			.burmyForm = SPECIES_BURMY_TRASH,
 		},
 
+	[BATTLE_TERRAIN_SEAFOAM_ISLANDS + 4] =
+		{
+			.camouflageType = TYPE_ICE,
+			.secretPowerEffect = MOVE_EFFECT_FREEZE,
+			.secretPowerAnim = MOVE_POWDERSNOW,
+			.naturePowerMove = MOVE_ICEBEAM,
+			.burmyForm = SPECIES_BURMY_SANDY,
+		},
+
 	//ADD NEW ENTRIES HERE
 
 #ifdef UNBOUND //The ones below are for Pokemon Unbound. Feel free to remove.

@@ -1988,3 +1988,4 @@ QLPlaybackCB_DestroyScriptMenuMonPicSprites = 0x809d6d4 |1;
 Overworld_CreditsMainCB = 0x80574A4 | 1;
 LoadStdWindowFrameGfx = 0x80f6E9C | 1;
 InitOverworldBgs_NoResetHeap = 0x8056354 | 1;
+GetReflectionTypeByMetatileBehavior = 0x80680C8 | 1;

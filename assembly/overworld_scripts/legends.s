@@ -63,6 +63,8 @@
 .equ FLAG_CRESSELIA_SPRITE, 0x1017
 .equ FLAG_GOT_CRESSELIA, 0x101F
 .equ FLAG_REGISTEEL_BEAT, 0x978
+.equ FLAG_GOT_REGIDRAGO, 0x1024
+
 
 .global EventScript_RegicePuzzleForce
 EventScript_MovePlayerRegiceDown:
@@ -926,5 +928,17 @@ EventScript_Registeel:
 	wildbattle SPECIES_REGISTEEL 65 ITEM_METAL_COAT
 	setflag FLAG_REGISTEEL_BEAT
 	hidesprite 1
+	release
+	end
+
+.global EventScript_Regidrago
+EventScript_Regidrago:
+	lock
+	faceplayer
+	cry SPECIES_REGIDRAGO 0x0
+	msgbox gText_Regidrago MSG_NORMAL
+	wildbattle SPECIES_REGIDRAGO 65 ITEM_DRAGON_FANG
+	setflag FLAG_GOT_REGIDRAGO
+	hidesprite 5
 	release
 	end

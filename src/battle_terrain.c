@@ -9,6 +9,7 @@
 #include "../include/overworld.h"
 #include "../include/constants/metatile_behaviors.h"
 #include "../include/constants/trainer_classes.h"
+#include "../include/constants/region_map_sections.h"
 
 #include "../include/new/battle_terrain.h"
 #include "../include/new/dns.h"
@@ -37,9 +38,11 @@ u8 BattleSetup_GetTerrainId(void)
 	u16 tileBehavior;
 	s16 x, y;
 	u8 terrain = BATTLE_TERRAIN_PLAIN;
+	u8 currRegionMapSecId = GetCurrentRegionMapSectionId();
 
 	PlayerGetDestCoords(&x, &y);
 	tileBehavior = MapGridGetMetatileBehaviorAt(x, y);
+
 
 	#ifdef VAR_BATTLE_BG
 	if (VarGet(VAR_BATTLE_BG))
@@ -91,6 +94,12 @@ u8 BattleSetup_GetTerrainId(void)
 				if (MetatileBehavior_IsIndoorEncounter(tileBehavior))
 				{
 					terrain = BATTLE_TERRAIN_INSIDE;
+					break;
+				}
+
+				if (currRegionMapSecId == MAPSEC_SEAFOAM_ISLANDS)
+				{
+					terrain = BATTLE_TERRAIN_SEAFOAM_ISLANDS;
 					break;
 				}
 

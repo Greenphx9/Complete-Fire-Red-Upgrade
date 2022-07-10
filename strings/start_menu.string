@@ -39,3 +39,9 @@ Sat
 
 #org @gText_StartMenu_Error
 Err
+
+#org @gText_StartMenu_Red
+[RED]
+
+#org @gText_StartMenu_Normal
+[BLACK]

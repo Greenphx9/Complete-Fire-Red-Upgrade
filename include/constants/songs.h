@@ -121,7 +121,7 @@
 #define MUS_FANFA1 0x101
 #define MUS_FANFA2 0x10D
 
-#define BGM_BATTLE_REGI 347
+#define BGM_BATTLE_REGI_TRIO 347
 
 #ifdef UNBOUND //For Unbound
 

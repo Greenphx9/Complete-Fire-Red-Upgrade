@@ -13,6 +13,7 @@
 #include "../include/script.h"
 #include "../include/party_menu.h"
 #include "../include/new/overworld_data.h"
+#include "../include/new/dynamic_ow_pals.h"
 
 #include "../include/new/dexnav.h"
 #include "../include/new/overworld.h"
@@ -730,7 +731,7 @@ void FieldMoveCallback_CutGrass(void)
     FieldEffectActiveListRemove(FLDEFF_USE_CUT_ON_GRASS);
     if (sScheduleOpenDottedHole == TRUE)
         CutMoveOpenDottedHoleDoor();
-    else if (IsInRockTunnel() == TRUE)
+    else if (IsInRockTunnel() == TRUE && !FlagGet(FLAG_REGIROCK_DOOR))
 	{
 		ScriptContext1_SetupScript(EventScript_OpenRegirockDoor);
 		ScriptContext2_Disable();
@@ -772,7 +773,7 @@ void FieldCallback_OpenRegielekiDoor(void)
 
 bool8 SetUpFieldMove_Flash(void)
 {
-    if (IsInPowerPlant() == TRUE) 
+    if (IsInPowerPlant() == TRUE && !FlagGet(FLAG_REGIELEKI_DOOR)) 
 	{
 		gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
 		gPostMenuFieldCallback = FieldCallback_OpenRegielekiDoor;
@@ -789,4 +790,3 @@ bool8 SetUpFieldMove_Flash(void)
     gPostMenuFieldCallback = FieldCallback_Flash;
     return TRUE;
 }
-

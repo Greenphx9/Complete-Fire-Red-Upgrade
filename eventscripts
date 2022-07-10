@@ -276,6 +276,9 @@ npc 12 3 0 EventScript_CinnabarTutor
 npc 12 3 1 EventScript_Eeevee8
 npc 12 4 1 EventScript_GiveOtherFossil
 npc 12 1 1 EventScript_MoonblastTutor
+sign 1 62 0 EventScript_RegidragoSign
+map 1 62 PokemonMansion_B1F_MapScripts
+npc 1 62 4 EventScript_Regidrago
 
 ## Mega Stones
 npc 3 23 1 EventScript_Beedrillite
@@ -304,6 +307,7 @@ npc 43 11 10 EventScript_TM93
 
 ## Power Plant
 npc 1 95 9 EventScript_TM99
+map 1 95 PowerPlant_MapScripts
 
 ## Route 21
 npc 3 39 7 EventScript_TM119
@@ -429,6 +433,8 @@ map 1 84 EventScript_SeafomIslandsMapScript
 npc 1 84 4 EventScript_BeginARaidBattle
 npc 1 83 3 EventScript_TM72
 npc 1 85 3 EventScript_TM118
+npc 43 24 0 EventScript_Regigigas
+map 43 24 SeafoamIslands_B5F_MapScripts
 
 ## Victory Road
 npc 3 42 7 EventScript_TM52

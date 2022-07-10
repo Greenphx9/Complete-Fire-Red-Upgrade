@@ -122,6 +122,7 @@ u8 __attribute__((long_call)) TryLoadObjectPalette(const struct SpritePalette* s
 void __attribute__((long_call)) ApplyGlobalFieldPaletteTint(u8 paletteIdx);
 void __attribute__((long_call)) ClearPlayerHeldMovementAndUnfreezeObjectEvents(void);
 void __attribute__((long_call)) CameraUpdate(void);
+u8 __attribute__((long_call)) GetReflectionTypeByMetatileBehavior(u32);
 
 /*
 extern const struct SpriteFrameImage gEventObjectPicTable_PechaBerryTree[];

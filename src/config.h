@@ -240,7 +240,6 @@
 #define FLAG_GOT_CRESSELIA 0x101F
 #define FLAG_GOT_REGIELEKI 0x1020
 #define FLAG_SHOW_SC_BASEMENT 0x1021
-#define FLAG_GOT_REGIDRAGO 0x1022
 
 #define VAR_POWER_ITEM_LEVEL 0x5105
 #define VAR_TEST_VAR 0x5107 //braille var test
@@ -248,7 +247,14 @@
 #define VAR_POWER_ITEM_EV_VALUE 0x5110
 #define VAR_ROUTE_23_BADGE_GUARDS 0x5112
 
+#define FLAG_REGIDRAGO_DOOR 0x1023
+#define FLAG_GOT_REGIDRAGO 0x1024
+#define FLAG_REGIELEKI_DOOR 0x1025
+#define FLAG_REGIROCK_DOOR 0x1026
+#define FLAG_REGIGIGAS 0x1027
+
 #define FLAG_SCALEMONS 0x1200 //Sets every Pokemon's BST to 600.
+#define FLAG_TIME_TURNER 0x1201 //Changes the time to PM when AM,and vice versa
 /*===== General Vars =====*/
 #define VAR_TERRAIN 0x5000 //Set to a terrain type for a battle to begin with the given terrain
 #define VAR_TOTEM 0x5001 //to var + 3 (0x5004)

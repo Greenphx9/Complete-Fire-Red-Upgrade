@@ -360,6 +360,9 @@ void ChangeMonIconPalsInTMCase(u16 itemId)
 			else
 			{
                 sprite->oam.objMode = ST_OAM_OBJ_BLEND;
+                SetPartyHPBarSprite(sprite, 0); //Stop moving and reload original frame
+				sprite->callback(sprite); //Update frame
+				sprite->callback = SpriteCallbackDummy; //Stop animating old mon icon
 			}
 		}
 	}

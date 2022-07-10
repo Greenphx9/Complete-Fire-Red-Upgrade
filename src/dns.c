@@ -66,7 +66,6 @@ static void FadeDayNightPalettes()
 						|| gMain.callback2 == CB2_OverworldBasic
 						|| gMain.callback2 == CB2_Credits; //Quicker than checking if Task_WeatherMain is active
 			fadePalettes = inOverworld || gInShop;
-
 			if (fadePalettes)
 			{
 				u8 coeff = gDNSNightFadingByTime[gClock.hour][gClock.minute / 10].amount;

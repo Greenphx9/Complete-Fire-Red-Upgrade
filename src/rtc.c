@@ -4,6 +4,8 @@
 #include "../include/new/ram_locs.h"
 #include "../include/string_util.h"
 #include "../include/start_menu.h"
+#include "../include/event_data.h"
+#include "config.h"
 
 extern u16 sRTCErrorStatus;
 extern u8 sRTCProbeResult;
@@ -153,6 +155,7 @@ u16 RtcCheckInfo(struct SiiRtcInfo *rtc)
 
 	value = ConvertBcdToBinary(rtc->minute);
 
+
 	if (value > 60)
 		errorFlags |= RTC_ERR_INVALID_MINUTE;
 
@@ -170,7 +173,10 @@ static void UpdateClockFromRtc(struct SiiRtcInfo* rtc)
 	gClock.month = ConvertBcdToBinary(rtc->month);
 	gClock.day = ConvertBcdToBinary(rtc->day);
 	gClock.dayOfWeek = ConvertBcdToBinary(rtc->dayOfWeek);
-	gClock.hour = ConvertBcdToBinary(rtc->hour);
+	if(FlagGet(FLAG_TIME_TURNER))
+	{
+		gClock.hour = (ConvertBcdToBinary(rtc->hour) >= 12) ? ConvertBcdToBinary(rtc->hour) - 12 : ConvertBcdToBinary(rtc->hour) + 12;
+	}
 	gClock.minute = ConvertBcdToBinary(rtc->minute);
 	gClock.second = ConvertBcdToBinary(rtc->second);
 

@@ -21,6 +21,7 @@
 #include "../include/new/frontier.h"
 #include "../include/new/util2.h"
 #include "../include/new/overworld.h"
+#include "../include/main.h"
 
 /**
  * \file follow_me.c
@@ -1338,6 +1339,48 @@ static void TurnNPCIntoFollower(u8 localId, u8 followerFlags)
 				SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_ON_FOOT); //Dismmount Bike
 		}
 	}
+}
+
+void UpdateFollowerPokemonGraphic(void)
+{
+    // Loaded in case the player changed the species of the Pokemon in the lead of the party.
+    // If so, the following Pokemon needs to change.
+    u16 leadMonGraphicId = 256; //GetMonData(&gPlayerParty[GetLeadMonNotFaintedIndex()], MON_DATA_SPECIES, NULL) + OBJ_EVENT_GFX_BULBASAUR - 1;
+    struct EventObject *follower = &gEventObjects[gFollowerState.objId];
+
+    if(gFollowerState.inProgress && leadMonGraphicId != gFollowerState.gfxId)
+    {
+        // Sets the follower's graphic data to the proper following Pokemon graphic data
+        gFollowerState.gfxId= leadMonGraphicId;
+
+        // Sets the current follower object's graphic data to the proper data.
+        // Necessary because, without it, the follower's sprite won't change until entering a loading zone.
+		follower->graphicsIdLowerByte = leadMonGraphicId & 0xFF;
+		follower->graphicsIdUpperByte = leadMonGraphicId >> 8;
+		SetMainCallback2(CB2_ReturnToField);
+        // Specifically for Pokemon Center, if lead Pokemon is revived, deletes old follower and creates new one
+        /*if(gSpecialVar_Unused_0x8014 == 1)
+        {
+            u8 newSpriteId;
+            struct ObjectEventTemplate clone;
+            struct ObjectEvent backupFollower = *follower;
+            backupFollower.graphicsId = gSaveBlock2Ptr->follower.graphicsId;
+            DestroySprite(&gSprites[gObjectEvents[gSaveBlock2Ptr->follower.objId].spriteId]);
+            RemoveObjectEvent(&gObjectEvents[gSaveBlock2Ptr->follower.objId]);
+
+            clone = *GetObjectEventTemplateByLocalIdAndMap(gSaveBlock2Ptr->follower.map.id, gSaveBlock2Ptr->follower.map.number, gSaveBlock2Ptr->follower.map.group);
+            clone.graphicsId = gSaveBlock2Ptr->follower.graphicsId;;
+            gSaveBlock2Ptr->follower.objId = TrySpawnObjectEventTemplate(&clone, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup, clone.x, clone.y);
+
+            follower = &gObjectEvents[gSaveBlock2Ptr->follower.objId];
+            newSpriteId = follower->spriteId;
+            *follower = backupFollower;
+            follower->spriteId = newSpriteId;
+            MoveObjectEventToMapCoords(follower, follower->currentCoords.x, follower->currentCoords.y);
+            ObjectEventTurn(follower, follower->facingDirection);
+            gSpecialVar_Unused_0x8014 = 0;
+        }*/
+    }
 }
 
 //@Details: Sets up the follow me feature.
