@@ -258,3 +258,12 @@ Hope you enjoy using [BUFFER1]!
 
 #org @gText_ImbestTutor
 I'm the best move tutor!\pCompared to others, they are\nnothing!\pMay I teach your Pok\emon a move?
+
+#org @gText_SabrinaLose
+This loss shocks me!\nBut, a loss is a loss.\pI admit, I didn't work hard enough\nto win.
+
+#org @gText_TakeMarshBadge
+Your victory has earned you the\nMarshBadge.
+
+#org @gText_GiveMarshBadge
+[BLACK][PLAYER] received the\nMarshBadge from Sabrina!

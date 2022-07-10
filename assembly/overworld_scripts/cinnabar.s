@@ -271,9 +271,45 @@ EventScript_FaceDownShocked:
 .global EventScript_Blaine
 EventScript_Blaine:
 	lock
+	givepokemon SPECIES_ZACIAN_CROWNED 100 0x0 0x0 0x0
+	givepokemon SPECIES_ZACIAN_CROWNED 100 0x0 0x0 0x0
+	givepokemon SPECIES_ZACIAN_CROWNED 100 0x0 0x0 0x0
 	checkflag 0x826
 	if 0x1 _goto EventScript_BlaineBeat
-	trainerbattle1 0x1 0x1A3 0x0 0x8199543 0x81995FA 0x816DA06
+	trainerbattle1 0x1 0x1A3 0x0 0x8199543 gText_DefeatedBlaine EventScript_DefeatedBlaine
+	release
+	end
+
+EventScript_DefeatedBlaine:
+	setvar 0x8004 0x8
+	setvar 0x8005 0x1
+	special 0x173
+	setflag 0x4B6
+	setflag 0x826
+	sethealingplace 0x9
+	setvar 0x4071 0x1
+	clearflag 0x62
+	setvar 0x8008 0x7
+	call 0x81A6B18
+	goto EventScript_GiveTM38
+
+EventScript_GiveTM38:
+	msgbox gText_TakeVolcanoBadge MSG_FACE
+	fanfare 260
+	setvar 0x8004 0x6
+	setvar 0x8006 0x0
+	callasm ShowBadgeAfterBeatingLeader
+	msgbox gText_GiveVolcanoBadge MSG_KEEPOPEN
+	waitfanfare
+	callasm HideBadgeAfterBeatingLeader
+	msgbox 0x819969E MSG_KEEPOPEN
+	checkitemspace 0x146 0x1
+	compare LASTRESULT 0x0
+	if 0x1 _goto 0x816DA75
+	additem 0x146 0x1
+	giveitem_msg 0x81996FF 0x146
+	setflag 0x24E
+	msgbox 0x8199652 MSG_KEEPOPEN
 	release
 	end
 

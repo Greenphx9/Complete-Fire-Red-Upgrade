@@ -94,6 +94,7 @@ ability_battle_scripts.s
 .global BattleScript_AvoidedMoveWithAbility
 .global BattleScript_MimicryTransformed
 .global BattleScript_MimicryReturnedToNormal
+.global BattleScript_GulpMissileActivate
 
 .global BattleScript_AbilityPopUp
 .global BattleScript_AbilityPopUpRevert
@@ -635,6 +636,7 @@ BattleScript_AbilityApplySecondaryEffect:
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 BattleScript_RoughSkinActivates:
+	callasm SetUpGulpMissile
 	call BattleScript_AbilityPopUp
 	orword HIT_MARKER, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_NON_ATTACK_DMG
 	healthbarupdate BANK_ATTACKER
@@ -1205,6 +1207,13 @@ BattleScript_MimicryReturnedToNormal:
 	printstring 0x184
 	waitmessage DELAY_1SECOND
 	call BattleScript_AbilityPopUpRevert
+	return
+
+@;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+BattleScript_GulpMissileActivate:
+	call BattleScript_AbilityPopUp
+	setword BATTLE_STRING_LOADER gText_AbilityChangedType
 	return
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

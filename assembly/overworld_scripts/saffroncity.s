@@ -630,7 +630,42 @@ EventScript_Sabrina:
 	lock
 	checkflag 0x825
 	if 0x1 _goto EventScript_SabrinaBeat
-	trainerbattle1 0x1 0x1A4 0x0 0x819B53C 0x819B602 0x816EE0A
+	trainerbattle1 0x1 0x1A4 0x0 0x819B53C gText_SabrinaLose EventScript_DefeatedSabrina
+	release
+	end
+
+EventScript_DefeatedSabrina:
+	setvar 0x8004 0x7
+	setvar 0x8005 0x2
+	special 0x173
+	setvar 0x8004 0x7
+	setvar 0x8005 0x3
+	special 0x173
+	clearflag 0xAE
+	setflag 0x4B5
+	setflag 0x825
+	setvar 0x8008 0x6
+	call 0x81A6B18
+	goto EventScript_GiveTM04
+	end
+
+EventScript_GiveTM04:
+	msgbox gText_TakeMarshBadge MSG_FACE
+	fanfare 260
+	setvar 0x8004 0x5
+	setvar 0x8006 0x0
+	callasm ShowBadgeAfterBeatingLeader
+	msgbox gText_GiveMarshBadge MSG_KEEPOPEN
+	waitfanfare
+	callasm HideBadgeAfterBeatingLeader
+	msgbox 0x819B6FA MSG_KEEPOPEN 
+	checkitemspace 0x124 0x1
+	compare LASTRESULT 0x0
+	if 0x1 _goto 0x816EE7E
+	additem 0x124 0x1
+	giveitem_msg 0x819B7D3 0x124
+	setflag 0x29A
+	msgbox 0x819B685 MSG_KEEPOPEN
 	release
 	end
 

@@ -177,6 +177,10 @@ static void UpdateClockFromRtc(struct SiiRtcInfo* rtc)
 	{
 		gClock.hour = (ConvertBcdToBinary(rtc->hour) >= 12) ? ConvertBcdToBinary(rtc->hour) - 12 : ConvertBcdToBinary(rtc->hour) + 12;
 	}
+	else
+	{
+		gClock.hour = ConvertBcdToBinary(rtc->hour);
+	}
 	gClock.minute = ConvertBcdToBinary(rtc->minute);
 	gClock.second = ConvertBcdToBinary(rtc->second);
 

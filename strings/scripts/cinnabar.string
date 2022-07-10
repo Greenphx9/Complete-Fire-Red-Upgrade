@@ -87,3 +87,12 @@ Some of the people here research\nthe Moon.\pSpeaking of the moon, I can teach\n
 
 #org @gTexst_Moonblast
 There you go.\pYour Pok\emon now knows the move\nMoonblast.
+
+#org @gText_DefeatedBlaine
+I have burned down to nothing!\nNot even ashes remain!
+
+#org @gText_TakeVolcanoBadge
+You have earned the VolcanoBadge.
+
+#org @gText_GiveVolcanoBadge
+[BLACK][PLAYER] received the\nVolcanoBadge from Blaine!
