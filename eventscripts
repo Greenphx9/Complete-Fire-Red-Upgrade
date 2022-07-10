@@ -30,6 +30,7 @@ npc 43 9 1 EventScript_UB1WarpBack
 tile 28 0 0 EventScript_CheckBadgeAndRematch
 npc 3 41 1 EventScript_TM54
 npc 3 1 0 EventScript_GiveDreamEaterTM
+npc 5 1 7 EventScript_Giovanni
 
 ## Viridian Forest
 sign 43 0 0 EventScript_ButterfreeEnc

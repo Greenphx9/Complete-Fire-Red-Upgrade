@@ -414,3 +414,51 @@ EventScript_NurseJoyHeal:
 	msgbox gText_StaySafeJourney MSG_FACE
 	release
 	end
+
+.global EventScript_Giovanni
+EventScript_Giovanni:
+	setvar 0x8004 0xF
+	setvar 0x8005 0x2
+	special 0x174
+	trainerbattle1 0x1 0x15E 0x0 0x818F352 gText_DefeatedGiovanni EventScript_DefeatedGiovanni
+	checkflag 0x298
+	if 0x0 _goto 0x8169F2F
+	msgbox 0x818F4A2 MSG_KEEPOPEN
+	closeonkeypress
+	fadescreen 0x1
+	hidesprite 0x8
+	fadescreen 0x0
+	release
+	end
+
+EventScript_DefeatedGiovanni:
+	setvar 0x8004 0xF
+	setvar 0x8005 0x3
+	special 0x173
+	setflag 0xAD
+	setflag 0x4B7
+	setflag 0x827
+	setvar 0x4054 0x3
+	setvar 0x8008 0x8
+	call 0x81A6B18
+	goto EventScript_GiveTM26
+
+EventScript_GiveTM26:
+	msgbox gText_TakeEarthBadge MSG_FACE
+	fanfare 260
+	setvar 0x8004 0x7
+	setvar 0x8006 0x0
+	callasm ShowBadgeAfterBeatingLeader
+	msgbox gText_GiveEarthBadge MSG_KEEPOPEN
+	waitfanfare
+	callasm HideBadgeAfterBeatingLeader
+	msgbox 0x818F586 MSG_KEEPOPEN
+	checkitemspace 0x13A 0x1
+	compare LASTRESULT 0x0
+	if 0x1 _goto 0x8169F70
+	additem 0x13A 0x1
+	giveitem_msg 0x818F675 0x13A
+	setflag 0x298
+	msgbox 0x818F695 MSG_KEEPOPEN
+	release
+	end

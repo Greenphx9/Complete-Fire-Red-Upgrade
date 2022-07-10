@@ -102,3 +102,12 @@ You look tired. Here, take a rest.
 
 #org @gText_StaySafeJourney
 Good luck on your journey! Stay\nsafe!
+
+#org @gText_DefeatedGiovanni
+Ha!\nThat was a truly intense fight.\lYou have won!
+
+#org @gText_TakeEarthBadge
+As proof, here is the EarthBadge!
+
+#org @gText_GiveEarthBadge
+[BLACK][PLAYER] received the\nEarthBadge from Giovanni!

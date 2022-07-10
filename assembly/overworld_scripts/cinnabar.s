@@ -271,9 +271,6 @@ EventScript_FaceDownShocked:
 .global EventScript_Blaine
 EventScript_Blaine:
 	lock
-	givepokemon SPECIES_ZACIAN_CROWNED 100 0x0 0x0 0x0
-	givepokemon SPECIES_ZACIAN_CROWNED 100 0x0 0x0 0x0
-	givepokemon SPECIES_ZACIAN_CROWNED 100 0x0 0x0 0x0
 	checkflag 0x826
 	if 0x1 _goto EventScript_BlaineBeat
 	trainerbattle1 0x1 0x1A3 0x0 0x8199543 gText_DefeatedBlaine EventScript_DefeatedBlaine
