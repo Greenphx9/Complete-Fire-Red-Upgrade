@@ -4738,6 +4738,21 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smartWild = TRUE,
 	},
 #endif
+#ifdef SPECIES_ENAMORUS
+	[SPECIES_ENAMORUS] =
+	{
+		.setPerfectXIVs = TRUE,
+		.smartWild = TRUE,
+	},
+#endif
+#ifdef SPECIES_ENAMORUS_THERIAN
+	[SPECIES_ENAMORUS_THERIAN] =
+	{
+		.setPerfectXIVs = TRUE,
+		.smartWild = TRUE,
+		.randomizerBan = TRUE,
+	},
+#endif
 #ifdef SPECIES_NONE
 	[SPECIES_NONE] =
 	{
