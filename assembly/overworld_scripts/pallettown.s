@@ -37,6 +37,7 @@ EventScript_PalletTown_GiveStartItems:
 	setflag FLAG_AUTO_HMS
 	additem ITEM_EXP_SHARE 0x1
 	additem ITEM_FREE_SPACE_1 0x1
+	setvar 0x5105 1
 	return
 
 EventScript_PalletTown_MapScriptPt2:
@@ -158,7 +159,7 @@ EventScript_PalletTown_NoGrindingEVYes:
 	sound 0x2
 	msgbox gText_AskNoGrindingEVYes MSG_KEEPOPEN
 	closeonkeypress
-	setflag 0x94D
+	setvar 0x5105 6
 	goto EventScript_PalletTown_AskHardMode
 	release
 	end
@@ -211,7 +212,7 @@ EventScript_PalletTown_EnableScalemons:
 	sound 0x2
 	msgbox gText_ScalemonsEnabled MSG_KEEPOPEN
 	closeonkeypress
-	setflag 0x1200 @@Scalemons
+	setflag 0x1200 @@Scalemons 
 	release
 	end
 

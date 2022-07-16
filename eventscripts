@@ -132,6 +132,7 @@ npc 9 6 0 EventScript_Surge
 npc 3 29 15 EventScript_TM77
 npc 3 5 12 EventScript_TrappingMoveTutor
 npc 3 5 6 EventScript_Cut
+sign 1 4 1 EventScript_MewUnderTruck
 
 ##npc 9 0 0 EventScript_SpecialItemSeller
 npc 11 4 0 EventScript_IOATutor
@@ -302,6 +303,7 @@ npc 1 44 7 EventScript_Mawilite
 npc 1 47 1 EventScript_Medichamite
 npc 43 0 6 EventScript_Scizorite
 npc 3 42 11 EventScript_Gengarite
+npc 1 0 5 EventScript_Butterfreenite
 
 ## Groudon Cave
 npc 43 11 10 EventScript_TM93 
@@ -546,6 +548,9 @@ npc 1 0 15 EventScript_Cut
 npc 43 16 0 EventScript_Cut
 npc 43 16 1 EventScript_Cut
 npc 43 16 2 EventScript_Cut
+npc 1 0 18 EventScript_Cut
+npc 1 0 19 EventScript_Cut
+npc 1 0 20 EventScript_Cut
 npc 1 37 3 EventScript_RockSmash
 npc 1 82 11 EventScript_RockSmash
 npc 1 82 12 EventScript_RockSmash

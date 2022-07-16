@@ -11881,7 +11881,7 @@ const struct BattleMove gBattleMoves[] =
 	[MOVE_FREEZINGGLARE] =
 	{	//ANIM TODO
 		.effect = EFFECT_FREEZE_HIT,
-		.power = 90, //PLACEHOLDERS
+		.power = 95, //PLACEHOLDERS
 		.type = TYPE_PSYCHIC,
 		.accuracy = 100,
 		.pp = 10,

@@ -1,5 +1,5 @@
 #org @gText_GreenphxHello
-???: Oh, [PLAYER]!\nI'm [GREEN]Greenphx[BLUE], the creator of this [GREEN]rom\phack[BLUE]. Can we have a battle?\nI'll use my favourite Pok\emon!
+[BLUE]???: Oh, [PLAYER]!\nI'm [GREEN]Greenphx[BLUE], the creator of\lthis [GREEN]ROM Hack![BLUE].\pCan we have a battle? I'll use my\nfavourite Pok\emon!
 
 #org @gText_GreenphxNo
 Oh, okay then.
@@ -8,7 +8,7 @@ Oh, okay then.
 That was a great fight!
 
 #org @gText_GreenphxAfter
-[GREEN]Greenphx: [BLUE]In a future update, I'll\nbattle you with my full team.
+[GREEN]Greenphx: [BLUE]Come back to me when your\nthe Champion, and I'll use my full\lteam.
 
 #org @gText_DanielHello
 [BLUE]Daniel: Hello, I am Daniel.\nI assume you are looking for a\lchallenge?\pIf so, you've come to the best\nperson around. Would you like to\lhave a battle?
@@ -27,3 +27,12 @@ Wow, I can't believe you're stronger\nthan me.
 
 #org @gText_DanielAlreadyBattled
 [BLUE]Daniel: You're super strong. You\ncould probably become a new Kanto\lChampion if you trained enough.
+
+#org @gText_GreenphxAfter2
+[GREEN]Greenphx: [BLUE]Well done.\pI hope you enjoyed the ROM Hack.
+
+#org @gText_StartGreenphxRematch
+[GREEN]Greenphx: [BLUE]Hello there. You actually\ncame back, I'm surprised you\lremembered me.\pAnyways, let's start this battle!
+
+#org @gText_GreenphxLose2
+Greenphx: Defeated, once again[.]

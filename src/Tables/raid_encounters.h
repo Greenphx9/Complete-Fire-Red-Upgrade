@@ -231,7 +231,7 @@ static struct Raid sRoute3Raids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_FLAPPLE_GIGA,
+		.species = SPECIES_FLAPPLE,
 		.ability = RAID_ABILITY_RANDOM_ALL,
 		.drops =
 		{
@@ -464,7 +464,7 @@ static struct Raid sRoute4Raids4Star[] =
 static struct Raid sRoute4Raids5Star[] =
 {
 	{
-		.species = SPECIES_ORBEETLE_GIGA,
+		.species = SPECIES_ORBEETLE,
 		.ability = RAID_ABILITY_1,
 		.drops =
 		{
@@ -793,7 +793,7 @@ static struct Raid sRoute24Raids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_CHARIZARD_GIGA,
+		.species = SPECIES_CHARIZARD,
 		.ability = RAID_ABILITY_1,
 		.drops =
 		{
@@ -812,7 +812,7 @@ static struct Raid sRoute24Raids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_BLASTOISE_GIGA,
+		.species = SPECIES_BLASTOISE,
 		.ability = RAID_ABILITY_1,
 		.drops =
 		{
@@ -831,7 +831,7 @@ static struct Raid sRoute24Raids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_VENUSAUR_GIGA,
+		.species = SPECIES_VENUSAUR,
 		.ability = RAID_ABILITY_1,
 		.drops =
 		{
@@ -1121,7 +1121,7 @@ static struct Raid sRoute25Raids5Star[] =
 		},
 	},
 		{
-		.species = SPECIES_CINDERACE_GIGA,
+		.species = SPECIES_CINDERACE,
 		.ability = RAID_ABILITY_1,
 		.drops =
 		{
@@ -1140,7 +1140,7 @@ static struct Raid sRoute25Raids5Star[] =
 		},
 	},
 		{
-		.species = SPECIES_INTELEON_GIGA,
+		.species = SPECIES_INTELEON,
 		.ability = RAID_ABILITY_1,
 		.drops =
 		{
@@ -1159,7 +1159,7 @@ static struct Raid sRoute25Raids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_RILLABOOM_GIGA,
+		.species = SPECIES_RILLABOOM,
 		.ability = RAID_ABILITY_1,
 		.drops =
 		{
@@ -1412,7 +1412,7 @@ static struct Raid sRoute5Raids4Star[] =
 static struct Raid sRoute5Raids5Star[] =
 {
 	{
-		.species = SPECIES_CENTISKORCH_GIGA,
+		.species = SPECIES_CENTISKORCH,
 		.ability = RAID_ABILITY_1,
 		.drops =
 		{
@@ -1664,7 +1664,7 @@ static struct Raid sRoute6Raids4Star[] =
 static struct Raid sRoute6Raids5Star[] =
 {
 	{
-		.species = SPECIES_SNORLAX_GIGA,
+		.species = SPECIES_SNORLAX,
 		.ability = RAID_ABILITY_2,
 		.drops =
 		{
@@ -1683,7 +1683,7 @@ static struct Raid sRoute6Raids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_EEVEE_GIGA,
+		.species = SPECIES_EEVEE,
 		.ability = RAID_ABILITY_2,
 		.drops =
 		{
@@ -1992,7 +1992,7 @@ static struct Raid sRoute11Raids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_KINGLER_GIGA,
+		.species = SPECIES_KINGLER,
 		.ability = RAID_ABILITY_1,
 		.drops =
 		{
@@ -2282,7 +2282,7 @@ static struct Raid sMtMoonRaids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_DREDNAW_GIGA,
+		.species = SPECIES_DREDNAW,
 		.ability = RAID_ABILITY_1,
 		.drops =
 		{
@@ -2301,7 +2301,7 @@ static struct Raid sMtMoonRaids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_COALOSSAL_GIGA,
+		.species = SPECIES_COALOSSAL,
 		.ability = RAID_ABILITY_1,
 		.drops =
 		{
@@ -2587,7 +2587,7 @@ static struct Raid sRoute9Raids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_SANDACONDA_GIGA,
+		.species = SPECIES_SANDACONDA,
 		.ability = RAID_ABILITY_HIDDEN,
 		.drops =
 		{
@@ -2889,7 +2889,7 @@ static struct Raid sRockTunnelRaids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_LAPRAS_GIGA,
+		.species = SPECIES_LAPRAS,
 		.ability = RAID_ABILITY_1,
 		.drops =
 		{
@@ -3269,7 +3269,7 @@ static struct Raid sRoute8Raids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_GARBODOR_GIGA,
+		.species = SPECIES_GARBODOR,
 		.ability = RAID_ABILITY_1,
 		.drops =
 		{
@@ -3593,7 +3593,7 @@ static struct Raid sPokemonTowerRaids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_GENGAR_GIGA,
+		.species = SPECIES_GENGAR,
 		.ability = RAID_ABILITY_1,
 		.drops =
 		{
@@ -3650,7 +3650,7 @@ static struct Raid sPokemonTowerRaids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_GENGAR_GIGA,
+		.species = SPECIES_GENGAR,
 		.ability = RAID_ABILITY_1,
 		.drops =
 		{
@@ -4069,7 +4069,7 @@ static struct Raid sRoute7Raids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_HATTERENE_GIGA,
+		.species = SPECIES_HATTERENE,
 		.ability = RAID_ABILITY_RANDOM_ALL,//_1,
 		.drops =
 		{
@@ -4564,7 +4564,7 @@ static struct Raid sRoute16Raids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_GRIMMSNARL_GIGA,
+		.species = SPECIES_GRIMMSNARL,
 		.ability = RAID_ABILITY_HIDDEN,//_1,
 		.drops =
 		{
@@ -4945,7 +4945,7 @@ static struct Raid sRoute12Raids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_ALCREMIE_GIGA,
+		.species = SPECIES_ALCREMIE_STRAWBERRY,
 		.ability = RAID_ABILITY_HIDDEN,//_1,
 		.drops =
 		{
@@ -5250,7 +5250,7 @@ static struct Raid sRoute14Raids4Star[] =
 static struct Raid sRoute14Raids5Star[] =
 {
 	{
-		.species = SPECIES_LAPRAS_GIGA,
+		.species = SPECIES_LAPRAS,
 		.ability = RAID_ABILITY_RANDOM_ALL,//_RANDOM_ALL,
 		.drops =
 		{
@@ -5707,7 +5707,7 @@ static struct Raid sRoute15Raids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_CORVIKNIGHT_GIGA,
+		.species = SPECIES_CORVIKNIGHT,
 		.ability = RAID_ABILITY_RANDOM_ALL,//_1,
 		.drops =
 		{
@@ -6126,7 +6126,7 @@ static struct Raid sRoute19Raids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_PIKACHU_GIGA,
+		.species = SPECIES_PIKACHU,
 		.ability = RAID_ABILITY_RANDOM_ALL,//_1,
 		.drops =
 		{
@@ -7006,7 +7006,7 @@ static struct Raid sViridianForestRaids5Star[] =
 		},
 	},
 	{
-		.species = SPECIES_BUTTERFREE_GIGA,
+		.species = SPECIES_BUTTERFREE,
 		.ability = RAID_ABILITY_RANDOM_ALL,//_RANDOM_ALL,
 		.drops =
 		{
@@ -7139,7 +7139,7 @@ static struct Raid sViridianForestRaids5Star[] =
 		},
 	},
 	{
-	.species = SPECIES_ORBEETLE_GIGA,
+	.species = SPECIES_ORBEETLE,
 	.ability = RAID_ABILITY_RANDOM_ALL,//_RANDOM_ALL,
 	.drops =
 		{

@@ -444,6 +444,9 @@ StevenStonePal 8239B44
 AceTrainerBothTiles 823997C
 AceTrainerBothPal 8239E1C 
 
+GreenphxTiles 82395B4
+GreenphxPal 8239A54
+
 EventScript_EVIVMenu 8904058
 
 ##gEventObjectGraphicsInfo_Bug_Catcher 8EB1050
@@ -516,5 +519,8 @@ Bag_Copperanite_SpritePal 093C93CC
 
 Bag_Duraludonite_SpriteTiles 093C93D0
 Bag_Duraludonite_SpritePal 093C93D4
+
+Bag_Time_Turner_SpriteTiles 093C9808
+Bag_Time_Turner_SpritePal 093C980C
 
 gText_StoleItem 083FE144

@@ -45,10 +45,19 @@ RaidScript_DoStuff:
     end
 
 EventScript_RaidScreen:
+    givepokemon SPECIES_DRAGONITE 100 0x0 0x0
     fadescreen FADEOUT_BLACK
     special SPECIAL_RAID_BATTLE_INTRO
     waitstate
     compare LASTRESULT 0x0
+    goto_if_eq RaidScript_End
+    msgbox gText_Choose3 MSG_NORMAL
+    special 0x27
+    special 0xF5
+    waitstate
+    compare LASTRESULT 0x0
+    if 0x1 _goto RaidScript_End2
+    special 0x28
     if equal _goto RaidScript_End
     setflag FLAG_TAG_BATTLE
     msgbox gText_JoinedYouTake MSG_SIGN

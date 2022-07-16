@@ -1785,6 +1785,8 @@ static void TryDestroyItemDescriptionTask(void)
 		DestroyTask(taskId);
 }
 
+extern const u8 gText_PowerLensDescription[];
+
 void PrintItemDescriptionOnMessageWindow(u16 itemIndex)
 {
 	const u8* description;
@@ -2170,4 +2172,64 @@ void BagListMenuGetItemNameColored(u8 *dest, u16 itemId)
     else
         StringCopy(dest, sListItemTextColor_RegularItem);
     StringAppend(dest, ItemId_GetName(itemId));
+}
+
+bool8 HasItemsRequiredToLevelUpPowerItem(void)
+{
+	switch(VarGet(VAR_POWER_ITEM_LEVEL))
+	{
+		case 1:
+			if(CheckBagHasItem(ITEM_NUGGET, 3))
+			{
+				RemoveBagItem(ITEM_NUGGET, 3);
+				gSpecialVar_LastResult = TRUE;
+				return TRUE;
+			}
+			break;
+		case 2:
+			if(CheckBagHasItem(ITEM_NUGGET, 3) && CheckBagHasItem(ITEM_PRETTY_WING, 35))
+			{
+				RemoveBagItem(ITEM_NUGGET, 3);
+				RemoveBagItem(ITEM_PRETTY_WING, 35);
+				gSpecialVar_LastResult = TRUE;
+				return TRUE;
+			}
+			break;
+		case 3:
+			if(CheckBagHasItem(ITEM_NUGGET, 4) && CheckBagHasItem(ITEM_PRETTY_WING, 40) && CheckBagHasItem(ITEM_TINY_MUSHROOM, 3))
+			{
+				RemoveBagItem(ITEM_NUGGET, 4);
+				RemoveBagItem(ITEM_PRETTY_WING, 40);
+				RemoveBagItem(ITEM_TINY_MUSHROOM, 3);
+				gSpecialVar_LastResult = TRUE;
+				return TRUE;
+			}
+			break;
+		case 4:
+			if(CheckBagHasItem(ITEM_NUGGET, 10) && CheckBagHasItem(ITEM_PRETTY_WING, 100) && CheckBagHasItem(ITEM_TINY_MUSHROOM, 5) && CheckBagHasItem(ITEM_BIG_MUSHROOM, 3))
+			{
+				RemoveBagItem(ITEM_NUGGET, 10);
+				RemoveBagItem(ITEM_PRETTY_WING, 100);
+				RemoveBagItem(ITEM_TINY_MUSHROOM, 5);
+				RemoveBagItem(ITEM_BIG_MUSHROOM, 3);
+				gSpecialVar_LastResult = TRUE;
+				return TRUE;
+			}
+			break;
+
+		case 5:
+			if(CheckBagHasItem(ITEM_NUGGET, 15) && CheckBagHasItem(ITEM_PRETTY_WING, 150) && CheckBagHasItem(ITEM_TINY_MUSHROOM, 15) && CheckBagHasItem(ITEM_BIG_MUSHROOM, 10) && CheckBagHasItem(ITEM_RARE_BONE, 10))
+			{
+				RemoveBagItem(ITEM_NUGGET, 15);
+				RemoveBagItem(ITEM_PRETTY_WING, 150);
+				RemoveBagItem(ITEM_TINY_MUSHROOM, 15);
+				RemoveBagItem(ITEM_BIG_MUSHROOM, 10);
+				RemoveBagItem(ITEM_RARE_BONE, 10);
+				gSpecialVar_LastResult = TRUE;
+				return TRUE;
+			}
+			break;
+	}
+	gSpecialVar_LastResult = FALSE;
+	return FALSE;
 }

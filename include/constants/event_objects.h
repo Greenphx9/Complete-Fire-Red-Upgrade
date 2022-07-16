@@ -110,6 +110,7 @@ enum OverworldNPCSprites
 	EVENT_OBJ_GFX_WES,
 	EVENT_OBJ_GFX_STEVEN,
 	EVENT_OBJ_GFX_MIRA,
+	EVENT_OBJ_GFX_GREENPHX,
 };
 
 #define EVENT_OBJ_GFX_RED_UNDERWATER 6 //By default VS. Seeker on bike b\c not used by anything else

@@ -123,3 +123,30 @@ APPLYING CHANGES[.]\nPLEASE WAIT[.]
 
 #org @gText_HelloCurrentlyLevelBuffer
 Hello there.\nI can upgrade your Power Item's\lLevel.\pYour Power Items are currently level\n[BUFFER1]. Do you want me to\lupgrade them?
+
+#org @gText_ItemsToUpgradeToLevel2
+[BLUE]You will need:\n[GREEN]3 Nuggets\l[BLUE]To upgrade your Power Item to\nLevel 2.\pWould you like to upgrade your\nPower Item to level 2?
+
+#org @gText_DontHaveItemsRequired
+I'm sorry, but you do not have the\nitems required.\pHave a good day.
+
+#org @gText_ItemsToUpgradeToLevel3
+[BLUE]You will need:\n[GREEN]3 Nuggets\l35 Pretty Wings\l[BLUE]To upgrade your Power Item to\nLevel 3.\pWould you like to upgrade your\nPower Item to level 3?
+
+#org @gText_UpgradedToLevelBuffer
+[BLACK][PLAYER]'s Power Items were upgraded\nto Level [BUFFER1]!
+
+#org @gText_ItemsToUpgradeToLevel4
+[BLUE]You will need:\n[GREEN]4 Nuggets\l40 Pretty Wings\l3 Tiny Mushrooms\l[BLUE]To upgrade your Power Item to\lLevel 4.\pWould you like to upgrade your\nPower Item to level 4?
+
+#org @gText_ItemsToUpgradeToLevel5
+[BLUE]You will need:\n[GREEN]10 Nuggets\l100 Pretty Wings\l5 Tiny Mushrooms\l3 Big Mushrooms\l[BLUE]To upgrade your Power Item to\lLevel 5.\pWould you like to upgrade your\nPower Item to level 5?
+
+#org @gText_DidntKnowAmountEVs
+If you didn't know already, you can\nuse the machine on the right to\lchange the amount of EVs gained\lfrom the Power Items.
+
+#org @gText_ItemsToUpgradeToLevel6
+[BLUE]You will need:\n[GREEN]15 Nuggets\l150 Pretty Wings\l15 Tiny Mushrooms\l10 Big Mushrooms\l10 Rare Bones\l[BLUE]To upgrade your Power Item to\lLevel 6.\pWould you like to upgrade your\nPower Item to level 6?
+
+#org @gText_AlreadyLevel6
+Hello there.\nYou're Power Items are already\llevel 6.\pI can't upgrade them any further.

@@ -749,6 +749,7 @@ bool8 __attribute__((long_call)) PokemonItemUseNoEffect(struct Pokemon *mon, u16
 u8 __attribute__((long_call)) GetItemEffectParamOffset(u16 itemId, u8 effectByte, u8 effectBit);
 
 u8 __attribute__((long_call)) GetAbilityBySpecies(u16 species, bool8 altAbility);
+bool8 __attribute__((long_call)) IsPlayerPartyAndPokemonStorageFull(void);
 
 /*
 void ZeroMonData(struct Pokemon *mon);

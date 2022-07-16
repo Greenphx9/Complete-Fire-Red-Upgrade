@@ -428,6 +428,9 @@ EventScript_PowerItemEVFadescreen2:
 EventScript_PowerItemLevelUp:
 	lock
 	faceplayer
+	additem 0x2E1 1
+	compare 0x5105 6
+	goto_if_eq EventScript_AlreadyLevel6PowerItem
 	copyvar 0x8004 0x5105
 	buffernumber 0x0 0x8004
 	msgbox gText_HelloCurrentlyLevelBuffer MSG_YESNO
@@ -436,10 +439,77 @@ EventScript_PowerItemLevelUp:
 	release
 	end
 
-EventScript_ItemsRequired:
-	msgbox gText_HelloCurrentlyLevelBuffer MSG_YESNO
+EventScript_AlreadyLevel6PowerItem:
+	msgbox gText_AlreadyLevel6 MSG_FACE
 	release
 	end
+
+EventScript_ItemsRequired:
+	copyvar LASTRESULT 0x5105
+	switch LASTRESULT
+	case 1, EventScript_PowerItem1_ItemsRequired
+	case 2, EventScript_PowerItem2_ItemsRequired
+	case 3, EventScript_PowerItem3_ItemsRequired
+	case 4, EventScript_PowerItem4_ItemsRequired
+	case 5, EventScript_PowerItem5_ItemsRequired
+	release
+	end
+
+EventScript_PowerItem1_ItemsRequired:	
+	msgbox gText_ItemsToUpgradeToLevel2 MSG_YESNO
+	compare LASTRESULT 1
+	goto_if_eq EventScript_HasItemsRequiredPowerItem
+	release
+	end
+
+EventScript_PowerItem2_ItemsRequired:	
+	msgbox gText_ItemsToUpgradeToLevel3 MSG_YESNO
+	compare LASTRESULT 1
+	goto_if_eq EventScript_HasItemsRequiredPowerItem
+	release
+	end
+
+EventScript_PowerItem3_ItemsRequired:
+	msgbox gText_ItemsToUpgradeToLevel4 MSG_YESNO
+	compare LASTRESULT 1
+	goto_if_eq EventScript_HasItemsRequiredPowerItem
+	release
+	end
+
+EventScript_PowerItem4_ItemsRequired:
+	msgbox gText_ItemsToUpgradeToLevel5 MSG_YESNO
+	compare LASTRESULT 1
+	goto_if_eq EventScript_HasItemsRequiredPowerItem
+	release
+	end
+
+EventScript_PowerItem5_ItemsRequired:
+	msgbox gText_ItemsToUpgradeToLevel6 MSG_YESNO
+	compare LASTRESULT 1
+	goto_if_eq EventScript_HasItemsRequiredPowerItem
+	release
+	end
+
+EventScript_HasItemsRequiredPowerItem:
+	callasm HasItemsRequiredToLevelUpPowerItem
+	compare LASTRESULT 0
+	goto_if_eq EventScript_DoesntHaveRequiredItems
+	addvar 0x5105 1
+	copyvar 0x8004 0x5105
+	buffernumber 0x0 0x8004
+	fanfare 0x101
+	msgbox gText_UpgradedToLevelBuffer MSG_KEEPOPEN
+	waitfanfare
+	closeonkeypress
+	msgbox gText_DidntKnowAmountEVs MSG_FACE
+	release
+	end
+
+EventScript_DoesntHaveRequiredItems:
+	msgbox gText_DontHaveItemsRequired MSG_FACE
+	release
+	end
+
 
 
 .align 1

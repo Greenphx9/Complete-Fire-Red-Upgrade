@@ -4,6 +4,7 @@
 .include "../xse_commands.s"
 .include "../xse_defines.s"
 .include "../asm_defines.s"
+.include "../new_megas.s"
 
 .global EventScript_Beedrillite
 EventScript_Beedrillite:
@@ -128,4 +129,9 @@ EventScript_Gengarite:
 .global EventScript_Aggronite
 EventScript_Aggronite:
 	giveitem ITEM_AGGRONITE 0x1 MSG_FIND
+	end
+
+.global EventScript_Butterfreenite
+EventScript_Butterfreenite:
+	giveitem ITEM_BUTTERFREENITE 0x1 MSG_FIND
 	end

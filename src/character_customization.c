@@ -131,6 +131,8 @@ extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Steven;
 extern const u16 gEventObjectPic_StevenPal[];
 extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Mira;
 extern const u16 gEventObjectPic_MiraPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Greenphx;
+extern const u16 gEventObjectPic_GreenphxPal[];
 
 	static NPCPtr sOverworldTable2[] = { 
 		&gEventObjectGraphicsInfo_Cresselia,
@@ -150,6 +152,7 @@ extern const u16 gEventObjectPic_MiraPal[];
 		&gEventObjectGraphicsInfo_Wes,
 		&gEventObjectGraphicsInfo_Steven,
 		&gEventObjectGraphicsInfo_Mira,
+		&gEventObjectGraphicsInfo_Greenphx,
 	};
 
 	const struct EventObjectGraphicsInfo** const gOverworldTableSwitcher[255] =
@@ -178,6 +181,7 @@ extern const u16 gEventObjectPic_MiraPal[];
 		{gEventObjectPic_WesPal, 0x120F},
 		{gEventObjectPic_StevenPal, 0x1210},
 		{gEventObjectPic_MiraPal, 0x1211},
+		{gEventObjectPic_GreenphxPal, 0x1212},
 		{NULL, 0x11FF},
 	};
 	const struct SpritePalette* const gObjectEventSpritePalettesSwitcher[255] = {

@@ -17,6 +17,7 @@
 #include "../include/constants/event_objects.h"
 #include "../include/constants/songs.h"
 #include "../include/gba/io_reg.h"
+#include "defines_battle.h"
 
 #include "../include/new/build_pokemon.h"
 #include "../include/new/frontier.h"
@@ -433,6 +434,7 @@ static void Task_RaidBattleIntroWaitForKeyPress(u8 taskId)
 		StringCopy(gStringVar7, name);
 		GetSpeciesName(gStringVar2, gRaidBattleSpecies);
 		GetSpeciesName(gStringVar8, gRaidBattleSpecies);
+		StringCopy(gStringVar9, gTrainerClassNames[gRaidPartners[id].trainerClass]);
 
 		PlaySE(SE_CORRECT);
 		BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);

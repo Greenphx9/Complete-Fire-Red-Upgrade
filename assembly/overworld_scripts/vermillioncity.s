@@ -1178,6 +1178,36 @@ EventScript_NOTrapMove:
 	release
 	end
 
+.equ FLAG_MEW_BEAT, 0x97A
+
+.global EventScript_MewUnderTruck
+EventScript_MewUnderTruck:
+	lock
+	goto_if_set 0x827 EventScript_CheckMewBeat
+	msgbox gText_JustATruck MSG_KEEPOPEN
+	closeonkeypress
+	release
+	end
+
+EventScript_CheckMewBeat:
+	goto_if_unset FLAG_MEW_BEAT EventScript_MewBattle
+	msgbox gText_JustATruck MSG_KEEPOPEN
+	closeonkeypress
+	release
+	end
+
+EventScript_MewBattle:
+	msgbox gText_Truck2 MSG_KEEPOPEN
+	closeonkeypress
+	cry SPECIES_MEW 0x0
+	waitcry
+	msgbox gText_TheresAPokemonUnder MSG_KEEPOPEN
+	closeonkeypress
+	wildbattle SPECIES_MEW 80 0x0
+	setflag FLAG_MEW_BEAT
+	release
+	end
+
 
 .align 1
 EventScript_VermillionBerriesShop:

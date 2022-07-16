@@ -253,6 +253,9 @@
 #define FLAG_REGIROCK_DOOR 0x1026
 #define FLAG_REGIGIGAS 0x1027
 
+#define FLAG_BUTTERFREENITE 0x1028
+#define FLAG_FOUGHT_GREENPHX 0x1029
+
 #define FLAG_SCALEMONS 0x1200 //Sets every Pokemon's BST to 600.
 #define FLAG_TIME_TURNER 0x1201 //Changes the time to PM when AM,and vice versa
 /*===== General Vars =====*/
