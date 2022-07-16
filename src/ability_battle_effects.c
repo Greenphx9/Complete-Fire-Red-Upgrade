@@ -716,10 +716,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 					gBankAttacker = bank;
 					*GetAbilityLocation(bank) = *GetAbilityLocation(gActiveBattler);
 					gLastUsedAbility = *GetAbilityLocation(gActiveBattler);
+					gLastUsedSpecies = SPECIES(gActiveBattler);
 					BattleScriptPushCursorAndCallback(BattleScript_TraceActivates);
 
 					PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gActiveBattler, gBattlerPartyIndexes[gActiveBattler])
-					PREPARE_ABILITY_BUFFER(gBattleTextBuff2, gLastUsedAbility)
+					StringCopy(gBattleTextBuff2, GetAbilityNameByMon(gLastUsedAbility, gLastUsedSpecies));
 				}
 				else
 					--effect;
