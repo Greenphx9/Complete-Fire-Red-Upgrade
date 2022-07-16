@@ -439,6 +439,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 	else
 		gLastUsedAbility = ABILITY(bank);
 
+	gLastUsedSpecies = SPECIES(bank);
+
 	if (moveArg)
 		move = moveArg;
 	else

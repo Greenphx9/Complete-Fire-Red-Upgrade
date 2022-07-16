@@ -335,6 +335,7 @@ void TryActivatePartnerSapSipper(void)
 		gBattleScripting.animArg1 = 0xE + STAT_STAGE_ATK;
 		gBattleScripting.animArg2 = 0;
 		gLastUsedAbility = ABILITY(gBankTarget);
+		gLastUsedSpecies = SPECIES(gBankTarget);
 		BattleScriptPush(gBattlescriptCurrInstr + 5);
 		gBattlescriptCurrInstr = BattleScript_SapSipperAromatherapy - 5;
 	}
@@ -1270,6 +1271,7 @@ void AbilityChangeBSFunc(void)
 		{
 			*defAbilityLoc = ABILITY_INSOMNIA;
 			gLastUsedAbility = defAbility; //Original ability
+			gLastUsedSpecies = SPECIES(gBankTarget);
 			ResetVarsForAbilityChange(gBankTarget);
 			gBattleStringLoader = WorrySeedString;
 		}
@@ -1304,6 +1306,7 @@ void AbilityChangeBSFunc(void)
 		{
 			*defAbilityLoc = atkAbility;
 			gLastUsedAbility = defAbility; //Original ability
+			gLastUsedSpecies = SPECIES(gBankTarget);
 			ResetVarsForAbilityChange(gBankTarget);
 			gBattleStringLoader = EntrainmentString;
 
@@ -1321,6 +1324,7 @@ void AbilityChangeBSFunc(void)
 		{
 			*defAbilityLoc = ABILITY_SIMPLE;
 			gLastUsedAbility = defAbility; //Original ability
+			gLastUsedSpecies = SPECIES(gBankTarget);
 			ResetVarsForAbilityChange(gBankTarget);
 			gBattleStringLoader = SimpleBeamString;
 		}

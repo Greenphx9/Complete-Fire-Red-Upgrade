@@ -606,6 +606,7 @@ void atk06_typecalc(void)
 
 			u8 defAbility = ABILITY(bankDef);
 			u8 defEffect = ITEM_EFFECT(bankDef);
+			u16 defSpecies = SPECIES(bankDef);
 			gBattleMoveDamage = gNewBS->DamageTaken[bankDef];
 			gNewBS->ResultFlags[bankDef] &= ~(MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE | MOVE_RESULT_DOESNT_AFFECT_FOE); //Reset for now so damage can be modulated properly
 
@@ -624,6 +625,7 @@ void atk06_typecalc(void)
 				if (defAbility == ABILITY_LEVITATE)
 				{
 					gLastUsedAbility = defAbility;
+					gLastUsedSpecies = defSpecies;
 					gNewBS->ResultFlags[bankDef] |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
 					gLastLandedMoves[bankDef] = 0;
 					gLastHitByType[bankDef] = 0;
@@ -653,6 +655,7 @@ void atk06_typecalc(void)
 				if (defAbility == ABILITY_OVERCOAT)
 				{
 					gLastUsedAbility = defAbility;
+					gLastUsedSpecies = defSpecies;
 					gNewBS->ResultFlags[bankDef] |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
 					gLastLandedMoves[bankDef] = 0;
 					gLastHitByType[bankDef] = 0xFF;
@@ -694,6 +697,7 @@ void atk06_typecalc(void)
 			 && SPLIT(gCurrentMove) != SPLIT_STATUS)
 			 {
 				gLastUsedAbility = defAbility;
+				gLastUsedSpecies = defSpecies;
 				gNewBS->ResultFlags[bankDef] |= MOVE_RESULT_MISSED;
 				gLastLandedMoves[bankDef] = 0;
 				gLastHitByType[bankDef] = 0;
@@ -722,6 +726,8 @@ void atk4A_typecalc2(void)
 {
 	u8 moveType = gBattleStruct->dynamicMoveType & 0x3F;
 	u8 atkAbility = ABILITY(gBankAttacker);
+	u16 atkSpecies = SPECIES(gBankAttacker);
+	u16 defSpecies = SPECIES(gBankTarget);
 	u8 defAbility = ABILITY(gBankTarget);
 	u8 defEffect = ITEM_EFFECT(gBankTarget);
 
@@ -731,6 +737,7 @@ void atk4A_typecalc2(void)
 		if (defAbility == ABILITY_LEVITATE)
 		{
 			gLastUsedAbility = atkAbility;
+			gLastUsedSpecies = atkSpecies;
 			gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
 			gLastLandedMoves[gBankTarget] = 0;
 			gNewBS->missStringId[gBankTarget] = 3;
@@ -755,6 +762,7 @@ void atk4A_typecalc2(void)
 		if (defAbility == ABILITY_OVERCOAT)
 		{
 			gLastUsedAbility = defAbility;
+			gLastUsedSpecies = defSpecies;
 			gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
 			gLastLandedMoves[gBankTarget] = 0;
 			gNewBS->missStringId[gBankTarget] = 3;
@@ -794,6 +802,7 @@ void atk4A_typecalc2(void)
 	&& gBattleMoves[gCurrentMove].power)
 	{
 		gLastUsedAbility = defAbility;
+		gLastUsedSpecies = defSpecies;
 		gMoveResultFlags |= MOVE_RESULT_MISSED;
 		gLastLandedMoves[gBankTarget] = 0;
 		gNewBS->missStringId[gBankTarget] = 3;

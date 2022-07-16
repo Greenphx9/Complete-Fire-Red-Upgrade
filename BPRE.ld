@@ -1990,3 +1990,4 @@ LoadStdWindowFrameGfx = 0x80f6E9C | 1;
 InitOverworldBgs_NoResetHeap = 0x8056354 | 1;
 GetReflectionTypeByMetatileBehavior = 0x80680C8 | 1;
 IsPlayerPartyAndPokemonStorageFull = 0x8040F6C | 1;
+gLastUsedSpecies = 0x203FA00;

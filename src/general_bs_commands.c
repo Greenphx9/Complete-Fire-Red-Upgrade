@@ -1314,6 +1314,7 @@ void atk1B_cleareffectsonfaint(void) {
 						gBattleScripting.animArg2 = 0;
 
 						gLastUsedAbility = ABILITY_SOULHEART;
+						gLastUsedSpecies = SPECIES(bank);
 
 						BattleScriptPushCursor();
 						gBattlescriptCurrInstr = BattleScript_SoulHeart;
@@ -1327,6 +1328,7 @@ void atk1B_cleareffectsonfaint(void) {
 			case Faint_ReceiverActivate:
 				gNewBS->ReceiverActivated = FALSE;
 				u8 partnerAbility = ABILITY(partner);
+				u16 partnerSpecies = SPECIES(partner);
 
 				if (IS_DOUBLE_BATTLE
 				&& (partnerAbility == ABILITY_RECEIVER)
@@ -1334,6 +1336,7 @@ void atk1B_cleareffectsonfaint(void) {
 				&& CopyAbility(gActiveBattler) != ABILITY_UNOWNPOWER)
 				{
 					gLastUsedAbility = partnerAbility;
+					gLastUsedSpecies = partnerSpecies;
 					*GetAbilityLocation(partner) = CopyAbility(gActiveBattler);
 					gEffectBank = gActiveBattler;
 					gBattleScripting.bank = partner;
@@ -2466,6 +2469,8 @@ void atk84_jumpifcantmakeasleep(void) {
 	u8 defPartner = PARTNER(bankDef);
 	u8 defAbility = ABILITY(bankDef);
 	u8 defPartnerAbility = ABILITY(defPartner);
+	u16 defSpecies = SPECIES(bankDef);
+	u16 defPartnerSpecies = SPECIES(defPartner);
 
 	u8* jump_loc = T1_READ_PTR(gBattlescriptCurrInstr + 1);
 
@@ -2480,6 +2485,7 @@ void atk84_jumpifcantmakeasleep(void) {
 	|| (defAbility == ABILITY_LEAFGUARD && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY)
 	|| (defAbility == ABILITY_FLOWERVEIL && IsOfType(bankDef, TYPE_GRASS) && gCurrentMove != MOVE_REST)) {
 		gLastUsedAbility = defAbility;
+		gLastUsedSpecies = defSpecies;
 		gBattleCommunication[MULTISTRING_CHOOSER] = 2;
 		gBattlescriptCurrInstr = jump_loc;
 		RecordAbilityBattle(bankDef, gLastUsedAbility);
@@ -2488,6 +2494,7 @@ void atk84_jumpifcantmakeasleep(void) {
 	else if (defPartnerAbility == ABILITY_SWEETVEIL
 	|| (defPartnerAbility == ABILITY_FLOWERVEIL && IsOfType(bankDef, TYPE_GRASS) && gCurrentMove != MOVE_REST)) {
 		gLastUsedAbility = defPartnerAbility;
+		gLastUsedSpecies = defPartnerSpecies;
 		gBattlescriptCurrInstr = jump_loc;
 		RecordAbilityBattle(defPartner, gLastUsedAbility);
 	}
@@ -4508,6 +4515,7 @@ void atkD2_tryswapitems(void) { //Trick
 		else if (ABILITY(gBankTarget) == ABILITY_STICKYHOLD)  {
 			gBattlescriptCurrInstr = BattleScript_StickyHoldActivates;
 			gLastUsedAbility = ABILITY(gBankTarget);
+			gLastUsedSpecies = SPECIES(gBankTarget);
 			RecordAbilityBattle(gBankTarget, gLastUsedAbility);
 		}
 
@@ -4560,6 +4568,7 @@ void atkD3_trycopyability(void) //Role Play
 
 	u8* atkAbilityLoc, *defAbilityLoc;
 	u8 atkAbility, defAbility;
+	u16 atkSpecies;
 
 	//Get correct location of ability
 	atkAbilityLoc = GetAbilityLocation(gBankAttacker);
@@ -4567,6 +4576,8 @@ void atkD3_trycopyability(void) //Role Play
 
 	atkAbility = *atkAbilityLoc;
 	defAbility = *defAbilityLoc;
+
+	atkSpecies = SPECIES(gBankAttacker);
 
 	if (atkAbility == defAbility
 	||  defAbility == ABILITY_NONE
@@ -4580,6 +4591,7 @@ void atkD3_trycopyability(void) //Role Play
 		gNewBS->backupAbility = atkAbility;
 		*atkAbilityLoc = defAbility;
 		gLastUsedAbility = atkAbility; //To display what changed
+		gLastUsedSpecies = atkSpecies;
 		TransferAbilityPopUp(gBankAttacker, gLastUsedAbility);
 		ResetVarsForAbilityChange(gBankAttacker);
 		gBattlescriptCurrInstr += 5;

@@ -893,6 +893,7 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 							gBattleScripting.animArg1 = 0xE + max;
 							gBattleScripting.animArg2 = 0;
 							gLastUsedAbility = ABILITY_BEASTBOOST;
+							gLastUsedSpecies = SPECIES(gBankAttacker);
 							RecordAbilityBattle(gBankAttacker, gLastUsedAbility);
 
 							BattleScriptPushCursor();
