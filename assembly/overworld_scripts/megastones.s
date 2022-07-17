@@ -155,3 +155,8 @@ EventScript_Snorlaxite:
 EventScript_Laprasite:
 	giveitem ITEM_LAPRASITE 0x1 MSG_FIND
 	end
+
+.global EventScript_Melmetalite
+EventScript_Melmetalite:
+	giveitem ITEM_MELMETALITE 0x1 MSG_FIND
+	end
