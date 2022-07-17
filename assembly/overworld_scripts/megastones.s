@@ -145,3 +145,8 @@ EventScript_Machampite:
 EventScript_Kinglerite:
 	giveitem ITEM_KINGLERITE 0x1 MSG_FIND
 	end
+
+.global EventScript_Snorlaxite
+EventScript_Snorlaxite:
+	giveitem ITEM_SNORLAXITE 0x1 MSG_FIND
+	end
