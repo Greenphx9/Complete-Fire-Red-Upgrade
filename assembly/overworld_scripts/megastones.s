@@ -150,3 +150,8 @@ EventScript_Kinglerite:
 EventScript_Snorlaxite:
 	giveitem ITEM_SNORLAXITE 0x1 MSG_FIND
 	end
+
+.global EventScript_Laprasite
+EventScript_Laprasite:
+	giveitem ITEM_LAPRASITE 0x1 MSG_FIND
+	end
