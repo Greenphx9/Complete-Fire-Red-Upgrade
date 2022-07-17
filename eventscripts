@@ -306,6 +306,7 @@ npc 43 0 6 EventScript_Scizorite
 npc 3 42 11 EventScript_Gengarite
 npc 1 0 5 EventScript_Butterfreenite
 npc 14 2 11 EventScript_Machampite
+npc 3 38 13 EventScript_Kinglerite
 
 ## Groudon Cave
 npc 43 11 10 EventScript_TM93 

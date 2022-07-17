@@ -140,3 +140,8 @@ EventScript_Butterfreenite:
 EventScript_Machampite:
 	giveitem ITEM_MACHAMPITE 0x1 MSG_FIND
 	end
+
+.global EventScript_Kinglerite
+EventScript_Kinglerite:
+	giveitem ITEM_KINGLERITE 0x1 MSG_FIND
+	end
