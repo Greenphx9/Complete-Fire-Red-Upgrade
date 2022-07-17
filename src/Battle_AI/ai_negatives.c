@@ -616,11 +616,6 @@ MOVESCR_CHECK_0:
 	switch (moveEffect)
 	{
 		case EFFECT_HIT:
-		case EFFECT_POISON_HIT:
-        case EFFECT_BURN_HIT:
-        case EFFECT_FREEZE_HIT:
-        case EFFECT_PARALYZE_HIT:
-        case EFFECT_CONFUSE_HIT:
 			goto AI_STANDARD_DAMAGE;
 
 		case EFFECT_SLEEP:

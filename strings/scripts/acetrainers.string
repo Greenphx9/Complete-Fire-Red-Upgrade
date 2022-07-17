@@ -36,3 +36,6 @@ Wow, I can't believe you're stronger\nthan me.
 
 #org @gText_GreenphxLose2
 Defeated, once again[.]
+
+#org @gText_SaveblockSize
+SaveBlock1 is [BUFFER1] bytes long.\nSaveBlock2 is [BUFFER2] bytes long.\lPokemonStorage is [BUFFER3] bytes long.

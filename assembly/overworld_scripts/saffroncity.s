@@ -1061,6 +1061,12 @@ EventScript_SaffronTeachMove2:
 	release
 	end
 
+.global EventScript_FightingDojo_Haruto
+EventScript_FightingDojo_Haruto:
+	trainerbattle0 0x0 37 0x0 gText_Haurto_Before gText_Haruto_Defeat
+	msgbox gText_Haruto_After MSG_NORMAL
+	end
+
 .align 2
 EventScript_AbilityMart:
 	.hword ITEM_ABILITY_CAPSULE

@@ -5805,7 +5805,325 @@ static const struct BattleTowerSpread sHardmodeTeam_MayRoute23[] =
 	},
 };
 
+static const struct BattleTowerSpread sHardmodeTeam_BlackBeltKoichi[] =
+{
+	{
+        .species = SPECIES_INFERNAPE,
+        .item = ITEM_FOCUS_SASH,
+        .ability = FRONTIER_ABILITY_2, //Iron Fist
+        .nature = NATURE_JOLLY,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_STEALTHROCK,
+            MOVE_FIREPUNCH,
+            MOVE_CLOSECOMBAT,
+            MOVE_UTURN,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 65,
+    },
+    {
+        .species = SPECIES_PANGORO,
+        .item = ITEM_LIFE_ORB,
+        .ability = FRONTIER_ABILITY_1, //Iron Fist
+        .nature = NATURE_ADAMANT,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_DRAINPUNCH,
+            MOVE_DARKINTENTS,
+            MOVE_ICEPUNCH,
+            MOVE_BULLETPUNCH,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 65,
+    },
+    {
+        .species = SPECIES_CRABOMINABLE,
+        .item = ITEM_CHOICE_BAND,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Crabby Tactics
+        .nature = NATURE_ADAMANT,
+        .hpEv = 252,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_ICEHAMMER,
+            MOVE_CLOSECOMBAT,
+            MOVE_EARTHQUAKE,
+            MOVE_THUNDERPUNCH,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 65,
+    },
+    {
+        .species = SPECIES_LUCARIO,
+        .item = ITEM_LIFE_ORB,
+        .ability = FRONTIER_ABILITY_2, //Inner Focus
+        .nature = NATURE_JOLLY,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_SWORDSDANCE,
+            MOVE_METEORMASH,
+            MOVE_CLOSECOMBAT,
+            MOVE_EXTREMESPEED,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 65,
+    },
+    {
+        .species = SPECIES_POLIWRATH,
+        .item = ITEM_CHOICE_BAND,
+        .ability = FRONTIER_ABILITY_1, //Water Absorb
+        .nature = NATURE_JOLLY,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_SURGINGSTRIKES,
+            MOVE_CLOSECOMBAT,
+            MOVE_ICEPUNCH,
+            MOVE_POISONJAB,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 65,
+    },
+    {
+        .species = SPECIES_LOPUNNY,
+        .item = ITEM_LOPUNNITE,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Limber
+        .nature = NATURE_JOLLY,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_FAKEOUT,
+            MOVE_RETURN,
+            MOVE_HIGHJUMPKICK,
+            MOVE_UTURN,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 65,
+    },
+};
 
+static const struct BattleTowerSpread sHardmodeTeam_BlackBeltHaruto[] =
+{
+	    {
+        .species = SPECIES_CHESNAUGHT,
+        .item = ITEM_LEFTOVERS,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Dauntless Shield
+        .nature = NATURE_IMPISH,
+        .hpEv = 252,
+        .defEv = 252,
+        .spDefEv = 4,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_WOODHAMMER,
+            MOVE_DRAINPUNCH,
+            MOVE_SPIKES,
+            MOVE_SPIKYSHIELD,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 65,
+    },
+    {
+        .species = SPECIES_DECIDUEYE_H,
+        .item = ITEM_CHOICE_SCARF,
+        .ability = FRONTIER_ABILITY_1, //Overgrow
+        .nature = NATURE_ADAMANT,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_LEAFBLADE,
+            MOVE_CLOSECOMBAT,
+            MOVE_BRAVEBIRD,
+            MOVE_UTURN,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 65,
+    },
+    {
+        .species = SPECIES_SNEASLER,
+        .item = ITEM_CHOICE_BAND,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Poison Touch
+        .nature = NATURE_JOLLY,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_POISONJAB,
+            MOVE_CLOSECOMBAT,
+            MOVE_TRIPLEAXEL,
+            MOVE_SHADOWCLAW,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 65,
+    },
+    {
+        .species = SPECIES_LILLIGANT_H,
+        .item = ITEM_LIFE_ORB,
+        .ability = FRONTIER_ABILITY_1, //Chlorophyll
+        .nature = NATURE_JOLLY,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_VICTORYDANCE,
+            MOVE_LEAFBLADE,
+            MOVE_CLOSECOMBAT,
+            MOVE_POISONJAB,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 65,
+    },
+    {
+        .species = SPECIES_SCRAFTY,
+        .item = ITEM_DARK_GEM,
+        .ability = FRONTIER_ABILITY_2, //Moxie
+        .nature = NATURE_ADAMANT,
+        .hpEv = 224,
+        .atkEv = 252,
+        .spdEv = 32,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_WICKEDBLOW,
+            MOVE_DRAINPUNCH,
+            MOVE_POISONJAB,
+            MOVE_STONEEDGE,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 65,
+    },
+    {
+        .species = SPECIES_MACHAMP,
+        .item = ITEM_MACHAMPITE,
+        .ability = FRONTIER_ABILITY_2, //No Guard
+        .nature = NATURE_ADAMANT,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_DYNAMICPUNCH,
+            MOVE_KNOCKOFF,
+            MOVE_ICEPUNCH,
+            MOVE_BULLETPUNCH,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 65,
+    },
+};
 
 
 
@@ -6388,6 +6706,38 @@ const struct MultiRaidTrainer gHardmodeTrainers[] =
 		.spreadSizes =
 		{
 			[0] = NELEMS(sHardmodeTeam_MayRoute23),
+		},
+	},
+	{
+		.owNum = EVENT_OBJ_GFX_OAK,
+		.trainerClass = CLASS_PKMN_TRAINER_1,
+		.backSpriteId = 0,
+		.gender = FEMALE,
+		.otId = 317,
+		.name = sTrainerName_Tasha,
+		.spreads =
+		{
+			[0] = sHardmodeTeam_BlackBeltKoichi,
+		},
+		.spreadSizes =
+		{
+			[0] = NELEMS(sHardmodeTeam_BlackBeltKoichi),
+		},
+	},
+	{
+		.owNum = EVENT_OBJ_GFX_OAK,
+		.trainerClass = CLASS_PKMN_TRAINER_1,
+		.backSpriteId = 0,
+		.gender = FEMALE,
+		.otId = 37,
+		.name = sTrainerName_Tasha,
+		.spreads =
+		{
+			[0] = sHardmodeTeam_BlackBeltHaruto,
+		},
+		.spreadSizes =
+		{
+			[0] = NELEMS(sHardmodeTeam_BlackBeltHaruto),
 		},
 	},
 };

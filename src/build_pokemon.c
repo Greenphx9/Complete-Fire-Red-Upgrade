@@ -638,7 +638,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 	u8 otIdType = OT_ID_RANDOM_NO_SHINY;
 	//credits to soupercell
 	
-	if (FlagGet(FLAG_HARD_MODE) && side == B_SIDE_OPPONENT) {
+	if (!FlagGet(FLAG_HARD_MODE) && side == B_SIDE_OPPONENT) {
 		for (u8 i = 0; i < gNumHardmodeTrainers; i++) {
 			if (trainerId == gHardmodeTrainers[i].otId) {
 				return BuildExpertBossParty(party, trainerId, gHardmodeTrainers[i]);
@@ -2044,7 +2044,7 @@ static u8 ConvertFrontierAbilityNumToAbility(const u8 abilityNum, const u16 spec
 		ability = gBaseStats2[species].hiddenAbility;
 		break;
 	}
-
+	
 	if (ability == ABILITY_NONE)
 		ability = gBaseStats2[species].ability1;
 

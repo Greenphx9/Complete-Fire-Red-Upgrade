@@ -261,6 +261,7 @@ npc 1 53 11 EventScript_GalarFossilSeller
 npc 14 0 0 EventScript_SaffronTutor
 npc 3 10 8 EventScript_SaffronTutor2
 npc 1 50 8 EventScript_Aggronite
+npc 14 2 12 EventScript_FightingDojo_Haruto
 
 ## Cinnabar
 sign 3 8 4 EventScript_MissingNo
@@ -304,6 +305,7 @@ npc 1 47 1 EventScript_Medichamite
 npc 43 0 6 EventScript_Scizorite
 npc 3 42 11 EventScript_Gengarite
 npc 1 0 5 EventScript_Butterfreenite
+npc 14 2 11 EventScript_Machampite
 
 ## Groudon Cave
 npc 43 11 10 EventScript_TM93 
@@ -600,6 +602,7 @@ npc 43 0 3 EventScript_RockSmash
 npc 1 2 4 EventScript_RockSmash
 npc 1 2 5 EventScript_RockSmash
 npc 1 2 6 EventScript_RockSmash
+npc 14 2 10 EventScript_RockSmash
 npc 43 11 0 EventScript_Strength
 npc 43 11 1 EventScript_Strength
 npc 43 11 2 EventScript_Strength

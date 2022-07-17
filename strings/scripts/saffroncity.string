@@ -267,3 +267,12 @@ Your victory has earned you the\nMarshBadge.
 
 #org @gText_GiveMarshBadge
 [BLACK][PLAYER] received the\nMarshBadge from Sabrina!
+
+#org @gText_Haurto_Before
+My Master told me to guard this Mega\nStone with my life!\pHoargh!
+
+#org @gText_Haruto_Defeat
+I can't believe I lost to a kid[.]
+
+#org @gText_Haruto_After
+If you really want the Mega Stone,\njust break this boulder and it'll\lbe there!

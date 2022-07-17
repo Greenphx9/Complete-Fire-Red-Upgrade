@@ -2214,6 +2214,7 @@ static const struct LevelUpMove sHitmonleeLevelUpLearnset[] = {
 	LEVEL_UP_MOVE(53, MOVE_MEGAKICK),
 	LEVEL_UP_MOVE(57, MOVE_CLOSECOMBAT),
 	LEVEL_UP_MOVE(61, MOVE_REVERSAL),
+	LEVEL_UP_MOVE(65, MOVE_THUNDEROUSKICK),
 	LEVEL_UP_END
 };
 static const struct LevelUpMove sHitmonchanLevelUpLearnset[] = {
@@ -2241,6 +2242,7 @@ static const struct LevelUpMove sHitmonchanLevelUpLearnset[] = {
 	LEVEL_UP_MOVE(50, MOVE_DETECT),
 	LEVEL_UP_MOVE(56, MOVE_FOCUSPUNCH),
 	LEVEL_UP_MOVE(61, MOVE_COUNTER),
+	LEVEL_UP_MOVE(65, MOVE_WICKEDBLOW),
 	LEVEL_UP_MOVE(66, MOVE_CLOSECOMBAT),
 	LEVEL_UP_END
 };
@@ -11336,8 +11338,8 @@ static const struct LevelUpMove sScraftyLevelUpLearnset[] = {
 	LEVEL_UP_MOVE(45, MOVE_FACADE),
 	LEVEL_UP_MOVE(51, MOVE_ROCKCLIMB),
 	LEVEL_UP_MOVE(58, MOVE_FOCUSPUNCH),
-	LEVEL_UP_MOVE(65, MOVE_HEADSMASH),
-	LEVEL_UP_MOVE(68, MOVE_WICKEDBLOW),
+	LEVEL_UP_MOVE(61, MOVE_HEADSMASH),
+	LEVEL_UP_MOVE(65, MOVE_WICKEDBLOW),
 	LEVEL_UP_END
 };
 static const struct LevelUpMove sSigilyphLevelUpLearnset[] = {

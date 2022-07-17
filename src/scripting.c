@@ -4609,3 +4609,10 @@ void HallOfFame_PrintWelcomeText(u8 not, u8 used)
 	AddTextPrinterParameterized3(0, 2, x2, 4, sTextColors[0], 0, gStringVar1);
     CopyWindowToVram(0, COPYWIN_BOTH);
 }
+
+void CheckSaveblockSizes(void)
+{
+	ConvertIntToDecimalStringN(gStringVar1, sizeof(struct SaveBlock1), STR_CONV_MODE_LEFT_ALIGN, 6);
+    ConvertIntToDecimalStringN(gStringVar2, sizeof(struct SaveBlock2), STR_CONV_MODE_LEFT_ALIGN, 6);
+    ConvertIntToDecimalStringN(gStringVar3, sizeof(struct PokemonStorage), STR_CONV_MODE_LEFT_ALIGN, 6);
+}

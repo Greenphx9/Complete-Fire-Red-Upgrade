@@ -135,3 +135,8 @@ EventScript_Aggronite:
 EventScript_Butterfreenite:
 	giveitem ITEM_BUTTERFREENITE 0x1 MSG_FIND
 	end
+
+.global EventScript_Machampite
+EventScript_Machampite:
+	giveitem ITEM_MACHAMPITE 0x1 MSG_FIND
+	end

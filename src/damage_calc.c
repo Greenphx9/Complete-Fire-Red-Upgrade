@@ -3505,6 +3505,7 @@ static u16 AdjustBasePower(struct DamageCalc* data, u16 power)
 		#else
 			power = (power * 13) / 10;
 		#endif
+		gNewBS->GemHelper = FALSE;
 	}
 
 	//Charge check - 2x Boost
