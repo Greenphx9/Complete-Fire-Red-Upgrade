@@ -45,7 +45,6 @@ RaidScript_DoStuff:
     end
 
 EventScript_RaidScreen:
-    givepokemon SPECIES_DRAGONITE 100 0x0 0x0
     fadescreen FADEOUT_BLACK
     special SPECIAL_RAID_BATTLE_INTRO
     waitstate

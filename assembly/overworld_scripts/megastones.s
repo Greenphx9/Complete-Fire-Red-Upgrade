@@ -160,3 +160,8 @@ EventScript_Laprasite:
 EventScript_Melmetalite:
 	giveitem ITEM_MELMETALITE 0x1 MSG_FIND
 	end
+
+.global EventScript_Garbodorite
+EventScript_Garbodorite:
+	giveitem ITEM_GARBODORITE 0x1 MSG_FIND
+	end
