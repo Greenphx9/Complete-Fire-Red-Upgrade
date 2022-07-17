@@ -31,6 +31,7 @@ ai_util.c
 //This file's functions:
 static u32 CalcPredictedDamageForCounterMoves(u16 move, u8 bankAtk, u8 bankDef);
 static bool8 CalculateMoveKnocksOutXHits(u16 move, u8 bankAtk, u8 bankDef, u8 numHits);
+u16 PriorityMoveInMoveset(u8 bank);
 
 bool8 CanKillAFoe(u8 bank)
 {
@@ -240,6 +241,8 @@ bool8 MoveKnocksOutPossiblyGoesFirstWithBestAccuracy(u16 move, u8 bankAtk, u8 ba
 	u16 currMove, currAcc;
 
 	u8 bestMoveIndex = 0xFF;
+	u8 bestMoveIndexArray[4];
+	u8 totalBestMoves = 0;
 	u16 bestAcc = 0;
 	u8 moveLimitations = CheckMoveLimitations(bankAtk, 0, AdjustMoveLimitationFlagsForAI(bankAtk, bankDef));
 
@@ -255,18 +258,32 @@ bool8 MoveKnocksOutPossiblyGoesFirstWithBestAccuracy(u16 move, u8 bankAtk, u8 ba
 		{
 			currAcc = CalcAIAccuracy(currMove, bankAtk, bankDef);
 
+			if (currAcc == 0xFFFF) { 
+				currAcc = 100; //we don't care about inf accuracy lol
+			}
+
 			if ((!checkGoingFirst || MoveWouldHitFirst(currMove, bankAtk, bankDef))
 			&& MoveKnocksOutXHits(currMove, bankAtk, bankDef, 1))
 			{
-				if (MoveWillHit(currMove, bankAtk, bankDef) || currAcc > bestAcc)
+				if ((MoveWillHit(currMove, bankAtk, bankDef) && bestAcc < 100) || (currAcc > bestAcc))	
 				{
 					bestAcc = currAcc;
 					bestMoveIndex = i;
 				}
 				else if (currAcc == bestAcc)
 				{
-					if (PriorityCalc(bankAtk, ACTION_USE_MOVE, currMove) > PriorityCalc(bankAtk, ACTION_USE_MOVE, gBattleMons[bankAtk].moves[bestMoveIndex])) //The better move is still the one with more priority
+					if ( PriorityCalc(bankAtk, ACTION_USE_MOVE, currMove) > PriorityCalc(bankAtk, ACTION_USE_MOVE, gBattleMons[bankAtk].moves[bestMoveIndex]) 
+					&& ((MoveWouldHitFirst(MOVE_TACKLE, bankAtk, bankDef) && PriorityCalc(bankAtk, ACTION_USE_MOVE, currMove) >= PriorityMoveInMoveset(bankDef) )
+					|| !MoveWouldHitFirst(MOVE_TACKLE, bankAtk, bankDef))  ){
 						bestMoveIndex = i;
+						totalBestMoves = 1;
+						bestMoveIndexArray[0] = i;
+					}
+					else {
+						bestMoveIndex = i;
+						bestMoveIndexArray[totalBestMoves] = i;
+						totalBestMoves++;
+					}
 				}
 			}
 		}
@@ -274,6 +291,12 @@ bool8 MoveKnocksOutPossiblyGoesFirstWithBestAccuracy(u16 move, u8 bankAtk, u8 ba
 
 	if (bestMoveIndex == 0xFF) //No moves knock out and go first
 		return FALSE;
+
+	for (u8 i = 0; i < totalBestMoves; i++) {
+		if (gBattleMons[bankAtk].moves[bestMoveIndexArray[i]] == move) {
+			return TRUE;
+		}
+	}
 
 	if (gBattleMons[bankAtk].moves[bestMoveIndex] == move)
 		return TRUE;
@@ -860,7 +883,7 @@ u16 CalcFinalAIMoveDamage(u16 move, u8 bankAtk, u8 bankDef, u8 numHits, struct D
 		return gBattleMons[bankDef].hp;
 
 	u8 defAbility = ABILITY(bankDef);
-	if (numHits >= 2 && BATTLER_MAX_HP(bankDef) && (defAbility == ABILITY_MULTISCALE || defAbility == ABILITY_SHADOWSHIELD))
+	if (numHits >= 2 && BATTLER_MAX_HP(bankDef) && (defAbility == ABILITY_MULTISCALE))
 		return MathMin(dmg + (dmg * 2) * (numHits - 1), gBattleMons[bankDef].maxHP); //Adjust damage on subsequent hits
 
 	return MathMin(dmg * numHits, gBattleMons[bankDef].maxHP);
@@ -1082,6 +1105,8 @@ bool8 MoveWillHit(u16 move, u8 bankAtk, u8 bankDef)
 		return FALSE;
 
 	if ((move == MOVE_TOXIC && IsOfType(bankAtk, TYPE_POISON))
+	|| (move == MOVE_WILLOWISP && IsOfType(bankAtk, TYPE_FIRE))
+	|| (move == MOVE_THUNDERWAVE && IsOfType(bankAtk, TYPE_ELECTRIC))
 	||  (CheckTableForMove(move, gAlwaysHitWhenMinimizedMoves) && gStatuses3[bankDef] & STATUS3_MINIMIZED)
 	|| ((gStatuses3[bankDef] & STATUS3_TELEKINESIS) && gBattleMoves[move].effect != EFFECT_0HKO)
 	||  gBattleMoves[move].accuracy == 0
@@ -1682,7 +1707,6 @@ bool8 GoodIdeaToLowerAttack(u8 bankDef, u8 bankAtk, u16 move)
 	return STAT_STAGE(bankDef, STAT_STAGE_ATK) > 4 && PhysicalMoveInMoveset(bankDef)
 		&& defAbility != ABILITY_CONTRARY
 		&& defAbility != ABILITY_CLEARBODY
-		&& defAbility != ABILITY_WHITESMOKE
 		//&& defAbility != ABILITY_FULLMETALBODY
 		&& defAbility != ABILITY_HYPERCUTTER;
 }
@@ -1698,7 +1722,6 @@ bool8 GoodIdeaToLowerDefense(u8 bankDef, u8 bankAtk, u16 move)
 		&& PhysicalMoveInMoveset(bankAtk)
 		&& defAbility != ABILITY_CONTRARY
 		&& defAbility != ABILITY_CLEARBODY
-		&& defAbility != ABILITY_WHITESMOKE
 		//&& defAbility != ABILITY_FULLMETALBODY
 		&& defAbility != ABILITY_BIGPECKS;
 }
@@ -1712,9 +1735,7 @@ bool8 GoodIdeaToLowerSpAtk(u8 bankDef, u8 bankAtk, u16 move)
 
 	return STAT_STAGE(bankDef, STAT_STAGE_SPATK) > 4 && SpecialMoveInMoveset(bankDef)
 		&& defAbility != ABILITY_CONTRARY
-		&& defAbility != ABILITY_CLEARBODY
-		//&& defAbility != ABILITY_FULLMETALBODY
-		&& defAbility != ABILITY_WHITESMOKE;
+		&& defAbility != ABILITY_CLEARBODY;
 }
 
 bool8 GoodIdeaToLowerSpDef(u8 bankDef, u8 bankAtk, u16 move)
@@ -1726,9 +1747,7 @@ bool8 GoodIdeaToLowerSpDef(u8 bankDef, u8 bankAtk, u16 move)
 
 	return STAT_STAGE(bankDef, STAT_STAGE_SPDEF) > 4 && SpecialMoveInMoveset(bankAtk)
 		&& defAbility != ABILITY_CONTRARY
-		&& defAbility != ABILITY_CLEARBODY
-		//&& defAbility != ABILITY_FULLMETALBODY
-		&& defAbility != ABILITY_WHITESMOKE;
+		&& defAbility != ABILITY_CLEARBODY;
 }
 
 bool8 GoodIdeaToLowerSpeed(u8 bankDef, u8 bankAtk, u16 move)
@@ -1740,9 +1759,7 @@ bool8 GoodIdeaToLowerSpeed(u8 bankDef, u8 bankAtk, u16 move)
 
 	return SpeedCalc(bankAtk) <= SpeedCalc(bankDef)
 		&& defAbility != ABILITY_CONTRARY
-		&& defAbility != ABILITY_CLEARBODY
-		//&& defAbility != ABILITY_FULLMETALBODY
-		&& defAbility != ABILITY_WHITESMOKE;
+		&& defAbility != ABILITY_CLEARBODY;
 }
 
 bool8 GoodIdeaToLowerAccuracy(u8 bankDef, u8 bankAtk, u16 move)
@@ -1754,7 +1771,6 @@ bool8 GoodIdeaToLowerAccuracy(u8 bankDef, u8 bankAtk, u16 move)
 
 	return defAbility != ABILITY_CONTRARY
 		&& defAbility != ABILITY_CLEARBODY
-		&& defAbility != ABILITY_WHITESMOKE
 		//&& defAbility != ABILITY_FULLMETALBODY
 		&& defAbility != ABILITY_KEENEYE;
 }
@@ -1765,9 +1781,7 @@ bool8 GoodIdeaToLowerEvasion(u8 bankDef, u8 bankAtk, unusedArg u16 move)
 
 	return (STAT_STAGE(bankDef, STAT_STAGE_EVASION) > 6 || MoveInMovesetWithAccuracyLessThan(bankAtk, bankDef, 90, TRUE))
 		&& defAbility != ABILITY_CONTRARY
-		&& defAbility != ABILITY_CLEARBODY
-		//&& defAbility != ABILITY_FULLMETALBODY
-		&& defAbility != ABILITY_WHITESMOKE;
+		&& defAbility != ABILITY_CLEARBODY;
 }
 
 //Move Prediction Code
@@ -1891,6 +1905,36 @@ bool8 DamagingMoveInMoveset(u8 bank)
 	return FALSE;
 }
 
+u16 PriorityMoveInMoveset(u8 bank) 
+{
+	//some problems with this - doesn't account for prankster,
+	//doesn't account for 
+	u16 move;
+	u8 moveLimitations = CheckMoveLimitations(bank, 0, 0xFF);
+
+	u8 highestPriority = 0;
+	for (int i = 0; i < MAX_MON_MOVES; ++i)
+	{
+		move = GetBattleMonMove(bank, i);
+		if (move == MOVE_NONE)
+			break;
+
+		if (!(gBitTable[i] & moveLimitations))
+		{
+			if(move == MOVE_EXTREMESPEED && highestPriority < 2)
+				highestPriority = 2;
+			else if (ABILITY(bank) == ABILITY_TRIAGE && MoveEffectInMoveset(EFFECT_ABSORB, bank) && highestPriority < 3)
+				highestPriority = 3;
+			else if((gBattleMoves[move].effect == EFFECT_QUICK_ATTACK || move == MOVE_WATERSHURIKEN || move == MOVE_SUCKERPUNCH)  
+			&& highestPriority < 1)
+				highestPriority = 1;
+
+		}
+	}
+
+	return highestPriority;
+}
+
 bool8 PhysicalMoveInMoveset(u8 bank)
 {
 	u16 move;
@@ -1914,6 +1958,33 @@ bool8 PhysicalMoveInMoveset(u8 bank)
 	return FALSE;
 }
 
+bool8 AtLeastTwoPhysicalMoveInMoveset(u8 bank, u8 amount)
+{
+	u16 move;
+	u8 moveLimitations = CheckMoveLimitations(bank, 0, 0xFF);
+	u8 count = 0;
+	for (int i = 0; i < MAX_MON_MOVES; ++i)
+	{
+		move = GetBattleMonMove(bank, i);
+		if (move == MOVE_NONE)
+			break;
+
+		if (!(gBitTable[i] & moveLimitations))
+		{
+			if (CalcMoveSplit(bank, move) == SPLIT_PHYSICAL
+			&& gBattleMoves[move].power != 0
+			&& gBattleMoves[move].effect != EFFECT_COUNTER){
+				count++;
+				if (count >= amount){
+					return TRUE;
+				}
+			}
+		}
+	}
+
+	return FALSE;
+}
+
 bool8 SpecialMoveInMoveset(u8 bank)
 {
 	u16 move;
@@ -1931,6 +2002,34 @@ bool8 SpecialMoveInMoveset(u8 bank)
 			&& gBattleMoves[move].power != 0
 			&& gBattleMoves[move].effect != EFFECT_MIRROR_COAT)
 				return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+bool8 AtLeastTwoSpecialMoveInMoveset(u8 bank, u8 amount)
+{
+	u16 move;
+	u8 moveLimitations = CheckMoveLimitations(bank, 0, 0xFF);
+	u8 count = 0;
+
+	for (int i = 0; i < MAX_MON_MOVES; ++i)
+	{
+		move = GetBattleMonMove(bank, i);
+		if (move == MOVE_NONE)
+			break;
+
+		if (!(gBitTable[i] & moveLimitations))
+		{
+			if (CalcMoveSplit(bank, move) == SPLIT_SPECIAL
+			&& gBattleMoves[move].power != 0
+			&& gBattleMoves[move].effect != EFFECT_MIRROR_COAT){
+				count++;
+				if (count >= amount){
+					return TRUE;
+				}
+			}
 		}
 	}
 
@@ -2873,6 +2972,11 @@ bool8 GetHealthPercentage(u8 bank)
 	return (gBattleMons[bank].hp * 100) / gBattleMons[bank].maxHP;
 }
 
+bool8 GetDmgHealthPercentage(u8 bank, u32 dmg)
+{
+	return ((gBattleMons[bank].hp - dmg) * 100) / gBattleMons[bank].maxHP;
+}
+
 bool8 TeamFullyHealedMinusBank(u8 bank)
 {
 	u8 firstId, lastId;
@@ -2921,6 +3025,8 @@ bool8 AnyUsefulStatIsRaised(u8 bank)
 					break;
 				case STAT_STAGE_DEF:
 					if (MoveSplitOnTeam(FOE(bank), SPLIT_PHYSICAL))
+						return TRUE;
+					if(MoveInMoveset(MOVE_BODYPRESS, FOE(bank)))
 						return TRUE;
 					break;
 				case STAT_STAGE_SPATK:

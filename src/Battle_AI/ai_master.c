@@ -331,6 +331,8 @@ u32 GetAIFlags(void)
 	{
 		if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS)
 			flags = gTrainers[gTrainerBattleOpponent_A].aiFlags | gTrainers[VarGet(VAR_SECOND_OPPONENT)].aiFlags;
+		else if (FlagGet(FLAG_HARD_MODE) && gBattleTypeFlags & BATTLE_TYPE_TRAINER) //In Hard mode trainers are always smart
+			flags = 7; 
 		else
 			flags = gTrainers[gTrainerBattleOpponent_A].aiFlags;
 
@@ -751,7 +753,13 @@ void AI_TrySwitchOrUseItem(void)
 			//Partner isn't allowed to use items
 		}
 		else if (ShouldAIUseItem())
-			ret = TRUE;
+		{
+			if(FlagGet(FLAG_HARD_MODE))
+				ret = FALSE;
+			else
+				ret = TRUE;
+
+		}
 
 		TryRevertTempMegaEvolveBank(gActiveBattler, &backupMonAtk, &backupSpeciesAtk, &backupAbilityAtk);
 		if (ret) return;
@@ -1576,7 +1584,8 @@ static bool8 ShouldSwitchToAvoidDeath(void)
 		&& (atkMove == MOVE_NONE || !MoveWouldHitFirst(atkMove, gActiveBattler, FOE(gActiveBattler))) //Attacker wouldn't go first
 		&& (!IS_BEHIND_SUBSTITUTE(gActiveBattler) || !MoveBlockedBySubstitute(defMove, FOE(gActiveBattler), gActiveBattler))
 		&&  MoveKnocksOutXHits(defMove, FOE(gActiveBattler), gActiveBattler, 1) //Foe will kill
-		&& !WillTakeSignificantDamageFromEntryHazards(gActiveBattler, 2)) //50% health loss
+		&& !WillTakeSignificantDamageFromEntryHazards(gActiveBattler, 3) //33% health loss
+		&& GetHealthPercentage(gActiveBattler) > 20) //Have more than 20% health
 		{
 			u8 firstId, lastId;
 			struct Pokemon* party = LoadPartyRange(gActiveBattler, &firstId, &lastId);
@@ -2061,6 +2070,9 @@ u8 CalcMostSuitableMonToSwitchInto(void)
 			if (WillFaintFromEntryHazards(&party[i], SIDE(gActiveBattler)))
 				continue; //Don't switch in the mon if it'll faint on reentry
 
+			if (party[i].condition == (STATUS1_SLEEP)) //added, don't switch in if asleep
+				continue;
+
 			struct DamageCalc damageData = {0};
 			damageData.bankAtk = gActiveBattler;
 			damageData.monAtk = &party[i];
@@ -2088,13 +2100,25 @@ u8 CalcMostSuitableMonToSwitchInto(void)
 
 						if (ability == ABILITY_MOXIE
 						||  ability == ABILITY_SOULHEART
-						||  ability == ABILITY_BEASTBOOST)
+						||  ability == ABILITY_BEASTBOOST
+						||  ability == ABILITY_GRIMNEIGH)
 							scores[i] += SWITCHING_INCREASE_REVENGE_KILL;
 						else
 						{
 							for (k = 0; k < MAX_MON_MOVES; ++k)
 							{
 								move = GetMonData(&party[i], MON_DATA_MOVE1 + k, 0);
+
+								if ((ability == ABILITY_MAGNETPULL && IsOfType(foe, TYPE_STEEL) && (ITEM(foe) != ITEM_SHED_SHELL))
+								|| (ability == ABILITY_ARENATRAP && (CheckGrounding(foe)) && (ITEM(foe) != ITEM_SHED_SHELL) && (!IsOfType(foe, TYPE_GHOST)))
+								|| (ability == ABILITY_SHADOWTAG && (!IsOfType(foe, TYPE_GHOST)) && (ITEM(foe) != ITEM_SHED_SHELL))) //If we can trap and kill, let's do it
+								{
+									if (MoveKnocksOutXHitsFromParty(move, &party[i], foe, 1, &damageData))
+									{
+										scores[i] += SWITCHING_INCREASE_REVENGE_KILL;
+										break;
+									}
+								}
 
 								if (gBattleMoves[move].effect == EFFECT_RAPID_SPIN //Includes Defog
 								&&  gSideStatuses[SIDE(gActiveBattler)] & SIDE_STATUS_SPIKES)
@@ -2106,6 +2130,15 @@ u8 CalcMostSuitableMonToSwitchInto(void)
 								}
 
 								if (move == MOVE_FELLSTINGER
+								&&  !(gBitTable[k] & moveLimitations))
+								{
+									if (MoveKnocksOutXHitsFromParty(move, &party[i], foe, 1, &damageData))
+									{
+										scores[i] += SWITCHING_INCREASE_REVENGE_KILL;
+										break;
+									}
+								}
+								else if (move == MOVE_PURSUIT
 								&&  !(gBitTable[k] & moveLimitations))
 								{
 									if (MoveKnocksOutXHitsFromParty(move, &party[i], foe, 1, &damageData))

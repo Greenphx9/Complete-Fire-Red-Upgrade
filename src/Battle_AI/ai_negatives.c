@@ -117,6 +117,13 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 	u16 partnerMove = data->partnerMove;
 	u8 bankAtkPartner = data->bankAtkPartner;
 
+	if(gDisableStructs[bankAtk].disabledMove == move)
+    {
+        DECREASE_VIABILITY(100); //Should never use a disabled move
+        return viability;
+    }
+
+
 	//Affects User Check
 	if (moveTarget & MOVE_TARGET_USER)
 		goto MOVESCR_CHECK_0;
@@ -176,7 +183,8 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 		return 0; //Can't select this move period
 
 	// Ungrounded check
-	if (CheckGrounding(bankDef) == IN_AIR && moveType == TYPE_GROUND)
+	if (CheckGrounding(bankDef) == IN_AIR && moveType == TYPE_GROUND && move != MOVE_THOUSANDARROWS
+	&& (data->atkAbility != ABILITY_MOLDBREAKER && data->defAbility != ABILITY_LEVITATE)) //make sure we can still click thousandarrows, ground moves w/mold breaker vs levitat
 		return 0;
 
 	// Powder Move Checks (safety goggles, defender has grass type, overcoat, and powder move table)
@@ -188,6 +196,12 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 	{
 		DECREASE_VIABILITY(10);
 		return viability; //Move Fails
+	}
+
+	//Don't use poltergeist if target has no item
+	if (data->defItem == ITEM_NONE && move == MOVE_POLTERGEIST) {
+		DECREASE_VIABILITY(20);
+		return viability;
 	}
 
 	//Target Ability Checks
@@ -300,7 +314,6 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				}
 				break;
 
-			case ABILITY_DAZZLING:
 			case ABILITY_QUEENLYMAJESTY:
 				if (PriorityCalc(bankAtk, ACTION_USE_MOVE, move) > 0) //Check if right num
 				{
@@ -355,7 +368,6 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 			case ABILITY_CLEARBODY:
 			//case ABILITY_FULLMETALBODY:
-			case ABILITY_WHITESMOKE:
 				if (CheckTableForMoveEffect(move, gStatLoweringMoveEffects))
 				{
 					DECREASE_VIABILITY(10);
@@ -488,7 +500,6 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 					}
 					break;
 
-				case ABILITY_DAZZLING:
 				case ABILITY_QUEENLYMAJESTY:
 					if (PriorityCalc(bankAtk, ACTION_USE_MOVE, move) > 0) //Check if right num
 					{
@@ -623,6 +634,10 @@ MOVESCR_CHECK_0:
 			{
 				DECREASE_VIABILITY(10);
 			}
+			else if ( (HasProtectionMoveInMoveset(bankDef, 0) && gDisableStructs[bankDef].protectUses < 1) || MoveEffectInMoveset(EFFECT_SEMI_INVULNERABLE, bankDef))
+			{
+				DECREASE_VIABILITY(10);
+			}
 			else if (ViableMonCountFromBank(bankDef) == 1 //If the Target only has one PKMN left
 			&& MoveKnocksOutXHits(move, bankAtk, bankDef, 1)) //The AI can knock out the target
 			{
@@ -648,7 +663,7 @@ MOVESCR_CHECK_0:
 						//Good to use move
 					}
 					else if (CanKnockOutWithoutMove(move, bankAtk, bankDef, FALSE))
-						DECREASE_VIABILITY(4); //Better to use a different move to knock out
+						DECREASE_VIABILITY(10); //Better to use a different move to knock out
 				}
 				else
 					DECREASE_VIABILITY(4);
@@ -726,7 +741,7 @@ MOVESCR_CHECK_0:
 
 		case EFFECT_ATTACK_UP:
 		case EFFECT_ATTACK_UP_2:
-			if (data->atkAbility != ABILITY_CONTRARY)
+if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE && !MoveInMoveset(MOVE_HAZE, bankDef) && !MoveInMoveset(MOVE_FREEZYFROST, bankDef))
 			{
 				switch (move) {
 					case MOVE_HONECLAWS:
@@ -791,6 +806,8 @@ MOVESCR_CHECK_0:
 		case EFFECT_SPEED_UP_2:
 			if (data->atkAbility == ABILITY_CONTRARY || !STAT_CAN_RISE(bankAtk, STAT_STAGE_SPEED))
 				DECREASE_VIABILITY(10);
+			else if(IsTrickRoomActive())
+				DECREASE_VIABILITY(10);
 			break;
 
 		case EFFECT_SPECIAL_ATTACK_UP:
@@ -801,7 +818,8 @@ MOVESCR_CHECK_0:
 				AI_WORK_UP_CHECK: ;
 					if (((!STAT_CAN_RISE(bankAtk,STAT_STAGE_ATK)|| !PhysicalMoveInMoveset(bankAtk))
 					  && (!STAT_CAN_RISE(bankAtk, STAT_STAGE_SPATK) || !SpecialMoveInMoveset(bankAtk)))
-					|| data->atkAbility == ABILITY_CONTRARY)
+					|| data->atkAbility == ABILITY_CONTRARY || data->defAbility == ABILITY_UNAWARE ||
+					MoveInMoveset(MOVE_HAZE, bankDef) || MoveInMoveset(MOVE_FREEZYFROST, bankDef))
 						DECREASE_VIABILITY(10);
 					break;
 
@@ -1092,7 +1110,7 @@ MOVESCR_CHECK_0:
 			break;
 
 		case EFFECT_LIGHT_SCREEN:
-			if (gSideStatuses[SIDE(bankAtk)] & SIDE_STATUS_LIGHTSCREEN)
+			if (gSideStatuses[SIDE(bankAtk)] & SIDE_STATUS_LIGHTSCREEN || (MoveInMoveset(MOVE_BRICKBREAK, bankDef) || (MoveInMoveset(MOVE_DEFOG, bankDef) )))
 				DECREASE_VIABILITY(10);
 			break;
 
@@ -1106,6 +1124,10 @@ MOVESCR_CHECK_0:
 			if (data->atkAbility == ABILITY_MAGICGUARD)
 				goto AI_STANDARD_DAMAGE;
 			else if (moveAcc < 75)
+				DECREASE_VIABILITY(6);
+			else if (IsOfType(bankDef, TYPE_GHOST))
+				DECREASE_VIABILITY(10);
+			else if(HasProtectionMoveInMoveset(bankDef, 0) && gDisableStructs[bankDef].protectUses < 1) //Check for protect, and that their protect timer is at 0
 				DECREASE_VIABILITY(6);
 			break;
 
@@ -1206,13 +1228,15 @@ MOVESCR_CHECK_0:
 					if (gNewBS->AuroraVeilTimers[SIDE(bankAtk)]
 					|| !(gBattleWeather & WEATHER_HAIL_ANY)
 					|| PARTNER_MOVE_EFFECT_IS_SAME_NO_TARGET
-					|| PARTNER_MOVE_IS_MAX_MOVE_WITH_EFFECT(MAX_EFFECT_AURORA_VEIL))
+					|| PARTNER_MOVE_IS_MAX_MOVE_WITH_EFFECT(MAX_EFFECT_AURORA_VEIL)
+					|| (MoveInMoveset(MOVE_BRICKBREAK, bankDef) || (MoveInMoveset(MOVE_DEFOG, bankDef))))
 						DECREASE_VIABILITY(10);
 					break;
 
 				default:
 					if (gSideStatuses[SIDE(bankAtk)] & SIDE_STATUS_REFLECT
-					|| PARTNER_MOVE_EFFECT_IS_SAME_NO_TARGET)
+					|| PARTNER_MOVE_EFFECT_IS_SAME_NO_TARGET
+					|| (MoveInMoveset(MOVE_BRICKBREAK, bankDef) || (MoveInMoveset(MOVE_DEFOG, bankDef)))) 
 						DECREASE_VIABILITY(10);
 			}
 			break;
@@ -1275,8 +1299,10 @@ MOVESCR_CHECK_0:
 
 		case EFFECT_LEECH_SEED:
 			if (IsOfType(bankDef, TYPE_GRASS)
+			|| data->defStatus2 & STATUS2_SUBSTITUTE
 			|| data->defStatus3 & STATUS3_LEECHSEED
 			|| data->defAbility == ABILITY_LIQUIDOOZE
+			|| data->defAbility == ABILITY_MAGICGUARD
 			|| PARTNER_MOVE_EFFECT_IS_SAME)
 				DECREASE_VIABILITY(10);
 			break;
@@ -1348,7 +1374,7 @@ MOVESCR_CHECK_0:
 				case MOVE_LASERFOCUS:
 					if (IsLaserFocused(bankAtk))
 						DECREASE_VIABILITY(10);
-					else if (data->defAbility == ABILITY_SHELLARMOR || data->defAbility == ABILITY_BATTLEARMOR)
+					else if (data->defAbility == ABILITY_SHELLARMOR)
 						DECREASE_VIABILITY(8);
 					break;
 
@@ -1470,6 +1496,12 @@ MOVESCR_CHECK_0:
 				break;
 			}
 
+			if (ABILITY(bankDef) == ABILITY_UNSEENFIST) //Don't protect if move goes through protect
+			{ 
+				DECREASE_VIABILITY(10);
+				break;
+			}
+
 			if (gBattleMoves[gLastResultingMoves[bankAtk]].effect == EFFECT_PROTECT
 			&&  move != MOVE_QUICKGUARD
 			&&  move != MOVE_WIDEGUARD
@@ -1477,7 +1509,8 @@ MOVESCR_CHECK_0:
 			{
 				if (WillFaintFromSecondaryDamage(bankAtk)
 				&&  data->defAbility != ABILITY_MOXIE
-				&&  data->defAbility != ABILITY_BEASTBOOST)
+				&&  data->defAbility != ABILITY_BEASTBOOST
+				&&  data->defAbility != ABILITY_GRIMNEIGH)
 				{
 					DECREASE_VIABILITY(10); //Don't protect if you're going to faint after protecting
 				}
@@ -1514,7 +1547,9 @@ MOVESCR_CHECK_0:
 			}
 			else
 			{
-				if (ViableMonCountFromBank(bankDef) <= 1)
+				if (ViableMonCountFromBank(bankDef) <= 3
+				|| MoveInMoveset(MOVE_DEFOG, bankDef)
+				|| MoveInMoveset(MOVE_RAPIDSPIN, bankDef))
 				{
 					DECREASE_VIABILITY(10);
 					break;
@@ -1694,6 +1729,11 @@ MOVESCR_CHECK_0:
 				}
 
 				goto AI_LOWER_EVASION;
+			}
+			else if (move == MOVE_RAPIDSPIN && (IsOfType(bankDef, TYPE_GHOST))) //Don't use rapid spin if opponent is a ghost type
+			{
+				DECREASE_VIABILITY(10);
+				break; 
 			}
 			else if ((data->atkStatus2 & STATUS2_WRAPPED) || (data->atkStatus3 & STATUS3_LEECHSEED))
 				goto AI_STANDARD_DAMAGE;
@@ -1893,6 +1933,7 @@ MOVESCR_CHECK_0:
 
 		case EFFECT_TAUNT:
 			if (IsTaunted(bankDef)
+			|| ABILITY(bankDef) == ABILITY_OBLIVIOUS
 			|| PARTNER_MOVE_EFFECT_IS_SAME)
 				DECREASE_VIABILITY(1);
 			break;
@@ -2012,6 +2053,12 @@ MOVESCR_CHECK_0:
 					DECREASE_VIABILITY(9); //Don't use Knock Off is the enemy's only moves don't affect the AI
 			}
 			break;
+		
+		case EFFECT_POLTERGEIST:
+			if (data->defItem == ITEM_NONE) {
+				DECREASE_VIABILITY(10);
+			}
+			break;
 
 		case EFFECT_SKILL_SWAP:
 			data->atkAbility = *GetAbilityLocation(bankAtk); //Get actual abilities
@@ -2122,6 +2169,9 @@ MOVESCR_CHECK_0:
 		case EFFECT_COSMIC_POWER:
 			if (data->atkAbility == ABILITY_CONTRARY)
 				DECREASE_VIABILITY(10);
+			else if(MoveInMoveset(MOVE_HAZE, bankDef) || MoveInMoveset(MOVE_FREEZYFROST, bankDef)) {
+				DECREASE_VIABILITY(10);
+			}
 			else
 			{
 				AI_COSMIC_POWER:
@@ -2205,15 +2255,24 @@ MOVESCR_CHECK_0:
 					if (data->atkAbility == ABILITY_CONTRARY)
 						goto AI_COSMIC_POWER;
 
+					if (MoveInMoveset(MOVE_HAZE, bankDef) || MoveInMoveset(MOVE_FREEZYFROST, bankDef)) {
+						DECREASE_VIABILITY(10);
+					}
+
 					if ((STAT_STAGE(bankAtk, STAT_STAGE_SPATK) >= STAT_STAGE_MAX || !SpecialMoveInMoveset(bankAtk))
 					&&  (STAT_STAGE(bankAtk, STAT_STAGE_ATK) >= STAT_STAGE_MAX || !PhysicalMoveInMoveset(bankAtk))
 					&&  (STAT_STAGE(bankAtk, STAT_STAGE_SPEED) >= STAT_STAGE_MAX))
+						DECREASE_VIABILITY(10);
+					else if (IsTrickRoomActive())
 						DECREASE_VIABILITY(10);
 					break;
 
 				default: //Dragon Dance + Shift Gear
 					if (data->atkAbility == ABILITY_CONTRARY)
 						DECREASE_VIABILITY(10);
+					else if(MoveInMoveset(MOVE_HAZE, bankDef) || MoveInMoveset(MOVE_FREEZYFROST, bankDef)) {
+						DECREASE_VIABILITY(10);
+					}
 					else
 					{
 						if ((STAT_STAGE(bankAtk, STAT_STAGE_ATK) >= STAT_STAGE_MAX || !PhysicalMoveInMoveset(bankAtk))
@@ -2663,6 +2722,9 @@ MOVESCR_CHECK_0:
 					DECREASE_VIABILITY(10);
 					break;
 				}
+			}
+			else if ( Random() % 2 == 0) {
+				DECREASE_VIABILITY(10);
 			}
 
 			//If the foe has move prediction, assume damage move for now.
