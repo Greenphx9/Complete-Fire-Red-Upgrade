@@ -165,3 +165,8 @@ EventScript_Melmetalite:
 EventScript_Garbodorite:
 	giveitem ITEM_GARBODORITE 0x1 MSG_FIND
 	end
+
+.global EventScript_Cinderacite
+EventScript_Cinderacite:
+	giveitem ITEM_CINDERACITE 0x1 MSG_FIND
+	end
