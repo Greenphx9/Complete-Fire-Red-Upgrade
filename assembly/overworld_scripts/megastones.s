@@ -210,3 +210,23 @@ EventScript_Applite:
 EventScript_Sandaconite:
 	giveitem ITEM_SANDACONDITE 0x1 MSG_FIND
 	end
+
+.global EventScript_Toxtricite
+EventScript_Toxtricite:
+	giveitem ITEM_TOXTRICITE 0x1 MSG_FIND
+	end
+
+.global EventScript_Centiskite
+EventScript_Centiskite:
+	giveitem ITEM_CENTISKITE 0x1 MSG_FIND
+	end
+
+.global EventScript_Hatterenite
+EventScript_Hatterenite:
+	giveitem ITEM_HATTERENITE 0x1 MSG_FIND
+	end
+
+.global EventScript_Grimmsnalite
+EventScript_Grimmsnalite:
+	giveitem ITEM_GRIMMSNALITE 0x1 MSG_FIND
+	end

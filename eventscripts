@@ -320,6 +320,10 @@ npc 3 1 9 EventScript_Drednawite
 npc 1 61 4 EventScript_Coalossite
 npc 1 66 4 EventScript_Applite
 npc 1 82 29 EventScript_Sandaconite
+npc 1 95 10 EventScript_Toxtricite
+npc 1 65 4 EventScript_Centiskite
+npc 1 74 12 EventScript_Hatterenite
+npc 1 74 13 EventScript_Grimmsnalite
 
 ## Groudon Cave
 npc 43 11 10 EventScript_TM93 
