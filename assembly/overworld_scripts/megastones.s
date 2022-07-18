@@ -170,3 +170,13 @@ EventScript_Garbodorite:
 EventScript_Cinderacite:
 	giveitem ITEM_CINDERACITE 0x1 MSG_FIND
 	end
+
+.global EventScript_Rillaboomite
+EventScript_Rillaboomite:
+	giveitem ITEM_RILLABOOMITE 0x1 MSG_FIND
+	end
+
+.global EventScript_Inteleite
+EventScript_Inteleite:
+	giveitem ITEM_INTELEITE 0x1 MSG_FIND
+	end
