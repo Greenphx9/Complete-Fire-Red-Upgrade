@@ -267,6 +267,9 @@
 #define FLAG_CORVISITE 0x1033
 #define FLAG_ORBEETLITE 0x1034
 #define FLAG_DREDNAWITE 0x1035
+#define FLAG_COALOSSITE 0x1036
+#define FLAG_APPLITE 0x1037
+#define FLAG_SANDACONDITE 0x1037
 
 #define FLAG_SCALEMONS 0x1200 //Sets every Pokemon's BST to 600.
 #define FLAG_TIME_TURNER 0x1201 //Changes the time to PM when AM,and vice versa

@@ -195,3 +195,18 @@ EventScript_Orbeetlite:
 EventScript_Drednawite:
 	giveitem ITEM_DREDNAWITE 0x1 MSG_FIND
 	end
+
+.global EventScript_Coalossite
+EventScript_Coalossite:
+	giveitem ITEM_COALOSSITE 0x1 MSG_FIND
+	end
+
+.global EventScript_Applite
+EventScript_Applite:
+	giveitem ITEM_APPLITE 0x1 MSG_FIND
+	end
+
+.global EventScript_Sandaconite
+EventScript_Sandaconite:
+	giveitem ITEM_SANDACONDITE 0x1 MSG_FIND
+	end
