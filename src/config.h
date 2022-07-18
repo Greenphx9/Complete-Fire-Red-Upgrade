@@ -274,6 +274,9 @@
 #define FLAG_CENTISKITE 0x1039
 #define FLAG_HATTERENITE 0x103A
 #define FLAG_GRIMMSNARITE 0x103B
+#define FLAG_ALCREMITE 0x103C
+#define FLAG_COPPERANITE 0x103D
+#define FLAG_DURALADITE 0x103F
 
 #define FLAG_SCALEMONS 0x1200 //Sets every Pokemon's BST to 600.
 #define FLAG_TIME_TURNER 0x1201 //Changes the time to PM when AM,and vice versa

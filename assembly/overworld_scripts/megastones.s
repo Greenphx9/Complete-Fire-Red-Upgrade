@@ -230,3 +230,18 @@ EventScript_Hatterenite:
 EventScript_Grimmsnalite:
 	giveitem ITEM_GRIMMSNALITE 0x1 MSG_FIND
 	end
+
+.global EventScript_Alcremite
+EventScript_Alcremite:
+	giveitem ITEM_ALCREMITE 0x1 MSG_FIND
+	end
+
+.global EventScript_Copperanite
+EventScript_Copperanite:
+	giveitem ITEM_COPPERANITE 0x1 MSG_FIND
+	end
+
+.global EventScript_Duraladite
+EventScript_Duraladite:
+	giveitem ITEM_DURALUDONITE 0x1 MSG_FIND
+	end

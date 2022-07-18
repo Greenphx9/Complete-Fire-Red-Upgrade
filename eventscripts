@@ -324,6 +324,9 @@ npc 1 95 10 EventScript_Toxtricite
 npc 1 65 4 EventScript_Centiskite
 npc 1 74 12 EventScript_Hatterenite
 npc 1 74 13 EventScript_Grimmsnalite
+npc 10 17 5 EventScript_Alcremite
+npc 1 2 8 EventScript_Copperanite
+npc 3 31 12 EventScript_Duraladite
 
 ## Groudon Cave
 npc 43 11 10 EventScript_TM93 
@@ -620,6 +623,8 @@ npc 43 0 3 EventScript_RockSmash
 npc 1 2 4 EventScript_RockSmash
 npc 1 2 5 EventScript_RockSmash
 npc 1 2 6 EventScript_RockSmash
+npc 1 2 9 EventScript_RockSmash
+npc 1 2 10 EventScript_RockSmash
 npc 14 2 10 EventScript_RockSmash
 npc 43 0 7 EventScript_RockSmash
 npc 43 11 0 EventScript_Strength
