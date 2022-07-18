@@ -527,6 +527,40 @@ EventScript_End1:
 	release
 	end
 
+.global EventScript_Castform
+EventScript_Castform:
+	lock
+	faceplayer
+	setvar 0x4001 SPECIES_CASTFORM
+	givepokemon SPECIES_CASTFORM 50 0x0 0x0 0x0 0x0
+	compare LASTRESULT 0x0
+	if 0x1 _goto EventScript_CastformObtained
+	compare LASTRESULT 0x1
+	if 0x1 _goto EventScript_CastformObtained2
+	compare LASTRESULT 0x2
+	if 0x1 _goto 0x81A927C
+	release
+	end
+
+EventScript_CastformObtained:
+	hidesprite 0x2
+	fanfare 0x101
+	preparemsg gText_ObtainedACastform
+	waitmsg
+	waitfanfare
+	bufferpokemon 0x0 SPECIES_CASTFORM
+	call 0x81A8C27
+	goto 0x816C514
+
+EventScript_CastformObtained2:
+	hidesprite 0x2
+	fanfare 0x101
+	preparemsg gText_ObtainedACastform
+	waitmsg
+	waitfanfare
+	bufferpokemon 0x0 SPECIES_CASTFORM
+	goto 0x816C509	
+
 .align 1
 EventScript_TMShop1:	
 	.hword ITEM_TM10

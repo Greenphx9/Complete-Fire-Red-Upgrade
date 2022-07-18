@@ -192,6 +192,7 @@ npc 10 12 2 EventScript_PledgeTutor
 npc 3 6 6 EventScript_SoftboiledTutor
 sign 10 2 4 EventScript_TVRemake
 npc 10 2 0 EventScript_LiquidationTutor
+npc 10 11 1 EventScript_Castform
 
 ## Route 16
 npc 3 34 12 EventScript_TM114

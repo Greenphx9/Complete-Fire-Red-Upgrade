@@ -141,3 +141,6 @@ I must confer on you the\nRainbowBadge.
 
 #org @gText_GiveRainbowBadge
 [BLACK][PLAYER] received the\nRainbowBadge from Erika! 
+
+#org @gText_ObtainedACastform
+[PLAYER] obtained a Castform!
