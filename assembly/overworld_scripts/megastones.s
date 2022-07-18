@@ -180,3 +180,18 @@ EventScript_Rillaboomite:
 EventScript_Inteleite:
 	giveitem ITEM_INTELEITE 0x1 MSG_FIND
 	end
+
+.global EventScript_Corvisite
+EventScript_Corvisite:
+	giveitem ITEM_CORVISITE 0x1 MSG_FIND
+	end
+
+.global EventScript_Orbeetlite
+EventScript_Orbeetlite:
+	giveitem ITEM_ORBEETLITE 0x1 MSG_FIND
+	end
+
+.global EventScript_Drednawite
+EventScript_Drednawite:
+	giveitem ITEM_DREDNAWITE 0x1 MSG_FIND
+	end
