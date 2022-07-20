@@ -39,3 +39,21 @@ Defeated, once again[.]
 
 #org @gText_SaveblockSize
 SaveBlock1 is [BUFFER1] bytes long.\nSaveBlock2 is [BUFFER2] bytes long.\lPokemonStorage is [BUFFER3] bytes long.
+
+#org @gText_HelloThereDexio
+???: Alola trainer!\nMy name is Dexio!\pIf you couldn't tell, I come from\nthe Alola region.\pJust visiting Kanto to battle some\nnew trainers!\pSpeaking of battling, do you want to\nhave a battle?\pIf you win I'll give you two Pok\emon\nnative to Alola!
+
+#org @gText_WarningYouDexio
+I'm not gonna go easy!
+
+#org @gText_DefeatDexio
+Wow!\nYou're the strongest trainer I've\lever faced!
+
+#org @gText_HeresTwoPokemon
+Here's the two Pok\emon that I\npromised to give you.
+
+#org @gText_PlayerReceievedStakatakaBlacephalon
+[BLACK][PLAYER] received a Blacephalon and\nStakataka from Dexio!
+
+#org @gText_PokemonLEagueAheadDexio
+The Pok\emon League is up ahead. I\nhear crazy strong trainers await\lthere.

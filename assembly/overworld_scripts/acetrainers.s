@@ -5,6 +5,7 @@
 .include "../xse_defines.s"
 .include "../asm_defines.s"
 
+.equ FLAG_BEAT_DEXIO, 0x1041
 
 .global EventScript_GreenphxBattle1
 EventScript_GreenphxBattle1:
@@ -73,5 +74,37 @@ EventScript_DanielBattle:
 
 EventScript_DanielAlreadyBattled:
 	msgbox gText_DanielAlreadyBattled MSG_FACE
+	release
+	end
+
+.global EventScript_Dexio
+EventScript_Dexio:
+	lock
+	faceplayer
+	checktrainerflag 38
+	goto_if_eq EventScript_DexioDefeated
+	msgbox gText_HelloThereDexio MSG_YESNO
+	compare LASTRESULT 0x1
+	goto_if_eq EventScript_StartDexioBattle
+	release
+	end
+
+EventScript_StartDexioBattle:
+	msgbox gText_WarningYouDexio MSG_KEEPOPEN
+	closeonkeypress
+	trainerbattle3 0x1 38 0x0 gText_DefeatDexio
+	msgbox gText_HeresTwoPokemon MSG_FACE
+	givepokemon SPECIES_BLACEPHALON 85 0x0 0x0 0x0
+	givepokemon SPECIES_STAKATAKA 85 0x0 0x0 0x0
+	fanfare 0x101
+	msgbox gText_PlayerReceievedStakatakaBlacephalon MSG_KEEPOPEN
+	waitfanfare
+	closeonkeypress
+	goto EventScript_DexioDefeated
+	release
+	end
+
+EventScript_DexioDefeated:
+	msgbox gText_PokemonLEagueAheadDexio MSG_FACE
 	release
 	end
