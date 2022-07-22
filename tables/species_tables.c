@@ -1102,6 +1102,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	{
 		.battleTowerStandardBan = TRUE,
 		.gsCupLegendaries = TRUE,
+		.badForUbers = TRUE,
 		.setPerfectXIVs = TRUE,
 		.smartWild = TRUE,
 	},
