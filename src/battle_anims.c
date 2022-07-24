@@ -1568,6 +1568,14 @@ bool8 DoesAnimMoveGetMaxRollout(void)
 		|| sAnimMoveIndex == MOVE_G_MAX_SANDBLAST_P || sAnimMoveIndex == MOVE_G_MAX_SANDBLAST_S;
 }
 
+
+void AnimTask_IsAttackerShiny(u8 taskId)
+{
+	gBattleAnimArgs[0] = IsMonShiny(GetIllusionPartyData(gBattleAnimAttacker));
+	DestroyAnimVisualTask(taskId);
+}
+
+
 bool8 IsAnimMoveBloomDoom(void)
 {
 	return sAnimMoveIndex == MOVE_BLOOM_DOOM_P || sAnimMoveIndex == MOVE_BLOOM_DOOM_S;
