@@ -1041,6 +1041,7 @@ bool8 ShouldRecover(u8 bankAtk, u8 bankDef, u16 move)
 				return TRUE;
 
 			if (Can2HKO(bankDef, bankAtk)
+			&& !IsBankIncapacitated(bankDef)
 			&& healAmount > gBattleMons[bankAtk].hp //Will get back more damage than the foe would do
 			&& (AI_THINKING_STRUCT->simulatedRNG[1] & 1) == 0) //Heal 50% of the time
 				return TRUE;				
@@ -1049,7 +1050,8 @@ bool8 ShouldRecover(u8 bankAtk, u8 bankDef, u16 move)
 		{
 			if (!CanKnockOut(bankDef, bankAtk)) //Enemy can't kill attacker
 			{
-				if (Can2HKO(bankDef, bankAtk)
+				if (!IsBankIncapacitated(bankDef)
+				&& Can2HKO(bankDef, bankAtk)
 				&& !CanKnockOutAfterHealing(bankDef, bankAtk, healAmount, 1, TRUE)) //Deal one hit first since it's slower
 					return TRUE;
 			}
