@@ -159,6 +159,7 @@ npc 1 81 11 EventScript_TM68
 npc 1 82 27 EventScript_TM113
 npc 1 82 28 EventScript_Absolite
 npc 1 81 12 EventScript_Aerodactylite
+map 1 81 RockTunnel_B1F_MapScripts
 
 ## Lavender Town
 npc 8 0 0 EventScript_pokecentre_0X16A2CF
@@ -292,7 +293,7 @@ npc 1 94 5 EventScript_Sablenite
 npc 43 11 11 EventScript_Cameruptite
 npc 1 41 12 EventScript_Diancite
 npc 1 39 2 EventScript_Garchompite
-npc 1 40 7 EventScript_Salamencite
+npc 1 40 6 EventScript_Salamencite
 npc 3 38 12 EventScript_Galladite
 npc 3 39 8 EventScript_Gardevoirite
 npc 43 12 1 EventScript_Glalitite
@@ -463,12 +464,13 @@ npc 1 83 3 EventScript_TM72
 npc 1 85 3 EventScript_TM118
 npc 43 24 0 EventScript_Regigigas
 map 43 24 SeafoamIslands_B5F_MapScripts
+sign 43 2 0 EventScript_RegiceSign
 
 ## Victory Road
 npc 3 42 7 EventScript_TM52
-npc 1 40 5 EventScript_Moltres
-npc 1 40 12 EventScript_UltiElementTeach
-npc 1 40 13 EventScript_BeginARaidBattle
+npc 1 40 13 EventScript_Moltres
+npc 1 40 11 EventScript_UltiElementTeach
+npc 1 40 12 EventScript_BeginARaidBattle
 
 ## Route 21
 map 3 39 EventScript_Route21MapScript
@@ -654,9 +656,9 @@ npc 1 87 1 EventScript_Strength
 npc 1 39 4 EventScript_Strength
 npc 1 39 5 EventScript_Strength
 npc 1 39 6 EventScript_Strength
+npc 1 40 8 EventScript_Strength
 npc 1 40 9 EventScript_Strength
 npc 1 40 10 EventScript_Strength
-npc 1 40 11 EventScript_Strength
 npc 1 41 6 EventScript_Strength
 npc 1 41 7 EventScript_Strength
 npc 1 41 8 EventScript_Strength

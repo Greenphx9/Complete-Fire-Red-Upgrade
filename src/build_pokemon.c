@@ -1864,6 +1864,7 @@ static void BuildRaidMultiParty(void)
 	u8 zero = METLOC_FATEFUL_ENCOUNTER;
 	u8 numStars = gRaidBattleStars;
 	u8 multiId = VarGet(VAR_FACILITY_TRAINER_ID_PARTNER);
+	u8 ball = BALL_TYPE_POKE_BALL;
 
 	//Build Team
 	for (i = 0; i < PARTY_SIZE / 2 && i < gRaidPartners[multiId].spreadSizes[numStars]; ++i)
@@ -1871,6 +1872,10 @@ static void BuildRaidMultiParty(void)
 		const struct BattleTowerSpread* spread = GetRaidMultiSpread(multiId, i, numStars);
 		CreateFrontierMon(&gPlayerParty[i + 3], GetRandomRaidLevel(), spread, RAID_BATTLE_MULTI_TRAINER_TID, 2, gRaidPartners[multiId].gender, FALSE);
 		SetMonData(&gPlayerParty[i + 3], MON_DATA_MET_LOCATION, &zero); //So they don't say "Battle Frontier"
+		if(GetMonData(&gPlayerParty[i + 3], MON_DATA_POKEBALL, 0) == 0) //Make raid partners have Pokeballs instead of Masterballs
+		{
+			SetMonData(&gPlayerParty[i + 3], MON_DATA_POKEBALL, &ball);
+		}
 	}
 }
 

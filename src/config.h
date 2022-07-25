@@ -279,6 +279,7 @@
 #define FLAG_DURALADITE 0x103F
 #define FLAG_CASTFORM_BALL 0x1040
 #define FLAG_BEAT_DEXIO 0x1041
+#define FLAG_MOLTRES 0x1042
 
 #define FLAG_SCALEMONS 0x1200 //Sets every Pokemon's BST to 600.
 #define FLAG_TIME_TURNER 0x1201 //Changes the time to PM when AM,and vice versa

@@ -151,7 +151,7 @@ ANIM_WRAPPED_END_TURN:
 	jumpifargmatches 0x0 0x6 ANIM_INFESTATION
 	jumpifargmatches 0x0 0x7 ANIM_SNAP_TRAP
 	jumpifargmatches 0x0 0x8 ANIM_OCTOLOCK
-	jumpifargmatches 0x0 0x9 0x81c7faa
+	jumpifargmatches 0x0 0x9 ANIM_THUNDERCAGE_TRAP
 	jumpifargmatches 0x0 0xA ANIM_CEASELESSEDGE_WRAP
 	jumpifargmatches 0x0 0xB ANIM_CEASELESSEDGE_WRAP
 	jumpifargmatches 0x0 0xC ANIM_LEAFTORNADO

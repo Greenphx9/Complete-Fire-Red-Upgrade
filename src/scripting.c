@@ -4234,10 +4234,11 @@ bool8 ScrCmd_braillemessage(struct ScriptContext *ctx)
     xText = (xWindow - xText - 1) * 8 + 3;
     yText = (yText - yWindow - 1) * 8;
 
-    winTemplate = SetWindowTemplateFields(0, xWindow, yWindow + 1, width, height, 0xF, 0x1);
+    winTemplate = SetWindowTemplateFields(0, xWindow, yWindow + 1, width, height, 15, 0x1);
+	Menu_LoadStdPalAt(0xF0);
     sBrailleWindowId = AddWindow(&winTemplate);
     LoadUserWindowBorderGfx(sBrailleWindowId, 0x214, 0xE0);
-    DrawStdWindowFrame(sBrailleWindowId, 0);
+    DrawStdWindowFrame(sBrailleWindowId, FALSE);
     PutWindowTilemap(sBrailleWindowId);
     FillWindowPixelBuffer(sBrailleWindowId, PIXEL_FILL(1));
     AddTextPrinterParameterized(sBrailleWindowId, 6, gStringVar4, xText, yText, 0xFF, NULL);

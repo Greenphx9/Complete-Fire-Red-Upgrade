@@ -92,6 +92,7 @@
 .equ BG_DYNAMAX_CANNON, 0x4A
 .equ BG_AURA_SPHERE, 0x4B
 .equ BG_GLITCH_CITY, 0x4C
+.equ BG_BITTER_MALICE, 0x4D
 
 @pals for pal fading tasks
 .equ PAL_BG, 0x1

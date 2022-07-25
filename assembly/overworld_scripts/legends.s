@@ -49,7 +49,7 @@
 .equ FLAG_MANAPHY_1, 0x9BC
 .equ FLAG_MANAPHY_2, 0x9BD
 .equ VAR_MANAPHY_SCRIPT, 0x510C
-.equ FLAG_HIDE_MOLTRES, 0x52
+.equ FLAG_HIDE_MOLTRES, 0x1042
 .equ FLAG_NECROZMA_GOT, 0x100B
 .equ FLAG_NECROZMA_SPRITE, 0x100C
 .equ FLAG_ZACIAN_GOT, 0x100D
@@ -698,7 +698,7 @@ EventScript_Moltres:
 	wildbattle SPECIES_MOLTRES 80 0x0
 	fadescreen 0x1
 	setflag FLAG_HIDE_MOLTRES
-	hidesprite 6
+	hidesprite 14
 	fadescreen 0x0
 	msgbox gText_MoltresFlew MSG_NORMAL
 	release

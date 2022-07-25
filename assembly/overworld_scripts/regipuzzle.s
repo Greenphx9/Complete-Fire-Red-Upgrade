@@ -38,11 +38,16 @@ EventScript_RegirockDoorSetMapTile:
 	return
 
 RockTunnel_B1F_MapScripts:
+	mapscript MAP_SCRIPT_ON_TRANSITION RockTunnel_B1F_OnTransition
 	mapscript MAP_SCRIPT_ON_LOAD RockTunnel_B1F_OnLoad
 	.byte MAP_SCRIPT_TERMIN
 
 RockTunnel_B1F_OnLoad:
 	call_if_set FLAG_REGIROCK_DOOR EventScript_RegirockDoorSetMapTile
+	end
+
+RockTunnel_B1F_OnTransition:
+	setworldmapflag 0x8B0
 	end
 
 .global EventScript_RegirockSign

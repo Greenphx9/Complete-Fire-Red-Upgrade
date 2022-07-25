@@ -735,6 +735,7 @@ void FieldMoveCallback_CutGrass(void)
 	{
 		ScriptContext1_SetupScript(EventScript_OpenRegirockDoor);
 		ScriptContext2_Disable();
+		return;
 	}
 	else
         FieldEffectStart(FLDEFF_CUT_GRASS);

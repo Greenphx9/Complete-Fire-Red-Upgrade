@@ -111,10 +111,12 @@ enum OverworldNPCSprites
 	EVENT_OBJ_GFX_STEVEN,
 	EVENT_OBJ_GFX_MIRA,
 	EVENT_OBJ_GFX_GREENPHX,
+	EVENT_OBJ_GFX_RED_DUPE,
 };
 
 #define EVENT_OBJ_GFX_RED_UNDERWATER 6 //By default VS. Seeker on bike b\c not used by anything else
 #define EVENT_OBJ_GFX_LEAF_UNDERWATER 13
+#define EVENT_OBJ_GFX_GARY 72
 
 // These are dynamic object gfx ids.
 // They correspond with the values of the VAR_OBJ_GFX_ID_X vars.

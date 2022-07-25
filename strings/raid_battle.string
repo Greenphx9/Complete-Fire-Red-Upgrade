@@ -16,29 +16,8 @@ Available Partners
 #org @gText_StartRaidBattle
 [BLACK]The den emits mysterious energy[.]\nWant to look inside?
 
-#org @sTrainerName_Greg
-Greg
-
-#org @sTrainerName_Catherine
-Catherine
-
-#org @sTrainerName_Tasha
-Tasha
-
 #org @gText_DenEmpty
 [BLACK]The den is empty.
-
-#org @sTrainerName_Ash
-Ash
-
-#org @sTrainerName_Lyra
-Lyra
-
-#org @sTrainerName_Fox
-Fox
-
-#org @sTrainerName_Talia
-Talia
 
 #org @gText_JoinedYouTake
 [BLACK][BUFFER][09] [BUFFER][07]\njoined you to take on [BUFFER][08]!
@@ -46,26 +25,8 @@ Talia
 #org @gText_Choose3
 [BLACK]Choose 3 Pok\emon to\nbring into battle.
 
-#org @sTrainerName_Juniper
-Juniper
-
-#org @sTrainerName_Kai
-Kai
-
-#org @sTrainerName_Skye
-Skye
-
-#org @sTrainerName_Cynthia
-Cynthia
-
-#org @sTrainerName_Mei
-Mei
-
-#org @sTrainerName_Fernando 
-Fernando
-
-#org @sTrainerName_May
-May
+#org @sTrainerName_Tasha
+Tasha
 
 #org @sTrainerName_Laphicet
 Laphicet
@@ -87,3 +48,24 @@ Simply
 
 #org @sTrainerName_Greenphx
 Greenphx
+
+#org @sTrainerName_Red
+Red
+
+#org @sTrainerName_Gary
+Gary
+
+#org @sTrainerName_Ash
+Ash
+
+#org @sTrainerName_Brendan
+Brendan
+
+#org @sTrainerName_May
+May
+
+#org @sTrainerName_Lyra
+Lyra
+
+#org @sTrainerName_Aelius
+Aelius

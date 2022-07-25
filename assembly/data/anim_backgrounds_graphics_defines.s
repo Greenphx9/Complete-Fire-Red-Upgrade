@@ -143,3 +143,6 @@ definitions for battle backgrounds
 .equ BG_GLITCH_CITY_IMG, Glitch_CityTiles
 .equ BG_GLITCH_CITY_PAL, Glitch_CityPal
 .equ BG_GLITCH_CITY_RAW, Glitch_CityMap
+.equ BG_BITTER_MALICE_IMG, NightmareTiles
+.equ BG_BITTER_MALICE_PAL, Bitter_MalicePal
+.equ BG_BITTER_MALICE_RAW, NightmareMap

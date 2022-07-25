@@ -611,7 +611,20 @@ void CursorCb_NoEntry(u8 taskId)
 		if (gSelectedOrderFromParty[i] == gPartyMenu.slotId + 1)
 		{
 			for (j = i; j < (max - 1); ++j)
-				gSelectedOrderFromParty[j] = gSelectedOrderFromParty[j + 1];
+			{
+				switch (j)
+				{
+				case 0:
+					gSelectedOrderFromParty[0] = gSelectedOrderFromParty[1];
+					gSelectedOrderFromParty[1] = gSelectedOrderFromParty[2];
+					gSelectedOrderFromParty[2] = 0;
+					break;
+				case 1:
+					gSelectedOrderFromParty[1] = gSelectedOrderFromParty[2];
+					gSelectedOrderFromParty[2] = 0;
+					break;
+				}
+			}
 
 			gSelectedOrderFromParty[j] = 0;
 			break;
