@@ -358,6 +358,18 @@ bool8 ItemEffectPreventsHazards(u8 itemEffect)
 	return itemEffect == ITEM_EFFECT_HEAVY_DUTY_BOOTS;
 }
 
+bool8 CheckGroundingByDetails(u16 species, u16 item, u8 ability)
+{
+	if (ability != ABILITY_KLUTZ && ItemId_GetHoldEffect(item) == ITEM_EFFECT_IRON_BALL)
+		return GROUNDED;
+	else if (ability == ABILITY_LEVITATE
+	|| gBaseStats[species].type1 == TYPE_FLYING
+	|| gBaseStats[species].type2 == TYPE_FLYING)
+		return IN_AIR;
+
+	return GROUNDED;
+}
+
 bool8 IsFloatingWithMagnetism(u8 bank)
 {
 	return IsMagnetRiseBattle()
@@ -1865,6 +1877,12 @@ bool8 WeatherHasEffect(void)
 
 	return TRUE;
 }
+
+bool8 ItemEffectIgnoresSunAndRain(u8 itemEffect)
+{
+	return itemEffect == ITEM_EFFECT_UTILITY_UMBRELLA;
+}
+
 
 bool8 IsChoiceAbility(u8 ability)
 {
