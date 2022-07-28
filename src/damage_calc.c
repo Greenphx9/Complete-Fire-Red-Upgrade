@@ -3372,8 +3372,16 @@ static u16 AdjustBasePower(struct DamageCalc* data, u16 power)
 		case ABILITY_STEELWORKER:
 		case ABILITY_STEELY_SPIRIT:
 		//1.5x Boost
-			if (data->moveType == TYPE_STEEL)
-				power = (power * 15) / 10;
+			if(data->atkSpecies == SPECIES_DHELMISE || data->atkSpecies == SPECIES_PERRSERKER)
+			{
+				if (data->moveType == TYPE_STEEL)
+					power = (power * 15) / 10;
+			}
+			else
+			{
+				if (data->moveType == TYPE_GRASS)
+					power = (power * 15) / 10;
+			}
 			break;
 
 		case ABILITY_WATERBUBBLE:

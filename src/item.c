@@ -2137,6 +2137,10 @@ void BagListMenuGetItemNameColored(u8 *dest, u16 itemId)
 		{
 			VarSet(VAR_POWER_ITEM_LEVEL, 1);
 		}
+		if(VarGet(VAR_POWER_ITEM_LEVEL) != 6 && FlagGet(FLAG_NO_GRINDING_EV))
+		{
+			VarSet(VAR_POWER_ITEM_LEVEL, 6);
+		}
 		//unefficent, but i don't think buffers work
 		switch(VarGet(VAR_POWER_ITEM_LEVEL)) 
 		{

@@ -4002,9 +4002,9 @@ static const struct BattleTowerSpread sRaidPartnerSpread_Aelius_Rank5[] =
 static const struct BattleTowerSpread sRaidPartnerSpread_Aelius_Rank6[] =
 {
     {
-        .species = SPECIES_HO_OH,
+        .species = SPECIES_GROUDON,
         .item = ITEM_LIFE_ORB,
-        .ability = FRONTIER_ABILITY_HIDDEN, //Regenerator
+        .ability = FRONTIER_ABILITY_1, //Drought
         .nature = NATURE_JOLLY,
         .atkEv = 252,
         .spDefEv = 4,
@@ -4017,19 +4017,19 @@ static const struct BattleTowerSpread sRaidPartnerSpread_Aelius_Rank6[] =
         .spdIv = 31,
         .moves = 
         {
-            MOVE_SACREDFIRE,
-            MOVE_BRAVEBIRD,
-            MOVE_EARTHQUAKE,
-            MOVE_ZENHEADBUTT,
+            MOVE_PRECIPICEBLADES,
+            MOVE_STONEEDGE,
+            MOVE_HEATCRASH,
+            MOVE_THUNDERPUNCH,
         },
         .forSingles = TRUE,
         .forDoubles = TRUE,
         .modifyMovesDoubles = FALSE,
     },
     {
-        .species = SPECIES_PORYGON_Z,
-        .item = ITEM_CHOICE_SCARF,
-        .ability = FRONTIER_ABILITY_1, //Adaptability
+        .species = SPECIES_RESHIRAM,
+        .item = ITEM_CHOICE_SPECS,
+        .ability = FRONTIER_ABILITY_1, //Turboblaze
         .nature = NATURE_TIMID,
         .spAtkEv = 252,
         .spDefEv = 4,
@@ -4042,20 +4042,20 @@ static const struct BattleTowerSpread sRaidPartnerSpread_Aelius_Rank6[] =
         .spdIv = 31,
         .moves = 
         {
-            MOVE_TECHNOBLAST,
-            MOVE_SHADOWBALL,
-            MOVE_ICEBEAM,
-            MOVE_THUNDERBOLT,
+            MOVE_BLUEFLARE,
+            MOVE_DRAGONPULSE,
+            MOVE_SCORCHINGSANDS,
+            MOVE_FOCUSBLAST,
         },
         .forSingles = TRUE,
         .forDoubles = TRUE,
         .modifyMovesDoubles = FALSE,
     },
     {
-        .species = SPECIES_LUGIA,
-        .item = ITEM_LEFTOVERS,
-        .ability = FRONTIER_ABILITY_HIDDEN, //Multiscale
-        .nature = NATURE_MODEST,
+        .species = SPECIES_CHARIZARD,
+        .item = ITEM_CHARIZARDITE_Y,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Solar Power
+        .nature = NATURE_TIMID,
         .spAtkEv = 252,
         .spDefEv = 4,
         .spdEv = 252,
@@ -4067,10 +4067,10 @@ static const struct BattleTowerSpread sRaidPartnerSpread_Aelius_Rank6[] =
         .spdIv = 31,
         .moves = 
         {
-            MOVE_PSYCHIC,
-            MOVE_AEROBLAST,
-            MOVE_EARTHPOWER,
-            MOVE_HYDROPUMP,
+            MOVE_WEATHERBALL,
+            MOVE_SOLARBEAM,
+            MOVE_SCORCHINGSANDS,
+            MOVE_ROOST,
         },
         .forSingles = TRUE,
         .forDoubles = TRUE,

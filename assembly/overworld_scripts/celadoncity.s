@@ -681,6 +681,7 @@ EventScript_BattleItems:
 	.hword ITEM_ELECTRIC_SEED
 	.hword ITEM_PSYCHIC_SEED
 	.hword ITEM_FOCUS_SASH
+	.hword ITEM_SCOPE_LENS
 	.hword 0x0
 
 EventScript_MiscPokeballs:
