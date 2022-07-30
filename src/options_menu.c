@@ -40,6 +40,9 @@
 #include "../include/text_window.h"
 #include "../include/bg.h"
 #include "../include/mgba.h"
+#include "../include/menu_helpers.h"
+#include "../include/gba/m4a_internal.h"
+#include "../include/malloc.h"
 
 #include "../include/pokemon_summary_screen.h"
 #include "../include/menu.h"
@@ -50,6 +53,10 @@
 void CB2_OptionMenu(void);
 bool8 LoadOptionMenuPalette(void);
 void LoadOptionMenuItemNames(void);
+void Task_OptionMenu(u8 taskId);
+void CloseAndSaveOptionMenu(u8 taskId);
+u8 OptionMenu_ProcessInput(void);
+void BufferOptionMenuString(u8 selection);
 
 // Menu items
 enum
@@ -61,9 +68,9 @@ enum
     MENUITEM_BUTTONMODE,
     MENUITEM_FRAMETYPE,
     MENUITEM_CANCEL,
-    MENUITEM_PAGE1_COUNT,
+    /*MENUITEM_PAGE1_COUNT,
     MENUITEM_RBUTTONMODE,
-    MENUITEM_PAGE2_COUNT,
+    MENUITEM_PAGE2_COUNT,*/
     MENUITEM_COUNT,
 };
 
@@ -104,7 +111,54 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_BUTTONMODE]  = gText_ButtonMode,
     [MENUITEM_FRAMETYPE]   = gText_Frame,
     [MENUITEM_CANCEL]      = gText_OptionMenuCancel,
-    [MENUITEM_RBUTTONMODE] = gText_RButtonMode,
+    //[MENUITEM_RBUTTONMODE] = gText_RButtonMode,
+};
+
+extern const u8 gText_TextSpeedSlow[];
+extern const u8 gText_TextSpeedMid[];
+extern const u8 gText_TextSpeedFast[];
+extern const u8 gText_BattleSceneOn[];
+extern const u8 gText_BattleSceneOff[];
+extern const u8 gText_BattleStyleShift[];
+extern const u8 gText_BattleStyleSet[];
+extern const u8 gText_SoundMono[];
+extern const u8 gText_SoundStereo[];
+extern const u8 gText_ButtonTypeHelp[];
+extern const u8 gText_ButtonTypeLR[];
+extern const u8 gText_ButtonTypeLEqualsA[];
+extern const u8 gText_MenuOption[];
+extern const u8 gText_FrameType[];
+
+static const u8 *const sTextSpeedOptions[] =
+{
+    gText_TextSpeedSlow, 
+    gText_TextSpeedMid, 
+    gText_TextSpeedFast
+};
+
+static const u8 *const sBattleSceneOptions[] =
+{
+    gText_BattleSceneOn, 
+    gText_BattleSceneOff
+};
+
+static const u8 *const sBattleStyleOptions[] =
+{
+    gText_BattleStyleShift,
+    gText_BattleStyleSet
+};
+
+static const u8 *const sSoundOptions[] =
+{
+    gText_SoundMono, 
+    gText_SoundStereo
+};
+
+static const u8 *const sButtonTypeOptions[] =
+{
+    gText_ButtonTypeHelp,
+	gText_ButtonTypeLR,
+	gText_ButtonTypeLEqualsA
 };
 
 static const u16 sOptionMenuItemCounts[MENUITEM_COUNT] = {3, 2, 2, 2, 3, 10, 0};
@@ -112,15 +166,20 @@ static const u16 sOptionMenuItemCounts[MENUITEM_COUNT] = {3, 2, 2, 2, 3, 10, 0};
 void CB2_OptionsMenuFromStartMenu(void)
 {
     u8 i;
-    MgbaPrintf(MGBA_LOG_INFO, "Hello world! %d", i);
     
     if (gMain.savedCallback == NULL)
         gMain.savedCallback = CB2_ReturnToFieldWithOpenMenu;
+    MgbaPrintf(MGBA_LOG_INFO, "Hello world! 0");
     sOptionMenuPtr = AllocZeroed(sizeof(struct OptionMenu));
+    MgbaPrintf(MGBA_LOG_INFO, "Hello world! 1");
     sOptionMenuPtr->loadState = 0;
+    MgbaPrintf(MGBA_LOG_INFO, "Hello world! 2");
     sOptionMenuPtr->loadPaletteState = 0;
+    MgbaPrintf(MGBA_LOG_INFO, "Hello world! 3");
     sOptionMenuPtr->state = 0;
+    MgbaPrintf(MGBA_LOG_INFO, "Hello world! 4");
     sOptionMenuPtr->cursorPos = 0;
+    MgbaPrintf(MGBA_LOG_INFO, "Hello world! 5");
     sOptionMenuPtr->option[MENUITEM_TEXTSPEED] = gSaveBlock2->optionsTextSpeed;
     sOptionMenuPtr->option[MENUITEM_BATTLESCENE] = gSaveBlock2->optionsBattleSceneOff;
     sOptionMenuPtr->option[MENUITEM_BATTLESTYLE] = gSaveBlock2->optionsBattleStyle;
@@ -134,6 +193,74 @@ void CB2_OptionsMenuFromStartMenu(void)
             sOptionMenuPtr->option[i] = 0;
     }
     SetMainCallback2(CB2_OptionMenu);
+}
+
+void Task_OptionMenu(u8 taskId)
+{
+    switch (sOptionMenuPtr->loadState)
+    {
+    case 0:
+        BeginNormalPaletteFade(0xFFFFFFFF, 0, 0x10, 0, RGB_BLACK);
+        OptionMenu_SetVBlankCallback();
+        sOptionMenuPtr->loadState++;
+        break;
+    case 1:
+        if (gPaletteFade->active)
+            return;
+        sOptionMenuPtr->loadState++;
+        break;
+    case 2:
+        if (((bool32)MenuHelpers_CallLinkSomething()) == TRUE)
+            break;
+        switch (OptionMenu_ProcessInput())
+        {
+        case 0:
+            break;
+        case 1:
+            sOptionMenuPtr->loadState++;
+            break;
+        case 2:
+            LoadBgTiles(1, GetUserFrameGraphicsInfo(sOptionMenuPtr->option[MENUITEM_FRAMETYPE])->tiles, 0x120, 0x1AA);
+            LoadPalette(GetUserFrameGraphicsInfo(sOptionMenuPtr->option[MENUITEM_FRAMETYPE])->palette, 0x20, 0x20);
+            BufferOptionMenuString(sOptionMenuPtr->cursorPos);
+            break;
+        case 3:
+            UpdateSettingSelectionDisplay(sOptionMenuPtr->cursorPos);
+            break;
+        case 4:
+            BufferOptionMenuString(sOptionMenuPtr->cursorPos);
+            break;
+        }
+        break;
+    case 3:
+        BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
+        sOptionMenuPtr->loadState++;
+        break;
+    case 4:
+        if (gPaletteFade->active)
+            return;
+        sOptionMenuPtr->loadState++;
+        break;
+    case 5:
+        CloseAndSaveOptionMenu(taskId);
+        break;
+    }
+}
+
+void CloseAndSaveOptionMenu(u8 taskId)
+{
+    gFieldCallback = FieldCB_DefaultWarpExit;
+    SetMainCallback2(gMain.savedCallback);
+    FreeAllWindowBuffers();
+    gSaveBlock2->optionsTextSpeed = sOptionMenuPtr->option[MENUITEM_TEXTSPEED];
+    gSaveBlock2->optionsBattleSceneOff = sOptionMenuPtr->option[MENUITEM_BATTLESCENE];
+    gSaveBlock2->optionsBattleStyle = sOptionMenuPtr->option[MENUITEM_BATTLESTYLE];
+    gSaveBlock2->optionsSound = sOptionMenuPtr->option[MENUITEM_SOUND];
+    gSaveBlock2->optionsButtonMode = sOptionMenuPtr->option[MENUITEM_BUTTONMODE];
+    gSaveBlock2->optionsWindowFrameType = sOptionMenuPtr->option[MENUITEM_FRAMETYPE];
+    SetPokemonCryStereo(gSaveBlock2->optionsSound);
+    FREE_AND_SET_NULL(sOptionMenuPtr);
+    DestroyTask(taskId);
 }
 
 void CB2_OptionMenu(void)
@@ -179,6 +306,51 @@ void CB2_OptionMenu(void)
 		break;
     }
     sOptionMenuPtr->state++;
+}
+
+static const u8 sOptionMenuPickSwitchCancelTextColor[] = {TEXT_DYNAMIC_COLOR_6, TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GREY};
+static const u8 sOptionMenuTextColor[] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_LIGHT_RED, TEXT_COLOR_RED};
+
+void BufferOptionMenuString(u8 selection)
+{
+    u8 str[20];
+    u8 buf[12];
+    u8 dst[3];
+    u8 x, y;
+    
+    memcpy(dst, sOptionMenuTextColor, 3);
+    x = 0x82;
+    y = ((GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) - 1) * selection) + 2;
+    FillWindowPixelRect(1, 1, x, y, 0x46, GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT));
+
+    switch (selection)
+    {
+    case MENUITEM_TEXTSPEED:
+        AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sTextSpeedOptions[sOptionMenuPtr->option[selection]]);
+        break;
+    case MENUITEM_BATTLESCENE:
+        AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sBattleSceneOptions[sOptionMenuPtr->option[selection]]);
+        break;
+    case MENUITEM_BATTLESTYLE:
+        AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sBattleStyleOptions[sOptionMenuPtr->option[selection]]);
+        break;
+    case MENUITEM_SOUND:
+        AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sSoundOptions[sOptionMenuPtr->option[selection]]);
+        break;
+    case MENUITEM_BUTTONMODE:
+        AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sButtonTypeOptions[sOptionMenuPtr->option[selection]]);
+        break;
+    case MENUITEM_FRAMETYPE:
+        StringCopy(str, gText_FrameType);
+        ConvertIntToDecimalStringN(buf, sOptionMenuPtr->option[selection] + 1, 1, 2);
+        StringAppendN(str, buf, 3);
+        AddTextPrinterParameterized3(1, 2, x, y, dst, -1, str);
+        break;
+    default:
+        break;
+    }
+    PutWindowTilemap(1);
+    CopyWindowToVram(1, COPYWIN_BOTH);
 }
 
 u8 OptionMenu_ProcessInput(void)
@@ -267,7 +439,7 @@ void LoadOptionMenuItemNames(void)
     u8 i;
     
     FillWindowPixelBuffer(1, PIXEL_FILL(1));
-    for (i = 0; i < MENUITEM_PAGE1_COUNT; i++)
+    for (i = 0; i < MENUITEM_COUNT; i++)
     {
         AddTextPrinterParameterized(WIN_OPTIONS, 2, sOptionMenuItemsNames[i], 8, (u8)((i * (GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT))) + 2) - i, TEXT_SPEED_FF, NULL);    
     }
