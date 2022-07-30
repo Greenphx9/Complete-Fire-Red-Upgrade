@@ -694,3 +694,7 @@ SetUpFieldMove_Flash 080C9B2C 0
 
 HallOfFame_PrintWelcomeText 080F313C 2
 ObjectEventCheckForReflectiveSurface 08067F88 1
+
+LoadOptionMenuItemNames 08088D8C 0
+OptionMenu_ProcessInput 080888C0 0
+CB2_OptionsMenuFromStartMenu 08088388 0

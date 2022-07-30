@@ -312,6 +312,9 @@ void __attribute__((long_call)) TextPrinterClearDownArrow(struct TextPrinter *te
 void __attribute__((long_call)) CopyGlyphToWindow(struct TextPrinter *x);
 void __attribute__((long_call)) SetFontsPointer(const struct FontInfo *fonts);
 
+u8 GetFontAttribute(u8 fontId, u8 attributeId);
+
+
 struct GlyphInfo
 {
     u8 pixels[0x80];

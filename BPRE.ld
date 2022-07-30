@@ -1991,3 +1991,26 @@ InitOverworldBgs_NoResetHeap = 0x8056354 | 1;
 GetReflectionTypeByMetatileBehavior = 0x80680C8 | 1;
 IsPlayerPartyAndPokemonStorageFull = 0x8040F6C | 1;
 gLastUsedSpecies = 0x203FA00;
+
+/* Options Menu */
+sOptionMenuPtr = 0x203DA00;
+gText_TextSpeed = 0x8419dd3;
+gText_BattleScene = 0x8419dde;
+gText_BattleScene = 0x8419dde;
+gText_BattleStyle = 0x8419deb;
+gText_Sound = 0x8419df8;
+gText_ButtonMode = 0x8419dfe;
+gText_Frame = 0x8419e0a;
+gText_OptionMenuCancel = 0x8419e10;
+OptionMenu_InitCallbacks = 0x8088430 | 1;
+InitOptionMenuBg = 0x8088530 | 1;
+OptionMenu_ResetSpriteData = 0x80886D4 | 1;
+PrintOptionMenuHeader = 0x8088BD0 | 1;
+DrawOptionMenuBg = 0x8088C0C | 1;
+BufferOptionMenuString = 0x80889A8 | 1;
+UpdateSettingSelectionDisplay = 0x8088DE0 | 1;
+OptionMenu_PickSwitchCancel = 0x8088680 | 1;
+SetOptionMenuTask = 0x8088514 | 1;
+GetUserFrameGraphicsInfo = 0x8069788 | 1;
+DrawWindowBorderWithStdpal3 = 0x814FDA0 | 1;
+sOptionMenuPalette = 0x83CC2E4;
