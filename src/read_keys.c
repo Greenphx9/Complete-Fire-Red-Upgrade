@@ -246,7 +246,7 @@ bool8 StartRButtonFunc(void)
 		return FALSE; //Don't enable the script context
 	}
 	#else*/
-	switch (gSaveBlock2->optionsRButtonMode) {
+	switch (VarGet(VAR_R_BUTTON_MODE)) {
 		case OPTIONS_R_BUTTON_MODE_DEXNAV:
 			if (dexNavSpecies != SPECIES_NONE && FlagGet(FLAG_SYS_DEXNAV))
 			{

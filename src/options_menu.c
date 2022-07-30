@@ -75,6 +75,8 @@ enum
 enum
 {
     MENUITEM_RBUTTONMODE = 0,
+    MENUITEM_BATTLEMUSIC,
+    MENUITEM_WILDLEVELSCALING,
     MENUITEM_CANCEL_PAGE_2,
     MENUITEM_PAGE2_COUNT,
 };
@@ -107,6 +109,8 @@ extern const u8 gText_ButtonMode[];
 extern const u8 gText_Frame[];
 extern const u8 gText_OptionMenuCancel[];
 extern const u8 gText_RButtonMode[];
+extern const u8 gText_BattleMusic[];
+extern const u8 gText_WildLevelScaling[];
 
 static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
 {
@@ -122,6 +126,8 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
 static const u8 *const sOptionMenuItemsNames_SecondPage[MENUITEM_COUNT] =
 {
     [MENUITEM_RBUTTONMODE] = gText_RButtonMode,
+    [MENUITEM_BATTLEMUSIC] = gText_BattleMusic,
+    [MENUITEM_WILDLEVELSCALING] = gText_WildLevelScaling,
     [MENUITEM_CANCEL_PAGE_2] = gText_OptionMenuCancel,
 };
 
@@ -142,6 +148,10 @@ extern const u8 gText_FrameType[];
 extern const u8 gText_RButtonDexNav[];
 extern const u8 gText_RButtonPokemon[];
 extern const u8 gText_RButtonItems[];
+extern const u8 gText_FRLG[];
+extern const u8 gText_RSE[];
+extern const u8 gText_OnOption[];
+extern const u8 gText_OffOption[];
 
 static const u8 *const sTextSpeedOptions[] =
 {
@@ -182,8 +192,20 @@ static const u8 *const sRButtonModeOptions[] =
 	gText_RButtonItems
 };
 
+static const u8 *const sBattleMusicOptions[] =
+{
+    gText_FRLG,
+	gText_RSE
+};
+
+static const u8 *const sWildScalingOptions[] =
+{
+    gText_OnOption,
+	gText_OffOption
+};
+
 static const u16 sOptionMenuItemCounts[MENUITEM_COUNT] = {3, 2, 2, 2, 3, 10, 0};
-static const u16 sOptionMenuItemCounts_SecondPage[MENUITEM_PAGE2_COUNT] = {3, 0};
+static const u16 sOptionMenuItemCounts_SecondPage[MENUITEM_PAGE2_COUNT] = {3, 2, 2, 0};
 
 void CB2_OptionsMenuFromStartMenu(void)
 {
@@ -202,7 +224,9 @@ void CB2_OptionsMenuFromStartMenu(void)
     sOptionMenuPtr->option[MENUITEM_SOUND] = gSaveBlock2->optionsSound;
     sOptionMenuPtr->option[MENUITEM_BUTTONMODE] = gSaveBlock2->optionsButtonMode;
     sOptionMenuPtr->option[MENUITEM_FRAMETYPE] = gSaveBlock2->optionsWindowFrameType;
-    sOptionMenuPtr->option_secondPage[MENUITEM_RBUTTONMODE] = gSaveBlock2->optionsRButtonMode;
+    sOptionMenuPtr->option_secondPage[MENUITEM_RBUTTONMODE] = VarGet(VAR_R_BUTTON_MODE);
+    sOptionMenuPtr->option_secondPage[MENUITEM_BATTLEMUSIC] = VarGet(VAR_BATTLE_MUSIC);
+    sOptionMenuPtr->option_secondPage[MENUITEM_WILDLEVELSCALING] = VarGet(VAR_WILD_LEVEL_SCALING);
     
     for (i = 0; i < MENUITEM_COUNT - 1; i++)
     {
@@ -292,7 +316,9 @@ void CloseAndSaveOptionMenu(u8 taskId)
     gSaveBlock2->optionsSound = sOptionMenuPtr->option[MENUITEM_SOUND];
     gSaveBlock2->optionsButtonMode = sOptionMenuPtr->option[MENUITEM_BUTTONMODE];
     gSaveBlock2->optionsWindowFrameType = sOptionMenuPtr->option[MENUITEM_FRAMETYPE];
-    gSaveBlock2->optionsRButtonMode = sOptionMenuPtr->option_secondPage[MENUITEM_RBUTTONMODE];
+    VarSet(VAR_R_BUTTON_MODE, sOptionMenuPtr->option_secondPage[MENUITEM_RBUTTONMODE]);
+    VarSet(VAR_BATTLE_MUSIC, sOptionMenuPtr->option_secondPage[MENUITEM_BATTLEMUSIC]);
+    VarSet(VAR_WILD_LEVEL_SCALING, sOptionMenuPtr->option_secondPage[MENUITEM_WILDLEVELSCALING]);
     SetPokemonCryStereo(gSaveBlock2->optionsSound);
     FREE_AND_SET_NULL(sOptionMenuPtr);
     DestroyTask(taskId);
@@ -393,6 +419,12 @@ void BufferOptionMenuString(u8 selection)
         {
             case MENUITEM_RBUTTONMODE:
                 AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sRButtonModeOptions[sOptionMenuPtr->option_secondPage[selection]]);
+                break;
+            case MENUITEM_BATTLEMUSIC:
+                AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sBattleMusicOptions[sOptionMenuPtr->option_secondPage[selection]]);
+                break;
+            case MENUITEM_WILDLEVELSCALING:
+                AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sWildScalingOptions[sOptionMenuPtr->option_secondPage[selection]]);
                 break;
             default:
                 break;

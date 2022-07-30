@@ -1802,7 +1802,7 @@ static void Task_DexNavWaitForKeyPress(u8 taskId)
 			VarSet(VAR_DEXNAV, varStore);
 
 			//Update R-Button mode if applicable
-			gSaveBlock2->optionsRButtonMode = OPTIONS_R_BUTTON_MODE_DEXNAV;
+			VarSet(VAR_R_BUTTON_MODE, OPTIONS_R_BUTTON_MODE_DEXNAV);
 		}
 		else //Not valid species
 		{

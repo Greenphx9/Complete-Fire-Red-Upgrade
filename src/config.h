@@ -214,7 +214,6 @@
 #define FLAG_KUBFU_BALL 0x1007
 #define FLAG_GOT_REINS 0x1008
 #define FLAG_GOT_ZY_CUBE 0x1009
-//#define VAR_R_BUTTON_MODE 0x5150
 #define FLAG_ARROKUDA_TRADE 0x100A
 #define FLAG_NECROZMA_GOT 0x100B
 #define FLAG_NECROZMA_SPRITE 0x100C
@@ -283,6 +282,13 @@
 
 #define FLAG_SCALEMONS 0x1200 //Sets every Pokemon's BST to 600.
 #define FLAG_TIME_TURNER 0x1201 //Changes the time to PM when AM,and vice versa
+
+//Save stuff
+#define VAR_R_BUTTON_MODE 0x5150
+#define VAR_BATTLE_MUSIC  0x5152
+#define VAR_WILD_LEVEL_SCALING 0x5154
+
+
 /*===== General Vars =====*/
 #define VAR_TERRAIN 0x5000 //Set to a terrain type for a battle to begin with the given terrain
 #define VAR_TOTEM 0x5001 //to var + 3 (0x5004)

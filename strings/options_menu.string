@@ -12,3 +12,21 @@ Items
 
 #org @gText_PickSwitchCancel
 [L_BUTTON][R_BUTTON]Page [DPAD_UP_DOWN]Pick [DPAD_LEFT_RIGHT]Switch [A_BUTTON][B_BUTTON]Cancel
+
+#org @gText_BattleMusic
+Battle Music
+
+#org @gText_FRLG
+FRLG
+
+#org @gText_RSE
+RSE
+
+#org @gText_WildLevelScaling
+Wild Level Scaling
+
+#org @gText_OnOption
+On
+
+#org @gText_OffOption
+Off

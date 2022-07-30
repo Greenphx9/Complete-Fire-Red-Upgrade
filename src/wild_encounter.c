@@ -102,6 +102,7 @@ static u8 ChooseWildMonLevel(const struct WildPokemon* wildPokemon)
 
 	//#ifdef FLAG_SCALE_WILD_POKEMON_LEVELS
 	//if (FlagGet(FLAG_SCALE_WILD_POKEMON_LEVELS))
+	if(VarGet(VAR_WILD_LEVEL_SCALING) == 0)
 	{
 		if (gPlayerPartyCount == 1) {
 			min = GetLowestMonLevel(gPlayerParty) - 3;
@@ -148,20 +149,23 @@ static u8 ChooseWildMonLevel(const struct WildPokemon* wildPokemon)
 				min = 1;
 			break;
 	}
-	u16 level = 0;
-	for (int i = 0; i < gPlayerPartyCount; i++) {
-		level += gPlayerParty[i].level;
-	}
-	level /= gPlayerPartyCount;
-	if(min <= level && max <= level) {
-		min = level - 6;
-		max = level - 7;
-	}
-	if (min < 1 || min > 100) {
-		min = 2;
-	}
-	if (max < 1 || max > 100) {
-		max = 3;
+	if(VarGet(VAR_WILD_LEVEL_SCALING) == 0)
+	{
+		u16 level = 0;
+		for (int i = 0; i < gPlayerPartyCount; i++) {
+			level += gPlayerParty[i].level;
+		}
+		level /= gPlayerPartyCount;
+		if(min <= level && max <= level) {
+			min = level - 6;
+			max = level - 7;
+		}
+		if (min < 1 || min > 100) {
+			min = 2;
+		}
+		if (max < 1 || max > 100) {
+			max = 3;
+		}
 	}
 	//Check ability for max level mon
 	if (!GetMonData(&gPlayerParty[0], MON_DATA_IS_EGG, NULL))
