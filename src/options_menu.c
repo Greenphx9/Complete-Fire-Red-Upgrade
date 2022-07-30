@@ -68,9 +68,9 @@ enum
     MENUITEM_BUTTONMODE,
     MENUITEM_FRAMETYPE,
     MENUITEM_CANCEL,
-    /*MENUITEM_PAGE1_COUNT,
+    MENUITEM_PAGE1_COUNT,
     MENUITEM_RBUTTONMODE,
-    MENUITEM_PAGE2_COUNT,*/
+    MENUITEM_PAGE2_COUNT,
     MENUITEM_COUNT,
 };
 
@@ -111,7 +111,7 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_BUTTONMODE]  = gText_ButtonMode,
     [MENUITEM_FRAMETYPE]   = gText_Frame,
     [MENUITEM_CANCEL]      = gText_OptionMenuCancel,
-    //[MENUITEM_RBUTTONMODE] = gText_RButtonMode,
+    [MENUITEM_RBUTTONMODE] = gText_RButtonMode,
 };
 
 extern const u8 gText_TextSpeedSlow[];
@@ -128,6 +128,9 @@ extern const u8 gText_ButtonTypeLR[];
 extern const u8 gText_ButtonTypeLEqualsA[];
 extern const u8 gText_MenuOption[];
 extern const u8 gText_FrameType[];
+extern const u8 gText_RButtonDexNav[];
+extern const u8 gText_RButtonPokemon[];
+extern const u8 gText_RButtonItems[];
 
 static const u8 *const sTextSpeedOptions[] =
 {
@@ -161,7 +164,14 @@ static const u8 *const sButtonTypeOptions[] =
 	gText_ButtonTypeLEqualsA
 };
 
-static const u16 sOptionMenuItemCounts[MENUITEM_COUNT] = {3, 2, 2, 2, 3, 10, 0};
+static const u8 *const sRButtonModeOptions[] =
+{
+    gText_RButtonDexNav,
+	gText_RButtonPokemon,
+	gText_RButtonItems
+};
+
+static const u16 sOptionMenuItemCounts[MENUITEM_COUNT] = {3, 2, 2, 2, 3, 10, 0, 0, 3, 0};
 
 void CB2_OptionsMenuFromStartMenu(void)
 {
@@ -169,23 +179,18 @@ void CB2_OptionsMenuFromStartMenu(void)
     
     if (gMain.savedCallback == NULL)
         gMain.savedCallback = CB2_ReturnToFieldWithOpenMenu;
-    MgbaPrintf(MGBA_LOG_INFO, "Hello world! 0");
     sOptionMenuPtr = AllocZeroed(sizeof(struct OptionMenu));
-    MgbaPrintf(MGBA_LOG_INFO, "Hello world! 1");
     sOptionMenuPtr->loadState = 0;
-    MgbaPrintf(MGBA_LOG_INFO, "Hello world! 2");
     sOptionMenuPtr->loadPaletteState = 0;
-    MgbaPrintf(MGBA_LOG_INFO, "Hello world! 3");
     sOptionMenuPtr->state = 0;
-    MgbaPrintf(MGBA_LOG_INFO, "Hello world! 4");
     sOptionMenuPtr->cursorPos = 0;
-    MgbaPrintf(MGBA_LOG_INFO, "Hello world! 5");
     sOptionMenuPtr->option[MENUITEM_TEXTSPEED] = gSaveBlock2->optionsTextSpeed;
     sOptionMenuPtr->option[MENUITEM_BATTLESCENE] = gSaveBlock2->optionsBattleSceneOff;
     sOptionMenuPtr->option[MENUITEM_BATTLESTYLE] = gSaveBlock2->optionsBattleStyle;
     sOptionMenuPtr->option[MENUITEM_SOUND] = gSaveBlock2->optionsSound;
     sOptionMenuPtr->option[MENUITEM_BUTTONMODE] = gSaveBlock2->optionsButtonMode;
     sOptionMenuPtr->option[MENUITEM_FRAMETYPE] = gSaveBlock2->optionsWindowFrameType;
+    sOptionMenuPtr->option[MENUITEM_RBUTTONMODE] = gSaveBlock2->optionsRButtonMode;
     
     for (i = 0; i < MENUITEM_COUNT - 1; i++)
     {
@@ -258,6 +263,7 @@ void CloseAndSaveOptionMenu(u8 taskId)
     gSaveBlock2->optionsSound = sOptionMenuPtr->option[MENUITEM_SOUND];
     gSaveBlock2->optionsButtonMode = sOptionMenuPtr->option[MENUITEM_BUTTONMODE];
     gSaveBlock2->optionsWindowFrameType = sOptionMenuPtr->option[MENUITEM_FRAMETYPE];
+    gSaveBlock2->optionsRButtonMode = sOptionMenuPtr->option[MENUITEM_RBUTTONMODE];
     SetPokemonCryStereo(gSaveBlock2->optionsSound);
     FREE_AND_SET_NULL(sOptionMenuPtr);
     DestroyTask(taskId);
@@ -345,6 +351,9 @@ void BufferOptionMenuString(u8 selection)
         ConvertIntToDecimalStringN(buf, sOptionMenuPtr->option[selection] + 1, 1, 2);
         StringAppendN(str, buf, 3);
         AddTextPrinterParameterized3(1, 2, x, y, dst, -1, str);
+        break;
+    case MENUITEM_RBUTTONMODE:
+        AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sRButtonModeOptions[sOptionMenuPtr->option[selection]]);
         break;
     default:
         break;
@@ -439,7 +448,7 @@ void LoadOptionMenuItemNames(void)
     u8 i;
     
     FillWindowPixelBuffer(1, PIXEL_FILL(1));
-    for (i = 0; i < MENUITEM_COUNT; i++)
+    for (i = 0; i < MENUITEM_PAGE1_COUNT; i++)
     {
         AddTextPrinterParameterized(WIN_OPTIONS, 2, sOptionMenuItemsNames[i], 8, (u8)((i * (GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT))) + 2) - i, TEXT_SPEED_FF, NULL);    
     }

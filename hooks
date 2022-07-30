@@ -698,3 +698,4 @@ ObjectEventCheckForReflectiveSurface 08067F88 1
 LoadOptionMenuItemNames 08088D8C 0
 OptionMenu_ProcessInput 080888C0 0
 CB2_OptionsMenuFromStartMenu 08088388 0
+Task_OptionMenu 08088780 1
