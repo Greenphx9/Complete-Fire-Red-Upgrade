@@ -70,6 +70,7 @@ enum
     MENUITEM_CANCEL,
     MENUITEM_PAGE1_COUNT,
     MENUITEM_RBUTTONMODE,
+    MENUITEM_CANCEL_PAGE_2,
     MENUITEM_PAGE2_COUNT,
     MENUITEM_COUNT,
 };
@@ -112,6 +113,7 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_FRAMETYPE]   = gText_Frame,
     [MENUITEM_CANCEL]      = gText_OptionMenuCancel,
     [MENUITEM_RBUTTONMODE] = gText_RButtonMode,
+    [MENUITEM_CANCEL_PAGE_2] = gText_OptionMenuCancel,
 };
 
 extern const u8 gText_TextSpeedSlow[];
@@ -202,6 +204,7 @@ void CB2_OptionsMenuFromStartMenu(void)
 
 void Task_OptionMenu(u8 taskId)
 {
+    u8 i;
     switch (sOptionMenuPtr->loadState)
     {
     case 0:
@@ -233,7 +236,12 @@ void Task_OptionMenu(u8 taskId)
             UpdateSettingSelectionDisplay(sOptionMenuPtr->cursorPos);
             break;
         case 4:
-            BufferOptionMenuString(sOptionMenuPtr->cursorPos);
+            BufferOptionMenuString(sOptionMenuPtr->cursorPos + MENUITEM_RBUTTONMODE);
+            break;
+        case 5:
+            sOptionMenuPtr->page = 1;
+            LoadOptionMenuItemNames();
+            BufferOptionMenuString(MENUITEM_RBUTTONMODE);
             break;
         }
         break;
@@ -298,7 +306,7 @@ void CB2_OptionMenu(void)
         LoadOptionMenuItemNames();
         break;
     case 7:
-        for (i = 0; i < MENUITEM_COUNT; i++)
+        for (i = 0; i < MENUITEM_PAGE1_COUNT; i++)
             BufferOptionMenuString(i);
         break;
     case 8:
@@ -326,7 +334,7 @@ void BufferOptionMenuString(u8 selection)
     
     memcpy(dst, sOptionMenuTextColor, 3);
     x = 0x82;
-    y = ((GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) - 1) * selection) + 2;
+    y = ((GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) - 1) * (sOptionMenuPtr->page == 0 ? selection : selection - MENUITEM_RBUTTONMODE)) + 2;
     FillWindowPixelRect(1, 1, x, y, 0x46, GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT));
 
     switch (selection)
@@ -407,6 +415,11 @@ u8 OptionMenu_ProcessInput(void)
             sOptionMenuPtr->cursorPos = sOptionMenuPtr->cursorPos + 1;
         return 3;
     }
+    else if (JOY_NEW(R_BUTTON))
+    {
+        sOptionMenuPtr->page = 1;
+        return 5;
+    }
     else if (JOY_NEW(B_BUTTON) || JOY_NEW(A_BUTTON))
     {
         return 1;
@@ -448,8 +461,18 @@ void LoadOptionMenuItemNames(void)
     u8 i;
     
     FillWindowPixelBuffer(1, PIXEL_FILL(1));
-    for (i = 0; i < MENUITEM_PAGE1_COUNT; i++)
+    if(sOptionMenuPtr->page == 0)
     {
-        AddTextPrinterParameterized(WIN_OPTIONS, 2, sOptionMenuItemsNames[i], 8, (u8)((i * (GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT))) + 2) - i, TEXT_SPEED_FF, NULL);    
+        for (i = 0; i < MENUITEM_PAGE1_COUNT; i++)
+        {
+            AddTextPrinterParameterized(WIN_OPTIONS, 2, sOptionMenuItemsNames[i], 8, (u8)((i * (GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT))) + 2) - i, TEXT_SPEED_FF, NULL);    
+        }
+    }
+    else
+    {
+        for (i = MENUITEM_RBUTTONMODE; i < MENUITEM_PAGE2_COUNT; i++)
+        {
+            AddTextPrinterParameterized(WIN_OPTIONS, 2, sOptionMenuItemsNames[i], 8, (u8)(((i - MENUITEM_RBUTTONMODE) * (GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT))) + 2) - (i - MENUITEM_RBUTTONMODE), TEXT_SPEED_FF, NULL);    
+        } 
     }
 }

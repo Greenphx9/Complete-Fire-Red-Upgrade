@@ -239,14 +239,14 @@ bool8 StartRButtonFunc(void)
 
 	u16 dexNavSpecies = VarGet(VAR_DEXNAV);
 
-	#ifndef VAR_R_BUTTON_MODE
+	/*#ifndef VAR_R_BUTTON_MODE
 	if (dexNavSpecies != SPECIES_NONE)
 	{
 		InitDexNavHUD(dexNavSpecies & 0x7FFF, dexNavSpecies >> 15);
 		return FALSE; //Don't enable the script context
 	}
-	#else
-	switch (VarGet(VAR_R_BUTTON_MODE)) {
+	#else*/
+	switch (gSaveBlock2->optionsRButtonMode) {
 		case OPTIONS_R_BUTTON_MODE_DEXNAV:
 			if (dexNavSpecies != SPECIES_NONE && FlagGet(FLAG_SYS_DEXNAV))
 			{
@@ -299,7 +299,6 @@ bool8 StartRButtonFunc(void)
 			ScriptContext1_SetupScript(SystemScript_DebugMenu);
 			return TRUE;
 	}
-	#endif
 
 	return FALSE;
 }
