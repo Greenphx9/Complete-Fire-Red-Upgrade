@@ -39,6 +39,7 @@
 #include "../include/tm_case.h"
 #include "../include/text_window.h"
 #include "../include/bg.h"
+#include "../include/mgba.h"
 
 #include "../include/pokemon_summary_screen.h"
 #include "../include/menu.h"
@@ -111,6 +112,7 @@ static const u16 sOptionMenuItemCounts[MENUITEM_COUNT] = {3, 2, 2, 2, 3, 10, 0};
 void CB2_OptionsMenuFromStartMenu(void)
 {
     u8 i;
+    MgbaPrintf(MGBA_LOG_INFO, "Hello world! %d", i);
     
     if (gMain.savedCallback == NULL)
         gMain.savedCallback = CB2_ReturnToFieldWithOpenMenu;

@@ -181,6 +181,13 @@
 
 #define TEXT_SPEED_FF 0xFF
 
+// Ported from pokeemerald. May or may not be correct.
+#define CHAR_LESS_THAN         0x85
+#define CHAR_GREATER_THAN      0x86
+#define CHAR_PERCENT           0x5B
+#define CHAR_LEFT_PAREN        0x5C
+#define CHAR_RIGHT_PAREN       0x5D
+
 enum
 {
     FONTATTR_MAX_LETTER_WIDTH,
