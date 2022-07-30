@@ -1,3 +1,14 @@
+/********\
+
+CUSTOM FILE!
+THIS IS A CUSTOM FILE THAT ISN'T NORMALLY IN THE CFRU.
+
+Give Credits to:
+- Greenphx
+if used.
+
+\********/
+
 #include "defines.h"
 #include "defines_battle.h"
 #include "../include/options_menu.h"
@@ -279,6 +290,7 @@ void Task_OptionMenu(u8 taskId)
                 BufferOptionMenuString(i);
             sOptionMenuPtr->cursorPos = 0;
             UpdateSettingSelectionDisplay(sOptionMenuPtr->cursorPos);
+            OptionMenu_PickSwitchCancel();
             break;
         case 6:
             sOptionMenuPtr->page = 0;
@@ -287,6 +299,7 @@ void Task_OptionMenu(u8 taskId)
                 BufferOptionMenuString(i);
             sOptionMenuPtr->cursorPos = 0;
             UpdateSettingSelectionDisplay(sOptionMenuPtr->cursorPos);
+            OptionMenu_PickSwitchCancel();
             break;
         }
         break;
@@ -526,11 +539,15 @@ u8 OptionMenu_ProcessInput(void)
     }
     else if (JOY_NEW(R_BUTTON))
     {
+        if(sOptionMenuPtr->page == 1)
+            return 0;
         sOptionMenuPtr->page = 1;
         return 5;
     }
     else if (JOY_NEW(L_BUTTON))
     {
+        if(sOptionMenuPtr->page == 0)
+            return 0;
         sOptionMenuPtr->page = 0;
         return 6;
     }
@@ -591,14 +608,26 @@ void LoadOptionMenuItemNames(void)
     }
 }
 
-extern const u8 gText_PickSwitchCancel[];
+extern const u8 gText_PickSwitchCancel_Page1[];
+extern const u8 gText_PickSwitchCancel_Page2[];
 
 void OptionMenu_PickSwitchCancel(void)
 {
     s32 x;
-    x = 0xE4 - GetStringWidth(0, gText_PickSwitchCancel, 0);
-    FillWindowPixelBuffer(2, PIXEL_FILL(15)); 
-    AddTextPrinterParameterized3(2, 0, x, 0, sOptionMenuPickSwitchCancelTextColor, 0, gText_PickSwitchCancel);
-    PutWindowTilemap(2);
-    CopyWindowToVram(2, COPYWIN_BOTH);
+    if(sOptionMenuPtr->page == 0)
+    {
+        x = 0xE4 - GetStringWidth(0, gText_PickSwitchCancel_Page1, 0);
+        FillWindowPixelBuffer(2, PIXEL_FILL(15)); 
+        AddTextPrinterParameterized3(2, 0, x, 0, sOptionMenuPickSwitchCancelTextColor, 0, gText_PickSwitchCancel_Page1);
+        PutWindowTilemap(2);
+        CopyWindowToVram(2, COPYWIN_BOTH);   
+    }
+    else
+    {
+        x = 0xE4 - GetStringWidth(0, gText_PickSwitchCancel_Page2, 0);
+        FillWindowPixelBuffer(2, PIXEL_FILL(15)); 
+        AddTextPrinterParameterized3(2, 0, x, 0, sOptionMenuPickSwitchCancelTextColor, 0, gText_PickSwitchCancel_Page2);
+        PutWindowTilemap(2);
+        CopyWindowToVram(2, COPYWIN_BOTH);
+    }
 }

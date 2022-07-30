@@ -10,8 +10,11 @@ Pok\emon
 #org @gText_RButtonItems
 Items
 
-#org @gText_PickSwitchCancel
-[L_BUTTON][R_BUTTON]Page [DPAD_UP_DOWN]Pick [DPAD_LEFT_RIGHT]Switch [A_BUTTON][B_BUTTON]Cancel
+#org @gText_PickSwitchCancel_Page1
+[L_BUTTON][R_BUTTON]Page 1 [DPAD_UP_DOWN]Pick [DPAD_LEFT_RIGHT]Switch [A_BUTTON][B_BUTTON]Cancel
+
+#org @gText_PickSwitchCancel_Page2
+[L_BUTTON][R_BUTTON]Page 2 [DPAD_UP_DOWN]Pick [DPAD_LEFT_RIGHT]Switch [A_BUTTON][B_BUTTON]Cancel
 
 #org @gText_BattleMusic
 Battle Music

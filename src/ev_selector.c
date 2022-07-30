@@ -1,3 +1,15 @@
+/********\
+
+CUSTOM FILE!
+THIS IS A CUSTOM FILE THAT ISN'T NORMALLY IN THE CFRU.
+
+Give Credits to:
+- Greenphx
+- TheXaman
+if used.
+
+\********/
+
 #include "defines.h"
 #include "../include/evolution_scene.h"
 #include "../include/field_control_avatar.h"

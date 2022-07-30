@@ -1,3 +1,15 @@
+/********\
+
+CUSTOM FILE!
+THIS IS A CUSTOM FILE THAT ISN'T NORMALLY IN THE CFRU.
+
+Give Credits to:
+- Skeli
+- Greenphx
+if used.
+
+\********/
+
 #include "defines.h"
 #include "../include/random.h"
 #include "../include/constants/abilities.h"

@@ -695,9 +695,12 @@ SetUpFieldMove_Flash 080C9B2C 0
 HallOfFame_PrintWelcomeText 080F313C 2
 ObjectEventCheckForReflectiveSurface 08067F88 1
 
-LoadOptionMenuItemNames 08088D8C 0
-OptionMenu_ProcessInput 080888C0 0
 CB2_OptionsMenuFromStartMenu 08088388 0
 Task_OptionMenu 08088780 1
-BufferOptionMenuString 80889A8 1
-OptionMenu_PickSwitchCancel 8088680 0
+CloseAndSaveOptionMenu 08088B00 1
+CB2_OptionMenu 08088454 0
+BufferOptionMenuString 080889A8 1
+OptionMenu_ProcessInput 080888C0 0
+LoadOptionMenuPalette 080886F0 0
+LoadOptionMenuItemNames 08088D8C 0
+OptionMenu_PickSwitchCancel 08088680 0

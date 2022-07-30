@@ -1,3 +1,14 @@
+/********\
+
+CUSTOM FILE!
+THIS IS A CUSTOM FILE THAT ISN'T NORMALLY IN THE CFRU.
+
+Give Credits to:
+- Acimut
+if used.
+
+\********/
+
 #include "../include/global.h"
 #include "../include/pokemon.h"
 #include "../include/bg.h"

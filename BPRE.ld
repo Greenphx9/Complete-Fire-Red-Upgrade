@@ -1508,7 +1508,6 @@ StartMenuSafariZoneRetireCallback = 0x806F554 | 1;
 StartMenuLinkModePlayerCallback = 0x806F56C | 1;
 CloseStartMenu = 0x806FEA0 | 1;
 AppendToList = 0x806FEC8 | 1;
-CB2_OptionMenu = 0x08088454 | 1;
 CreateStartMenuWindow = 0x80F78E0 | 1;
 DestroyHelpMessageWindow_ = 0x80F7998 | 1;
 GetStartMenuWindowId = 0x80F793C | 1;
@@ -1993,7 +1992,7 @@ IsPlayerPartyAndPokemonStorageFull = 0x8040F6C | 1;
 gLastUsedSpecies = 0x203FA00;
 
 /* Options Menu */
-sOptionMenuPtr = 0x2039620;
+sOptionMenuPtr = 0x203DA00;
 gText_TextSpeed = 0x8419dd3;
 gText_BattleScene = 0x8419dde;
 gText_BattleScene = 0x8419dde;
