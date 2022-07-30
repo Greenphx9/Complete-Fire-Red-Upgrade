@@ -79,6 +79,10 @@ extern const u8 gTrainerBackPic_GreenphxPal[];
 #define gTrainerPalette_Greenphx gTrainerBackPic_GreenphxPal
 extern const u8 gTrainerBackPic_GaryPal[];
 #define gTrainerPalette_Gary gTrainerBackPic_GaryPal
+extern const u8 gTrainerBackPic_BrockPal[];
+#define gTrainerPalette_Brock gTrainerBackPic_BrockPal
+extern const u8 gTrainerBackPic_MistyPal[];
+#define gTrainerPalette_Misty gTrainerBackPic_MistyPal
 
 const struct CompressedSpritePalette gTrainerBackPicPaletteTable[] =
 {
@@ -88,22 +92,24 @@ const struct CompressedSpritePalette gTrainerBackPicPaletteTable[] =
 	[TRAINER_BACK_PIC_MAY] =		{gTrainerPalette_May, 			TRAINER_BACK_PIC_MAY},
 	[TRAINER_BACK_PIC_POKE_DUDE] =	{gTrainerPalette_PokeDude, 		TRAINER_BACK_PIC_POKE_DUDE},
 	[TRAINER_BACK_PIC_OLD_MAN] =	{gTrainerPalette_OldMan, 		TRAINER_BACK_PIC_OLD_MAN},
-	[TRAINER_BACK_YOUNG_TRAINER_MALE] = {gTrainerPalette_Young_Trainer, 		TRAINER_BACK_YOUNG_TRAINER_MALE},
-	[TRAINER_BACK_PIC_LYRA] =		{gTrainerPalette_Lyra, TRAINER_BACK_PIC_LYRA},
+	[TRAINER_BACK_YOUNG_TRAINER_MALE] = {gTrainerPalette_Young_Trainer, TRAINER_BACK_YOUNG_TRAINER_MALE},
+	[TRAINER_BACK_PIC_LYRA] =		{gTrainerPalette_Lyra, 			TRAINER_BACK_PIC_LYRA},
 	[TRAINER_BACK_PIC_FEMALETRAINER] = {gTrainerPalette_FemaleTrainer, TRAINER_BACK_PIC_FEMALETRAINER},
-	[TRAINER_BACK_PIC_ASH] =		{gTrainerPalette_Ash, TRAINER_BACK_PIC_ASH},
+	[TRAINER_BACK_PIC_ASH] =		{gTrainerPalette_Ash, 			TRAINER_BACK_PIC_ASH},
 	[TRAINER_BACK_PIC_MIRA] = {gTrainerPalette_Young_TrainerFemale, TRAINER_BACK_PIC_MIRA},
-	[TRAINER_BACK_PIC_JUNIPER] =	{gTrainerPalette_Juniper, TRAINER_BACK_PIC_JUNIPER},
-	[TRAINER_BACK_PIC_HILBERT] =	{gTrainerPalette_Hilbert, TRAINER_BACK_PIC_HILBERT},
-	[TRAINER_BACK_PIC_NATE] =		{gTrainerPalette_Nate, TRAINER_BACK_PIC_NATE},
-	[TRAINER_BACK_PIC_CYNTHIA] =	{gTrainerPalette_Cynthia, TRAINER_BACK_PIC_CYNTHIA},
-	[TRAINER_BACK_PIC_SLOWBRO] =	{gTrainerPalette_Slowbro, TRAINER_BACK_PIC_SLOWBRO},
-	[TRAINER_BACK_PIC_ANABEL] =	    {gTrainerPalette_Anabel, TRAINER_BACK_PIC_ANABEL},
-	[TRAINER_BACK_PIC_FERROTHORN] =	{gTrainerPalette_Ferrothorn, TRAINER_BACK_PIC_FERROTHORN},
-	[TRAINER_BACK_PIC_WES] =		{gTrainerPalette_Wes, TRAINER_BACK_PIC_WES},
-	[TRAINER_BACK_PIC_STEVEN] =		{gTrainerPalette_Steven, TRAINER_BACK_PIC_STEVEN},
-	[TRAINER_BACK_PIC_GREENPHX] =	{gTrainerPalette_Greenphx, TRAINER_BACK_PIC_GREENPHX},
-	[TRAINER_BACK_PIC_GARY] =		{gTrainerPalette_Gary, TRAINER_BACK_PIC_GARY},
+	[TRAINER_BACK_PIC_JUNIPER] =	{gTrainerPalette_Juniper, 		TRAINER_BACK_PIC_JUNIPER},
+	[TRAINER_BACK_PIC_HILBERT] =	{gTrainerPalette_Hilbert, 		TRAINER_BACK_PIC_HILBERT},
+	[TRAINER_BACK_PIC_NATE] =		{gTrainerPalette_Nate,			TRAINER_BACK_PIC_NATE},
+	[TRAINER_BACK_PIC_CYNTHIA] =	{gTrainerPalette_Cynthia, 		TRAINER_BACK_PIC_CYNTHIA},
+	[TRAINER_BACK_PIC_SLOWBRO] =	{gTrainerPalette_Slowbro,	 	TRAINER_BACK_PIC_SLOWBRO},
+	[TRAINER_BACK_PIC_ANABEL] =	    {gTrainerPalette_Anabel, 		TRAINER_BACK_PIC_ANABEL},
+	[TRAINER_BACK_PIC_FERROTHORN] =	{gTrainerPalette_Ferrothorn, 	TRAINER_BACK_PIC_FERROTHORN},
+	[TRAINER_BACK_PIC_WES] =		{gTrainerPalette_Wes, 			TRAINER_BACK_PIC_WES},
+	[TRAINER_BACK_PIC_STEVEN] =		{gTrainerPalette_Steven, 		TRAINER_BACK_PIC_STEVEN},
+	[TRAINER_BACK_PIC_GREENPHX] =	{gTrainerPalette_Greenphx, 		TRAINER_BACK_PIC_GREENPHX},
+	[TRAINER_BACK_PIC_GARY] =		{gTrainerPalette_Gary, 			TRAINER_BACK_PIC_GARY},
+	[TRAINER_BACK_PIC_BROCK] =		{gTrainerPalette_Brock, 		TRAINER_BACK_PIC_BROCK},
+	[TRAINER_BACK_PIC_MISTY] =		{gTrainerPalette_Misty, 		TRAINER_BACK_PIC_MISTY},
 
 #ifdef UNBOUND //For Pokemon Unbound
 	[TRAINER_BACK_PIC_MARLON] =		{gTrainerPalette_Marlon, 		TRAINER_BACK_PIC_MARLON},
@@ -153,6 +159,8 @@ const struct CompressedSpritePalette gTrainerBackPicPaletteTable[] =
 #define gTrainerBackAnims_Steven (const union AnimCmd* const*) 0x8239F44
 #define gTrainerBackAnims_Greenphx (const union AnimCmd* const*) 0x8239F54
 #define gTrainerBackAnims_Gary (const union AnimCmd* const*) 0x8239F44
+#define gTrainerBackAnims_Brock (const union AnimCmd* const*) 0x8239F44
+#define gTrainerBackAnims_Misty (const union AnimCmd* const*) 0x8239F44
 
 const union AnimCmd* const* const gTrainerBackAnimsPtrTable[] =
 {
@@ -178,6 +186,8 @@ const union AnimCmd* const* const gTrainerBackAnimsPtrTable[] =
 	[TRAINER_BACK_PIC_STEVEN] = gTrainerBackAnims_Steven,
 	[TRAINER_BACK_PIC_GREENPHX] = gTrainerBackAnims_Greenphx,
 	[TRAINER_BACK_PIC_GARY] = gTrainerBackAnims_Gary,
+	[TRAINER_BACK_PIC_BROCK] = gTrainerBackAnims_Brock,
+	[TRAINER_BACK_PIC_MISTY] = gTrainerBackAnims_Misty,
 
 #ifdef UNBOUND
 	[TRAINER_BACK_PIC_MARLON] = gTrainerBackAnims_Marlon,
@@ -218,6 +228,8 @@ const struct MonCoords gTrainerBackPicCoords[] =
 	[TRAINER_BACK_PIC_STEVEN] = 	{.coords = 8, .y_offset = 4},
 	[TRAINER_BACK_PIC_GREENPHX] = 	{.coords = 8, .y_offset = 4},
 	[TRAINER_BACK_PIC_GARY] = 		{.coords = 8, .y_offset = 4},
+	[TRAINER_BACK_PIC_BROCK] = 		{.coords = 8, .y_offset = 4},
+	[TRAINER_BACK_PIC_MISTY] = 		{.coords = 8, .y_offset = 4},
 
 #ifdef UNBOUND
 	[TRAINER_BACK_PIC_MARLON] = 	{.coords = 8, .y_offset = 4},
@@ -274,6 +286,8 @@ extern const u8 gTrainerBackPic_WesTiles[];
 extern const u8 gTrainerBackPic_StevenTiles[];
 extern const u8 gTrainerBackPic_GreenphxTiles[];
 extern const u8 gTrainerBackPic_GaryTiles[];
+extern const u8 gTrainerBackPic_BrockTiles[];
+extern const u8 gTrainerBackPic_MistyTiles[];
 static const struct SpriteFrameImage sTrainerBackPicTable_Brendan[] =
 {
 	{gTrainerBackPic_BrendanTiles, 			0x800, 0},
@@ -423,6 +437,24 @@ static const struct SpriteFrameImage sTrainerBackPicTable_Gary[] =
 	{gTrainerBackPic_GaryTiles + 0x1000, 	0x800, 0},
 	{gTrainerBackPic_GaryTiles + 0x1800, 	0x800, 0},
 	{gTrainerBackPic_GaryTiles + 0x2000, 	0x800, 0},
+};
+
+static const struct SpriteFrameImage sTrainerBackPicTable_Brock[] =
+{
+	{gTrainerBackPic_BrockTiles, 			0x800, 0},
+	{gTrainerBackPic_BrockTiles + 0x0800, 	0x800, 0},
+	{gTrainerBackPic_BrockTiles + 0x1000, 	0x800, 0},
+	{gTrainerBackPic_BrockTiles + 0x1800, 	0x800, 0},
+	{gTrainerBackPic_BrockTiles + 0x2000, 	0x800, 0},
+};
+
+static const struct SpriteFrameImage sTrainerBackPicTable_Misty[] =
+{
+	{gTrainerBackPic_MistyTiles, 			0x800, 0},
+	{gTrainerBackPic_MistyTiles + 0x0800, 	0x800, 0},
+	{gTrainerBackPic_MistyTiles + 0x1000, 	0x800, 0},
+	{gTrainerBackPic_MistyTiles + 0x1800, 	0x800, 0},
+	{gTrainerBackPic_MistyTiles + 0x2000, 	0x800, 0},
 };
 
 #ifdef UNBOUND
@@ -745,6 +777,28 @@ const struct SpriteTemplate gSpriteTemplateTable_TrainerBackSprites[] =
 		.oam = gOamData_TrainerBacksprite,
 		.anims = NULL,
 		.images = sTrainerBackPicTable_Gary,
+		.affineAnims = gAffineAnims_TrainerBacksprite,
+		.callback = gSpriteCB_TrainerBacksprite,
+	},
+
+	[TRAINER_BACK_PIC_BROCK] =
+	{
+		.tileTag = 0xFFFF,
+		.paletteTag = 0,
+		.oam = gOamData_TrainerBacksprite,
+		.anims = NULL,
+		.images = sTrainerBackPicTable_Brock,
+		.affineAnims = gAffineAnims_TrainerBacksprite,
+		.callback = gSpriteCB_TrainerBacksprite,
+	},
+
+	[TRAINER_BACK_PIC_MISTY] =
+	{
+		.tileTag = 0xFFFF,
+		.paletteTag = 0,
+		.oam = gOamData_TrainerBacksprite,
+		.anims = NULL,
+		.images = sTrainerBackPicTable_Misty,
 		.affineAnims = gAffineAnims_TrainerBacksprite,
 		.callback = gSpriteCB_TrainerBacksprite,
 	},

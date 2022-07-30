@@ -1836,7 +1836,7 @@ const struct BattleTowerSpread* GetRaidMultiSpread(u8 multiId, u8 index, u8 numS
 	const struct BattleTowerSpread* spread;
 	const struct MultiRaidTrainer* multiPartner = &gRaidPartners[multiId];
 
-#ifdef UNBOUND
+/*#ifdef UNBOUND
 	if (index == 0 && multiPartner->owNum == EVENT_OBJ_GFX_RIVAL)
 	{
 #define VAR_RIVAL_CHOSEN_STARTER 0x5012
@@ -1852,8 +1852,22 @@ const struct BattleTowerSpread* GetRaidMultiSpread(u8 multiId, u8 index, u8 numS
 		}
 	}
 	else
-#endif
+#endif*/
+
+	//Use if/else instead of a switch case because
+	//I don't think there's an easy way to check two
+	//things in a switch statement at once
+	//(eg: is overworld Brock & index 1)
+	if(index == 1 && multiPartner->owNum == EVENT_OBJ_GFX_BROCK && numStars != 6)
+	{
+		if(Random() % 2 == 0)
+			spread = &multiPartner->spreads[numStars][1]; //Brock has Omanyte
+		else
+			spread = &multiPartner->spreads[numStars][3]; //Brock has Omanyte
+	}
+	else
 		spread = &multiPartner->spreads[numStars][index];
+		
 
 	return spread;
 }

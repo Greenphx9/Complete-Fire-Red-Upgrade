@@ -1702,8 +1702,7 @@ static u32 GetRaidRandomNumber(void)
 
 static bool8 ShouldTryGigantamaxRaidMon(void)
 {
-	return gRaidBattleStars >= 6 //6-star Raid
-		&& (GetRaidRandomNumber() % 100 >= 95 || GetRaidRandomNumber() % 100 < 20); //25% chance
+	return FALSE; //never
 }
 
 void DetermineRaidStars(void)
