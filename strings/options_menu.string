@@ -9,3 +9,6 @@ Pok\emon
 
 #org @gText_RButtonItems
 Items
+
+#org @gText_PickSwitchCancel
+[L_BUTTON][R_BUTTON]Page [DPAD_UP_DOWN]Pick [DPAD_LEFT_RIGHT]Switch [A_BUTTON][B_BUTTON]Cancel

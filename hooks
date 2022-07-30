@@ -700,3 +700,4 @@ OptionMenu_ProcessInput 080888C0 0
 CB2_OptionsMenuFromStartMenu 08088388 0
 Task_OptionMenu 08088780 1
 BufferOptionMenuString 80889A8 1
+OptionMenu_PickSwitchCancel 8088680 0

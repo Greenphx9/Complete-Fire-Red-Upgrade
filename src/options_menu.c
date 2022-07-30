@@ -57,6 +57,7 @@ void Task_OptionMenu(u8 taskId);
 void CloseAndSaveOptionMenu(u8 taskId);
 u8 OptionMenu_ProcessInput(void);
 void BufferOptionMenuString(u8 selection);
+void OptionMenu_PickSwitchCancel(void);
 
 // Menu items
 enum
@@ -68,11 +69,14 @@ enum
     MENUITEM_BUTTONMODE,
     MENUITEM_FRAMETYPE,
     MENUITEM_CANCEL,
-    MENUITEM_PAGE1_COUNT,
-    MENUITEM_RBUTTONMODE,
+    MENUITEM_COUNT,
+};
+
+enum
+{
+    MENUITEM_RBUTTONMODE = 0,
     MENUITEM_CANCEL_PAGE_2,
     MENUITEM_PAGE2_COUNT,
-    MENUITEM_COUNT,
 };
 
 // Window Ids
@@ -90,6 +94,7 @@ struct OptionMenu
     /*0x??*/ u8 state;
     /*0x??*/ u8 loadPaletteState;
     /*0x??*/ u8 page;
+    /*0x??*/ u16 option_secondPage[MENUITEM_PAGE2_COUNT];
 };
 
 extern struct OptionMenu *sOptionMenuPtr;
@@ -112,6 +117,10 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_BUTTONMODE]  = gText_ButtonMode,
     [MENUITEM_FRAMETYPE]   = gText_Frame,
     [MENUITEM_CANCEL]      = gText_OptionMenuCancel,
+};
+
+static const u8 *const sOptionMenuItemsNames_SecondPage[MENUITEM_COUNT] =
+{
     [MENUITEM_RBUTTONMODE] = gText_RButtonMode,
     [MENUITEM_CANCEL_PAGE_2] = gText_OptionMenuCancel,
 };
@@ -173,7 +182,8 @@ static const u8 *const sRButtonModeOptions[] =
 	gText_RButtonItems
 };
 
-static const u16 sOptionMenuItemCounts[MENUITEM_COUNT] = {3, 2, 2, 2, 3, 10, 0, 0, 3, 0};
+static const u16 sOptionMenuItemCounts[MENUITEM_COUNT] = {3, 2, 2, 2, 3, 10, 0};
+static const u16 sOptionMenuItemCounts_SecondPage[MENUITEM_PAGE2_COUNT] = {3, 0};
 
 void CB2_OptionsMenuFromStartMenu(void)
 {
@@ -192,7 +202,7 @@ void CB2_OptionsMenuFromStartMenu(void)
     sOptionMenuPtr->option[MENUITEM_SOUND] = gSaveBlock2->optionsSound;
     sOptionMenuPtr->option[MENUITEM_BUTTONMODE] = gSaveBlock2->optionsButtonMode;
     sOptionMenuPtr->option[MENUITEM_FRAMETYPE] = gSaveBlock2->optionsWindowFrameType;
-    sOptionMenuPtr->option[MENUITEM_RBUTTONMODE] = gSaveBlock2->optionsRButtonMode;
+    sOptionMenuPtr->option_secondPage[MENUITEM_RBUTTONMODE] = gSaveBlock2->optionsRButtonMode;
     
     for (i = 0; i < MENUITEM_COUNT - 1; i++)
     {
@@ -236,12 +246,23 @@ void Task_OptionMenu(u8 taskId)
             UpdateSettingSelectionDisplay(sOptionMenuPtr->cursorPos);
             break;
         case 4:
-            BufferOptionMenuString(sOptionMenuPtr->cursorPos + MENUITEM_RBUTTONMODE);
+            BufferOptionMenuString(sOptionMenuPtr->cursorPos);
             break;
         case 5:
             sOptionMenuPtr->page = 1;
             LoadOptionMenuItemNames();
-            BufferOptionMenuString(MENUITEM_RBUTTONMODE);
+            for(i = 0; i < MENUITEM_PAGE2_COUNT; i++)
+                BufferOptionMenuString(i);
+            sOptionMenuPtr->cursorPos = 0;
+            UpdateSettingSelectionDisplay(sOptionMenuPtr->cursorPos);
+            break;
+        case 6:
+            sOptionMenuPtr->page = 0;
+            LoadOptionMenuItemNames();
+            for(i = 0; i < MENUITEM_COUNT; i++)
+                BufferOptionMenuString(i);
+            sOptionMenuPtr->cursorPos = 0;
+            UpdateSettingSelectionDisplay(sOptionMenuPtr->cursorPos);
             break;
         }
         break;
@@ -271,7 +292,7 @@ void CloseAndSaveOptionMenu(u8 taskId)
     gSaveBlock2->optionsSound = sOptionMenuPtr->option[MENUITEM_SOUND];
     gSaveBlock2->optionsButtonMode = sOptionMenuPtr->option[MENUITEM_BUTTONMODE];
     gSaveBlock2->optionsWindowFrameType = sOptionMenuPtr->option[MENUITEM_FRAMETYPE];
-    gSaveBlock2->optionsRButtonMode = sOptionMenuPtr->option[MENUITEM_RBUTTONMODE];
+    gSaveBlock2->optionsRButtonMode = sOptionMenuPtr->option_secondPage[MENUITEM_RBUTTONMODE];
     SetPokemonCryStereo(gSaveBlock2->optionsSound);
     FREE_AND_SET_NULL(sOptionMenuPtr);
     DestroyTask(taskId);
@@ -306,7 +327,7 @@ void CB2_OptionMenu(void)
         LoadOptionMenuItemNames();
         break;
     case 7:
-        for (i = 0; i < MENUITEM_PAGE1_COUNT; i++)
+        for (i = 0; i < MENUITEM_COUNT; i++)
             BufferOptionMenuString(i);
         break;
     case 8:
@@ -334,37 +355,48 @@ void BufferOptionMenuString(u8 selection)
     
     memcpy(dst, sOptionMenuTextColor, 3);
     x = 0x82;
-    y = ((GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) - 1) * (sOptionMenuPtr->page == 0 ? selection : selection - MENUITEM_RBUTTONMODE)) + 2;
+    y = ((GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT) - 1) * (selection)) + 2;
     FillWindowPixelRect(1, 1, x, y, 0x46, GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT));
 
-    switch (selection)
+    if(sOptionMenuPtr->page == 0)
     {
-    case MENUITEM_TEXTSPEED:
-        AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sTextSpeedOptions[sOptionMenuPtr->option[selection]]);
-        break;
-    case MENUITEM_BATTLESCENE:
-        AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sBattleSceneOptions[sOptionMenuPtr->option[selection]]);
-        break;
-    case MENUITEM_BATTLESTYLE:
-        AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sBattleStyleOptions[sOptionMenuPtr->option[selection]]);
-        break;
-    case MENUITEM_SOUND:
-        AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sSoundOptions[sOptionMenuPtr->option[selection]]);
-        break;
-    case MENUITEM_BUTTONMODE:
-        AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sButtonTypeOptions[sOptionMenuPtr->option[selection]]);
-        break;
-    case MENUITEM_FRAMETYPE:
-        StringCopy(str, gText_FrameType);
-        ConvertIntToDecimalStringN(buf, sOptionMenuPtr->option[selection] + 1, 1, 2);
-        StringAppendN(str, buf, 3);
-        AddTextPrinterParameterized3(1, 2, x, y, dst, -1, str);
-        break;
-    case MENUITEM_RBUTTONMODE:
-        AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sRButtonModeOptions[sOptionMenuPtr->option[selection]]);
-        break;
-    default:
-        break;
+        switch (selection)
+        {
+        case MENUITEM_TEXTSPEED:
+            AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sTextSpeedOptions[sOptionMenuPtr->option[selection]]);
+            break;
+        case MENUITEM_BATTLESCENE:
+            AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sBattleSceneOptions[sOptionMenuPtr->option[selection]]);
+            break;
+        case MENUITEM_BATTLESTYLE:
+            AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sBattleStyleOptions[sOptionMenuPtr->option[selection]]);
+            break;
+        case MENUITEM_SOUND:
+            AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sSoundOptions[sOptionMenuPtr->option[selection]]);
+            break;
+        case MENUITEM_BUTTONMODE:
+            AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sButtonTypeOptions[sOptionMenuPtr->option[selection]]);
+            break;
+        case MENUITEM_FRAMETYPE:
+            StringCopy(str, gText_FrameType);
+            ConvertIntToDecimalStringN(buf, sOptionMenuPtr->option[selection] + 1, 1, 2);
+            StringAppendN(str, buf, 3);
+            AddTextPrinterParameterized3(1, 2, x, y, dst, -1, str);
+            break;
+        default:
+            break;
+        }
+    }
+    else
+    {
+        switch (selection)
+        {
+            case MENUITEM_RBUTTONMODE:
+                AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sRButtonModeOptions[sOptionMenuPtr->option_secondPage[selection]]);
+                break;
+            default:
+                break;
+        }
     }
     PutWindowTilemap(1);
     CopyWindowToVram(1, COPYWIN_BOTH);
@@ -376,49 +408,99 @@ u8 OptionMenu_ProcessInput(void)
     u16* curr;
     if (JOY_REPT(DPAD_RIGHT))
     {
-        current = sOptionMenuPtr->option[(sOptionMenuPtr->cursorPos)];
-        if (current == (sOptionMenuItemCounts[sOptionMenuPtr->cursorPos] - 1))
-            sOptionMenuPtr->option[sOptionMenuPtr->cursorPos] = 0;
+        if(sOptionMenuPtr->page == 0)
+        {
+            current = sOptionMenuPtr->option[(sOptionMenuPtr->cursorPos)];
+            if (current == (sOptionMenuItemCounts[sOptionMenuPtr->cursorPos] - 1))
+                sOptionMenuPtr->option[sOptionMenuPtr->cursorPos] = 0;
+            else
+                sOptionMenuPtr->option[sOptionMenuPtr->cursorPos] = current + 1;
+            if (sOptionMenuPtr->cursorPos == MENUITEM_FRAMETYPE)
+                return 2;
+            else
+                return 4;
+        }
         else
-            sOptionMenuPtr->option[sOptionMenuPtr->cursorPos] = current + 1;
-        if (sOptionMenuPtr->cursorPos == MENUITEM_FRAMETYPE)
-            return 2;
-        else
+        {
+            current = sOptionMenuPtr->option_secondPage[(sOptionMenuPtr->cursorPos)];
+            if (current == (sOptionMenuItemCounts_SecondPage[sOptionMenuPtr->cursorPos] - 1))
+                sOptionMenuPtr->option_secondPage[sOptionMenuPtr->cursorPos] = 0;
+            else
+                sOptionMenuPtr->option_secondPage[sOptionMenuPtr->cursorPos] = current + 1;
             return 4;
+        }
     }
     else if (JOY_REPT(DPAD_LEFT))
     {
-        curr = &sOptionMenuPtr->option[sOptionMenuPtr->cursorPos];
-        if (*curr == 0)
-            *curr = sOptionMenuItemCounts[sOptionMenuPtr->cursorPos] - 1;
+        if(sOptionMenuPtr->page == 0)
+        {
+            curr = &sOptionMenuPtr->option[sOptionMenuPtr->cursorPos];
+            if (*curr == 0)
+                *curr = sOptionMenuItemCounts[sOptionMenuPtr->cursorPos] - 1;
+            else
+                --*curr;
+            
+            if (sOptionMenuPtr->cursorPos == MENUITEM_FRAMETYPE)
+                return 2;
+            else
+                return 4;
+        }
         else
-            --*curr;
-        
-        if (sOptionMenuPtr->cursorPos == MENUITEM_FRAMETYPE)
-            return 2;
-        else
+        {
+            curr = &sOptionMenuPtr->option_secondPage[sOptionMenuPtr->cursorPos];
+            if (*curr == 0)
+                *curr = sOptionMenuItemCounts_SecondPage[sOptionMenuPtr->cursorPos] - 1;
+            else
+                --*curr;
+            
             return 4;
+        }
     }
     else if (JOY_REPT(DPAD_UP))
     {
-        if (sOptionMenuPtr->cursorPos == MENUITEM_TEXTSPEED)
-            sOptionMenuPtr->cursorPos = MENUITEM_CANCEL;
+        if(sOptionMenuPtr->page == 0)
+        {
+            if (sOptionMenuPtr->cursorPos == MENUITEM_TEXTSPEED)
+                sOptionMenuPtr->cursorPos = MENUITEM_CANCEL;
+            else
+                sOptionMenuPtr->cursorPos = sOptionMenuPtr->cursorPos - 1;
+        }
         else
-            sOptionMenuPtr->cursorPos = sOptionMenuPtr->cursorPos - 1;
+        {
+            if (sOptionMenuPtr->cursorPos == MENUITEM_RBUTTONMODE)
+                sOptionMenuPtr->cursorPos = MENUITEM_CANCEL_PAGE_2;
+            else
+                sOptionMenuPtr->cursorPos = sOptionMenuPtr->cursorPos - 1;
+        }
         return 3;        
     }
     else if (JOY_REPT(DPAD_DOWN))
     {
-        if (sOptionMenuPtr->cursorPos == MENUITEM_CANCEL)
-            sOptionMenuPtr->cursorPos = MENUITEM_TEXTSPEED;
+        if(sOptionMenuPtr->page == 0)
+        {
+            if (sOptionMenuPtr->cursorPos == MENUITEM_CANCEL)
+                sOptionMenuPtr->cursorPos = MENUITEM_TEXTSPEED;
+            else
+                sOptionMenuPtr->cursorPos = sOptionMenuPtr->cursorPos + 1;
+        }
         else
-            sOptionMenuPtr->cursorPos = sOptionMenuPtr->cursorPos + 1;
+        {
+            if (sOptionMenuPtr->cursorPos == MENUITEM_CANCEL_PAGE_2)
+                sOptionMenuPtr->cursorPos = MENUITEM_RBUTTONMODE;
+            else
+                sOptionMenuPtr->cursorPos = sOptionMenuPtr->cursorPos + 1;
+        }
         return 3;
     }
     else if (JOY_NEW(R_BUTTON))
     {
         sOptionMenuPtr->page = 1;
         return 5;
+    }
+    else if (JOY_NEW(L_BUTTON))
+    {
+        sOptionMenuPtr->page = 0;
+        return 6;
     }
     else if (JOY_NEW(B_BUTTON) || JOY_NEW(A_BUTTON))
     {
@@ -463,16 +545,28 @@ void LoadOptionMenuItemNames(void)
     FillWindowPixelBuffer(1, PIXEL_FILL(1));
     if(sOptionMenuPtr->page == 0)
     {
-        for (i = 0; i < MENUITEM_PAGE1_COUNT; i++)
+        for (i = 0; i < MENUITEM_COUNT; i++)
         {
             AddTextPrinterParameterized(WIN_OPTIONS, 2, sOptionMenuItemsNames[i], 8, (u8)((i * (GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT))) + 2) - i, TEXT_SPEED_FF, NULL);    
         }
     }
     else
     {
-        for (i = MENUITEM_RBUTTONMODE; i < MENUITEM_PAGE2_COUNT; i++)
+        for (i = 0; i < MENUITEM_PAGE2_COUNT; i++)
         {
-            AddTextPrinterParameterized(WIN_OPTIONS, 2, sOptionMenuItemsNames[i], 8, (u8)(((i - MENUITEM_RBUTTONMODE) * (GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT))) + 2) - (i - MENUITEM_RBUTTONMODE), TEXT_SPEED_FF, NULL);    
+            AddTextPrinterParameterized(WIN_OPTIONS, 2, sOptionMenuItemsNames_SecondPage[i], 8, (u8)((i * (GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT))) + 2) - i, TEXT_SPEED_FF, NULL);    
         } 
     }
+}
+
+extern const u8 gText_PickSwitchCancel[];
+
+void OptionMenu_PickSwitchCancel(void)
+{
+    s32 x;
+    x = 0xE4 - GetStringWidth(0, gText_PickSwitchCancel, 0);
+    FillWindowPixelBuffer(2, PIXEL_FILL(15)); 
+    AddTextPrinterParameterized3(2, 0, x, 0, sOptionMenuPickSwitchCancelTextColor, 0, gText_PickSwitchCancel);
+    PutWindowTilemap(2);
+    CopyWindowToVram(2, COPYWIN_BOTH);
 }

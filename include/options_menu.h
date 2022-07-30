@@ -19,7 +19,6 @@ void __attribute__((long_call)) OptionMenu_ResetSpriteData(void);
 void __attribute__((long_call)) PrintOptionMenuHeader(void);
 void __attribute__((long_call)) DrawOptionMenuBg(void);
 void __attribute__((long_call)) UpdateSettingSelectionDisplay(u16 selection);
-void __attribute__((long_call)) OptionMenu_PickSwitchCancel(void);
 void __attribute__((long_call)) SetOptionMenuTask(void);
 void __attribute__((long_call)) OptionMenu_SetVBlankCallback(void);
 void __attribute__((long_call)) FieldCB_DefaultWarpExit(void);

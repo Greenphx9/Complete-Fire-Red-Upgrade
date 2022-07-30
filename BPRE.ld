@@ -2008,7 +2008,6 @@ OptionMenu_ResetSpriteData = 0x80886D4 | 1;
 PrintOptionMenuHeader = 0x8088BD0 | 1;
 DrawOptionMenuBg = 0x8088C0C | 1;
 UpdateSettingSelectionDisplay = 0x8088DE0 | 1;
-OptionMenu_PickSwitchCancel = 0x8088680 | 1;
 SetOptionMenuTask = 0x8088514 | 1;
 GetUserFrameGraphicsInfo = 0x8069788 | 1;
 DrawWindowBorderWithStdpal3 = 0x814FDA0 | 1;
