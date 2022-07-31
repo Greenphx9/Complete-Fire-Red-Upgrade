@@ -98,7 +98,8 @@ ability_battle_scripts.s
 .global BattleScript_AvoidedMoveWithAbility
 .global BattleScript_MimicryTransformed
 .global BattleScript_MimicryReturnedToNormal
-.global BattleScript_GulpMissileActivate
+.global BattleScript_CramorantCatchPrey
+.global BattleScript_CramorantSpitPrey
 
 .global BattleScript_AbilityPopUp
 .global BattleScript_AbilityPopUpRevert
@@ -1293,10 +1294,39 @@ BattleScript_MimicryReturnedToNormal:
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-BattleScript_GulpMissileActivate:
+BattleScript_CramorantCatchPrey:
 	call BattleScript_AbilityPopUp
-	setword BATTLE_STRING_LOADER gText_AbilityChangedType
+	playanimation BANK_ATTACKER ANIM_TRANSFORM 0x0
+	call BattleScript_AbilityPopUpRevert
 	return
+
+BattleScript_CramorantSpitPrey:
+	call BattleScript_AbilityPopUp
+	jumpiffainted BANK_TARGET BattleScript_CramorantSpitPrey_Fainted
+	playanimation BANK_TARGET ANIM_TRANSFORM 0x0
+BattleScript_CramorantSpitPrey_PostTransform:
+	call BattleScript_AbilityPopUpRevert
+	jumpifability BANK_ATTACKER ABILITY_MAGICGUARD BattleScript_CramorantSpitPrey_SetEffect
+	orword HIT_MARKER, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_NON_ATTACK_DMG
+	healthbarupdate BANK_ATTACKER
+	datahpupdate BANK_ATTACKER
+	printstring 0xCF @;STRINGID_PKMNHURTSWITH
+	waitmessage DELAY_1SECOND
+	faintpokemon BANK_ATTACKER 0x0 0x0
+	jumpiffainted BANK_ATTACKER BattleScript_CramorantSpitPrey_Return
+
+BattleScript_CramorantSpitPrey_SetEffect:
+	swapattackerwithtarget
+	seteffectprimary
+	swapattackerwithtarget
+BattleScript_CramorantSpitPrey_Return:
+	return
+
+BattleScript_CramorantSpitPrey_Fainted:
+	callasm CycleScriptingBankHealthBetween0And1
+	playanimation BANK_TARGET ANIM_TRANSFORM 0x0
+	callasm CycleScriptingBankHealthBetween0And1
+	goto BattleScript_CramorantSpitPrey_PostTransform
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
