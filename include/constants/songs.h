@@ -126,6 +126,7 @@
 #define MUS_RS_VS_WILD            348 
 #define MUS_RS_VS_E4              349 
 #define MUS_RS_VS_CHAMP           350 
+#define MUS_RS_VS_RIVAL           351 
 
 #define BGM_BATTLE_REGI_TRIO 347
 
