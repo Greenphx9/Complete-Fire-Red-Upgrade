@@ -54,6 +54,8 @@ if used.
 #include "../include/menu_helpers.h"
 #include "../include/gba/m4a_internal.h"
 #include "../include/malloc.h"
+#include "../include/sound.h"
+#include "../include/constants/songs.h"
 
 #include "../include/pokemon_summary_screen.h"
 #include "../include/menu.h"
@@ -88,6 +90,8 @@ enum
     MENUITEM_RBUTTONMODE = 0,
     MENUITEM_BATTLEMUSIC,
     MENUITEM_WILDLEVELSCALING,
+    MENUITEM_AUTOSORTBAG,
+    MENUITEM_DIFFICULTY,
     MENUITEM_CANCEL_PAGE_2,
     MENUITEM_PAGE2_COUNT,
 };
@@ -122,6 +126,8 @@ extern const u8 gText_OptionMenuCancel[];
 extern const u8 gText_RButtonMode[];
 extern const u8 gText_BattleMusic[];
 extern const u8 gText_WildLevelScaling[];
+extern const u8 gText_AutoSortBag[];
+extern const u8 gText_Difficulty[];
 
 static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
 {
@@ -139,6 +145,8 @@ static const u8 *const sOptionMenuItemsNames_SecondPage[MENUITEM_COUNT] =
     [MENUITEM_RBUTTONMODE] = gText_RButtonMode,
     [MENUITEM_BATTLEMUSIC] = gText_BattleMusic,
     [MENUITEM_WILDLEVELSCALING] = gText_WildLevelScaling,
+    [MENUITEM_AUTOSORTBAG] = gText_AutoSortBag,
+    [MENUITEM_DIFFICULTY]  = gText_Difficulty,
     [MENUITEM_CANCEL_PAGE_2] = gText_OptionMenuCancel,
 };
 
@@ -163,6 +171,11 @@ extern const u8 gText_FRLG[];
 extern const u8 gText_RSE[];
 extern const u8 gText_OnOption[];
 extern const u8 gText_OffOption[];
+extern const u8 gText_ByName[];
+extern const u8 gText_ByType[];
+extern const u8 gText_ByAmount[];
+extern const u8 gText_NormalDiff[];
+extern const u8 gText_HardDiff[];
 
 static const u8 *const sTextSpeedOptions[] =
 {
@@ -215,8 +228,22 @@ static const u8 *const sWildScalingOptions[] =
 	gText_OffOption
 };
 
+static const u8 *const sAutoSortBagOptions[] =
+{
+    gText_OffOption,
+	gText_ByName,
+    gText_ByType,
+    gText_ByAmount,
+};
+
+static const u8 *const sDifficultyOptions[] =
+{
+    gText_NormalDiff,
+	gText_HardDiff
+};
+
 static const u16 sOptionMenuItemCounts[MENUITEM_COUNT] = {3, 2, 2, 2, 3, 10, 0};
-static const u16 sOptionMenuItemCounts_SecondPage[MENUITEM_PAGE2_COUNT] = {3, 2, 2, 0};
+static const u16 sOptionMenuItemCounts_SecondPage[MENUITEM_PAGE2_COUNT] = {3, 2, 2, 4, 0};
 
 void CB2_OptionsMenuFromStartMenu(void)
 {
@@ -238,6 +265,8 @@ void CB2_OptionsMenuFromStartMenu(void)
     sOptionMenuPtr->option_secondPage[MENUITEM_RBUTTONMODE] = VarGet(VAR_R_BUTTON_MODE);
     sOptionMenuPtr->option_secondPage[MENUITEM_BATTLEMUSIC] = VarGet(VAR_BATTLE_MUSIC);
     sOptionMenuPtr->option_secondPage[MENUITEM_WILDLEVELSCALING] = VarGet(VAR_WILD_LEVEL_SCALING);
+    sOptionMenuPtr->option_secondPage[MENUITEM_AUTOSORTBAG] = VarGet(VAR_AUTO_SORT_BAG);
+    sOptionMenuPtr->option_secondPage[MENUITEM_DIFFICULTY] = FlagGet(FLAG_HARD_MODE) ? 1 : 0;
     
     for (i = 0; i < MENUITEM_COUNT - 1; i++)
     {
@@ -332,6 +361,8 @@ void CloseAndSaveOptionMenu(u8 taskId)
     VarSet(VAR_R_BUTTON_MODE, sOptionMenuPtr->option_secondPage[MENUITEM_RBUTTONMODE]);
     VarSet(VAR_BATTLE_MUSIC, sOptionMenuPtr->option_secondPage[MENUITEM_BATTLEMUSIC]);
     VarSet(VAR_WILD_LEVEL_SCALING, sOptionMenuPtr->option_secondPage[MENUITEM_WILDLEVELSCALING]);
+    VarSet(VAR_AUTO_SORT_BAG, sOptionMenuPtr->option_secondPage[MENUITEM_AUTOSORTBAG]);
+    sOptionMenuPtr->option_secondPage[MENUITEM_DIFFICULTY] == 0 ? FlagClear(FLAG_HARD_MODE) : FlagSet(FLAG_HARD_MODE);
     SetPokemonCryStereo(gSaveBlock2->optionsSound);
     FREE_AND_SET_NULL(sOptionMenuPtr);
     DestroyTask(taskId);
@@ -439,6 +470,12 @@ void BufferOptionMenuString(u8 selection)
             case MENUITEM_WILDLEVELSCALING:
                 AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sWildScalingOptions[sOptionMenuPtr->option_secondPage[selection]]);
                 break;
+            case MENUITEM_AUTOSORTBAG:
+                AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sAutoSortBagOptions[sOptionMenuPtr->option_secondPage[selection]]);
+                break;
+            case MENUITEM_DIFFICULTY:
+                AddTextPrinterParameterized3(1, 2, x, y, dst, -1, sDifficultyOptions[sOptionMenuPtr->option_secondPage[selection]]);
+                break;
             default:
                 break;
         }
@@ -468,6 +505,8 @@ u8 OptionMenu_ProcessInput(void)
         else
         {
             current = sOptionMenuPtr->option_secondPage[(sOptionMenuPtr->cursorPos)];
+            if(sOptionMenuPtr->cursorPos == MENUITEM_DIFFICULTY)
+                FlagSet(FLAG_HAS_USED_NORMAL_MODE);
             if (current == (sOptionMenuItemCounts_SecondPage[sOptionMenuPtr->cursorPos] - 1))
                 sOptionMenuPtr->option_secondPage[sOptionMenuPtr->cursorPos] = 0;
             else
@@ -493,6 +532,8 @@ u8 OptionMenu_ProcessInput(void)
         else
         {
             curr = &sOptionMenuPtr->option_secondPage[sOptionMenuPtr->cursorPos];
+            if(sOptionMenuPtr->cursorPos == MENUITEM_DIFFICULTY)
+                FlagSet(FLAG_HAS_USED_NORMAL_MODE);
             if (*curr == 0)
                 *curr = sOptionMenuItemCounts_SecondPage[sOptionMenuPtr->cursorPos] - 1;
             else
@@ -542,6 +583,7 @@ u8 OptionMenu_ProcessInput(void)
         if(sOptionMenuPtr->page == 1)
             return 0;
         sOptionMenuPtr->page = 1;
+        PlaySE(SE_SELECT);
         return 5;
     }
     else if (JOY_NEW(L_BUTTON))
@@ -549,6 +591,7 @@ u8 OptionMenu_ProcessInput(void)
         if(sOptionMenuPtr->page == 0)
             return 0;
         sOptionMenuPtr->page = 0;
+        PlaySE(SE_SELECT);
         return 6;
     }
     else if (JOY_NEW(B_BUTTON) || JOY_NEW(A_BUTTON))

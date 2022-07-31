@@ -674,3 +674,38 @@ const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Red =
     .images = gEventObjectPicTable_Red,
     .affineAnims = gDummySpriteAffineAnimTable,
 };
+
+extern const u8 gEventObjectPic_FloetteEternalTiles[];
+
+static const struct SpriteFrameImage gEventObjectPicTable_FloetteEternal[] =
+{
+    overworld_frame(gEventObjectPic_FloetteEternalTiles, 4, 4, 0),
+    overworld_frame(gEventObjectPic_FloetteEternalTiles, 4, 4, 1),
+    overworld_frame(gEventObjectPic_FloetteEternalTiles, 4, 4, 2),
+    overworld_frame(gEventObjectPic_FloetteEternalTiles, 4, 4, 4),
+    overworld_frame(gEventObjectPic_FloetteEternalTiles, 4, 4, 4),
+    overworld_frame(gEventObjectPic_FloetteEternalTiles, 4, 4, 6),
+    overworld_frame(gEventObjectPic_FloetteEternalTiles, 4, 4, 6),
+    overworld_frame(gEventObjectPic_FloetteEternalTiles, 4, 4, 8),
+    overworld_frame(gEventObjectPic_FloetteEternalTiles, 4, 4, 8),
+};
+
+const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_FloetteEternal =
+{
+    .tileTag = 0xFFFF,
+    .paletteTag1 = 0x1214,
+    .paletteTag2 = EVENT_OBJ_PAL_TAG_NONE,
+    .size = (32 * 32) / 2,
+    .width = 32,
+    .height = 32,
+    .shadowSize = SHADOW_SIZE_M, //Can also be SHADOW_SIZE_S, SHADOW_SIZE_L, or SHADOW_SIZE_XL
+    .inanimate = FALSE,
+    .disableReflectionPaletteLoad = FALSE,
+    .tracks = TRACKS_FOOT, //Can also be TRACKS_TIRE
+    .gender = FEMALE, //Can also be FEMALE
+    .oam = gEventObjectBaseOam_32x32,
+    .subspriteTables = gEventObjectSpriteOamTables_32x32,
+    .anims = gEventObjectImageAnimTable_Standard,
+    .images = gEventObjectPicTable_FloetteEternal,
+    .affineAnims = gDummySpriteAffineAnimTable,
+};

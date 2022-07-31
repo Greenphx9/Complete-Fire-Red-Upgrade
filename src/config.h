@@ -279,15 +279,17 @@
 #define FLAG_CASTFORM_BALL 0x1040
 #define FLAG_BEAT_DEXIO 0x1041
 #define FLAG_MOLTRES 0x1042
+#define FLAG_FLOETTE_ETERNAL_BEAT 0x1043
 
 #define FLAG_SCALEMONS 0x1200 //Sets every Pokemon's BST to 600.
 #define FLAG_TIME_TURNER 0x1201 //Changes the time to PM when AM,and vice versa
+#define FLAG_HAS_USED_NORMAL_MODE 0x1202 //Displays normal mode on the HOF if normal mode has been used. Discourages cheaters.
 
 //Save stuff
 #define VAR_R_BUTTON_MODE 0x5150
-#define VAR_BATTLE_MUSIC  0x5152
-#define VAR_WILD_LEVEL_SCALING 0x5154
-
+#define VAR_BATTLE_MUSIC  0x5151
+#define VAR_WILD_LEVEL_SCALING 0x5153
+#define VAR_AUTO_SORT_BAG 0x5154
 
 /*===== General Vars =====*/
 #define VAR_TERRAIN 0x5000 //Set to a terrain type for a battle to begin with the given terrain

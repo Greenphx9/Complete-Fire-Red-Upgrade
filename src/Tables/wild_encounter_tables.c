@@ -1783,7 +1783,7 @@ const struct WildPokemon gVictoryRoad3_LandMonsNight[] =
 
 const struct WildPokemonInfo gVictoryRoad3_LandMonsNightInfo = { 5, gVictoryRoad3_LandMonsNight };
 
-const struct WildPokemon gFlowerField_LandMons[] =
+const struct WildPokemon gFlowerField_LandMons_Day[] =
 {
 	{20, 20, SPECIES_ORICORIO},
 	{20, 20, SPECIES_ORICORIO_Y},
@@ -1791,15 +1791,33 @@ const struct WildPokemon gFlowerField_LandMons[] =
 	{20, 20, SPECIES_ORICORIO_P},
 	{20, 20, SPECIES_ORICORIO_S},
 	{20, 20, SPECIES_ORICORIO_S},
+	{20, 20, SPECIES_FLABEBE},
 	{20, 20, SPECIES_COMFEY},
+	{20, 20, SPECIES_FLABEBE_BLUE},
 	{20, 20, SPECIES_COMFEY},
-	{20, 20, SPECIES_COMFEY},
-	{20, 20, SPECIES_COMFEY},
-	{20, 20, SPECIES_COMFEY},
+	{20, 20, SPECIES_FLABEBE_ORANGE},
 	{20, 20, SPECIES_COMFEY},
 };
 
-const struct WildPokemonInfo gFlowerField_LandMonsInfo = { 22, gFlowerField_LandMons };
+const struct WildPokemonInfo gFlowerField_LandMonsInfo_Day = { 22, gFlowerField_LandMons_Day };
+
+const struct WildPokemon gFlowerField_LandMons_Night[] =
+{
+	{20, 20, SPECIES_ORICORIO},
+	{20, 20, SPECIES_ORICORIO_Y},
+	{20, 20, SPECIES_ORICORIO_P},
+	{20, 20, SPECIES_ORICORIO_P},
+	{20, 20, SPECIES_ORICORIO_S},
+	{20, 20, SPECIES_ORICORIO_S},
+	{20, 20, SPECIES_FLABEBE},
+	{20, 20, SPECIES_COMFEY},
+	{20, 20, SPECIES_FLABEBE_YELLOW},
+	{20, 20, SPECIES_COMFEY},
+	{20, 20, SPECIES_FLABEBE_WHITE},
+	{20, 20, SPECIES_COMFEY},
+};
+
+const struct WildPokemonInfo gFlowerField_LandMonsInfo_Night = { 22, gFlowerField_LandMons_Night };
 
 //Region Water
 const struct WildPokemon gPalletTown_FishingMons [] =
@@ -2378,7 +2396,7 @@ const struct WildPokemonHeader gWildMonMorningHeaders[] =
 	{
 		.mapGroup = 43,
 		.mapNum = 17,
-		.landMonsInfo = &gFlowerField_LandMonsInfo,
+		.landMonsInfo = &gFlowerField_LandMonsInfo_Day,
 		.waterMonsInfo = NULL,
 		.rockSmashMonsInfo = NULL,
 		.fishingMonsInfo = NULL,
@@ -2903,7 +2921,7 @@ const struct WildPokemonHeader gWildMonEveningHeaders[] =
 	{
 		.mapGroup = 43,
 		.mapNum = 17,
-		.landMonsInfo = &gFlowerField_LandMonsInfo,
+		.landMonsInfo = &gFlowerField_LandMonsInfo_Night,
 		.waterMonsInfo = NULL,
 		.rockSmashMonsInfo = NULL,
 		.fishingMonsInfo = NULL,

@@ -169,6 +169,7 @@ EventScript_PalletTown_AskHardMode:
 	compare LASTRESULT 0x1
 	if 0x1 _goto EventScript_PalletTown_EnableHardMode
 	sound 0x3
+	setflag 0x1202
 	goto EventScript_PalletTown_AskDynamax
 	release
 	end

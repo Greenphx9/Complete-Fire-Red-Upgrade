@@ -4586,7 +4586,11 @@ static const u8 sTextColors[][4] = {
 void HallOfFame_PrintWelcomeText(u8 not, u8 used)
 {
 	StringCopy(gStringVar1, gText_EmptyString2);
-	if(!FlagGet(FLAG_HARD_MODE))
+	if(FlagGet(FLAG_HAS_USED_NORMAL_MODE))
+	{
+		StringAppend(gStringVar1, gText_NormalModeHOF);
+	}
+	else if(!FlagGet(FLAG_HARD_MODE))
 	{
 		StringAppend(gStringVar1, gText_NormalModeHOF);
 	}

@@ -7,10 +7,13 @@
 #include "../include/safari_zone.h"
 #include "../include/script.h"
 #include "../include/start_menu.h"
+#include "../include/item_menu.h"
+#include "../include/field_weather.h"
 #include "../include/constants/flags.h"
 #include "../include/constants/songs.h"
 
 #include "../include/new/dexnav.h"
+#include "../include/new/item.h"
 #include "../include/string_util.h"
 
 /*
@@ -88,7 +91,7 @@ void __attribute__((long_call)) DestroyHelpMessageWindow_(void);
 void __attribute__((long_call)) HideStartMenu(void);
 bool8 __attribute__((long_call)) StartMenuPokedexCallback(void);
 bool8 __attribute__((long_call)) StartMenuPokemonCallback(void);
-bool8 __attribute__((long_call)) StartMenuBagCallback(void);
+bool8 StartMenuBagCallback(void);
 bool8 __attribute__((long_call)) StartMenuPlayerCallback(void);
 bool8 __attribute__((long_call)) StartMenuSaveCallback(void);
 bool8 __attribute__((long_call)) StartMenuOptionCallback(void);
@@ -510,4 +513,45 @@ void DestroySafariZoneStatsWindow(void)
 	ClearStdWindowAndFrameToTransparent(sTimeWindowId, FALSE);
 	CopyWindowToVram(sTimeWindowId, COPYWIN_GFX);
 	RemoveWindow(sTimeWindowId);
+}
+
+enum
+{
+	SORT_ALPHABETICALLY,
+	SORT_BY_TYPE,
+	SORT_BY_LEAST,
+	SORT_BY_MOST,
+	SORT_BY_AMOUNT,
+};
+
+bool8 StartMenuBagCallback(void)
+{
+    if (!gPaletteFade->active)
+    {
+        PlayRainStoppingSoundEffect();
+        DestroySafariZoneStatsWindow();
+        CleanupOverworldWindowsAndTilemaps();
+        SetMainCallback2(CB2_BagMenuFromStartMenu);
+		if(VarGet(VAR_AUTO_SORT_BAG) != 0)
+		{
+			switch(VarGet(VAR_AUTO_SORT_BAG))
+			{
+				case 1:
+					SortItemsInBag(POCKET_ITEMS - 1, SORT_ALPHABETICALLY);
+					SortItemsInBag(POCKET_KEYITEMS - 1, SORT_ALPHABETICALLY);
+					SortItemsInBag(POCKET_POKEBALLS - 1, SORT_ALPHABETICALLY);
+					break;
+				case 2:
+					SortItemsInBag(POCKET_ITEMS - 1, SORT_BY_TYPE);
+					break;
+				case 3:
+					SortItemsInBag(POCKET_ITEMS - 1, SORT_BY_AMOUNT);
+					SortItemsInBag(POCKET_POKEBALLS - 1, SORT_BY_AMOUNT);
+					break;
+			}
+
+		}
+        return TRUE;
+    }
+    return FALSE;
 }

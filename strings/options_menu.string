@@ -33,3 +33,24 @@ On
 
 #org @gText_OffOption
 Off
+
+#org @gText_AutoSortBag
+Auto-Sort Bag
+
+#org @gText_ByName
+By Name
+
+#org @gText_ByType
+By Type
+
+#org @gText_ByAmount
+By Amount
+
+#org @gText_Difficulty
+Difficulty
+
+#org @gText_NormalDiff
+Normal
+
+#org @gText_HardDiff
+Hard

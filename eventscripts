@@ -78,6 +78,7 @@ npc 3 22 10 EventScript_DeoxysFormChange
 npc 3 22 11 EventScript_TM58
 npc 3 22 12 EventScript_TM94
 map 3 22 EventScript_Route4MapScript
+npc 43 17 0 EventScript_FloetteEternal
 
 ## Mt Moon
 npc 1 1 14 EventScript_MtMoonRootFossil

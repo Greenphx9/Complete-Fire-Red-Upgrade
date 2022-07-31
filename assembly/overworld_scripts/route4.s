@@ -338,3 +338,39 @@ EventScript_DeoxysSpeed:
 EventScript_DeoxysNormal:
 	msgbox gText_DeoxysNormal MSG_NORMAL
 	return
+
+.global EventScript_FloetteEternal
+EventScript_FloetteEternal:
+	lockall
+	checkflag 0x827
+	goto_if_ne EventScript_StrangelyColouredFlower
+	pause 0x20
+	applymovement 1 EventScript_MoveFloetteLookDownSuprised 
+	waitmovement 0x0
+	sound 0x15
+	applymovement 0xFF EventScript_PlayerJumpDown
+	waitmovement 0x0
+	msgbox gText_Flo_Ette MSG_FACE
+	wildbattle SPECIES_FLOETTE_ETERNAL 80 0x0
+	fadescreen FADEOUT_BLACK
+	hidesprite 1
+	setflag 0x1043
+	fadescreen FADEIN_BLACK
+	releaseall
+	end
+
+EventScript_StrangelyColouredFlower:
+	msgbox gText_StrangeColouredFlower MSG_KEEPOPEN
+	closeonkeypress
+	releaseall
+	end
+
+EventScript_MoveFloetteLookDownSuprised:
+	.byte look_down
+	.byte 0x62
+	.byte 0xFE
+
+EventScript_PlayerJumpDown:
+	.byte jump_down
+	.byte look_up
+	.byte 0xFE

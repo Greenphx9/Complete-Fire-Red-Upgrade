@@ -38,7 +38,7 @@ Would you like to enable No EV\nGrinding Mode? EV increasing items will \lgive 2
 No EV Grinding Mode enabled.
 
 #org @gText_AskHardMode
-Would you like to enable hard\nmode?\pThis makes gym leaders and bosses\nsmarter.\pIt also gives gym leaders better\nteams, which includes EVs, good\lmovesets, and more.
+Would you like to enable hard\nmode?\pThis makes gym leaders and bosses\nsmarter.\pIt also gives gym leaders better\nteams, which includes EVs, good\lmovesets, and more.\pThis can be changed in the options\nmenu.
 
 #org @gText_HardModeEnabled
 Hard Mode enabled.
