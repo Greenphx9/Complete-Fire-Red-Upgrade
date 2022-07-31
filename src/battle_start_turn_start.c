@@ -106,7 +106,9 @@ static void TrySetupRaidBossRepeatedAttack(u8 turnActionNumber);
 static u8 GetWhoStrikesFirstUseLastBracketCalc(u8 bank1, u8 bank2);
 static u32 BoostSpeedInWeather(u8 ability, u8 itemEffect, u32 speed);
 static u32 BoostSpeedByItemEffect(u8 itemEffect, u8 itemQuality, u16 species, u32 speed, bool8 isDynamaxed);
-extern bool8 ShouldTrainerMugshot();
+#if (defined FLAG_HARD_LEVEL_CAP && defined FLAG_KEPT_LEVEL_CAP_ON)
+static void TryClearLevelCapKeptOn(void);
+#endif
 
 void HandleNewBattleRamClearBeforeBattle(void)
 {
@@ -161,6 +163,33 @@ static void SavePartyItems(void)
 	for (int i = 0; i < PARTY_SIZE; ++i)
 		gNewBS->itemBackup[i] = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, NULL);
 }
+
+#if (defined FLAG_HARD_LEVEL_CAP && defined FLAG_KEPT_LEVEL_CAP_ON)
+static void TryClearLevelCapKeptOn(void)
+{
+	if (!FlagGet(FLAG_SYS_GAME_CLEAR) //Main game
+	&& FlagGet(FLAG_HARD_LEVEL_CAP) //Level Cap is on
+	&& FlagGet(FLAG_KEPT_LEVEL_CAP_ON)) //And it hasn't ever been turned off
+	{
+		u32 i, levelCap;
+		
+		extern u8 GetCurrentLevelCap(void); //Must be implemented yourself
+		for (i = 0, levelCap = GetCurrentLevelCap(); i < PARTY_SIZE; ++i)
+		{
+			u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2, NULL);
+			if (species != SPECIES_NONE && species != SPECIES_EGG)
+			{
+				u8 level = GetMonData(&gPlayerParty[i], MON_DATA_LEVEL, NULL);
+				if (level > levelCap)
+				{
+					FlagClear(FLAG_KEPT_LEVEL_CAP_ON);
+					break;
+				}
+			}
+		}
+	}
+}
+#endif
 
 void BattleBeginFirstTurn(void)
 {
@@ -1819,6 +1848,28 @@ u16 LoadProperMusicForLinkBattles(void)
 	return GetMUS_ForBattle();
 }
 
+bool8 ShouldTrainerMugshot2()
+{
+	u16 trainerId = gTrainerBattleOpponent_A; //added 
+	u16 trainerClass = gTrainers[trainerId].trainerClass; //added 
+	// if(!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER)) ){
+	// 	return TRUE;
+	// }
+
+	if (!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER))) {
+		return TRUE;
+	}
+
+	if (trainerClass == CLASS_BOSS || trainerClass == CLASS_CHAMPION || trainerClass == CLASS_ORACLE || trainerClass == CLASS_RIVAL_2 || trainerClass == CLASS_AQUA_LEADER || trainerClass == CLASS_TEAM_AQUA || trainerClass == CLASS_AROMA_LADY_RS || trainerClass == CLASS_PKMN_TRAINER_2 || trainerClass == CLASS_LEADER || trainerClass == CLASS_ELITE_4
+		|| trainerClass == CLASS_MAGMA_ADMIN || trainerClass == CLASS_MAGMA_LEADER || trainerClass == CLASS_BUG_MANIAC)
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+
+}
+
 extern const u8 sBattleTransitionTable_Trainer[][2];
 u8 GetTrainerBattleTransition(void)
 {
@@ -1839,7 +1890,7 @@ u8 GetTrainerBattleTransition(void)
 		return B_TRANSITION_LORELEI;
 	}
 
-	if (gTrainers[gTrainerBattleOpponent_A].trainerClass == CLASS_ELITE_FOUR || !ShouldTrainerMugshot())
+	if (gTrainers[gTrainerBattleOpponent_A].trainerClass == CLASS_ELITE_FOUR || !ShouldTrainerMugshot2())
 	{
 		VarSet(VAR_PRE_BATTLE_MUGSHOT_STYLE, MUGSHOT_TWO_BARS);
 		VarSet(VAR_PRE_BATTLE_MUGSHOT_SPRITE, MUGSHOT_PLAYER);
@@ -1868,7 +1919,7 @@ u8 GetTrainerBattleTransition(void)
 	if (sTrainerEventObjectLocalId >= 0x100) //Used for mugshots
 		return B_TRANSITION_CHAMPION;
 #endif
-	if (ShouldTrainerMugshot()) {
+	if (ShouldTrainerMugshot2()) {
 		return B_TRANSITION_LORELEI;
 	}
 #ifdef VAR_BATTLE_TRANSITION_LOGO
