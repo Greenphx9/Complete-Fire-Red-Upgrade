@@ -2898,6 +2898,217 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.smogonLittleCup = TRUE,
 	},
 #endif
+#ifdef SPECIES_GROOKEY
+	[SPECIES_GROOKEY] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_SCORBUNNY
+	[SPECIES_SCORBUNNY] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_SOBBLE
+	[SPECIES_SOBBLE] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_SKWOVET
+	[SPECIES_SKWOVET] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_ROOKIDEE
+	[SPECIES_ROOKIDEE] =
+	{
+		.smogonLittleCup = TRUE,
+		.middleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_BLIPBUG
+	[SPECIES_BLIPBUG] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_NICKIT
+	[SPECIES_NICKIT] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_GOSSIFLEUR
+	[SPECIES_GOSSIFLEUR] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_WOOLOO
+	[SPECIES_WOOLOO] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_CHEWTLE
+	[SPECIES_CHEWTLE] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_YAMPER
+	[SPECIES_YAMPER] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_ROLYCOLY
+	[SPECIES_ROLYCOLY] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_APPLIN
+	[SPECIES_APPLIN] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_SILICOBRA
+	[SPECIES_SILICOBRA] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_ARROKUDA
+	[SPECIES_ARROKUDA] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_TOXEL
+	[SPECIES_TOXEL] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_SIZZLIPEDE
+	[SPECIES_SIZZLIPEDE] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_CLOBBOPUS
+	[SPECIES_CLOBBOPUS] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_SINISTEA
+	[SPECIES_SINISTEA] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_HATENNA
+	[SPECIES_HATENNA] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_IMPIDIMP
+	[SPECIES_IMPIDIMP] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_MILCERY
+	[SPECIES_MILCERY] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_SNOM
+	[SPECIES_SNOM] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_CUFANT
+	[SPECIES_CUFANT] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_DREEPY
+	[SPECIES_DREEPY] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_MEOWTH_G
+	[SPECIES_MEOWTH_G] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_PONYTA_G
+	[SPECIES_PONYTA_G] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_SLOWPOKE_G
+	[SPECIES_SLOWPOKE_G] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_FARFETCHD_G
+	[SPECIES_FARFETCHD_G] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_ZIGZAGOON_G
+	[SPECIES_ZIGZAGOON_G] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_DARUMAKA_G
+	[SPECIES_DARUMAKA_G] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_YAMASK_G
+	[SPECIES_YAMASK_G] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_GROWLITHE_H
+	[SPECIES_GROWLITHE_H] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_VOLTORB_H
+	[SPECIES_VOLTORB_H] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_ZORUA_H
+	[SPECIES_ZORUA_H] =
+	{
+		.smogonLittleCup = TRUE,
+	},
+#endif
 #ifdef SPECIES_IVYSAUR
 	[SPECIES_IVYSAUR] =
 	{
@@ -3572,6 +3783,66 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 #endif
 #ifdef SPECIES_GRAVELER_A
 	[SPECIES_GRAVELER_A] =
+	{
+		.middleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_THWACKEY
+	[SPECIES_THWACKEY] =
+	{
+		.middleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_RABOOT
+	[SPECIES_RABOOT] =
+	{
+		.middleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_DRIZZILE
+	[SPECIES_DRIZZILE] =
+	{
+		.middleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_DOTTLER
+	[SPECIES_DOTTLER] =
+	{
+		.middleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_CARKOL
+	[SPECIES_CARKOL] =
+	{
+		.middleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_HATTREM
+	[SPECIES_HATTREM] =
+	{
+		.middleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_MORGREM
+	[SPECIES_MORGREM] =
+	{
+		.middleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_LINOONE_G
+	[SPECIES_LINOONE_G] =
+	{
+		.middleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_MR_MIME_G
+	[SPECIES_MR_MIME_G] =
+	{
+		.middleCup = TRUE,
+	},
+#endif
+#ifdef SPECIES_SLIGGOO_H
+	[SPECIES_SLIGGOO_H] =
 	{
 		.middleCup = TRUE,
 	},
