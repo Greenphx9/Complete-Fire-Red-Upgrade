@@ -19114,6 +19114,8 @@ static const struct LevelUpMove sStunfiskGLevelUpLearnset[] = {
 	LEVEL_UP_END
 };
 static const struct LevelUpMove sMissingNoLevelUpLearnset[] = {
+	LEVEL_UP_MOVE(1, MOVE_BIND),
+	LEVEL_UP_MOVE(1, MOVE_PAYDAY),
 	LEVEL_UP_MOVE(1, MOVE_SKYATTACK),
 	LEVEL_UP_MOVE(1, MOVE_WATERGUN),
 	LEVEL_UP_MOVE(5, MOVE_CONFUSION),
