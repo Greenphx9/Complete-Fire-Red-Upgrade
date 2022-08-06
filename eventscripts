@@ -533,6 +533,9 @@ sign 1 0 1 EventScript_SortBagTip
 sign 1 0 2 EventScript_ManPokecentre
 sign 3 3 3 EventScript_LAEvolve
 
+## Cynthia
+map 27 0 EventScript_CynthiaHouseMapScript
+
 
 
 

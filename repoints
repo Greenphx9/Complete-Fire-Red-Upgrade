@@ -447,6 +447,9 @@ AceTrainerBothPal 8239E1C
 GreenphxTiles 82395B4
 GreenphxPal 8239A54
 
+CynthiaTiles 82395C4
+CynthiaPal 8239A64
+
 EventScript_EVIVMenu 8904058
 
 ##gEventObjectGraphicsInfo_Bug_Catcher 8EB1050

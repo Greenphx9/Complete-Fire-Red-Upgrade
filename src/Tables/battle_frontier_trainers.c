@@ -459,6 +459,9 @@ extern const u8 sFrontierText_Rancher_PreBattle_6[];
 extern const u8 sFrontierText_Rancher_PlayerWin_6[];
 extern const u8 sFrontierText_Rancher_PlayerLose_6[];
 
+extern const u8 gText_CynthiaLose[];
+extern const u8 sTrainerName_Cynthia[];
+
 #ifdef UNBOUND
 extern const u8 sTrainerName_Palmer[];
 extern const u8 sTrainerName_Pat[];
@@ -468,7 +471,6 @@ extern const u8 sTrainerName_Skeli[];
 extern const u8 sTrainerName_Golche[];
 extern const u8 sTrainerName_Gail[];
 extern const u8 sTrainerName_Lixdel[];
-extern const u8 sTrainerName_Cynthia[];
 extern const u8 sTrainerName_Red[];
 extern const u8 sTrainerName_BigMo[];
 extern const u8 sTrainerName_Galavan[];
@@ -2387,10 +2389,46 @@ const u8 gNumFrontierMultiTrainers = NELEMS(gFrontierMultiBattleTrainers);
 
 	const struct SpecialBattleFrontierTrainer gSpecialTowerTrainers[] =
 	{
+	{
+		.owNum = 			235,
+		.trainerClass = 	CLASS_CHAMPION_DP,
+		.trainerSprite = 	9,
+		.gender = 			BATTLE_FACILITY_FEMALE,
+		.name =				sTrainerName_Cynthia,
+		//.preBattleText = 	sFrontierText_Skeli_PreBattle,
+		//.playerWinText = 	sFrontierText_Skeli_PlayerWin,
+		.playerLoseText = 	gText_CynthiaLose,
+		.regularSpreads =	gSpecialTowerSpread_Cynthia,
+		.middleCupSpreads = gSpecialTowerSpread_Cynthia,
+		.littleCupSpreads = gSpecialTowerSpread_Cynthia,
+		.legendarySpreads = gSpecialTowerSpread_Cynthia,
+		.regSpreadSize = 	NELEMS(gSpecialTowerSpread_Cynthia),
+		.mcSpreadSize =		NELEMS(gSpecialTowerSpread_Cynthia),
+		.lcSpreadSize =		NELEMS(gSpecialTowerSpread_Cynthia),
+		.legSpreadSize =	NELEMS(gSpecialTowerSpread_Cynthia),
+		.songId = 			361,
+		.isMonotype = 		FALSE,
+	},
 	};
 
 	const struct SpecialBattleFrontierTrainer gFrontierBrains[] =
 	{
+		[0] =
+		{
+			.owNum = 			235,
+			.trainerClass = 	CLASS_CHAMPION_DP,
+			.trainerSprite = 	9,
+			.gender = 			BATTLE_FACILITY_MALE,
+			.name =				sTrainerName_Cynthia,
+			.regularSpreads =	gSpecialTowerSpread_Cynthia,
+			.legendarySpreads = gSpecialTowerSpread_Cynthia,
+			.middleCupSpreads = gSpecialTowerSpread_Cynthia,
+			.littleCupSpreads = gSpecialTowerSpread_Cynthia,
+			.regSpreadSize = 	NELEMS(gSpecialTowerSpread_Cynthia),
+			.legSpreadSize =	NELEMS(gSpecialTowerSpread_Cynthia),
+			.mcSpreadSize =		NELEMS(gSpecialTowerSpread_Cynthia),
+			.lcSpreadSize =		NELEMS(gSpecialTowerSpread_Cynthia),
+		},
 	};
 
 	const struct MultiBattleTowerTrainer gFrontierMultiBattleTrainers[] =

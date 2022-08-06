@@ -330,6 +330,11 @@ void Task_OptionMenu(u8 taskId)
             UpdateSettingSelectionDisplay(sOptionMenuPtr->cursorPos);
             OptionMenu_PickSwitchCancel();
             break;
+        case 7:
+            BufferOptionMenuString(sOptionMenuPtr->cursorPos);
+            if(FlagGet(FLAG_HARD_MODE) == FALSE)
+                FlagSet(FLAG_HARD_MODE);
+            break;
         }
         break;
     case 3:
@@ -506,7 +511,7 @@ u8 OptionMenu_ProcessInput(void)
         {
             current = sOptionMenuPtr->option_secondPage[(sOptionMenuPtr->cursorPos)];
             if(sOptionMenuPtr->cursorPos == MENUITEM_DIFFICULTY)
-                FlagSet(FLAG_HAS_USED_NORMAL_MODE);
+                return 7;
             if (current == (sOptionMenuItemCounts_SecondPage[sOptionMenuPtr->cursorPos] - 1))
                 sOptionMenuPtr->option_secondPage[sOptionMenuPtr->cursorPos] = 0;
             else
@@ -533,7 +538,7 @@ u8 OptionMenu_ProcessInput(void)
         {
             curr = &sOptionMenuPtr->option_secondPage[sOptionMenuPtr->cursorPos];
             if(sOptionMenuPtr->cursorPos == MENUITEM_DIFFICULTY)
-                FlagSet(FLAG_HAS_USED_NORMAL_MODE);
+                return 7;
             if (*curr == 0)
                 *curr = sOptionMenuItemCounts_SecondPage[sOptionMenuPtr->cursorPos] - 1;
             else
