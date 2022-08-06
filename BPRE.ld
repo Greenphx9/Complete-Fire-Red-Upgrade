@@ -2027,3 +2027,4 @@ gText_ButtonTypeHelp = 0x8419e46;
 gText_ButtonTypeLEqualsA = 0x8419e4b;
 gText_ButtonTypeLR = 0x8419e4f;
 gText_FrameType = 0x8419e52;
+

@@ -198,6 +198,8 @@
 #define TRAINER_BACK_PIC_GARY               21
 #define TRAINER_BACK_PIC_BROCK              22
 #define TRAINER_BACK_PIC_MISTY              23
+#define TRAINER_BACK_PIC_CHERYL             24
+#define TRAINER_BACK_PIC_BUCK               25
 #ifndef UNBOUND //CHANGE THESE
 
 #define TRAINER_ENCOUNTER_MUSIC_MALE         0 // standard male encounter music

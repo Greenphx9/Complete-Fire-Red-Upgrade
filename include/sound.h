@@ -6,7 +6,6 @@ extern bool8 gDisableMusic;
 extern bool8 gWarpMusicDisable;
 
 void __attribute__((long_call)) InitMapMusic(void);
-void __attribute__((long_call)) MapMusicMain(void);
 void __attribute__((long_call)) ResetMapMusic(void);
 u16 __attribute__((long_call)) GetCurrentMapMusic(void);
 void __attribute__((long_call)) PlayNewMapMusic(u16 songNum);

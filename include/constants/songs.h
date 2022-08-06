@@ -127,6 +127,9 @@
 #define MUS_RS_VS_E4              349 
 #define MUS_RS_VS_CHAMP           350 
 #define MUS_RS_VS_RIVAL           351 
+#define MUS_RS_POKE_CENTER        352
+
+#define MUS_POKE_CENTER           303 // MUS_RG_POKECEN
 
 #define BGM_BATTLE_REGI_TRIO 347
 
