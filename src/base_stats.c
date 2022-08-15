@@ -20475,8 +20475,8 @@ const struct BaseStats gBaseStats2[] =
 	{
 		.baseHP = 100,
 		.baseAttack = 60,
-		.baseDefense = 70,
-		.baseSpAttack = 100, //85
+		.baseDefense = 85,
+		.baseSpAttack = 85,
 		.baseSpDefense = 105,
 		.baseSpeed = 60,
 		.type1 = TYPE_WATER,
@@ -22422,7 +22422,7 @@ const struct BaseStats gBaseStats2[] =
 	{
 		.baseHP = 100,
 		.baseAttack = 60,
-		.baseDefense = 70,
+		.baseDefense = 85,
 		.baseSpAttack = 85,
 		.baseSpDefense = 105,
 		.baseSpeed = 60,
