@@ -2,6 +2,7 @@
 #include "defines_battle.h"
 #include "../include/battle_setup.h"
 #include "../include/event_data.h"
+#include "../include/field_weather.h"
 #include "../include/pokemon.h"
 #include "../include/pokemon_storage_system.h"
 #include "../include/random.h"

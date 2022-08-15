@@ -243,7 +243,7 @@ static const u8 *const sDifficultyOptions[] =
 };
 
 static const u16 sOptionMenuItemCounts[MENUITEM_COUNT] = {3, 2, 2, 2, 3, 10, 0};
-static const u16 sOptionMenuItemCounts_SecondPage[MENUITEM_PAGE2_COUNT] = {3, 2, 2, 4, 0};
+static const u16 sOptionMenuItemCounts_SecondPage[MENUITEM_PAGE2_COUNT] = {3, 2, 2, 4, 2, 0};
 
 void CB2_OptionsMenuFromStartMenu(void)
 {
@@ -510,12 +510,12 @@ u8 OptionMenu_ProcessInput(void)
         else
         {
             current = sOptionMenuPtr->option_secondPage[(sOptionMenuPtr->cursorPos)];
-            if(sOptionMenuPtr->cursorPos == MENUITEM_DIFFICULTY)
-                return 7;
             if (current == (sOptionMenuItemCounts_SecondPage[sOptionMenuPtr->cursorPos] - 1))
                 sOptionMenuPtr->option_secondPage[sOptionMenuPtr->cursorPos] = 0;
             else
                 sOptionMenuPtr->option_secondPage[sOptionMenuPtr->cursorPos] = current + 1;
+            if(sOptionMenuPtr->cursorPos == MENUITEM_DIFFICULTY)
+                return 7;
             return 4;
         }
     }
@@ -537,13 +537,12 @@ u8 OptionMenu_ProcessInput(void)
         else
         {
             curr = &sOptionMenuPtr->option_secondPage[sOptionMenuPtr->cursorPos];
-            if(sOptionMenuPtr->cursorPos == MENUITEM_DIFFICULTY)
-                return 7;
             if (*curr == 0)
                 *curr = sOptionMenuItemCounts_SecondPage[sOptionMenuPtr->cursorPos] - 1;
             else
                 --*curr;
-            
+            if(sOptionMenuPtr->cursorPos == MENUITEM_DIFFICULTY)
+                return 7;
             return 4;
         }
     }

@@ -133,7 +133,6 @@ extern const u8 sTrainerName_Grace[];
 extern const u8 sTrainerName_Chloe[];
 extern const u8 sTrainerName_Camila[];
 extern const u8 sTrainerName_Penelope[];
-extern const u8 sTrainerName_Riley[];
 extern const u8 sTrainerName_Layla[];
 extern const u8 sTrainerName_Lillian[];
 extern const u8 sTrainerName_Nora[];

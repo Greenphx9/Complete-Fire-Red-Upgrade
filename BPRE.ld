@@ -397,7 +397,6 @@ gText_BagDescription = 0x841A001;
 gText_PlayerDescription = 0x841A049;
 gText_SaveDescription = 0x841A06F;
 gText_OptionDescription = 0x841A0B7;
-gText_ExitDescription = 0x841A0F9;
 gText_RetireDescription = 0x841A111;
 gPokedexEntries = 0x844E850;
 gUnknown_08459FFC = 0x8459FFC;
@@ -2028,3 +2027,4 @@ gText_ButtonTypeLEqualsA = 0x8419e4b;
 gText_ButtonTypeLR = 0x8419e4f;
 gText_FrameType = 0x8419e52;
 
+sNameBoxWindowId = 0x203EFF6;

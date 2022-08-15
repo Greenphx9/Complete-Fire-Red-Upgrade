@@ -283,6 +283,10 @@
 #define FLAG_CYNTHIA_SPRITE 0x1044
 #define FLAG_CYNTHIA_BEAT 0x1045
 #define VAR_CYNTHIA_BEAT 0x5114
+#define VAR_GUARD 0x5100
+
+#define FLAG_GOT_GIBLE 0x1046
+#define FLAG_GIBLE_BALL_SPRITE 0x1047
 
 #define FLAG_SCALEMONS 0x1200 //Sets every Pokemon's BST to 600.
 #define FLAG_TIME_TURNER 0x1201 //Changes the time to PM when AM,and vice versa

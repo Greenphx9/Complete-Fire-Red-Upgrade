@@ -180,7 +180,7 @@
 #define TRAINER_BACK_PIC_MAY              	3
 #define TRAINER_BACK_PIC_POKE_DUDE        	4
 #define TRAINER_BACK_PIC_OLD_MAN 			5
-#define TRAINER_BACK_YOUNG_TRAINER_MALE		6
+#define TRAINER_BACK_PIC_HUGH		6
 #define TRAINER_BACK_PIC_LYRA				7
 #define TRAINER_BACK_PIC_FEMALETRAINER		8
 #define TRAINER_BACK_PIC_ASH				9
@@ -201,6 +201,9 @@
 #define TRAINER_BACK_PIC_CHERYL             24
 #define TRAINER_BACK_PIC_BUCK               25
 #define TRAINER_BACK_PIC_MARLEY             26
+#define TRAINER_BACK_PIC_RILEY              27
+#define TRAINER_BACK_PIC_CHILI              28
+#define TRAINER_BACK_PIC_CRESS              29
 #ifndef UNBOUND //CHANGE THESE
 
 #define TRAINER_ENCOUNTER_MUSIC_MALE         0 // standard male encounter music

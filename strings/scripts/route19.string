@@ -8,4 +8,16 @@
 [RED]In order to get to know each other\nbetter as Pok\emon Trainers,\lI would like our Pok\emon to have a\lmatch.\pBefore I send out my Pok\emon, my\nheart always begins to race[.]\pInteresting[.]\nMy Pok\emon in their Poke Balls are\lradiating a happy feeling.\pAre you the reason?\nWhat are you?
 
 #org @gText_CynthiaLose
-My heart is pounding so hard because\nI had such a heated battle with\lyou.
+My heart is pounding so hard because\nI had such a heated battle with\lyou.\pYou are a really great trainer!
+
+#org @gText_Cynthia
+Cynthia
+
+#org @gText_CynthiaAfterBattle
+[RED]Cynthia: That was beyond my\nexpectation! What a exceptional\lbattle!\pI can't stay here all year, because\nthere's so much to investigate in\lSinnoh, as well.\pYou're a great Trainer, and it would\nmake me happy to see you again\lsometime.\pYou can have this special\n[GREEN]Gible[RED] I hatched, as an award for\lbeating me.
+
+#org @gText_PlayerReceievedShinyGible
+[BLACK][PLAYER] received a Shiny Gible!
+
+#org @gText_CynthiaAfterBattle2
+[RED]Goodbye, [PLAYER].

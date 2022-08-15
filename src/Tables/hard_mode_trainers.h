@@ -6125,7 +6125,467 @@ static const struct BattleTowerSpread sHardmodeTeam_BlackBeltHaruto[] =
     },
 };
 
+static const struct BattleTowerSpread sHardmodeTeam_Cynthia1[] =
+{
+    {
+        .species = SPECIES_SPIRITOMB,
+        .item = ITEM_LEFTOVERS,
+        .ability = FRONTIER_ABILITY_1, //Pressure
+        .nature = NATURE_MODEST,
+        .hpEv = 252,
+        .defEv = 4,
+        .spAtkEv = 252,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_NASTYPLOT,
+            MOVE_SHADOWBALL,
+            MOVE_DARKPULSE,
+            MOVE_PSYCHIC,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_ROSERADE,
+        .item = ITEM_BLACK_SLUDGE,
+        .ability = FRONTIER_ABILITY_1, //Natural Cure
+        .nature = NATURE_TIMID,
+        .spAtkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_GIGADRAIN,
+            MOVE_SLUDGEBOMB,
+            MOVE_EXTRASENSORY,
+            MOVE_SYNTHESIS,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_TOGEKISS,
+        .item = ITEM_HEAVY_DUTY_BOOTS,
+        .ability = FRONTIER_ABILITY_2, //Serene Grace
+        .nature = NATURE_TIMID,
+        .hpEv = 4,
+        .spAtkEv = 252,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_AIRSLASH,
+            MOVE_DAZZLINGGLEAM,
+            MOVE_FLAMETHROWER,
+            MOVE_ROOST,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_LUCARIO,
+        .item = ITEM_LIFE_ORB,
+        .ability = FRONTIER_ABILITY_1, //Steadfast
+        .nature = NATURE_JOLLY,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_SWORDSDANCE,
+            MOVE_METEORMASH,
+            MOVE_CLOSECOMBAT,
+            MOVE_EXTREMESPEED,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_MILOTIC,
+        .item = ITEM_FLAME_ORB,
+        .ability = FRONTIER_ABILITY_1, //Marvel Scale
+        .nature = NATURE_BOLD,
+        .hpEv = 252,
+        .defEv = 252,
+        .spAtkEv = 4,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_SCALD,
+            MOVE_ICEBEAM,
+            MOVE_FLIPTURN,
+            MOVE_RECOVER,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_GARCHOMP,
+        .item = ITEM_GARCHOMPITE,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Rough Skin
+        .nature = NATURE_JOLLY,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_SWORDSDANCE,
+            MOVE_SCALESHOT,
+            MOVE_EARTHQUAKE,
+            MOVE_FIREFANG,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+};
 
+static const struct BattleTowerSpread sHardmodeTeam_Cynthia2[] =
+{
+    {
+        .species = SPECIES_SPIRITOMB,
+        .item = ITEM_LEFTOVERS,
+        .ability = FRONTIER_ABILITY_1, //Pressure
+        .nature = NATURE_MODEST,
+        .hpEv = 252,
+        .defEv = 4,
+        .spAtkEv = 252,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_NASTYPLOT,
+            MOVE_SHADOWBALL,
+            MOVE_DARKPULSE,
+            MOVE_PSYCHIC,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_PORYGON_Z,
+        .item = ITEM_EXPERT_BELT,
+        .ability = FRONTIER_ABILITY_1, //Adaptability
+        .nature = NATURE_TIMID,
+        .spAtkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_TECHNOBLAST,
+            MOVE_THUNDERBOLT,
+            MOVE_ICEBEAM,
+            MOVE_SHADOWBALL,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_TOGEKISS,
+        .item = ITEM_HEAVY_DUTY_BOOTS,
+        .ability = FRONTIER_ABILITY_2, //Serene Grace
+        .nature = NATURE_TIMID,
+        .hpEv = 4,
+        .spAtkEv = 25,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_AIRSLASH,
+            MOVE_DAZZLINGGLEAM,
+            MOVE_FLAMETHROWER,
+            MOVE_ROOST,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_LUCARIO,
+        .item = ITEM_LIFE_ORB,
+        .ability = FRONTIER_ABILITY_1, //Steadfast
+        .nature = NATURE_JOLLY,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 25,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_SWORDSDANCE,
+            MOVE_METEORMASH,
+            MOVE_CLOSECOMBAT,
+            MOVE_EXTREMESPEED,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_MILOTIC,
+        .item = ITEM_FLAME_ORB,
+        .ability = FRONTIER_ABILITY_1, //Marvel Scale
+        .nature = NATURE_BOLD,
+        .hpEv = 252,
+        .defEv = 252,
+        .spAtkEv = 4,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_SCALD,
+            MOVE_ICEBEAM,
+            MOVE_FLIPTURN,
+            MOVE_RECOVER,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_GARCHOMP,
+        .item = ITEM_GARCHOMPITE,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Rough Skin
+        .nature = NATURE_JOLLY,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_SWORDSDANCE,
+            MOVE_SCALESHOT,
+            MOVE_EARTHQUAKE,
+            MOVE_FIREFANG,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+};
+
+static const struct BattleTowerSpread sHardmodeTeam_Cynthia3[] =
+{
+    {
+        .species = SPECIES_SPIRITOMB,
+        .item = ITEM_LEFTOVERS,
+        .ability = FRONTIER_ABILITY_1, //Pressure
+        .nature = NATURE_MODEST,
+        .hpEv = 252,
+        .defEv = 4,
+        .spAtkEv = 252,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_NASTYPLOT,
+            MOVE_SHADOWBALL,
+            MOVE_DARKPULSE,
+            MOVE_PSYCHIC,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_EELEKTROSS,
+        .item = ITEM_ASSAULT_VEST,
+        .ability = FRONTIER_ABILITY_1, //Levitate
+        .nature = NATURE_MODEST,
+        .hpEv = 252,
+        .defEv = 4,
+        .spAtkEv = 252,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_THUNDERBOLT,
+            MOVE_GIGADRAIN,
+            MOVE_FLAMETHROWER,
+            MOVE_VOLTSWITCH,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_TOGEKISS,
+        .item = ITEM_HEAVY_DUTY_BOOTS,
+        .ability = FRONTIER_ABILITY_2, //Serene Grace
+        .nature = NATURE_TIMID,
+        .hpEv = 4,
+        .spAtkEv = 252,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_AIRSLASH,
+            MOVE_DAZZLINGGLEAM,
+            MOVE_FLAMETHROWER,
+            MOVE_ROOST,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_BRAVIARY,
+        .item = ITEM_LEFTOVERS,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Defiant
+        .nature = NATURE_ADAMANT,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_BULKUP,
+            MOVE_BRAVEBIRD,
+            MOVE_RETALIATE,
+            MOVE_ROOST,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_MILOTIC,
+        .item = ITEM_FLAME_ORB,
+        .ability = FRONTIER_ABILITY_1, //Marvel Scale
+        .nature = NATURE_BOLD,
+        .hpEv = 252,
+        .defEv = 252,
+        .spAtkEv = 4,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_SCALD,
+            MOVE_ICEBEAM,
+            MOVE_FLIPTURN,
+            MOVE_RECOVER,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_GARCHOMP,
+        .item = ITEM_GARCHOMPITE,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Rough Skin
+        .nature = NATURE_JOLLY,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_SWORDSDANCE,
+            MOVE_SCALESHOT,
+            MOVE_EARTHQUAKE,
+            MOVE_FIREFANG,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+};
 
 
 extern const u8 sTrainerName_Tasha[];
@@ -6738,6 +7198,54 @@ const struct MultiRaidTrainer gHardmodeTrainers[] =
 		.spreadSizes =
 		{
 			[0] = NELEMS(sHardmodeTeam_BlackBeltHaruto),
+		},
+	},
+	{
+		.owNum = EVENT_OBJ_GFX_OAK,
+		.trainerClass = CLASS_PKMN_TRAINER_1,
+		.backSpriteId = 0,
+		.gender = FEMALE,
+		.otId = 39,
+		.name = sTrainerName_Tasha,
+		.spreads =
+		{
+			[0] = sHardmodeTeam_Cynthia1,
+		},
+		.spreadSizes =
+		{
+			[0] = NELEMS(sHardmodeTeam_Cynthia1),
+		},
+	},
+	{
+		.owNum = EVENT_OBJ_GFX_OAK,
+		.trainerClass = CLASS_PKMN_TRAINER_1,
+		.backSpriteId = 0,
+		.gender = FEMALE,
+		.otId = 40,
+		.name = sTrainerName_Tasha,
+		.spreads =
+		{
+			[0] = sHardmodeTeam_Cynthia2,
+		},
+		.spreadSizes =
+		{
+			[0] = NELEMS(sHardmodeTeam_Cynthia2),
+		},
+	},
+	{
+		.owNum = EVENT_OBJ_GFX_OAK,
+		.trainerClass = CLASS_PKMN_TRAINER_1,
+		.backSpriteId = 0,
+		.gender = FEMALE,
+		.otId = 41,
+		.name = sTrainerName_Tasha,
+		.spreads =
+		{
+			[0] = sHardmodeTeam_Cynthia3,
+		},
+		.spreadSizes =
+		{
+			[0] = NELEMS(sHardmodeTeam_Cynthia3),
 		},
 	},
 };

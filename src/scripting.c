@@ -14,6 +14,7 @@
 #include "../include/naming_screen.h"
 #include "../include/overworld.h"
 #include "../include/pokemon_storage_system.h"
+#include "../include/random.h"
 #include "../include/region_map.h"
 #include "../include/save.h"
 #include "../include/script.h"
@@ -21,6 +22,7 @@
 #include "../include/sound.h"
 #include "../include/sprite.h"
 #include "../include/string_util.h"
+#include "../include/task.h"
 #include "../include/text.h"
 #include "../include/wild_encounter.h"
 #include "../include/window.h"
@@ -4621,3 +4623,13 @@ void CheckSaveblockSizes(void)
     ConvertIntToDecimalStringN(gStringVar2, sizeof(struct SaveBlock2), STR_CONV_MODE_LEFT_ALIGN, 6);
     ConvertIntToDecimalStringN(gStringVar3, sizeof(struct PokemonStorage), STR_CONV_MODE_LEFT_ALIGN, 6);
 }
+
+static const struct WindowTemplate sNameBoxWindowTemplate = {
+	.bg = 0,
+	.tilemapLeft = 1,
+	.tilemapTop = 11,
+	.width = 10,
+	.height = 2,
+	.paletteNum = 15,
+	.baseBlock = 0x008
+};

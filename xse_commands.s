@@ -1988,6 +1988,11 @@ map \map
 	if equal _goto \dest
 .endm
 
+.macro callcase condition:req, dest:req
+	compare 0x8000, \condition
+	if equal _call \dest
+.endm
+
 .macro giveitem item:req amount:req msgtype:req
 	copyvarifnotzero 0x8000 \item
 	copyvarifnotzero 0x8001 \amount
@@ -2092,4 +2097,20 @@ setorcopyvar 0x8000, \item
 setorcopyvar 0x8001, \amount
 setorcopyvar 0x8002, \fanfare
 callstd 9
+.endm
+
+.macro givepokemoncustom species:req level:req item:req move1=0 move2=0 move3=0 move4=0 nature=26 shiny=0 hpIv=0 atkIv=0 defIv=0 spatkIv=0 spdefIv=0 spdIv=0 ball=3
+setvar 0x8000, \move1 
+setvar 0x8001, \move2 
+setvar 0x8002, \move3 
+setvar 0x8003, \move4 
+setvar 0x8004, \nature 
+setvar 0x8005, \shiny 
+setvar 0x8006, \hpIv 
+setvar 0x8007, \atkIv 
+setvar 0x8008, \defIv 
+setvar 0x8009, \spdIv
+setvar 0x800A, \spatkIv 
+setvar 0x800B, \spdefIv 
+givepokemon \species, \level, \item, 0x0, 0x1, \ball 
 .endm

@@ -54,15 +54,46 @@ EventScript_DoCynthiaStuff:
     waitmovement 0x0
     msgbox gText_CynthiaIntro3 MSG_KEEPOPEN
     closeonkeypress
-    @@trainerbattle3 0x3 39 0x0 gText_CynthiaLose
-    setvar 0x8000 0
-    setvar 0x8001 2
-    setvar 0x8002 0
-    special2 0x5028 0x52
-    trainerbattle9 0x9 0x399 0x0 0x0 0x0
+    random 3
+    switch LASTRESULT
+    callcase 0, CynthiaBattle1
+    callcase 1, CynthiaBattle2
+    callcase 2, CynthiaBattle3
+    callcase 3, CynthiaBattle3
+    playbgm 360 0
+    msgbox gText_CynthiaAfterBattle MSG_KEEPOPEN
+    closeonkeypress
+    givepokemoncustom SPECIES_GIBLE 1 ITEM_NONE MOVE_OUTRAGE MOVE_SANDTOMB MOVE_BODYSLAM MOVE_IRONHEAD NATURE_JOLLY 1 31 31 31 31 31 31 21
+    fanfare 0x101
+    msgbox gText_PlayerReceievedShinyGible MSG_NORMAL
+    waitfanfare
+    closeonkeypress
+    msgbox gText_CynthiaAfterBattle2 MSG_KEEPOPEN
+    closeonkeypress
+    applymovement 1 EventScript_CynthiaMovement5
+    waitmovement 0x0
+    applymovement 0xFF EventScript_PlayerCynthiaMovement
+    waitmovement 0x0
+    pause 0x15
+    applymovement 1 EventScript_CynthiaMovement6
+    waitmovement 0x0
+    sound 241
     setvar VAR_CYNTHIA_BEAT 0x1
+    hidesprite 1
+    setflag FLAG_CYNTHIA_BEAT
+    fadedefaultbgm
     releaseall
     end
+
+CynthiaBattle1:
+    trainerbattle3 0x3 39 0x0 gText_CynthiaLose
+    return
+CynthiaBattle2:
+    trainerbattle3 0x3 40 0x0 gText_CynthiaLose
+    return
+CynthiaBattle3:
+    trainerbattle3 0x3 41 0x0 gText_CynthiaLose
+    return
 
 EventScript_CynthiaMovement1:
     .byte 0x62
@@ -78,4 +109,17 @@ EventScript_CynthiaMovement3:
 
 EventScript_CynthiaMovement4:
     .byte look_down
+    .byte 0xFE
+
+EventScript_CynthiaMovement5:
+    .byte walk_down
+    .byte 0xFE
+
+EventScript_PlayerCynthiaMovement:
+    .byte walk_right
+    .byte look_left
+    .byte 0xFE
+
+EventScript_CynthiaMovement6:
+    .byte walk_down
     .byte 0xFE
