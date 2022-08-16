@@ -660,6 +660,7 @@ void atkF0_givecaughtmon(void)
 	}
 
 	#ifdef UNBOUND
+	u32 none = 0;
 	SetMonData(mon, MON_DATA_PP_BONUSES, &none); //In case it was set for a boss battle
 	FixOverflownPP(mon);
 	#endif

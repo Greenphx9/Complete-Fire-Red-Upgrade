@@ -820,7 +820,7 @@ u16 CreateTrainerPicSprite(u16 species, bool8 isFrontPic, s16 x, s16 y, u8 palet
 	return spriteId;
 }
 
-void TryModifyMugshotTrainerPicPal(u16 trainerPicId, u8 index)
+void TryModifyMugshotTrainerPicPal(unusedArg u16 trainerPicId, unusedArg u8 index)
 {
 	#ifdef UNBOUND
 	if (IsTrainerPicAffectedByCustomization(trainerPicId)) //Is player sprite

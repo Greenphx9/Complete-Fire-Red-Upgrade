@@ -1954,7 +1954,25 @@ void DetermineRaidSpecies(void)
 	}
 	else if (raid->data != NULL)
 	{
-		index = GetRaidRandomNumber() % raid->amount;
+		u8 amount = raid->amount;
+
+		#ifdef FLAG_GEN_8_PLACED_IN_GAME
+		if (!FlagGet(FLAG_GEN_8_PLACED_IN_GAME))
+		{
+			//Don't spawn Gen 8 mons
+			for (u32 i = 0; i < raid->amount; ++i)
+			{
+				if (raid->data[i].species >= SPECIES_GROOKEY
+				&& raid->data[i].species < NUM_SPECIES_GEN_8)
+				{
+					amount = i;
+					break;
+				}
+			}
+		}
+		#endif
+
+		index = GetRaidRandomNumber() % amount;
 		gRaidBattleSpecies = raid->data[index].species;
 
 		ModifyNormalRaidBattleSpecies(); //Adjusts things like Wormadam
@@ -2277,6 +2295,26 @@ static bool8 IsFoughtRaidSpecies(u16 species)
 	#endif
 
 	return FALSE;
+}
+
+static u8 TryAlterRaidItemDropRate(unusedArg u16 item, u8 rate)
+{
+	#ifdef UNBOUND
+	if (item == ITEM_WISHING_PIECE)
+	{
+		for (u32 i = 0; i < PARTY_SIZE; i++)
+		{
+			if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2, NULL) == SPECIES_JIRACHI)
+			{
+				if (rate < 20)
+					rate = 20; //Bump up to 20%
+				break;
+			}
+		}
+	}
+	#endif
+
+	return rate;
 }
 
 //Input: VAR_TEMP_0 = 0
