@@ -283,6 +283,9 @@ Enter a Phrase
 #org @gText_EnterPassword
 Enter Password
 
+#org @gText_EnterSpeciesName
+Enter a Species
+
 #org @gText_Purchased
 Purchased
 

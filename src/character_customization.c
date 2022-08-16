@@ -775,7 +775,9 @@ bool8 IsTrainerPicAffectedByCustomization(u16 trainerPicId)
 		|| trainerPicId == TRAINER_PIC_PLAYER_CHAMPION_M
 		|| trainerPicId == TRAINER_PIC_PLAYER_CHAMPION_F
 		|| trainerPicId == TRAINER_PIC_PLAYER_RED
-		|| trainerPicId == TRAINER_PIC_PLAYER_LEAF;
+		|| trainerPicId == TRAINER_PIC_PLAYER_LEAF
+		|| trainerPicId == TRAINER_PIC_PLAYER_ETHAN
+		|| trainerPicId == TRAINER_PIC_PLAYER_LYRA;
 }
 
 bool8 IsTrainerPicAffectedByOutfitCustomization(u16 trainerPicId)
