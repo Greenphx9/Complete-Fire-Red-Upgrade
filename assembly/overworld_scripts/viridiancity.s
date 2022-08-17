@@ -319,7 +319,7 @@ EventScript_ExclamantionMark:
 .global EventScript_GiveDreamEaterTM
 EventScript_GiveDreamEaterTM:
 	lock
-	checkflag 0x9C
+	checkflag 0x9CE
 	if SET _goto EventScript_HasDreamEater
 	msgbox gText_GiveDreamEaterTM MSG_FACE
 	giveitem ITEM_TM85 0x1 MSG_OBTAIN

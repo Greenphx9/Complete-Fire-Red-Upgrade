@@ -95,6 +95,8 @@ extern const u8 gTrainerBackPic_ChiliPal[];
 #define gTrainerPalette_Chili gTrainerBackPic_ChiliPal
 extern const u8 gTrainerBackPic_CressPal[];
 #define gTrainerPalette_Cress gTrainerBackPic_CressPal
+extern const u8 gTrainerBackPic_CilanPal[];
+#define gTrainerPalette_Cilan gTrainerBackPic_CilanPal
 
 const struct CompressedSpritePalette gTrainerBackPicPaletteTable[] =
 {
@@ -128,6 +130,7 @@ const struct CompressedSpritePalette gTrainerBackPicPaletteTable[] =
 	[TRAINER_BACK_PIC_RILEY] =		{gTrainerPalette_Riley,			TRAINER_BACK_PIC_RILEY},
 	[TRAINER_BACK_PIC_CHILI] =		{gTrainerPalette_Chili,			TRAINER_BACK_PIC_CHILI},
 	[TRAINER_BACK_PIC_CRESS] =		{gTrainerPalette_Cress,			TRAINER_BACK_PIC_CRESS},
+	[TRAINER_BACK_PIC_CILAN] =		{gTrainerPalette_Cilan,			TRAINER_BACK_PIC_CILAN},
 
 #ifdef UNBOUND //For Pokemon Unbound
 	[TRAINER_BACK_PIC_MARLON] =		{gTrainerPalette_Marlon, 		TRAINER_BACK_PIC_MARLON},
@@ -185,6 +188,7 @@ const struct CompressedSpritePalette gTrainerBackPicPaletteTable[] =
 #define gTrainerBackAnims_Riley (const union AnimCmd* const*) 0x8239F44
 #define gTrainerBackAnims_Chili (const union AnimCmd* const*) 0x8239F44
 #define gTrainerBackAnims_Cress (const union AnimCmd* const*) 0x8239F44
+#define gTrainerBackAnims_Cilan (const union AnimCmd* const*) 0x8239F44
 
 const union AnimCmd* const* const gTrainerBackAnimsPtrTable[] =
 {
@@ -218,6 +222,7 @@ const union AnimCmd* const* const gTrainerBackAnimsPtrTable[] =
 	[TRAINER_BACK_PIC_RILEY] =			gTrainerBackAnims_Riley,
 	[TRAINER_BACK_PIC_CHILI] =			gTrainerBackAnims_Chili,
 	[TRAINER_BACK_PIC_CRESS] =			gTrainerBackAnims_Cress,
+	[TRAINER_BACK_PIC_CILAN] =			gTrainerBackAnims_Cilan,
 
 #ifdef UNBOUND
 	[TRAINER_BACK_PIC_MARLON] = gTrainerBackAnims_Marlon,
@@ -266,6 +271,7 @@ const struct MonCoords gTrainerBackPicCoords[] =
 	[TRAINER_BACK_PIC_RILEY] =	 	{.coords = 8, .y_offset = 4},
 	[TRAINER_BACK_PIC_CHILI] =	 	{.coords = 8, .y_offset = 4},
 	[TRAINER_BACK_PIC_CRESS] =	 	{.coords = 8, .y_offset = 4},
+	[TRAINER_BACK_PIC_CILAN] =	 	{.coords = 8, .y_offset = 4},
 
 #ifdef UNBOUND
 	[TRAINER_BACK_PIC_MARLON] = 	{.coords = 8, .y_offset = 4},
@@ -330,6 +336,7 @@ extern const u8 gTrainerBackPic_MarleyTiles[];
 extern const u8 gTrainerBackPic_RileyTiles[];
 extern const u8 gTrainerBackPic_ChiliTiles[];
 extern const u8 gTrainerBackPic_CressTiles[];
+extern const u8 gTrainerBackPic_CilanTiles[];
 static const struct SpriteFrameImage sTrainerBackPicTable_Brendan[] =
 {
 	{gTrainerBackPic_BrendanTiles, 			0x800, 0},
@@ -551,6 +558,15 @@ static const struct SpriteFrameImage sTrainerBackPicTable_Cress[] =
 	{gTrainerBackPic_CressTiles + 0x1000, 	0x800, 0},
 	{gTrainerBackPic_CressTiles + 0x1800, 	0x800, 0},
 	{gTrainerBackPic_CressTiles + 0x2000, 	0x800, 0},
+};
+
+static const struct SpriteFrameImage sTrainerBackPicTable_Cilan[] =
+{
+	{gTrainerBackPic_CilanTiles, 			0x800, 0},
+	{gTrainerBackPic_CilanTiles + 0x0800, 	0x800, 0},
+	{gTrainerBackPic_CilanTiles + 0x1000, 	0x800, 0},
+	{gTrainerBackPic_CilanTiles + 0x1800, 	0x800, 0},
+	{gTrainerBackPic_CilanTiles + 0x2000, 	0x800, 0},
 };
 
 #ifdef UNBOUND
@@ -961,6 +977,17 @@ const struct SpriteTemplate gSpriteTemplateTable_TrainerBackSprites[] =
 		.oam = gOamData_TrainerBacksprite,
 		.anims = NULL,
 		.images = sTrainerBackPicTable_Cress,
+		.affineAnims = gAffineAnims_TrainerBacksprite,
+		.callback = gSpriteCB_TrainerBacksprite,
+	},
+
+	[TRAINER_BACK_PIC_CILAN] =
+	{
+		.tileTag = 0xFFFF,
+		.paletteTag = 0,
+		.oam = gOamData_TrainerBacksprite,
+		.anims = NULL,
+		.images = sTrainerBackPicTable_Cilan,
 		.affineAnims = gAffineAnims_TrainerBacksprite,
 		.callback = gSpriteCB_TrainerBacksprite,
 	},

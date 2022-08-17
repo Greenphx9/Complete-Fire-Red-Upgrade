@@ -204,6 +204,7 @@
 #define TRAINER_BACK_PIC_RILEY              27
 #define TRAINER_BACK_PIC_CHILI              28
 #define TRAINER_BACK_PIC_CRESS              29
+#define TRAINER_BACK_PIC_CILAN              30
 #ifndef UNBOUND //CHANGE THESE
 
 #define TRAINER_ENCOUNTER_MUSIC_MALE         0 // standard male encounter music
