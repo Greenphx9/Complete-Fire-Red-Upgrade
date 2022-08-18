@@ -1804,6 +1804,8 @@ void PlayerHandleChooseAction(void)
 	else
 		BattleStringExpandPlaceholdersToDisplayedString(gText_WhatWillPkmnDo);
 	BattlePutTextOnWindow(gDisplayedStringBattle, 1);
+
+	TryLoadLastUsedBallTrigger();
 }
 
 void HandleInputChooseAction(void)
@@ -1935,6 +1937,39 @@ void HandleInputChooseAction(void)
 	else if (gMain.newKeys & START_BUTTON)
 	{
 		SwapHpBarsWithHpText();
+	}
+	else if (gMain.newKeys & L_BUTTON)
+	{
+		if (!CantLoadLastBallTrigger()) //Can use last ball
+		{
+			if (IsPlayerPartyAndPokemonStorageFull())
+				PlaySE(SE_ERROR);
+			else
+			{
+				PlaySE(SE_SELECT);
+				gSpecialVar_ItemId = GetLastUsedBall();
+				RemoveBagItem(gSpecialVar_ItemId, 1);
+				gNewBS->usedLastBall = TRUE;
+				gNewBS->megaData.chosen[gActiveBattler] = FALSE;
+				gNewBS->ultraData.chosen[gActiveBattler] = FALSE;
+				EmitTwoReturnValues(1, ACTION_USE_ITEM, 0);
+				PlayerBufferExecCompleted();
+			}
+			
+			return; //The Team Preview trigger check is unimportant
+		}
+
+		/*#ifdef TEAM_PREVIEW_TRIGGER
+		if (!CantLoadTeamPreviewTrigger())
+		{
+			PlaySE(SE_SELECT);
+			gBattleAnimAttacker = gActiveBattler;
+			UpdateOamPriorityInAllHealthboxes(0);
+			ChangeBattlerSpritesInvisibilities(TRUE);
+			DisplayInBattleTeamPreview();
+			gBattlerControllerFuncs[gActiveBattler] = HandleInputTeamPreview;
+		}
+		#endif*/
 	}
 }
 

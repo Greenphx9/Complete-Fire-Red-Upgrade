@@ -19,6 +19,9 @@ void TryLoadMegaTriggers(void);
 void TryLoadZTrigger(void);
 void TryLoadDynamaxTrigger(void);
 void DestroyRaidShieldSprite(void);
+void TryLoadLastUsedBallTrigger(void);
+u16 GetLastUsedBall(void);
+bool8 CantLoadLastBallTrigger(void);
 
 //Exported Data Structures
 extern const struct SpriteTemplate gRaidShieldSpriteTemplate;

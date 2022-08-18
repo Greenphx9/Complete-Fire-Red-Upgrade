@@ -7,6 +7,7 @@ gBattleTowerStreaks = 0x2026840;
 gBattleMineStreaks = 0x2026B40;
 gBattleCircusStreaks = 0x2026B50;
 gFollowerState = 0x203B818;
+gLastUsedBall = 0x203B774;
 gNewBS = 0x203E038;
 gInShop = 0x203E043;
 sItemDescriptionPocket = 0x203E053;
@@ -1991,7 +1992,7 @@ IsPlayerPartyAndPokemonStorageFull = 0x8040F6C | 1;
 gLastUsedSpecies = 0x203FA00;
 
 /* Options Menu */
-sOptionMenuPtr = 0x203DFAA;
+sOptionMenuPtr = 0x203DA00;
 gText_TextSpeed = 0x8419dd3;
 gText_BattleScene = 0x8419dde;
 gText_BattleScene = 0x8419dde;

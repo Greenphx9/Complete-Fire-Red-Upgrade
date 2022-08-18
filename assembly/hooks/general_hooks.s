@@ -1264,3 +1264,20 @@ AIXItemStringHook:
 	ldr r6, =0x81D99E4
 	ldr r0, =0x8016706 | 1
 	bx r0
+
+.pool
+@0x8032CEC with r0
+LastUsedBallOverrideHook:
+	push {r4-r5, lr}
+	sub sp, #0x4
+	bl DidPlayerUseLastBallAndTryUpdateControllerFunc
+	cmp r0, #0x0
+	bne LastUsedBallOverrideHook_SkipBag
+	mov r0, #0x1
+	neg r0, r0
+	ldr r1, =0x8032CF4 | 1
+	bx r1
+
+LastUsedBallOverrideHook_SkipBag: @Skips the palette fade to bag
+	ldr r0, =0x8032D30 | 1
+	bx r0

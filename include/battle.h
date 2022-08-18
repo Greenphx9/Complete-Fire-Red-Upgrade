@@ -864,6 +864,8 @@ struct NewBattleStruct
 	bool8 doingPluckItemEffect : 1;
 	bool8 usedXSpDef : 1; //Needed because it's hooked into the X Sp. Atk
 	bool8 lessThanHalfHPBeforeShellBell : 1; //For Emergency Exit
+	bool8 usedLastBall : 1; //Helps prevent the bag from opening
+	bool8 threwBall : 1; //Last Used Ball only appears once a ball has been thrown once
 
 	//Other
 	u16 LastUsedMove;

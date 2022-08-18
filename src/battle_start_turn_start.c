@@ -667,10 +667,14 @@ void RunTurnActionsFunctions(void)
 	{
 		for (i = 0; i < gBattlersCount; ++i) //Loop through all battlers and play Quick Claw anim for each
 		{
+			u8 bank = gBanksByTurnOrder[i];
+			u8 action = gActionsByTurnOrder[i];
 			if (gNewBS->CustapQuickClawIndicator & gBitTable[i])
 			{
 				gNewBS->CustapQuickClawIndicator &= ~(gBitTable[i]);
 
+				if (action == ACTION_USE_ITEM || action == ACTION_SWITCH || action == ACTION_RUN)
+					continue;
 
 				if (gActionsByTurnOrder[i] != ACTION_USE_ITEM)
 				{
@@ -681,6 +685,11 @@ void RunTurnActionsFunctions(void)
 						gCurrentActionFuncId = savedActionFuncId;
 						return;
 					}
+					if (action == ACTION_USE_ITEM)
+						continue;
+					else if (ITEM_EFFECT(bank) == ITEM_EFFECT_CUSTAP_BERRY
+					&& (action == ACTION_USE_ITEM || action == ACTION_SWITCH || action == ACTION_RUN)) //Only Quick Claw activates on the switch
+						continue;
 					gBattleScripting.bank = i;
 					gLastUsedItem = ITEM(i);
 					if (ITEM_EFFECT(i) != ITEM_EFFECT_CUSTAP_BERRY)

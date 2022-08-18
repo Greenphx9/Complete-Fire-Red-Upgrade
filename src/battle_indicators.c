@@ -5,8 +5,10 @@
 #include "../include/string_util.h"
 #include "../include/new/battle_indicators.h"
 #include "../include/new/battle_util.h"
+#include "../include/new/catching.h"
 #include "../include/new/dynamax.h"
 #include "../include/new/item.h"
+#include "../include/item_icon.h"
 #include "../include/new/mega.h"
 #include "../include/new/move_menu.h"
 #include "../include/new/set_z_effect.h"
@@ -26,6 +28,8 @@ extern const u8 Dynamax_TriggerTiles[]; //For some reason this doesn't work
 extern const u8 Dynamax_Trigger_WorkingTiles[]; //This is used as the image until the bug is fixed
 extern const u16 Dynamax_TriggerPal[];
 extern const u8 Raid_ShieldTiles[];
+extern const u8 Last_Ball_TriggerTiles[];
+extern const u16 Last_Ball_TriggerPal[];
 
 static bool8 IsIgnoredTriggerColour(u16 colour);
 static struct Sprite* GetHealthboxSprite(u8 bank);
@@ -35,10 +39,13 @@ static void SpriteCB_MegaTrigger(struct Sprite* self);
 static void SpriteCB_MegaIndicator(struct Sprite* self);
 static void SpriteCB_ZTrigger(struct Sprite* self);
 static void SpriteCB_DynamaxTrigger(struct Sprite* self);
+static void SpriteCB_LastBallTrigger(struct Sprite* self);
 static void SpriteCB_RaidShield(struct Sprite* sprite);
 static void DestroyMegaTriggers(void);
 static void DestroyZTrigger(void);
 static void DestroyDynamaxTrigger(void);
+static void DestroyLastBallTrigger(struct Sprite* sprite);
+static void DestroyLastBallTriggerBall(struct Sprite* sprite);
 
 enum MegaGraphicsTags
 {
@@ -52,6 +59,8 @@ enum MegaGraphicsTags
 	GFX_TAG_DYNAMAX_INDICATOR,
 	GFX_TAG_DYNAMAX_TRIGGER,
 	GFX_TAG_RAID_SHIELD,
+	GFX_TAG_LAST_BALL_TRIGGER,
+	GFX_TAG_LAST_BALL_TRIGGER_BALL,
 };
 
 enum
@@ -79,6 +88,9 @@ static const struct CompressedSpriteSheet sDynamaxIndicatorSpriteSheet = {Dynama
 static const struct CompressedSpriteSheet sDynamaxTriggerSpriteSheet = {Dynamax_Trigger_WorkingTiles, (32 * 32) / 2, GFX_TAG_DYNAMAX_TRIGGER};
 static const struct SpritePalette sDynamaxTriggerPalette = {Dynamax_TriggerPal, GFX_TAG_DYNAMAX_TRIGGER};
 static const struct CompressedSpriteSheet sRaidShieldSpriteSheet = {Raid_ShieldTiles, (16 * 8) / 2, GFX_TAG_RAID_SHIELD};
+
+static const struct CompressedSpriteSheet sLastBallTriggerSpriteSheet = {Last_Ball_TriggerTiles, (32 * 32) / 2, GFX_TAG_LAST_BALL_TRIGGER};
+static const struct SpritePalette sLastBallTriggerPalette = {Last_Ball_TriggerPal, GFX_TAG_LAST_BALL_TRIGGER};
 
 static const struct OamData sIndicatorOam =
 {
@@ -235,6 +247,18 @@ const struct SpriteTemplate gRaidShieldSpriteTemplate =
 	.affineAnims = sSpriteAffineAnimTable_RaidShield,
 	.callback = SpriteCB_RaidShield,
 };
+
+static const struct SpriteTemplate sLastBallTriggerSpriteTemplate =
+{
+	.tileTag = GFX_TAG_LAST_BALL_TRIGGER,
+	.paletteTag = TAG_HEALTHBOX_PAL,
+	.oam = &sTriggerOam,
+	.anims = gDummySpriteAnimTable,
+	.images = NULL,
+	.affineAnims = gDummySpriteAffineAnimTable,
+	.callback = SpriteCB_LastBallTrigger,
+};
+
 
 /* Declare the colours the trigger button doesn't light up */
 static const u16 sIgnoredTriggerColours[] =
@@ -699,6 +723,42 @@ static void SpriteCB_DynamaxTrigger(struct Sprite* self)
 	}
 }
 
+static void SpriteCB_LastBallTrigger(struct Sprite* self)
+{
+	self->pos2.x = -self->data[3];
+
+	if (gBattlerControllerFuncs[TRIGGER_BANK] == (void*) (0x802E438 | 1) //Old HandleInputChooseAction
+	||  gBattlerControllerFuncs[TRIGGER_BANK] == HandleInputChooseAction)
+	{
+		if (!CantCatchPokemonRightNow())
+		{
+			//Recede
+			if (self->data[3] > 0)
+				self->data[3] -= 2;
+			else
+				self->data[3] = 0;
+		}
+		else
+		{
+			if (self->data[3] < 32)
+				self->data[3] += 2;
+			else
+				self->data[3] = 32;
+		}
+	}
+	else if (gBattlerControllerFuncs[TRIGGER_BANK] != HandleChooseActionAfterDma3) //Last Ball Trigger should recede and destroy itself otherwise
+	{
+		if (self->data[3] < 32)
+			self->data[3] += 2;
+		else
+		{
+			void (*destructionFunc)(struct Sprite*) = (void*) (((u16) self->data[6]) | (((u16) self->data[7]) << 16));
+			destructionFunc(self);
+			return;
+		}
+	}
+}
+
 static void SpriteCB_RaidShield(struct Sprite* sprite)
 {
 	u8 bank = sprite->data[0];
@@ -951,6 +1011,111 @@ static void DestroyDynamaxTrigger(void)
 		if (gSprites[i].template->tileTag == GFX_TAG_DYNAMAX_TRIGGER)
 			DestroySprite(&gSprites[i]);
 	}
+}
+
+u16 GetLastUsedBall(void)
+{
+	#ifdef UNBOUND
+	if (!FlagGet(FLAG_SANDBOX_MODE) //All balls have 100% catch rate so no point in this
+	&& FlagGet(FLAG_SHOW_BEST_BALL))
+		return GetBestBallInBag();
+	#endif
+
+	return gLastUsedBall;
+}
+
+bool8 CantLoadLastBallTrigger(void)
+{
+	u16 lastUsedBall = GetLastUsedBall();
+
+	return (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+		|| CantCatchPokemonRightNow()
+		|| GetPocketByItemId(lastUsedBall) != POCKET_POKEBALLS
+		|| !CheckBagHasItem(lastUsedBall, 1);
+}
+
+void TryLoadLastUsedBallTrigger(void)
+{
+	u8 spriteId, i;
+
+	if (CantLoadLastBallTrigger())
+		return;
+
+	if (IndexOfSpritePaletteTag(GFX_TAG_LAST_BALL_TRIGGER) == 0xFF)
+		LoadSpritePalette(&sLastBallTriggerPalette);
+	if (IndexOfSpriteTileTag(GFX_TAG_LAST_BALL_TRIGGER) == 0xFF)
+		LoadCompressedSpriteSheetUsingHeap(&sLastBallTriggerSpriteSheet);
+
+	//See if there's an old trigger that hasn't disappeared yet
+	for (i = 0; i < MAX_SPRITES; ++i)
+	{
+		if (gSprites[i].inUse
+		&& gSprites[i].template->tileTag == GFX_TAG_LAST_BALL_TRIGGER)
+			return; //Don't create a new trigger
+	}
+
+	spriteId = CreateSprite(&sLastBallTriggerSpriteTemplate, 0 + (32 / 2), 72 + (32 / 2), 1);
+	if (spriteId < MAX_SPRITES)
+	{
+		gSprites[spriteId].data[3] = 32;
+		gSprites[spriteId].data[4] = gActiveBattler;
+		gSprites[spriteId].data[6] = ((u32) DestroyLastBallTrigger) & 0xFFFF;
+		gSprites[spriteId].data[7] = ((u32) DestroyLastBallTrigger) >> 16;
+	}
+	
+	spriteId = AddItemIconSprite(GFX_TAG_LAST_BALL_TRIGGER_BALL, GFX_TAG_LAST_BALL_TRIGGER_BALL, GetLastUsedBall());
+	if (spriteId < MAX_SPRITES)
+	{
+		gSprites[spriteId].pos1.x = -1 + (40 / 2);
+		gSprites[spriteId].pos1.y = 75 + (40 / 2);
+		gSprites[spriteId].data[3] = 32;
+		gSprites[spriteId].data[4] = gActiveBattler;
+		gSprites[spriteId].data[6] = ((u32) DestroyLastBallTriggerBall) & 0xFFFF;
+		gSprites[spriteId].data[7] = ((u32) DestroyLastBallTriggerBall) >> 16;
+		gSprites[spriteId].callback = SpriteCB_LastBallTrigger;
+	}
+}
+
+static void DestroyLastBallTrigger(struct Sprite* sprite)
+{
+	u32 i;
+	DestroySprite(sprite);
+
+	for (i = 0; i < MAX_SPRITES; ++i)
+	{
+		if (gSprites[i].inUse && gSprites[i].template->tileTag == GFX_TAG_LAST_BALL_TRIGGER)
+			return; //Tiles and palette are still in use
+	}
+
+	//FreeSpritePaletteByTag(GFX_TAG_LAST_BALL_TRIGGER);
+	FreeSpriteTilesByTag(GFX_TAG_LAST_BALL_TRIGGER);
+}
+
+static void DestroyLastBallTriggerBall(struct Sprite* sprite)
+{
+	u32 i;
+	DestroySprite(sprite);
+
+	for (i = 0; i < MAX_SPRITES; ++i)
+	{
+		if (gSprites[i].inUse && gSprites[i].template->tileTag == GFX_TAG_LAST_BALL_TRIGGER_BALL)
+			return; //Tiles and palette are still in use
+	}
+
+	FreeSpritePaletteByTag(GFX_TAG_LAST_BALL_TRIGGER_BALL);
+	FreeSpriteTilesByTag(GFX_TAG_LAST_BALL_TRIGGER_BALL);
+}
+
+bool8 DidPlayerUseLastBallAndTryUpdateControllerFunc(void)
+{
+	if (gNewBS->usedLastBall)
+	{
+		gNewBS->usedLastBall = FALSE; //So bag can be opened normally again
+		gBattlerControllerFuncs[gActiveBattler] = (void*) (0x803073C | 1); //CompleteWhenChoseItem
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 static void DestroyRaidShieldSpriteAndMatrix(struct Sprite *sprite)
