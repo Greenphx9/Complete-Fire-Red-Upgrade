@@ -90,7 +90,6 @@ static const struct SpritePalette sDynamaxTriggerPalette = {Dynamax_TriggerPal, 
 static const struct CompressedSpriteSheet sRaidShieldSpriteSheet = {Raid_ShieldTiles, (16 * 8) / 2, GFX_TAG_RAID_SHIELD};
 
 static const struct CompressedSpriteSheet sLastBallTriggerSpriteSheet = {Last_Ball_TriggerTiles, (32 * 32) / 2, GFX_TAG_LAST_BALL_TRIGGER};
-static const struct SpritePalette sLastBallTriggerPalette = {Last_Ball_TriggerPal, GFX_TAG_LAST_BALL_TRIGGER};
 
 static const struct OamData sIndicatorOam =
 {
@@ -1041,8 +1040,6 @@ void TryLoadLastUsedBallTrigger(void)
 	if (CantLoadLastBallTrigger())
 		return;
 
-	if (IndexOfSpritePaletteTag(GFX_TAG_LAST_BALL_TRIGGER) == 0xFF)
-		LoadSpritePalette(&sLastBallTriggerPalette);
 	if (IndexOfSpriteTileTag(GFX_TAG_LAST_BALL_TRIGGER) == 0xFF)
 		LoadCompressedSpriteSheetUsingHeap(&sLastBallTriggerSpriteSheet);
 
