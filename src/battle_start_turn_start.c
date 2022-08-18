@@ -362,6 +362,8 @@ void BattleBeginFirstTurn(void)
 						gNewBS->ai.moveKnocksOut1Hit[i][j][k] = 0xFF;
 						gNewBS->ai.moveKnocksOut2Hits[i][j][k] = 0xFF;
 					}
+					if (SIDE(i) == B_SIDE_OPPONENT)
+						gNewBS->revealedEnemyMons |= gBitTable[gBattlerPartyIndexes[i]]; //Set up base for team preview
 				}
 			}
 

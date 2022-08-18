@@ -1,5 +1,6 @@
 #include "defines.h"
 #include "defines_battle.h"
+#include "../include/battle_anim.h"
 #include "../include/sprite.h"
 #include "../include/string_util.h"
 #include "../include/window.h"
@@ -66,6 +67,10 @@ static void CloseZMoveDetails(void);
 static void CloseMaxMoveDetails(void);
 static void TryLoadTypeIcons(void);
 static void SpriteCB_CamomonsTypeIcon(struct Sprite* sprite);
+static void HandleInputTeamPreview(void);
+static void ChangeBattlerSpritesInvisibilities(bool8 invisible);
+
+const u8 gText_EmptyString[] = {EOS};
 
 static const struct Coords16 sTypeIconPositions[][/*IS_SINGLE_BATTLE*/2] =
 {
@@ -1806,6 +1811,7 @@ void PlayerHandleChooseAction(void)
 	BattlePutTextOnWindow(gDisplayedStringBattle, 1);
 
 	TryLoadLastUsedBallTrigger();
+	TryLoadTeamPreviewTrigger();
 }
 
 void HandleInputChooseAction(void)
@@ -1959,7 +1965,6 @@ void HandleInputChooseAction(void)
 			return; //The Team Preview trigger check is unimportant
 		}
 
-		/*#ifdef TEAM_PREVIEW_TRIGGER
 		if (!CantLoadTeamPreviewTrigger())
 		{
 			PlaySE(SE_SELECT);
@@ -1969,7 +1974,6 @@ void HandleInputChooseAction(void)
 			DisplayInBattleTeamPreview();
 			gBattlerControllerFuncs[gActiveBattler] = HandleInputTeamPreview;
 		}
-		#endif*/
 	}
 }
 
@@ -2171,4 +2175,39 @@ static void SpriteCB_CamomonsTypeIcon(struct Sprite* sprite)
 	s16 originalY = sprite->data[3];
 	struct Sprite* healthbox = &gSprites[gHealthboxSpriteIds[GetBattlerAtPosition(position)]];
 	sprite->pos1.y = originalY + healthbox->pos2.y;
+}
+
+
+static void HandleInputTeamPreview(void)
+{
+	if (JOY_NEW(A_BUTTON | B_BUTTON | L_BUTTON | DPAD_ANY))
+	{
+		PlaySE(SE_SELECT);
+		TryLoadTeamPreviewTrigger();
+		gBattleAnimAttacker = gActiveBattler;
+		UpdateOamPriorityInAllHealthboxes(1);
+		ChangeBattlerSpritesInvisibilities(FALSE);
+		HideInBattleTeamPreview();
+		gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseAction;
+	}
+}
+
+static void ChangeBattlerSpritesInvisibilities(bool8 invisible)
+{
+	u32 i;
+
+	for (i = 0; i < gBattlersCount; ++i)
+	{
+		u8 spriteId = gBattlerSpriteIds[i];
+
+		if (spriteId == 0xFF || !IsBattlerSpriteVisible(i)) //Pokemon that are already hidden
+		{
+			if (invisible) //Hide sprite
+				gNewBS->hiddenAnimBattlerSprites |= gBitTable[i]; //Set bit to keep hidden after closing team preview
+			else
+				gNewBS->hiddenAnimBattlerSprites &= ~gBitTable[i]; //Clear bit to keep hidden after closing team preview
+		}
+		else
+			gSprites[spriteId].invisible = invisible;
+	}
 }

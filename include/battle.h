@@ -790,6 +790,7 @@ struct NewBattleStruct
 	//Bit Fields for Party
 	u8 BelchCounters;
 	u8 IllusionBroken;
+	u8 revealedEnemyMons;
 
 	//Other Helpers
 	u8 switchOutAbilitiesState; //For tracking effects that happen on switch-out

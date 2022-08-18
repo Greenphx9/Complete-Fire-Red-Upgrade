@@ -547,6 +547,8 @@ void atk52_switchineffects(void)
 				gNewBS->ai.switchingCooldown[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)] = 0;
 				if (IS_DOUBLE_BATTLE)
 					gNewBS->ai.switchingCooldown[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)] = 0;
+
+				gNewBS->revealedEnemyMons |= gBitTable[gBattlerPartyIndexes[gActiveBattler]]; //Add to team preview
 			}
 
 			++gNewBS->switchInEffectsState;

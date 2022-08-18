@@ -4299,6 +4299,11 @@ void UpdateOamPriorityInAllHealthboxes(u8 priority)
 		case CONTROLLER_BALLTHROWANIM:
 			goto HIDE_BOXES;
 
+		case CONTROLLER_CHOOSEACTION:
+			if (!CantLoadTeamPreviewTrigger())
+				break;
+			goto DEFAULT_CASE;
+
 		case CONTROLLER_BATTLEANIMATION:
 			switch (gBattleBufferA[gBattleAnimAttacker][1]) {
 				case B_ANIM_TURN_TRAP:
