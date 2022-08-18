@@ -499,7 +499,6 @@ map 3 25 EventScript_Route7MapScript
 
 ## Route 8
 map 3 26 EventScript_Route8MapScript
-npc 3 26 17 EventScript_TM36
 
 ## Route 18
 map 3 36 EventScript_Route18MapScript

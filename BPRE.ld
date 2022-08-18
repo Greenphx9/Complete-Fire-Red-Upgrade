@@ -1991,7 +1991,7 @@ IsPlayerPartyAndPokemonStorageFull = 0x8040F6C | 1;
 gLastUsedSpecies = 0x203FA00;
 
 /* Options Menu */
-sOptionMenuPtr = 0x203DA00;
+sOptionMenuPtr = 0x203DFAA;
 gText_TextSpeed = 0x8419dd3;
 gText_BattleScene = 0x8419dde;
 gText_BattleScene = 0x8419dde;
