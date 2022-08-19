@@ -1656,13 +1656,27 @@ const u8* LoadProperWhiteoutString(const u8* string)
 	return string;
 }
 
-bool8 IsAutoRunEnabled(void)
+bool8 ShouldPlayerRun(u16 heldKeys)
 {
-	#ifdef FLAG_AUTO_RUN
-		return FlagGet(FLAG_AUTO_RUN);
-	#else
+	if (IsRunningDisallowed(gEventObjects[gPlayerAvatar->eventObjectId].currentMetatileBehavior))
 		return FALSE;
+
+	#ifdef FLAG_AUTO_RUN
+	if (FlagGet(FLAG_AUTO_RUN))
+	{
+		if (heldKeys & B_BUTTON)
+			return FALSE; //Walk when holding B while auto-run is on
+		else
+			return TRUE;
+	}
+	else
 	#endif
+	{
+		if (heldKeys & B_BUTTON)
+			return TRUE;
+		else
+			return FALSE;
+	}
 }
 
 static bool8 IsRunningDisabledByFlag(void)

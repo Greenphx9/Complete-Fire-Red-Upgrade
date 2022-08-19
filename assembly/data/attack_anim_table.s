@@ -4720,7 +4720,7 @@ FLAME_BUFF:
 	return
 
 .align 2
-FLAREBLITZ_BUFF: objtemplate ANIM_TAG_SMALL_EMBER ANIM_TAG_SMALL_EMBER OAM_OFF_32x32 gDummySpriteAnimTable 0x0 gDummySpriteAffineAnimTable SpriteCB_FlareBlitzUpFlames
+FLAREBLITZ_BUFF: objtemplate ANIM_TAG_SMALL_EMBER ANIM_TAG_SMALL_EMBER OAM_OFF_32x32 gDummySpriteAnimTable 0x0 gDummySpriteAffineAnimTable SpriteCB_MoveSpriteUpwardsForDuration
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
@@ -17136,28 +17136,86 @@ ANIM_TERRAIN_PULSE:
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
 ANIM_SKITTER_SMACK:
-	goto ANIM_HYPERSPACEHOLE
+	loadparticle ANIM_TAG_IMPACT
+	launchtask AnimTask_BlendParticle 0x5 0x5 ANIM_TAG_IMPACT 0x0 0x9 0x9 0x3FB5 @;Light green
+	launchtask AnimTask_pal_fade 0xa 0x5 PAL_BG 0x1 0x0 0xE 0x0 @;To Black
+	setarg 0x7 0x0 @;Clear arg 7 so task works properly in Link battles
+	launchtask AnimTask_SkitterBehindOpposingMon 0x2 0x0
+SKITTER_SMACK_LOOP:
+	pause 0x1
+	jumpifargmatches 0x7 0x0 SKITTER_SMACK_LOOP
+	launchtemplate ORDER_HITS TEMPLATE_TARGET | 2, 0x3, 0xfff6 0xfff6 0x0
+	launchtask AnimTask_move_bank_2 0x2 0x5 bank_target 0x3 0x0 0x1C 0x1
+	playsound2 0x7f SOUND_PAN_TARGET
+	pause 0x4
+	launchtemplate ORDER_HITS TEMPLATE_TARGET | 2, 0x3, 0xa 0x14 0x0
+	playsound2 0x7f SOUND_PAN_TARGET
+	pause 0x4
+	launchtemplate ORDER_HITS TEMPLATE_TARGET | 2, 0x3, 0xfffb 0xa 0x0
+	playsound2 0x7f SOUND_PAN_TARGET
+	pause 0x4
+	launchtemplate ORDER_HITS TEMPLATE_TARGET | 2, 0x3, 0x11 0xfff4 0x0
+	playsound2 0x7f SOUND_PAN_TARGET
+	launchtask AnimTask_pal_fade 0xa 0x5 PAL_BG 0x1 0xE 0x0 0x0 @;To Black
+	waitanimation
 	endanimation
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
 ANIM_BURNING_JEALOUSY:
-	loadparticle ANIM_TAG_FOCUS_ENERGY
-	call EndureEffect
-	goto ANIM_LAVAPLUME
+	loadparticle ANIM_TAG_SMALL_EMBER
+	playsound2 0xa4 SOUND_PAN_ATTACKER
+	launchtask AnimTask_move_bank 0x5 0x5 bank_attacker 0x0 0x2 0x2A 0x1
+	launchtask AnimTask_pal_fade_complex 0x2 0x6 PAL_ATK 0x2 0x2 0x0 0x8 0x1F
+	call FIRE_BUFF_EFFECT
+	pause 0x8
+	call FIRE_BUFF_EFFECT
+	launchtask AnimTask_pal_fade_complex 0x2 0x6 PAL_ATK 0x2 0x2 0x0 0x8 0x1F
+	pause 0x4
+	call FIRE_BUFF_EFFECT
+	waitanimation
+	pokespritetoBG bank_target
+	playsound2 0x8A SOUND_PAN_ATTACKER
+	launchtask AnimTask_FlailMovement 0x2 0x1 bank_attacker
+	call BURNING_JEALOUSY_FLAMES_OUT
+	pause 0x8
+	call BURNING_JEALOUSY_FLAMES_OUT
+	pause 0x8
+	call BURNING_JEALOUSY_FLAMES_OUT
+	playsound2 0x8C 0x3f
+	launchtask AnimTask_move_bank_2 0x2 0x5 bank_target 0x2 0x0 0xC 0x1
+	launchtask AnimTask_move_bank_2 0x2 0x5 target_partner 0x2 0x0 0xC 0x1
+	launchtask AnimTask_BlendMonInAndOut 0x3 0x5 bank_target 0x1f 0xc 0x1 0x1
+	launchtask AnimTask_BlendMonInAndOut 0x3 0x5 target_partner 0x1f 0xc 0x1 0x1
+	call INCINERATE_BURN_CHANCE
+	waitanimation
+	pokespritefromBG bank_target
 	endanimation
 
-EndureEffect:	
-	launchtemplate 0x83e3604 0x2 0x4 0x0 0xffe8 0x1a 0x2  
-	pause 0x4 
-	launchtemplate 0x83e3604 0x2 0x4 0x0 0xe 0x1c 0x1  
-	pause 0x4 
-	launchtemplate 0x83e3604 0x2 0x4 0x0 0xfffb 0xa 0x2  
-	pause 0x4 
-	launchtemplate 0x83e3604 0x2 0x4 0x0 0x1c 0x1a 0x3  
-	pause 0x4 
-	launchtemplate 0x83e3604 0x2 0x4 0x0 0xfff4 0x0 0x1  
-	return 
+FIRE_BUFF_EFFECT:
+	launchtemplate FIRE_BUFF TEMPLATE_ATTACKER | 2, 0x5 bank_attacker 0xffe8 0x1a 0x2 0x18
+	pause 0x3
+	launchtemplate FIRE_BUFF TEMPLATE_ATTACKER | 2, 0x5 bank_attacker 0xe 0x1c 0x1 0x18
+	pause 0x3
+	launchtemplate FIRE_BUFF TEMPLATE_ATTACKER | 2, 0x5 bank_attacker 0xfffb 0xa 0x2 0x18
+	pause 0x3
+	launchtemplate FIRE_BUFF TEMPLATE_ATTACKER | 2, 0x5 bank_attacker 0x1c 0x1a 0x3 0x18
+	pause 0x3
+	return
+
+BURNING_JEALOUSY_FLAMES_OUT:
+	launchtemplate BURNING_JEALOUSY_EMISSION TEMPLATE_ATTACKER | 2, 0x6 0x0 0x0 0x1e 0xfb00 0x0 0x3
+	launchtemplate BURNING_JEALOUSY_EMISSION TEMPLATE_ATTACKER | 2, 0x6 0x0 0x0 0x1e 0x0 0x0500 0x3
+	launchtemplate BURNING_JEALOUSY_EMISSION TEMPLATE_ATTACKER | 2, 0x6 0x0 0x0 0x1e 0x0 0xfb00 0x3
+	launchtemplate BURNING_JEALOUSY_EMISSION TEMPLATE_ATTACKER | 2, 0x6 0x0 0x0 0x1e 0x0500 0x0300 0x3
+	launchtemplate BURNING_JEALOUSY_EMISSION TEMPLATE_ATTACKER | 2, 0x6 0x0 0x0 0x1e 0xfb00 0x0300 0x3
+	launchtemplate BURNING_JEALOUSY_EMISSION TEMPLATE_ATTACKER | 2, 0x6 0x0 0x0 0x1e 0x0500 0xfd00 0x3
+	launchtemplate BURNING_JEALOUSY_EMISSION TEMPLATE_ATTACKER | 2, 0x6 0x0 0x0 0x1e 0xfb00 0xfd00 0x3
+	return
+
+.align 2
+FIRE_BUFF: objtemplate ANIM_TAG_SMALL_EMBER ANIM_TAG_SMALL_EMBER OAM_OFF_32x32 0x83E5DB8 0x0 gDummySpriteAffineAnimTable SpriteCB_MoveSpriteUpwardsForDuration
+BURNING_JEALOUSY_EMISSION: objtemplate ANIM_TAG_SMALL_EMBER ANIM_TAG_SMALL_EMBER OAM_OFF_32x32 0x83E5DB8 0x0 gDummySpriteAffineAnimTable 0x80b725d
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool

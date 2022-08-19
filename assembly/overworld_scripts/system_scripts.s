@@ -671,6 +671,7 @@ EventScript_UseDive_Ask:
 	setanimation 0x0 0x8004
 	setanimation 0x1 1
 	doanimation FLDEFF_USE_DIVE
+	waitanimation FLDEFF_USE_DIVE
 	goto EventScript_EndDive
 
 .global EventScript_CantDive
@@ -687,6 +688,7 @@ EventScript_UseDive_SkipAsk:
 	setanimation 0x0 0x8004
 	setanimation 0x1 1
 	doanimation FLDEFF_USE_DIVE
+	waitanimation FLDEFF_USE_DIVE
 	goto EventScript_EndDive	
 
 .global EventScript_UseDiveUnderwater
@@ -703,6 +705,7 @@ EventScript_UseDiveUnderwater:
 	setanimation 0x0 0x8004
 	setanimation 0x1 1
 	doanimation FLDEFF_USE_DIVE
+	waitanimation FLDEFF_USE_DIVE
 	callasm FollowMe_SetIndicatorToRecreateSurfBlob
 	goto EventScript_EndSurface
 	end

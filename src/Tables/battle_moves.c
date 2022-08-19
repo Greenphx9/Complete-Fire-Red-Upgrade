@@ -11671,7 +11671,7 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_SKITTERSMACK] =
-	{	//ANIM TODO
+	{
 		.effect = EFFECT_EVASION_DOWN_HIT,
 		.power = 80,
 		.type = TYPE_BUG,
@@ -11687,13 +11687,13 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_BURNINGJEALOUSY] =
-	{	//ANIM TODO
-		.effect = EFFECT_BURN_HIT, //EFFECT TODO
+{
+		.effect = EFFECT_BURN_HIT,
 		.power = 70,
 		.type = TYPE_FIRE,
 		.accuracy = 100,
 		.pp = 5,
-		.secondaryEffectChance = 0,
+		.secondaryEffectChance = 100,
 		.target = MOVE_TARGET_BOTH,
 		.priority = 0,
 		.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,

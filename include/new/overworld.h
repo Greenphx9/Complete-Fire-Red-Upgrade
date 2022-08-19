@@ -22,7 +22,7 @@ void HasOneTrainerBeenDefeated(void);
 void MoveCameraToTrainerB(void);
 void TrainerFaceFix(void);
 void FollowerPositionFix(u8 offset);
-bool8 IsAutoRunEnabled(void);
+bool8 ShouldPlayerRun(u16 heldKeys);
 bool8 IsRunningDisallowed(u8 tile);
 bool8 IsCurrentAreaVolcano(void);
 bool8 IsCurrentAreaAutumn(void);

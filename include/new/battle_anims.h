@@ -35,7 +35,7 @@ void SpriteCB_SearingShotRock(struct Sprite* sprite);
 void SpriteCB_CoreEnforcerHits(struct Sprite* sprite);
 void SpriteCB_CoreEnforcerBeam(struct Sprite* sprite);
 void CoreEnforcerLoadBeamTarget(struct Sprite* sprite);
-void SpriteCB_FlareBlitzUpFlames(struct Sprite* sprite);
+void SpriteCB_MoveSpriteUpwardsForDuration(struct Sprite* sprite);
 void SpriteCB_SunsteelStrikeRings(struct Sprite* sprite);
 void SpriteCB_MindBlownBall(struct Sprite *sprite);
 void SpriteCB_MindBlownExplosion(struct Sprite* sprite);

@@ -1138,7 +1138,7 @@ void sp138_StartLegendaryBattle(void)
 	ScriptContext2_Enable();
 	gMain.savedCallback = CB2_EndScriptedWildBattle_2;
 
-	gBattleTypeFlags = BATTLE_TYPE_SCRIPTED_WILD_1 | BATTLE_TYPE_SCRIPTED_WILD_3;
+	gBattleTypeFlags = BATTLE_TYPE_SCRIPTED_WILD_1 | BATTLE_TYPE_LEGENDARY_FRLG;
 
 	#ifdef FLAG_DOUBLE_WILD_BATTLE
 	if (FlagGet(FLAG_DOUBLE_WILD_BATTLE)
@@ -1190,7 +1190,7 @@ void sp118_StartRaidBattle(void)
 	ScriptContext2_Enable();
 	gMain.savedCallback = CB2_EndScriptedWildBattle_2;
 
-	gBattleTypeFlags = BATTLE_TYPE_SCRIPTED_WILD_1 | BATTLE_TYPE_SCRIPTED_WILD_3 | BATTLE_TYPE_DYNAMAX;
+	gBattleTypeFlags = BATTLE_TYPE_SCRIPTED_WILD_1 | BATTLE_TYPE_LEGENDARY_FRLG | BATTLE_TYPE_DYNAMAX;
 
 	#ifdef FLAG_RAID_BATTLE
 	FlagSet(FLAG_RAID_BATTLE);
