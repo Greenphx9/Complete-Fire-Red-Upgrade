@@ -20,18 +20,26 @@ EventScript_HideCynthia:
 	checkflag FLAG_SYS_GAME_CLEAR
 	if NOT_SET _goto EventScript_HideCynthia2
 	checkflag FLAG_CYNTHIA_BEAT
-	if SET _goto EventScript_HideCynthia2
+	if SET _goto EventScript_HideCynthia_AlreadyBeat
 	showsprite 1
 	clearflag FLAG_CYNTHIA_SPRITE
+    setvar VAR_CYNTHIA_BEAT 2
 	end
 
 EventScript_HideCynthia2:
 	hidesprite 1
 	setflag FLAG_CYNTHIA_SPRITE
+    setvar VAR_CYNTHIA_BEAT 0
+	end
+    
+EventScript_HideCynthia_AlreadyBeat:
+	hidesprite 1
+	setflag FLAG_CYNTHIA_SPRITE
+    setvar VAR_CYNTHIA_BEAT 1
 	end
 
 EventScript_CheckCynthiaFlag:
-    levelscript VAR_CYNTHIA_BEAT, 0, EventScript_DoCynthiaStuff
+    levelscript VAR_CYNTHIA_BEAT, 2, EventScript_DoCynthiaStuff
     .2byte 0
 
 .global EventScript_DoCynthiaStuff

@@ -98,6 +98,7 @@ void PopulateDamageCalcStructWithBaseDefenderData(struct DamageCalc* data);
 u16 CalcVisualBasePower(u8 bankAtk, u8 bankDef, u16 move, bool8 ignoreDef);
 u16 TryGetAlternateSpeciesSize(u16 species, u8 type);
 u8 CountAliveMonsInBattle(u8 caseId, u8 bankAtk, u8 bankDef);
+void CalculateShellSideArmSplits(void);
 
 u32 GetActualSpeciesWeight(u16 species, u8 ability, u8 itemEffect, u8 bank, bool8 checkNimble);
 bool8 IsBankHoldingFocusSash(u8 bank);

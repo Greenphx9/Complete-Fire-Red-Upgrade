@@ -2210,3 +2210,29 @@ void TrySetBurningJealousyMoveEffect(void)
 	if (gNewBS->statRoseThisRound[gBankTarget])
 		gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_BURN;
 }
+
+void TryFailCorrosiveGas(void)
+{
+	if (!CanKnockOffItem(gBankTarget))
+		gBattlescriptCurrInstr = BattleScript_ButItDoesntAffect - 5;
+}
+
+void CorrodeItem(void)
+{
+	gNewBS->corrodedItems[SIDE(gBankTarget)] |= gBitTable[gBattlerPartyIndexes[gBankTarget]];
+	gLastUsedItem = ITEM(gBankTarget);
+	gBattleMons[gBankTarget].item = ITEM_NONE; //Inaccessible while on the field (but still on party menu)
+}
+
+void TryFailPoltergeist(void)
+{
+	u16 item = ITEM(gBankTarget);
+
+	if (WillPoltergeistFail(item, ABILITY(gBankTarget)))
+		gBattlescriptCurrInstr = BattleScript_ButItFailed - 5 - 2; //From attackstring
+	else
+	{
+		gLastUsedItem = item;
+		RecordItemEffectBattle(gBankTarget, ITEM_EFFECT(gBankTarget));
+	}
+}

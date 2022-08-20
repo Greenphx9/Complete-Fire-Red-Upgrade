@@ -8,6 +8,7 @@
 #include "../../include/new/ai_util.h"
 #include "../../include/new/ai_master.h"
 #include "../../include/new/ai_scripts.h"
+#include "../../include/new/ability_tables.h"
 #include "../../include/new/battle_start_turn_start.h"
 #include "../../include/new/battle_util.h"
 #include "../../include/new/damage_calc.h"
@@ -873,6 +874,11 @@ u16 CalcFinalAIMoveDamage(u16 move, u8 bankAtk, u8 bankDef, u8 numHits, struct D
 
 			return gBattleMons[bankDef].hp;
 
+		case EFFECT_POLTERGEIST:
+			if (WillPoltergeistFail(ITEM(bankDef), ABILITY(bankDef)))
+				return 0;
+			break;
+
 		case EFFECT_COUNTER: //Includes Metal Burst
 		case EFFECT_MIRROR_COAT:
 			return CalcPredictedDamageForCounterMoves(move, bankAtk, bankDef);
@@ -944,13 +950,13 @@ static u32 CalcPredictedDamageForCounterMoves(u16 move, u8 bankAtk, u8 bankDef)
 
 		switch (move) {
 			case MOVE_COUNTER:
-				if (CalcMoveSplit(bankDef, predictedMove) == SPLIT_PHYSICAL)
+				if (CalcMoveSplit(predictedMove, bankDef, bankAtk) == SPLIT_PHYSICAL)
 					predictedDamage *= 2;
 				else
 					predictedDamage = 0;
 				break;
 			case MOVE_MIRRORCOAT:
-				if (CalcMoveSplit(bankDef, predictedMove) == SPLIT_SPECIAL)
+				if (CalcMoveSplit(predictedMove, bankDef, bankAtk) == SPLIT_SPECIAL)
 					predictedDamage *= 2;
 				else
 					predictedDamage = 0;
@@ -1370,6 +1376,20 @@ u16 GetAIChosenMove(u8 bankAtk, u8 bankDef)
 	}
 
 	return move;
+}
+
+u8 GetMonAbilityAfterTrace(struct Pokemon* mon, u8 foe)
+{
+	u8 ability = GetMonAbility(mon);
+	
+	if (IS_SINGLE_BATTLE && ability == ABILITY_TRACE)
+	{
+		u8 foeAbility = *GetAbilityLocation(foe);
+		if (CheckTableForAbility(foeAbility, gTraceBannedAbilities))
+			ability = foeAbility; //What the Ability will become
+	}
+
+	return ability;
 }
 
 bool8 IsTrapped(u8 bank, bool8 switching)
@@ -1948,7 +1968,7 @@ bool8 PhysicalMoveInMoveset(u8 bank)
 
 		if (!(gBitTable[i] & moveLimitations))
 		{
-			if (CalcMoveSplit(bank, move) == SPLIT_PHYSICAL
+			if (CalcMoveSplit(move, bank, bank) == SPLIT_PHYSICAL
 			&& gBattleMoves[move].power != 0
 			&& gBattleMoves[move].effect != EFFECT_COUNTER)
 				return TRUE;
@@ -1971,7 +1991,7 @@ bool8 AtLeastTwoPhysicalMoveInMoveset(u8 bank, u8 amount)
 
 		if (!(gBitTable[i] & moveLimitations))
 		{
-			if (CalcMoveSplit(bank, move) == SPLIT_PHYSICAL
+			if (CalcMoveSplit(move, bank, bank) == SPLIT_PHYSICAL
 			&& gBattleMoves[move].power != 0
 			&& gBattleMoves[move].effect != EFFECT_COUNTER){
 				count++;
@@ -1998,7 +2018,7 @@ bool8 SpecialMoveInMoveset(u8 bank)
 
 		if (!(gBitTable[i] & moveLimitations))
 		{
-			if (CalcMoveSplit(bank, move) == SPLIT_SPECIAL
+			if (CalcMoveSplit(move, bank, bank) == SPLIT_SPECIAL
 			&& gBattleMoves[move].power != 0
 			&& gBattleMoves[move].effect != EFFECT_MIRROR_COAT)
 				return TRUE;
@@ -2022,7 +2042,7 @@ bool8 AtLeastTwoSpecialMoveInMoveset(u8 bank, u8 amount)
 
 		if (!(gBitTable[i] & moveLimitations))
 		{
-			if (CalcMoveSplit(bank, move) == SPLIT_SPECIAL
+			if (CalcMoveSplit(move, bank, bank) == SPLIT_SPECIAL
 			&& gBattleMoves[move].power != 0
 			&& gBattleMoves[move].effect != EFFECT_MIRROR_COAT){
 				count++;
@@ -2310,7 +2330,7 @@ bool8 StatusMoveInMoveset(u8 bank)
 
 		if (!(gBitTable[i] & moveLimitations))
 		{
-			if (CalcMoveSplit(bank, move) == SPLIT_STATUS)
+			if (CalcMoveSplit(move, bank, bank) == SPLIT_STATUS)
 				return TRUE;
 		}
 	}

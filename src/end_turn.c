@@ -2125,5 +2125,7 @@ bool8 HandleDynamaxOnTurnEnd(void)
 		}
 	}
 
+	CalculateShellSideArmSplits(); //Only done at the beginning of each turn
+
 	return FALSE;
 }

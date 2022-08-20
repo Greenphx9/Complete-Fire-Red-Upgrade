@@ -50,7 +50,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 	u8 moveEffect = gBattleMoves[move].effect;
 	u8 moveType = GetMoveTypeSpecial(bankAtk, move);
-	u8 moveSplit = CalcMoveSplit(bankAtk, move);
+	u8 moveSplit = CalcMoveSplit(move, bankAtk, bankDef);
 
 	//Begin
 	if (IS_DOUBLE_BATTLE && TARGETING_PARTNER)
@@ -1548,7 +1548,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 		AI_BURN_CHECKS:
 			if (!BadIdeaToBurn(bankDef, bankAtk) || CanKnockOutWithoutMove(move, bankAtk, bankDef, FALSE))
 			{
-				if (CalcMoveSplit(bankDef, predictedMove) == SPLIT_PHYSICAL
+				if (CalcMoveSplit(predictedMove, bankDef, bankAtk) == SPLIT_PHYSICAL
 				&& MoveKnocksOutXHits(predictedMove, bankDef, bankAtk, 1))
 					INCREASE_STATUS_VIABILITY(3); //If the enemy can kill with a physical move, try burning them so they can't anymore
 

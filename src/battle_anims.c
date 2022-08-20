@@ -656,6 +656,90 @@ const union AffineAnimCmd* const gSpriteAffineAnimTable_SpiritBreakBall[] =
 	sSpriteAffineAnim_SpiritBreakBall,
 };
 
+void SpriteCB_LeftRightSliceStep0(struct Sprite *sprite);
+void SpriteCB_LeftRightSliceStep1(struct Sprite *sprite);
+
+//Steel Roller//
+
+//Creates the moving Steel Wheel for Steel Roller
+//arg 0: initial x pixel offset
+//arg 1: initial y pixel offset
+//arg 2: falling speed
+//arg 3: horizontal distance
+//arg 4: horizontal speed
+static void SpriteCB_SteelRoller_Down(struct Sprite *sprite);
+static void SpriteCB_SteelRoller_LeftRight(struct Sprite* sprite);
+void SpriteCB_SteelRoller(struct Sprite* sprite)
+{
+	sprite->pos1.x = GetBattlerSpriteCoord2(gBattleAnimTarget, BATTLER_COORD_X);
+	sprite->pos1.y = GetBattlerSpriteCoord2(gBattleAnimTarget, BATTLER_COORD_Y);
+
+	sprite->pos2.x = gBattleAnimArgs[0];
+	sprite->pos2.y += gBattleAnimArgs[1];
+	
+	sprite->data[4] = gBattleAnimArgs[3]; //Left/Right distance
+	sprite->data[5] = gBattleAnimArgs[4]; //Left/Right speed
+
+	sprite->data[3] = gBattleAnimArgs[2]; //Falling Speed
+	sprite->callback = SpriteCB_SteelRoller_Down;
+}
+
+static void SpriteCB_SteelRoller_Down(struct Sprite *sprite)
+{
+	sprite->pos2.y += sprite->data[3];
+	if (sprite->pos2.y >= 0)
+	{
+		sprite->pos2.y = 0;
+		sprite->callback = SpriteCB_SteelRoller_LeftRight;
+	}
+}
+
+static void SpriteCB_SteelRoller_LeftRight(struct Sprite* sprite)
+{
+	sprite->data[0] = -sprite->data[4]; //Slice distance
+	sprite->data[1] = sprite->data[5]; //Slice speed
+	sprite->callback = SpriteCB_LeftRightSliceStep0;
+}
+
+static const union AnimCmd sAnimCmdSurgingStrike[] =
+{
+	//Only tthe first three frames of the animation
+	ANIMCMD_FRAME(64, 4),
+	ANIMCMD_FRAME(48, 4),
+	ANIMCMD_FRAME(32, 4),
+	ANIMCMD_END,
+};
+
+const union AnimCmd *const gAnimCmdTable_SurgingStrike[] =
+{
+	sAnimCmdSurgingStrike,
+};
+
+//Creates arc impacts for Surging Strikes
+//arg 0: initial x pixel offset (from target)
+//arg 1: initial y pixel offset (from target)
+//arg 2: target x pixel offset (from target)
+//arg 3: target y pixel offset (from target)
+//arg 4: duration
+//arg 5: wave amplitude
+void SpriteCB_SurgingStrikes(struct Sprite* sprite)
+{
+	InitSpritePosToAnimTarget(sprite, TRUE);
+	sprite->data[0] = gBattleAnimArgs[4];
+	sprite->data[2] = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2) + gBattleAnimArgs[2]; //Target X
+	sprite->data[4] = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y_PIC_OFFSET) + gBattleAnimArgs[3]; //Target Y
+	sprite->data[5] = gBattleAnimArgs[5];
+	InitAnimArcTranslation(sprite);
+	sprite->callback = SpriteCB_AnimMissileArcStep;
+}
+
+//Terrain Pulse//
+void AnimTask_GetTerrainType(u8 taskId)
+{
+	gBattleAnimArgs[0] = gTerrainType;
+	DestroyAnimVisualTask(taskId);
+}
+
 static const union AffineAnimCmd sSpriteAffineAnim_HalfSize[] =
 {
 	AFFINEANIMCMD_FRAME(-128, -128, 0, 1), //Half size
@@ -1138,20 +1222,6 @@ void AnimTask_GetTerrain(u8 taskId)
 	DestroyAnimVisualTask(taskId);
 }
 
-
-void AnimTask_ShellSideArm(u8 taskId)
-{
-	switch(CalcMoveSplit(gBattleAnimAttacker, sAnimMoveIndex)) {
-		case SPLIT_PHYSICAL:
-			gBattleAnimArgs[0] = 0;
-			break;
-		case SPLIT_SPECIAL:
-			gBattleAnimArgs[0] = 1;
-			break;	
-	}
-
-	DestroyAnimVisualTask(taskId);
-}
 
 
 void AnimTask_IsTargetPartner(u8 taskId)
@@ -2113,6 +2183,161 @@ void SpriteCB_DracoMeteorRock(struct Sprite *sprite)
 	sprite->callback = AnimDracoMeteorRockStep;
 }
 
+//Poltergeist//
+static void SpriteCB_PoltergeistItem(struct Sprite* sprite);
+static void SpriteCB_PoltergeistItem_Step0(struct Sprite* sprite);
+static void SpriteCB_PoltergeistItem_Step1(struct Sprite* sprite);
+static void SpriteCB_PoltergeistItem_Step2(struct Sprite* sprite);
+static void SpriteCB_PoltergeistItem_Step3(struct Sprite* sprite);
+static void SpriteCB_PoltergeistItem_Step4(struct Sprite* sprite);
+static void SpriteCB_PoltergeistItem_Step5(struct Sprite* sprite);
+static void SpriteCB_PoltergeistItem_Step6(struct Sprite* sprite);
+static void CombineSpritePositions(struct Sprite* sprite);
+
+static const union AffineAnimCmd sSpriteAffineAnim_PoltergeistItem[] =
+{
+	AFFINEANIMCMD_FRAME(-4, -4, 0, 16), //Pulsate slowly
+	AFFINEANIMCMD_FRAME(4, 4, 0, 16),
+	AFFINEANIMCMD_JUMP(0),
+};
+
+const union AffineAnimCmd* const gSpriteAffineAnimTable_PoltergeistItem[] =
+{
+	sSpriteAffineAnim_PoltergeistItem,
+};
+
+void AnimTask_CreatePoltergeistItem(u8 taskId)
+{
+	u8 iconSpriteId = AddItemIconSprite(ITEM_TAG, ITEM_TAG, gLastUsedItem);
+
+	if (iconSpriteId != MAX_SPRITES)
+	{
+		struct Sprite* sprite = &gSprites[iconSpriteId];
+
+		sprite->pos1.x = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2);
+		sprite->pos1.y = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y_PIC_OFFSET);
+		sprite->oam.priority = 1;
+		sprite->oam.affineMode = ST_OAM_AFFINE_NORMAL;
+		sprite->affineAnims = gSpriteAffineAnimTable_PoltergeistItem;
+		sprite->callback = SpriteCB_PoltergeistItem;
+
+		CalcCenterToCornerVec(sprite, sprite->oam.shape, sprite->oam.size, sprite->oam.affineMode);
+		InitSpriteAffineAnim(sprite);
+		++gAnimVisualTaskCount;
+	}
+
+	DestroyAnimVisualTask(taskId);
+}
+
+//Creates the moving item for Poltergeist
+static void SpriteCB_PoltergeistItem(struct Sprite* sprite)
+{
+	//Move sprite upwards
+	if (++sprite->data[0] >= 10)
+	{
+		sprite->data[0] = 0;
+		sprite->callback = SpriteCB_PoltergeistItem_Step0;
+	}
+	else
+		sprite->pos1.y -= 2;
+}
+
+static void SpriteCB_PoltergeistItem_Step0(struct Sprite* sprite)
+{
+	//Move sprite in an upwards arc to indicate turning
+	sprite->data[2] = sprite->pos1.x - 5;
+	sprite->data[4] = sprite->pos1.y;
+	sprite->data[0] = 20; //DURATION
+	sprite->data[5] = -5; //AMPLITUDE
+	InitAnimArcTranslation(sprite);
+	sprite->callback = SpriteCB_PoltergeistItem_Step1;
+}
+
+static void SpriteCB_PoltergeistItem_Step1(struct Sprite* sprite)
+{
+	if (TranslateAnimHorizontalArc(sprite))
+	{
+		//Move sprite in an left arc to slightly right of the lower middle of the target
+		CombineSpritePositions(sprite); //Clear movement offset
+		sprite->data[2] = sprite->pos1.x + 20; //TARGET_X_PIXEL_OFFSET
+		sprite->data[4] = sprite->pos1.y + 35; //TARGET_Y_PIXEL_OFFSET
+		sprite->data[0] = 40; //DURATION
+		sprite->data[5] = -30; //AMPLITUDE
+		InitAnimArcTranslation(sprite);
+		sprite->callback = SpriteCB_PoltergeistItem_Step2;
+	}
+}
+
+static void SpriteCB_PoltergeistItem_Step2(struct Sprite* sprite)
+{
+	if (TranslateAnimVerticalArc(sprite))
+	{
+		//Move sprite in a small arc like its turning
+		CombineSpritePositions(sprite); //Clear movement offset
+		sprite->data[2] = sprite->pos1.x; //TARGET_X_PIXEL_OFFSET
+		sprite->data[4] = sprite->pos1.y - 5; //TARGET_Y_PIXEL_OFFSET
+		sprite->data[0] = 20; //DURATION
+		sprite->data[5] = 5; //AMPLITUDE
+		InitAnimArcTranslation(sprite);
+		sprite->callback = SpriteCB_PoltergeistItem_Step3;
+	}
+}
+
+static void SpriteCB_PoltergeistItem_Step3(struct Sprite* sprite)
+{
+	if (TranslateAnimVerticalArc(sprite))
+	{
+		//Move sprite in a line to the top left of the target
+		CombineSpritePositions(sprite); //Clear movement offset
+		sprite->data[0] = 25; //Speed delay
+		sprite->data[2] = sprite->pos1.x - 40;
+		sprite->data[4] = sprite->pos1.y - 35;
+		sprite->callback = StartAnimLinearTranslation;
+		StoreSpriteCallbackInData6(sprite, SpriteCB_PoltergeistItem_Step4);
+	}
+}
+
+static void SpriteCB_PoltergeistItem_Step4(struct Sprite* sprite)
+{
+	//Move sprite in a upwards arc across the top of the target
+	CombineSpritePositions(sprite); //Clear movement offset
+	sprite->data[2] = sprite->pos1.x + 60; //TARGET_X_PIXEL_OFFSET
+	sprite->data[4] = sprite->pos1.y; //TARGET_Y_PIXEL_OFFSET
+	sprite->data[0] = 25; //DURATION
+	sprite->data[5] = -10; //AMPLITUDE
+	InitAnimArcTranslation(sprite);
+	sprite->callback = SpriteCB_PoltergeistItem_Step5;
+}
+
+static void SpriteCB_PoltergeistItem_Step5(struct Sprite* sprite)
+{
+	if (TranslateAnimHorizontalArc(sprite))
+	{
+		//Move sprite in a right arc to attack the target
+		CombineSpritePositions(sprite); //Clear movement offset
+		sprite->data[2] = sprite->pos1.x - 40; //TARGET_X_PIXEL_OFFSET
+		sprite->data[4] = sprite->pos1.y + 25; //TARGET_Y_PIXEL_OFFSET
+		sprite->data[0] = 15; //DURATION
+		sprite->data[5] = 20; //AMPLITUDE
+		InitAnimArcTranslation(sprite);
+		sprite->callback = SpriteCB_PoltergeistItem_Step6;
+	}
+}
+
+static void SpriteCB_PoltergeistItem_Step6(struct Sprite* sprite)
+{
+	if (TranslateAnimVerticalArc(sprite))
+		DestroyAnimSprite(sprite);
+}
+
+static void CombineSpritePositions(struct Sprite* sprite)
+{
+	sprite->pos1.x += sprite->pos2.x; //Combine positions
+	sprite->pos1.y += sprite->pos2.y;
+	sprite->pos2.x = 0; //Reset offsets
+	sprite->pos2.y = 0;
+}
+
 const struct OamData sPyroBallRockOAM =
 {
 	.affineMode = ST_OAM_AFFINE_OFF,
@@ -2214,6 +2439,66 @@ void SpriteCB_PyroBallLaunch(struct Sprite* sprite)
 	InitAnimArcTranslation(sprite);
 
 	sprite->callback = SpriteCB_AnimMissileArcStep;
+}
+
+//Shell Side Arm//
+static const union AffineAnimCmd sSpriteAffineAnim_ShellSideArmOpponent[] =
+{
+	AFFINEANIMCMD_FRAME(0, 0, -64, 1), //Rotate right 90 degrees
+	AFFINEANIMCMD_END
+};
+
+static const union AffineAnimCmd sSpriteAffineAnim_ShellSideArmPlayer[] =
+{
+	AFFINEANIMCMD_FRAME(0, 0, 64, 1), //Rotate left 90 degrees
+	AFFINEANIMCMD_END
+};
+
+const union AffineAnimCmd* const gSpriteAffineAnimTable_ShellSideArm[] =
+{
+	sSpriteAffineAnim_ShellSideArmOpponent,
+	sSpriteAffineAnim_ShellSideArmPlayer,
+};
+
+void AnimTask_GetShellSideArmSplit(u8 taskId)
+{
+	gBattleAnimArgs[0] = gNewBS->shellSideArmSplit[gBattleAnimAttacker][gBattleAnimTarget];
+	DestroyAnimVisualTask(taskId);
+}
+
+//Moves the shell horizontally for Shell Side Arm
+//args: Same as Rolling Kick
+void SpriteCB_ShellSideArmSmash(struct Sprite *sprite)
+{
+    if (PARTNER(gBattleAnimAttacker) == gBattleAnimTarget && GetBattlerPosition(gBattleAnimTarget) < B_POSITION_PLAYER_RIGHT)
+        gBattleAnimArgs[0] *= -1;
+
+    InitSpritePosToAnimTarget(sprite, TRUE);
+
+    if (SIDE(gBattleAnimTarget) == B_SIDE_PLAYER)
+	{
+        gBattleAnimArgs[2] = -gBattleAnimArgs[2];
+		StartSpriteAffineAnim(sprite, 1);
+	}
+
+    sprite->data[0] = gBattleAnimArgs[3];
+    sprite->data[1] = sprite->pos1.x;
+    sprite->data[2] = sprite->pos1.x + gBattleAnimArgs[2];
+    sprite->data[3] = sprite->pos1.y;
+    sprite->data[4] = sprite->pos1.y;
+    InitAnimLinearTranslation(sprite);
+    sprite->data[5] = gBattleAnimArgs[5];
+    sprite->data[6] = gBattleAnimArgs[4];
+    sprite->data[7] = 0;
+    sprite->callback = (void*) (0x80B0CB4 | 1);
+}
+
+//Chooses the sludge animation and launches it towards the target for Shell Side Arm
+//args: Same as Shadow Ball
+void SpriteCB_ShellSideArmBlast(struct Sprite* sprite)
+{
+	StartSpriteAnim(sprite, 2);
+	sprite->callback = (void*) (0x80B563C | 1); //AnimShadowBall
 }
 
 const struct OamData sAppleOAM =
@@ -2447,6 +2732,37 @@ void SpriteCB_LockingJaw(struct Sprite *sprite)
 	sprite->data[2] = gBattleAnimArgs[5];
 	sprite->data[6] = -gBattleAnimArgs[6];
 	sprite->callback = SpriteCB_LockingJawStep;
+}
+
+//Lash Out//
+
+//Creates the slam hit for LashOut
+//arg 0: initial x pixel offset
+//arg 1: initial y pixel offset
+//arg 2: flip
+void SpriteCB_LashOutStrike(struct Sprite* sprite)
+{
+	bool8 flip = SIDE(gBattleAnimTarget) == B_SIDE_PLAYER;
+	
+	if (gBattleAnimArgs[2])
+		flip ^= 1;
+
+	sprite->data[0] = 11;
+
+	if (flip)
+	{
+		sprite->pos1.x -= gBattleAnimArgs[0];
+		sprite->data[0] *= -1;
+		StartSpriteAffineAnim(sprite, 1);
+	}
+	else
+	{
+		sprite->pos1.x += gBattleAnimArgs[0];
+	}
+
+	sprite->pos1.y += gBattleAnimArgs[1];
+	sprite->data[1] = 192;
+	sprite->callback = (void*) (0x80E42DC | 1); //AnimKnockOffStrike_Step
 }
 
 //arg 0: initial x pixel offset
@@ -4917,5 +5233,34 @@ void SpriteCB_InitThrownBallBouncing(struct Sprite *sprite)
 			sprite->callback = SpriteCB_CriticalCaptureThrownBallMovement;
 		else
 			sprite->callback = SpriteCB_ThrowBallMovement;
+	}
+}
+
+void SpriteCB_AnimSpriteOnTargetSideCentre(struct Sprite *sprite)
+{
+	u8 target = LoadBattleAnimTarget(2);
+
+	if (!sprite->data[0])
+	{
+		if (SIDE(gBattleAnimAttacker) == SIDE(target))
+		{
+			if (IS_DOUBLE_BATTLE)
+				InitSpritePosToAnimAttackersCentre(sprite, FALSE);
+			else
+				InitSpritePosToAnimAttacker(sprite, FALSE);
+		}
+		else
+		{
+			if (IS_DOUBLE_BATTLE)
+				InitSpritePosToAnimTargetsCentre(sprite, FALSE);
+			else
+				InitSpritePosToAnimTarget(sprite, FALSE);
+		}
+
+		sprite->data[0]++;
+	}
+	else if (sprite->animEnded || sprite->affineAnimEnded)
+	{
+		DestroySpriteAndMatrix(sprite);
 	}
 }

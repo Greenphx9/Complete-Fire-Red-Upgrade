@@ -129,3 +129,6 @@ void SetSwitchingBankSwitchingCooldownTo2(void);
 void FaintedBankNameInBuff1(void);
 void SetCorrectTeleportBattleScript(void);
 void TrySetBurningJealousyMoveEffect(void);
+void TryFailCorrosiveGas(void);
+void CorrodeItem(void);
+void TryFailPoltergeist(void);

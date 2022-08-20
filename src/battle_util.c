@@ -1133,6 +1133,11 @@ bool8 MoveBlockedBySubstitute(u16 move, u8 bankAtk, u8 bankDef)
 	return IS_BEHIND_SUBSTITUTE(bankDef) && !MoveIgnoresSubstitutes(move, ABILITY(bankAtk));
 }
 
+bool8 BypassesScreens(u8 ability)
+{
+	return ability == ABILITY_INFILTRATOR;
+}
+
 bool8 MonMoveBlockedBySubstitute(u16 move, struct Pokemon* monAtk, u8 bankDef)
 {
 	return IS_BEHIND_SUBSTITUTE(bankDef) && !MoveIgnoresSubstitutes(move, GetMonAbility(monAtk));
@@ -1174,24 +1179,26 @@ bool8 IsMoveAffectedByParentalBond(u16 move, u8 bankAtk)
 	return FALSE;
 }
 
-u8 CalcMoveSplit(u8 bank, u16 move)
+u8 CalcMoveSplit(u16 move, u8 bankAtk, u8 bankDef)
 {
 	if (CheckTableForMove(move, gMovesThatChangePhysicality)
 	&&  SPLIT(move) != SPLIT_STATUS)
 	{
-		u32 attack = gBattleMons[bank].attack;
-		u32 spAttack = gBattleMons[bank].spAttack;
-
-		attack = attack * gStatStageRatios[STAT_STAGE(bank, STAT_STAGE_ATK)][0];
-		attack = udivsi(attack, gStatStageRatios[STAT_STAGE(bank, STAT_STAGE_ATK)][1]);
-
-		spAttack = spAttack * gStatStageRatios[STAT_STAGE(bank, STAT_STAGE_SPATK)][0];
-		spAttack = udivsi(spAttack, gStatStageRatios[STAT_STAGE(bank, STAT_STAGE_SPATK)][1]);
+		u32 attack = gBattleMons[bankAtk].attack;
+		u32 spAttack = gBattleMons[bankAtk].spAttack;
+		
+		APPLY_QUICK_STAT_MOD(attack, STAT_STAGE(bankAtk, STAT_STAGE_ATK));
+		APPLY_QUICK_STAT_MOD(spAttack, STAT_STAGE(bankAtk, STAT_STAGE_SPATK));
 
 		if (spAttack >= attack)
 			return SPLIT_SPECIAL;
 		else
 			return SPLIT_PHYSICAL;
+	}
+	else if (move == MOVE_SHELLSIDEARM
+	&& bankAtk != bankDef) //Indicator to just use the base physicality
+	{
+		return gNewBS->shellSideArmSplit[bankAtk][bankDef];
 	}
 
 	#ifdef OLD_MOVE_SPLIT
@@ -1360,6 +1367,13 @@ void RemoveScreensFromSide(const u8 side)
 	gSideTimers[side].reflectTimer = 0;
 	gSideTimers[side].lightscreenTimer = 0;
 	gNewBS->AuroraVeilTimers[side] = 0;
+}
+
+bool8 WillPoltergeistFail(u16 item, u8 ability)
+{
+	return item == ITEM_NONE
+		|| ability == ABILITY_KLUTZ
+		|| IsMagicRoomActive();
 }
 
 void ClearBankStatus(u8 bank)

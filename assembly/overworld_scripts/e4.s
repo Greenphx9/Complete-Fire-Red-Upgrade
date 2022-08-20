@@ -35,6 +35,7 @@ EventScript_GirlBlockingDoor:
 
 EventScript_DescribeReins:
 	msgbox gText_HowUseReins MSG_FACE
+	givepokemoncustom SPECIES_ETERNATUS 100 ITEM_NONE MOVE_POLTERGEIST MOVE_NONE MOVE_NONE MOVE_NONE NATURE_JOLLY 1 31 31 31 31 31 31 21
 	release
 	end
 

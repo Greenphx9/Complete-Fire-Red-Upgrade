@@ -393,6 +393,7 @@ void BattleBeginFirstTurn(void)
 			gBattleStruct->turncountersTracker = 0;
 			gMoveResultFlags = 0;
 			gRandomTurnNumber = Random();
+			CalculateShellSideArmSplits(); //Only done at the beginning of each turn
 			*state = 0;
 		}
 	}

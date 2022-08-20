@@ -589,14 +589,14 @@ void atk0C_datahpupdate(void)
 			gNewBS->AttackerDidDamageAtLeastOnce = TRUE;
 			gMoveResultFlags = 0;
 
-			if (CalcMoveSplit(gActiveBattler, gCurrentMove) == SPLIT_PHYSICAL)
+			if (CalcMoveSplit(gCurrentMove, gBankAttacker, gActiveBattler) == SPLIT_PHYSICAL)
 			{
 				gProtectStructs[gActiveBattler].physicalDmg = gHpDealt;
 				gSpecialStatuses[gActiveBattler].moveturnLostHP_physical = gHpDealt;
 				gProtectStructs[gActiveBattler].physicalBank = gBankAttacker;
 				gSpecialStatuses[gActiveBattler].moveturnPhysicalBank = gBankAttacker;
 			}
-			else if (CalcMoveSplit(gActiveBattler, gCurrentMove) == SPLIT_SPECIAL)
+			else if (CalcMoveSplit(gCurrentMove, gBankAttacker, gActiveBattler) == SPLIT_SPECIAL)
 			{
 				gProtectStructs[gActiveBattler].specialDmg = gHpDealt;
 				gSpecialStatuses[gActiveBattler].moveturnLostHP_special = gHpDealt;
@@ -680,7 +680,7 @@ void atk0C_datahpupdate(void)
 				if (!gSpecialStatuses[gActiveBattler].moveturnLostHP && !(gHitMarker & HITMARKER_NON_ATTACK_DMG))
 					gSpecialStatuses[gActiveBattler].moveturnLostHP = hpDealt;
 
-				if (CalcMoveSplit(gActiveBattler, gCurrentMove) == SPLIT_PHYSICAL
+				if (CalcMoveSplit(gCurrentMove, gBankAttacker, gActiveBattler) == SPLIT_PHYSICAL
 				&& !(gHitMarker & HITMARKER_NON_ATTACK_DMG))
 				{
 					gProtectStructs[gActiveBattler].physicalDmg = hpDealt;
@@ -699,7 +699,7 @@ void atk0C_datahpupdate(void)
 					}
 				}
 
-				else if (CalcMoveSplit(gActiveBattler, gCurrentMove) == SPLIT_SPECIAL
+				else if (CalcMoveSplit(gCurrentMove, gBankAttacker, gActiveBattler) == SPLIT_SPECIAL
 				&& !(gHitMarker & HITMARKER_NON_ATTACK_DMG))
 				{
 					gProtectStructs[gActiveBattler].specialDmg = hpDealt;
@@ -5067,10 +5067,4 @@ void atkEE_removelightscreenreflect(void) { //Brick Break
 		gBattleScripting.animTargetsHit = 0;
 	}
 	gBattlescriptCurrInstr++;
-}
-
-void TargetHasItem(void) {
-	if (GetBankPartyData(gBankTarget)->item == ITEM_NONE) {
-		gBattlescriptCurrInstr = BattleScript_ButItFailed - 5 - 1;
-	}
 }

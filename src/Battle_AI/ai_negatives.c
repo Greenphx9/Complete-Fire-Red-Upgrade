@@ -109,7 +109,7 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 		data->defAbility = ABILITY_NONE;
 
 	u8 moveEffect = gBattleMoves[move].effect;
-	u8 moveSplit = CalcMoveSplit(bankAtk, move);
+	u8 moveSplit = CalcMoveSplit(move, bankAtk, bankDef);
 	u8 moveTarget = gBattleMoves[move].target;
 	u8 moveType = GetMoveTypeSpecial(bankAtk, move);
 	u8 moveFlags = gBattleMoves[move].flags;
@@ -2053,12 +2053,6 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 					DECREASE_VIABILITY(9); //Don't use Knock Off is the enemy's only moves don't affect the AI
 			}
 			break;
-		
-		case EFFECT_POLTERGEIST:
-			if (data->defItem == ITEM_NONE) {
-				DECREASE_VIABILITY(10);
-			}
-			break;
 
 		case EFFECT_SKILL_SWAP:
 			data->atkAbility = *GetAbilityLocation(bankAtk); //Get actual abilities
@@ -2778,6 +2772,13 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 				else
 					goto AI_STANDARD_DAMAGE;
 			}
+			break;
+
+		case EFFECT_POLTERGEIST:
+			if (WillPoltergeistFail(data->defItem, data->defAbility))
+				DECREASE_VIABILITY(10);
+			else
+				goto AI_STANDARD_DAMAGE;
 			break;
 
 		case EFFECT_SYNCHRONOISE:

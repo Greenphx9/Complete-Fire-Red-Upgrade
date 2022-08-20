@@ -11703,7 +11703,7 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_LASHOUT] =
-	{	//ANIM TODO
+	{
 		.effect = EFFECT_HIT,
 		.power = 75,
 		.type = TYPE_DARK,
@@ -11735,8 +11735,8 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_CORROSIVEGAS] =
-	{	//ANIM TODO
-		.effect = EFFECT_KNOCK_OFF, //EFFECT TODO
+	{
+		.effect = EFFECT_KNOCK_OFF,
 		.power = 0,
 		.type = TYPE_POISON,
 		.accuracy = 100,

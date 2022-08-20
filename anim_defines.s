@@ -109,6 +109,9 @@
 .equ PAL_OPPONENT1, 0x200
 .equ PAL_OPPONENT2, 0x400
 
+.equ RGB_BLACK, 0x0
+.equ RGB_WHITE, 0x7FFF
+
 @for sound commands
 .equ SOUND_PAN_ABOVE, 0
 .equ SOUND_PAN_BELOW, 127
@@ -524,6 +527,11 @@
 .equ Template_FallingRock, 0x83e73b4
 .equ Template_BlackSmoke, 0x83fee18
 .equ Template_GustToTarget, 0x83e6b1c
+.equ Template_FlyBallUp, 0x83e6bb8
+.equ Template_EyeSparkle, 0x83e42fc
+.equ Template_MegaPunchKick, 0x83e67c0
+.equ Template_ComplexPaletteBlend, 0x83e7b3c
+.equ AnimTask_GlareEyeDots, 0x80e21cd
 
 .equ SpriteCB_AnimSpriteOnMonPos, 0x8075D9D
 .equ Callback_TranslateAnimSpriteToTargetMonLocation, 0x8075DF5
@@ -630,6 +638,10 @@
 .equ HEALING_ANIM_TARGET, 0x81D5712
 .equ SAND_ATTACK_DIRT, 0x81cdf72
 .equ EMBER_FIRE_HIT, 0x81c7cd5
+.equ DRAGON_CLAW_FIRE_SPIRAL, 0x81d31ad
+.equ PSYBEAM_RINGS, 0x81d0dd4
+
+.equ SoundTask_LoopSEAdjustPanning, 0x80dcf39 @;Song Id, Source, Target Pan, Pan Increment, Num Times, Pan Increment Ofteness, Length of One
 
 @supercommands
 

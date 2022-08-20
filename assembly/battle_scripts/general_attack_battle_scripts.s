@@ -21,21 +21,8 @@ general_attack_battle_scripts.s
 .global CantUseHyperspaceFuryString
 .global CantUseMoveString
 .global WrongHoopaFormString
-
-@;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-.global BS_224_Poltergeist
-BS_224_Poltergeist:
-	attackcanceler
-	attackstringnoprotean
-	accuracycheck BS_MOVE_MISSED 0x0
-	callasm TargetHasItem + 1
-	call STANDARD_DAMAGE
-	jumpiffainted BANK_TARGET BS_MOVE_FAINT
-	jumpifmovehadnoeffect BS_MOVE_FAINT
-	waitmessage DELAY_1SECOND
-	goto BS_MOVE_FAINT
 	
+@;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 .global BS_100_Spite
 BS_100_Spite:
@@ -3971,8 +3958,27 @@ BS_187_Yawn:
 
 .global BS_188_KnockOff
 BS_188_KnockOff:
+	jumpifmove MOVE_CORROSIVEGAS CorrosiveGasBS
 	setmoveeffect MOVE_EFFECT_KNOCK_OFF
 	goto BS_STANDARD_HIT
+
+CorrosiveGasBS:
+	attackcanceler
+	attackstringnoprotean
+	ppreduce
+	jumpifbehindsubstitute BANK_TARGET NOEFFECT
+	jumpifability BANK_TARGET ABILITY_STICKYHOLD BattleScript_ProtectedByAbility
+	tryactivateprotean
+	callasm TryFailCorrosiveGas
+	accuracycheck BS_MOVE_MISSED + 2 0x0
+	attackanimation
+	waitanimation
+	callasm CorrodeItem
+	setword BATTLE_STRING_LOADER gText_CorrodedItem
+	printstring 0x184
+	waitmessage DELAY_1SECOND
+	call 0x81D92DC @;BattleScript_WeatherFormChanges - In case of Utility Umbrella
+	goto BS_MOVE_END
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -4954,9 +4960,19 @@ RelicSongEndBS:
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-.global BS_224_Blank
-BS_224_Blank:
-	goto BS_STANDARD_HIT
+.global BS_224_Poltergeist
+BS_224_Poltergeist:
+	attackcanceler
+	callasm TryFailPoltergeist
+	accuracycheck BS_MOVE_MISSED 0x0
+	attackstring
+	ppreduce
+	pause DELAY_HALFSECOND
+	callasm TransferLastUsedItem
+	setword BATTLE_STRING_LOADER gText_PoltergeistWarn
+	printstring 0x184
+	waitmessage DELAY_HALFSECOND
+	goto BS_HIT_FROM_DAMAGE_CALC
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 

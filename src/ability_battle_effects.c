@@ -1881,7 +1881,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 			case ABILITY_WEAKARMOR:
 				if (MOVE_HAD_EFFECT
 				&& TOOK_DAMAGE(bank)
-				&& CalcMoveSplit(gBankAttacker, gCurrentMove) == SPLIT_PHYSICAL
+				&& CalcMoveSplit(gCurrentMove, gBankAttacker, bank) == SPLIT_PHYSICAL
 				&& BATTLER_ALIVE(bank)
 				&& gBankAttacker != bank
 				&& (gBattleMons[bank].statStages[STAT_SPEED - 1] < 12 || gBattleMons[bank].statStages[STAT_DEF - 1] > 0))

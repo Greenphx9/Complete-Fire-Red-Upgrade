@@ -17,6 +17,7 @@
 #include "../include/new/move_menu.h"
 #include "../include/new/multi.h"
 #include "../include/pokemon_icon.h"
+#include "../include/new/rom_locs.h"
 #include "../include/new/set_z_effect.h"
 
 #include "../include/constants/trainer_classes.h"
@@ -1389,6 +1390,7 @@ static bool8 EntireEnemyTeamRevealed(void)
 static void Task_DisplayInBattleTeamPreview(u8 taskId)
 {
 	u32 i;
+	u8 spriteId;
 	s16 x, y;
 	const u8* string;
 
@@ -1409,7 +1411,7 @@ static void Task_DisplayInBattleTeamPreview(u8 taskId)
 	struct SpritePalette faintedIconSpritePalette = {faintedIconPal, GFX_TAG_FAINTED_TEAM_PREVIEW_ICON};
 
 	for (i = 0; i < NELEMS(faintedIconPal); ++i)
-		faintedIconPal[i] = RGB(i * 2, i * 2, i * 2);
+		faintedIconPal[i] = RGB(31, 31, 31);
 
 	
 
@@ -1448,7 +1450,7 @@ static void Task_DisplayInBattleTeamPreview(u8 taskId)
 			void* callback = hp == 0 ? SpriteCallbackDummy : SpriteCB_PokeIcon; //Don't animate when fainted
 
 			LoadMonIconPalette(species); //On the off chance the palette didn't get loaded above
-			u8 spriteId = CreateMonIcon(species, callback, x, y, 1, GetMonData(&gEnemyParty[i], MON_DATA_PERSONALITY, NULL), FALSE);
+			spriteId = CreateMonIcon(species, callback, x, y, 1, GetMonData(&gEnemyParty[i], MON_DATA_PERSONALITY, NULL), FALSE);
 			if (spriteId < MAX_SPRITES)
 			{
 				struct Sprite* sprite = &gSprites[spriteId];
@@ -1493,8 +1495,7 @@ static void Task_DisplayInBattleTeamPreview(u8 taskId)
 					}
 					else
 					{
-						sprite->oam.paletteNum = faintedIconPalNum; //Make palette all white
-
+						sprite->oam.paletteNum = faintedIconPalNum;
 						LoadMonIconPalette(species); //On the off chance the palette didn't get loaded above
 						/*u8 spriteId = CreateSprite(&sFaintedMonIconTemplate, x, y, 0);
 						if (spriteId < MAX_SPRITES)
