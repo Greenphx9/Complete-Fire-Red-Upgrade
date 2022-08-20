@@ -162,7 +162,7 @@ StrengthSapBS:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 DrainHPBSP2
 	setgraphicalstatchangevalues
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	goto DrainHPBSP2
 
@@ -715,7 +715,7 @@ PlayNice_SkipAnim:
 	statbuffchange STAT_TARGET | STAT_BS_PTR PlayNice_SpAtk
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x3 PlayNice_SpAtk
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x4 BS_MOVE_END
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 
 PlayNice_SpAtk:
@@ -723,7 +723,7 @@ PlayNice_SpAtk:
 	setstatchanger STAT_SPATK | DECREASE_1
 	statbuffchange STAT_TARGET | STAT_BS_PTR BS_MOVE_END
 	jumpifbyte GREATERTHAN MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -754,7 +754,7 @@ VenomDrench_SkipAnim:
 	statbuffchange STAT_TARGET | STAT_BS_PTR VenomDrench_SpAtk
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x3 VenomDrench_SpAtk
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x4 BS_MOVE_END
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 
 VenomDrench_SpAtk:
@@ -763,7 +763,7 @@ VenomDrench_SpAtk:
 	setstatchanger STAT_SPATK | DECREASE_1
 	statbuffchange STAT_TARGET | STAT_BS_PTR VenomDrench_Spd
 	jumpifbyte GREATERTHAN MULTISTRING_CHOOSER 0x2 VenomDrench_Spd
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 
 VenomDrench_Spd:
@@ -771,7 +771,7 @@ VenomDrench_Spd:
 	setstatchanger STAT_SPD | DECREASE_1
 	statbuffchange STAT_TARGET | STAT_BS_PTR BS_MOVE_END
 	jumpifbyte GREATERTHAN MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
@@ -804,7 +804,7 @@ TarShotBS:
 	waitanimation
 	setgraphicalstatchangevalues
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	setcounter BANK_TARGET TAR_SHOT_TIMERS 1
 	setword BATTLE_STRING_LOADER gText_TarShotAffected
@@ -1602,7 +1602,7 @@ ToxicThreadDo:
 	waitanimation
 	setgraphicalstatchangevalues
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	setmoveeffect MOVE_EFFECT_POISON
 	seteffectprimary
@@ -2785,7 +2785,7 @@ PartingShot_SkipAnim:
 	statbuffchange STAT_TARGET | STAT_BS_PTR PartingShot_LowerSpAtk
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x3 PartingShot_LowerSpAtk
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x4 BS_MOVE_END
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 
 PartingShot_LowerSpAtk:
@@ -2793,7 +2793,7 @@ PartingShot_LowerSpAtk:
 	setstatchanger STAT_SPATK | DECREASE_1
 	statbuffchange STAT_TARGET | STAT_BS_PTR CheckPartingShotFail
 	jumpifbyte GREATERTHAN MULTISTRING_CHOOSER 0x2 CheckPartingShotFail
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	
 CheckPartingShotFail:
@@ -2834,7 +2834,7 @@ DefogBS:
 	jumpifbyte LESSTHAN MULTISTRING_CHOOSER 0x2 DefogLoweredStat
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x3 SecondDefogCheck
 	pause DELAY_HALFSECOND
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	goto SecondDefogCheck
 	
@@ -2844,7 +2844,7 @@ DefogLoweredStat:
 	setbyte ANIM_TARGETS_HIT 0x1 @;So animation doesn't play again
 	setgraphicalstatchangevalues
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	
 BattleScript_DefogAdditionalEffects:
@@ -3498,7 +3498,7 @@ Memento_Atk:
 MementoPrintAtkMsg:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x3 Memento_SpAtk
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x4 MementoFaintUser
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 
 Memento_SpAtk:
@@ -3507,7 +3507,7 @@ Memento_SpAtk:
 	statbuffchange STAT_TARGET | STAT_BS_PTR MementoPrintSpAtkMsg
 MementoPrintSpAtkMsg:
 	jumpifbyte GREATERTHAN MULTISTRING_CHOOSER 0x2 MementoFaintUser
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	
 MementoFaintUser:
@@ -3660,6 +3660,8 @@ BS_175_Taunt:
 .global BS_176_HelpingHand
 BS_176_HelpingHand:
 	attackcanceler
+	jumpifmove MOVE_DECORATE BS_Decorate
+	jumpifmove MOVE_COACHING BS_Coaching
 	attackstringnoprotean
 	ppreduce
 	sethelpinghand FAILED
@@ -3668,6 +3670,76 @@ BS_176_HelpingHand:
 	waitanimation
 	printstring 0xAE @;STRINGID_PKMNREADYTOHELP
 	waitmessage DELAY_1SECOND
+	goto BS_MOVE_END
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+BS_Decorate:
+	jumpifspecialstatusflag BANK_TARGET STATUS3_SEMI_INVULNERABLE 0x0 FAILED
+	jumpiffainted BANK_TARGET FAILED
+	jumpifprotectedbycraftyshield BANK_TARGET FAILED
+	attackstring
+	ppreduce
+	jumpifstat BANK_TARGET LESSTHAN STAT_ATK STAT_MAX Decorate_Atk
+	jumpifstat BANK_TARGET EQUALS STAT_SPATK STAT_MAX BattleScript_CantRaiseMultipleTargetStats
+
+Decorate_Atk:
+	attackanimation
+	waitanimation
+	setbyte STAT_ANIM_PLAYED 0x0
+	playstatchangeanimation BANK_TARGET, STAT_ANIM_ATK | STAT_ANIM_SPATK, STAT_ANIM_UP | STAT_ANIM_IGNORE_ABILITIES
+	setstatchanger STAT_ATK | INCREASE_2
+	statbuffchange STAT_TARGET | STAT_BS_PTR | STAT_CERTAIN Decorate_SpAtk
+	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 Decorate_SpAtk
+	printfromtable gStatUpStringIds
+	waitmessage DELAY_1SECOND
+
+Decorate_SpAtk:
+	setstatchanger STAT_SPATK | INCREASE_2
+	statbuffchange STAT_TARGET | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
+	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
+	printfromtable gStatUpStringIds
+	waitmessage DELAY_1SECOND
+	goto BS_MOVE_END
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+BS_Coaching:
+	jumpifbyte NOTANDS BATTLE_TYPE BATTLE_DOUBLE FAILED_PRE
+	callasm SetTargetPartner
+	jumpiffainted BANK_TARGET FAILED_PRE
+	jumpifspecialstatusflag BANK_TARGET STATUS3_SEMI_INVULNERABLE 0x0 FAILED_PRE
+	attackstring
+	ppreduce
+	jumpifstat BANK_TARGET LESSTHAN STAT_ATK STAT_MAX Coaching_Atk
+	jumpifstat BANK_TARGET EQUALS STAT_DEF STAT_MAX BattleScript_CantRaiseMultipleTargetStats
+
+Coaching_Atk:
+	attackanimation
+	waitanimation
+	setbyte STAT_ANIM_PLAYED 0x0
+	playstatchangeanimation BANK_TARGET, STAT_ANIM_ATK | STAT_ANIM_DEF, STAT_ANIM_UP | STAT_ANIM_IGNORE_ABILITIES
+	setstatchanger STAT_ATK | INCREASE_1
+	statbuffchange STAT_TARGET | STAT_BS_PTR | STAT_CERTAIN Coaching_Def
+	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 Coaching_Def
+	printfromtable gStatUpStringIds
+	waitmessage DELAY_1SECOND
+
+Coaching_Def:
+	setstatchanger STAT_DEF | INCREASE_1
+	statbuffchange STAT_TARGET | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
+	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
+	printfromtable gStatUpStringIds
+	waitmessage DELAY_1SECOND
+	goto BS_MOVE_END
+
+BattleScript_CantRaiseMultipleTargetStats:
+	pause DELAY_HALFSECOND
+	orbyte OUTCOME OUTCOME_FAILED
+	swapattackerwithtarget @;So the proper string is shown
+	printstring 25 @;STRINGID_STATSWONTINCREASE2
+	waitmessage DELAY_1SECOND
+	swapattackerwithtarget
 	goto BS_MOVE_END
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -4268,7 +4340,7 @@ Tickle_SkipAnim:
 	statbuffchange STAT_TARGET | STAT_BS_PTR Tickle_Def
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x3 Tickle_Def
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x4 BS_MOVE_END
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 
 Tickle_Def:
@@ -4276,7 +4348,7 @@ Tickle_Def:
 	setstatchanger STAT_DEF | DECREASE_1
 	statbuffchange STAT_TARGET | STAT_BS_PTR BS_MOVE_END
 	jumpifbyte GREATERTHAN MULTISTRING_CHOOSER 0x2 BS_MOVE_END
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 

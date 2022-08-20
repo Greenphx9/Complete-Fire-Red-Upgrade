@@ -69,7 +69,7 @@ BattleScript_TotemRet:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 TotemEnd
 	setgraphicalstatchangevalues
 	playanimation BANK_ATTACKER 0x1 0x2023FD4
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 TotemEnd:
 	return

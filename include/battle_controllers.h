@@ -115,6 +115,7 @@ struct ChooseMoveStruct
 	u8 moveResults[MAX_BATTLERS_COUNT][MAX_MON_MOVES];
 	u16 movePowers[MAX_MON_MOVES];
 	u16 moveAcc[MAX_MON_MOVES];
+    u8 moveSplit[MAX_MON_MOVES];
 	u8 monType3;
 	bool8 canMegaEvolve;
 	u8 megaVariance;
@@ -123,6 +124,7 @@ struct ChooseMoveStruct
 	bool8 ultraDone : 1;
 	bool8 dynamaxDone : 1;
 	bool8 dynamaxed : 1;
+    bool8 atkIsGrounded : 1;
 	bool8 bank;
 	u8 zPartyIndex;
 	u16 possibleZMoves[MAX_MON_MOVES];

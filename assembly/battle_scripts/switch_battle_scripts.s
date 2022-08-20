@@ -143,7 +143,7 @@ BattleScript_StickyWebSpeedDrop:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BattleScript_StickyWebSpeedDropReturn
 	setgraphicalstatchangevalues
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 BattleScript_StickyWebSpeedDropReturn:
 	bicword HIT_MARKER, HITMARKER_NON_ATTACK_DMG | HITMARKER_IGNORE_SAFEGUARD | HITMARKER_IGNORE_SUBSTITUTE

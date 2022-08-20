@@ -65,7 +65,7 @@ BattleScript_KingsShieldPostDecrementSet:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 KingsShieldReturn
 	setgraphicalstatchangevalues
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 
 KingsShieldReturn:
@@ -368,7 +368,7 @@ BattleScript_BrokenRaidBarrier_Def:
 BattleScript_BrokenRaidBarrierPrintDefMsg:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x3 BattleScript_BrokenRaidBarrier_SpDef
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x4 BattleScript_BrokenRaidBarrierEnd
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 
 BattleScript_BrokenRaidBarrier_SpDef:
@@ -377,7 +377,7 @@ BattleScript_BrokenRaidBarrier_SpDef:
 	statbuffchange STAT_TARGET | STAT_BS_PTR BattleScript_BrokenRaidBarrierPrintSpDefMsg
 BattleScript_BrokenRaidBarrierPrintSpDefMsg:
 	jumpifbyte GREATERTHAN MULTISTRING_CHOOSER 0x2 BattleScript_BrokenRaidBarrierEnd
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 
 BattleScript_BrokenRaidBarrierEnd:

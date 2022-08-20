@@ -11719,8 +11719,8 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_POLTERGEIST] =
-	{	//ANIM TODO
-		.effect = EFFECT_POLTERGEIST, //EFFECT TODO
+	{
+		.effect = EFFECT_POLTERGEIST,
 		.power = 110,
 		.type = TYPE_GHOST,
 		.accuracy = 90,
@@ -11751,8 +11751,8 @@ const struct BattleMove gBattleMoves[] =
 	},
 
 	[MOVE_COACHING] =
-	{	//ANIM TODO
-		.effect = EFFECT_HELPING_HAND, //EFFECT TODO
+	{
+		.effect = EFFECT_HELPING_HAND,
 		.power = 0,
 		.type = TYPE_FIGHTING,
 		.accuracy = 0,

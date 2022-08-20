@@ -150,7 +150,7 @@ BS_IntimidateActivatesLoop:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BattleScript_IntimidatePrevented
 	setgraphicalstatchangevalues
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	jumpifhelditemeffect BANK_TARGET ITEM_EFFECT_ADRENALINE_ORB BattleScript_AdrenalineOrb
 	goto IntimidateActivatesLoopIncrement
@@ -174,7 +174,7 @@ BattleScript_AdrenalineOrbCall:
 
 BattleScript_IntimidatePrevented:
 	pause DELAY_HALFSECOND
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 
 IntimidateActivatesLoopIncrement:
@@ -687,7 +687,7 @@ WeakArmorModDef:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 WeakArmorModSpd
 	setgraphicalstatchangevalues
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	
 WeakArmorModSpd:
@@ -772,7 +772,7 @@ BattleScript_GooeyActivates:
 	setstatchanger STAT_SPD | DECREASE_1
 	statbuffchange STAT_TARGET | STAT_BS_PTR GooeyReturn
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 GooeyReturn
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	call BattleScript_AbilityPopUpRevert
 
@@ -1037,7 +1037,7 @@ BattleScript_MirrorArmorReflectsStatLoss_StatChange:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BattleScript_MirrorArmorReflectsStatLossAttackerStatCantGoLower
 	setgraphicalstatchangevalues
 	playanimation BANK_ATTACKER ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 
 BattleScript_MirrorArmorReflectsStatLossReturn:
@@ -1045,7 +1045,7 @@ BattleScript_MirrorArmorReflectsStatLossReturn:
 	return
 
 BattleScript_MirrorArmorReflectsStatLossAttackerStatCantGoLower:
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	setbyte MULTISTRING_CHOOSER 0x3
 	goto BattleScript_MirrorArmorReflectsStatLossReturn
@@ -1080,7 +1080,7 @@ BattleScript_MirrorArmorReflectsIntimidate:
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BattleScript_MirrorArmorAttackerStatCantGoLower
 	setgraphicalstatchangevalues
 	playanimation BANK_TARGET ANIM_STAT_BUFF ANIM_ARG_1
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	jumpifhelditemeffect BANK_TARGET ITEM_EFFECT_ADRENALINE_ORB BattleScript_MirrorArmorAdrenalineOrb
 
@@ -1096,7 +1096,7 @@ BattleScript_MirrorArmorAdrenalineOrb:
 	goto BattleScript_MirrorArmorReflectsIntimidateReturn
 
 BattleScript_MirrorArmorAttackerStatCantGoLower:
-	printfromtable 0x83FE588
+	printfromtable gStatDownStringIds
 	waitmessage DELAY_1SECOND
 	setbyte MULTISTRING_CHOOSER 0x3
 	goto BattleScript_MirrorArmorReflectsIntimidateReturn

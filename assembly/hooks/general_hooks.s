@@ -1266,3 +1266,4 @@ LastUsedBallOverrideHook:
 LastUsedBallOverrideHook_SkipBag: @Skips the palette fade to bag
 	ldr r0, =0x8032D30 | 1
 	bx r0
+
