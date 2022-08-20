@@ -348,6 +348,35 @@ bool8 CheckContactByMon(u16 move, struct Pokemon* mon)
 	return TRUE;
 }
 
+bool8 IsContactMove(u16 move, u8 bankAtk, u8 bankDef)
+{
+	if (move == MOVE_SHELLSIDEARM && bankAtk != bankDef)
+		return gNewBS->shellSideArmSplit[bankAtk][bankDef] == SPLIT_PHYSICAL; //Calculated in advance
+	else
+		return gBattleMoves[move].flags & FLAG_MAKES_CONTACT;
+}
+
+bool8 CanNeverMakeContact(u8 bank)
+{
+	return CanNeverMakeContactByAbilityItemEffect(ABILITY(bank), ITEM_EFFECT(bank));
+}
+
+bool8 CanMonNeverMakeContact(struct Pokemon* mon)
+{
+	return CanNeverMakeContactByAbilityItemEffect(GetMonAbility(mon), GetMonItemEffect(mon));
+}
+
+bool8 CanNeverMakeContactByAbilityItemEffect(u8 ability, u8 itemEffect)
+{
+	return ability == ABILITY_LONGREACH
+		|| CanNeverMakeContactByItemEffect(itemEffect);
+}
+
+bool8 CanNeverMakeContactByItemEffect(u8 itemEffect)
+{
+	return itemEffect == ITEM_EFFECT_PROTECTIVE_PADS;
+}
+
 bool8 CheckHealingMove(move_t move)
 {
 	return gBattleMoves[move].flags & FLAG_TRIAGE_AFFECTED;

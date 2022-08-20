@@ -1973,6 +1973,7 @@ SetUpWarpExitTask = 0x807DE78 | 1;
 FieldCB_WarpExitFadeFromBlack = 0x807DF7C | 1;
 ScriptFreezeObjectEvents = 0x80695B4 | 1;
 DestroyMonIconInternal = 0x80973D8 | 1;
+CreateMonIconSprite = 0x8097300 | 1;
 ScriptContext2_RunScript = 0x8069AA8 | 1;
 OverworldBasic = 0x8056578 | 1;
 sub_8056CD8 = 0x8056CD8 | 1;

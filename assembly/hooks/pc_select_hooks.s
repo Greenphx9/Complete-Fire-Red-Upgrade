@@ -412,12 +412,12 @@ PhysicalSpecialSplitIconRoutine:
 	lsl r0, r4, #0x1
 	add r4, r0
 	lsl r4, #0x6
-	ldr r0, =PSSIconsTiles
+	ldr r0, =PSSPSSIconsTiles
 	add r0, r4
 	ldr r1, =0x6001800
 	mov r2, #0x30
 	swi 0xB
-	ldr r0, =PSSIconsTiles
+	ldr r0, =PSSPSSIconsTiles
 	add r0, r4
 	add r0, #0x60
 	ldr r1, =0x6001800
