@@ -307,24 +307,6 @@ HoneClaws_Acc:
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
-BattleScript_CantRaiseMultipleStats:
-	pause DELAY_HALFSECOND
-	orbyte OUTCOME OUTCOME_FAILED
-	jumpifability BANK_ATTACKER ABILITY_CONTRARY BattleScript_CantLowerMultipleStatsPrintString
-BattleScript_CantRaiseMultipleStatsPrintString:
-	printstring 0x19 @;STRINGID_STATSWONTINCREASE2
-	waitmessage DELAY_1SECOND
-	goto BS_MOVE_END
-
-BattleScript_CantLowerMultipleStats:
-	pause DELAY_HALFSECOND
-	orbyte OUTCOME OUTCOME_FAILED
-	jumpifability BANK_TARGET ABILITY_CONTRARY BattleScript_CantRaiseMultipleStatsPrintString
-BattleScript_CantLowerMultipleStatsPrintString:
-	printstring 0x15D @;STRINGID_STATSWONTDECREASE2
-	waitmessage DELAY_1SECOND
-	goto BS_MOVE_END
-
 HowlBS:
 	attackcanceler
 	attackstring
