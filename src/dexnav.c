@@ -53,6 +53,7 @@
 #include "../include/new/dexnav.h"
 #include "../include/new/dexnav_config.h"
 #include "../include/new/dns.h"
+#include "../include/new/exp.h"
 #include "../include/new/item.h"
 #include "../include/new/learn_move.h"
 #include "../include/new/overworld.h"
@@ -1046,15 +1047,6 @@ static void Task_ManageDexNavHUD(u8 taskId)
 		return;
 	}
 
-	if (sDexNavHudPtr->totalProximity <= SNEAKING_PROXIMITY && TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_DASH | PLAYER_AVATAR_FLAG_BIKE)) //If player is close and running then the Pokemon should flee
-	{
-		gCurrentDexNavChain = 0; //A Pokemon running like this resets the chain
-		DexNavFreeHUD();
-		DexNavShowFieldMessage(FIELD_MSG_SNEAK_NEXT_TIME);
-		DestroyTask(taskId);
-		return;
-	}
-
 	//Check if script just executed
 	if (ScriptContext2_IsEnabled() == TRUE)
 	{
@@ -1327,12 +1319,24 @@ static u8 DexNavGenerateMonLevel(u16 species, u8 chainLevel, u8 environment, boo
 	if (Random() % 100 < 4) //4% chance of having a +10 level
 		levelBonus += 10;
 
+	if (VarGet(VAR_WILD_LEVEL_SCALING) == 0)
+	{
+		u16 scaledLevel = 0;
+		u8 i;
+		for (i = 0; i < gPlayerPartyCount; i++) {
+			scaledLevel += gPlayerParty[i].level;
+		}
+		levelBase = (scaledLevel /= gPlayerPartyCount);
+	}
+
 	if (levelBase + levelBonus > MAX_LEVEL)
 		return MAX_LEVEL;
-	#ifdef FLAG_HARD_LEVEL_CAP
+	/*#ifdef FLAG_HARD_LEVEL_CAP
 	else if (FlagGet(FLAG_HARD_LEVEL_CAP) && levelBase + levelBonus > GetCurrentLevelCap())
 		return GetCurrentLevelCap();
-	#endif
+	#endif*/
+	else if (levelBase + levelBonus > GetCurrentLevelCap())
+		return GetCurrentLevelCap();
 	else
 		return levelBase + levelBonus;
 }
@@ -3201,6 +3205,8 @@ static void SpriteCB_WaterMonIcon(struct Sprite* sprite)
 
 //Input Handler//
 
+//Input Handler//
+
 static void Task_DexNavFadeIn(u8 taskId)
 {
 	if (!gPaletteFade->active)
@@ -3208,14 +3214,7 @@ static void Task_DexNavFadeIn(u8 taskId)
 		if (!AnyPokemonInCurrentArea())
 		{
 			PrintDexNavMessage(MESSAGE_NO_POKEMON_HERE);
-			if (JOY_NEW(A_BUTTON))
-			{
-				ClearStdWindowAndFrameToTransparent(WIN_TEXTBOX, FALSE);
-				CopyWindowToVram(WIN_TEXTBOX, COPYWIN_GFX);
-				RemoveWindow(WIN_TEXTBOX);
-				BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-				gTasks[taskId].func = Task_DexNavFadeOutToStartMenu;
-			}
+			gTasks[taskId].func = Task_PrintMessageThenClose;
 		}
 		else
 			gTasks[taskId].func = Task_DexNavWaitForKeyPress;
@@ -3224,8 +3223,11 @@ static void Task_DexNavFadeIn(u8 taskId)
 
 static void Task_PrintMessageThenClose(u8 taskId)
 {
-	BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-	gTasks[taskId].func = Task_DexNavFadeOutToStartMenu;
+	if (!RunTextPrinters_CheckPrinter0Active())
+	{
+		BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+		gTasks[taskId].func = Task_DexNavFadeOutToStartMenu;
+	}
 }
 
 static void Task_DexNavWaitForKeyPress(u8 taskId)
@@ -3380,6 +3382,8 @@ static void Task_DexNavFadeOutToStartMenu(u8 taskId)
 		SetMainCallback2(CB2_ReturnToFieldWithOpenMenu);
 		FreeAndCloseDexNav(taskId);
 	}
+	else
+		RemoveWindow(WIN_TEXTBOX);
 }
 
 static void Task_DexNavFadeOutToScan(u8 taskId)
@@ -3566,12 +3570,9 @@ static void CreateWaterScrollArrows(void)
 
 static void CreateCursor(void)
 {
-	if (AnyPokemonInCurrentArea()) //Don't bother if going to close right away
-	{
-		LoadSpriteSheet(&sCursorSpriteSheet);
-		LoadSpritePalette(&sCursorSpritePalette);
-		sDexNavGUIPtr->cursorSpriteId = CreateSprite(&sGUICursorTemplate, 30, 48, 0);
-	}
+	LoadSpriteSheet(&sCursorSpriteSheet);
+	LoadSpritePalette(&sCursorSpritePalette);
+	sDexNavGUIPtr->cursorSpriteId = CreateSprite(&sGUICursorTemplate, 30, 48, 0);
 }
 
 static void CreateRegisteredIcon(void)
@@ -3650,34 +3651,15 @@ static void LoadDexNavBgGfx(void)
 	//Choose palette based on current location
 	if (IsMapTypeIndoors(GetCurrentMapType()))
 		altPalette = DexNavBG_IndoorPal;
-	else if (IsCurrentAreaVolcano()) //Load special palette for volcanos
-		altPalette = DexNavBG_VolcanoPal;
-	#ifdef UNBOUND
-	else if (MAP_IS(FLOWER_PARADISE_A))
-		altPalette = DexNavBG_FlowerParadiseAPal;
-	else if (MAP_IS(FLOWER_PARADISE_B))
-		altPalette = DexNavBG_FlowerParadiseBPal;
-	else if (MAP_IS(FLOWER_PARADISE_C))
-		altPalette = DexNavBG_FlowerParadiseCPal;
-	#endif
-	else if (IsCurrentAreaDarkerCave())
-		altPalette = DexNavBG_DarkerCavePal;
 	else if (GetCurrentMapType() == MAP_TYPE_UNDERGROUND)
 		altPalette = DexNavBG_CavePal;
-	else if (IsCurrentAreaAutumn())
-		altPalette = DexNavBG_AutumnPal;
-	else if (IsCurrentAreaWinter())
-		altPalette = DexNavBG_WinterPal;
-	else if (IsCurrentAreaDesert())
-		altPalette = DexNavBG_DesertPal;
-	else if (IsCurrentAreaSwamp())
-		altPalette = DexNavBG_SwampPal;
 	else
 		altPalette = NULL;
 
-	LoadPalette(palette, 0, 0x20); //Pal 0
 	if (altPalette != NULL)
-		LoadPalette(altPalette + 1, 1, 0x2 * 6); //Pal 0 - copy first 6 real colours
+		LoadPalette(altPalette, 0, 0x20); //Pal 0 - copy first 6 real colours
+	else
+		LoadPalette(palette, 0, 0x20); //Pal 0
 	LoadMenuElementsPalette(12 * 0x10, 1); //Pal 12
 	Menu_LoadStdPalAt(15 * 0x10); //Pal 15
 }

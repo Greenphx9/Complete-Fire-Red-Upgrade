@@ -16,5 +16,6 @@ extern const u16 LevelCap[];
 bool8 AddEVs(struct Pokemon* mon, u8 statId, u16 numToAdd);
 
 //Functions Hooked In
+u8 GetCurrentLevelCap(void);
 void atk23_getexp(void);
 void PlayerHandleExpBarUpdate(void);

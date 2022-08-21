@@ -45,6 +45,7 @@ extern const u16 gBaseExpBySpecies[];
 extern u8 String_TeamExpGain[];
 
 //This file's functions:
+u8 GetCurrentLevelCap(void);
 static u32 ExpCalculator(u32 a, u32 t, u32 b, u32 e, u32 L, u32 Lp, u32 p, u32 f, u32 v, u32 s);
 static bool8 WasWholeTeamSentIn(u8 bank, u8 sentIn);
 static bool8 MonGetsAffectionBoost(struct Pokemon* mon);
@@ -95,6 +96,12 @@ const u16 LevelCap[] = {
 	78,
 	100,
 };
+
+u8 GetCurrentLevelCap(void)
+{
+	u8 badge = GetBadgeCount();
+	return LevelCap[badge];
+}
 
 ///////////////////// GAIN EXPERIENCE //////////////////////
 void atk23_getexp(void)

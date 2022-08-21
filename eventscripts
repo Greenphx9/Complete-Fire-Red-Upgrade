@@ -454,6 +454,7 @@ sign 1 95 3 EventScript_RegielekiSign
 sign 1 95 4 EventScript_RegielekiSign
 sign 1 47 0 EventScript_RegisteelSign
 map 1 47 EventScript_SilphCoMapScript
+npc 43 23 0 EventScript_Registeel
 
 npc 3 30 16 EventScript_ForbidYouEntering
 npc 3 37 13 EventScript_ForbidYouEntering
@@ -581,6 +582,8 @@ npc 43 16 2 EventScript_Cut
 npc 1 0 18 EventScript_Cut
 npc 1 0 19 EventScript_Cut
 npc 1 0 20 EventScript_Cut
+npc 3 32 10 EventScript_Cut
+npc 3 32 11 EventScript_Cut
 npc 1 37 3 EventScript_RockSmash
 npc 1 82 11 EventScript_RockSmash
 npc 1 82 12 EventScript_RockSmash
