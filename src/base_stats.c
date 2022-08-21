@@ -37195,7 +37195,7 @@ const struct BaseStats gBaseStats2[] =
 		.ability1 = ABILITY_SHELLARMOR, //-ABILITY_BATTLEARMOR
 		.ability2 = ABILITY_TOUGHCLAWS,
 		.safariZoneFleeRate = 0,
-		.hiddenAbility = ABILITY_STEELY_SPIRIT,
+		.hiddenAbility = ABILITY_STEELYSPIRIT,
 		.noFlip = TRUE,
 	},
 
@@ -37324,7 +37324,7 @@ const struct BaseStats gBaseStats2[] =
 		.growthRate = GROWTH_MEDIUM_FAST,
 		.eggGroup1 = EGG_GROUP_MINERAL,
 		.eggGroup2 = EGG_GROUP_AMORPHOUS,
-		.ability1 = ABILITY_WANDERING_SPIRIT,
+		.ability1 = ABILITY_WANDERINGSPIRIT,
 		.ability2 = ABILITY_NONE,
 		.safariZoneFleeRate = 0,
 		.hiddenAbility = ABILITY_NONE,
@@ -39733,7 +39733,7 @@ const struct BaseStats gBaseStats2[] =
 		.growthRate = GROWTH_MEDIUM_FAST,
 		.eggGroup1 = EGG_GROUP_MINERAL,
 		.eggGroup2 = EGG_GROUP_AMORPHOUS,
-		.ability1 = ABILITY_WANDERING_SPIRIT,
+		.ability1 = ABILITY_WANDERINGSPIRIT,
 		.ability2 = ABILITY_NONE,
 		.safariZoneFleeRate = 0,
 		.hiddenAbility = ABILITY_NONE,
