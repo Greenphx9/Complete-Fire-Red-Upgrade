@@ -908,6 +908,13 @@ static bool8 BankHoldingUsefulItemToProtectFor(u8 bank)
 	 || MoveInMoveset(MOVE_FACADE, bank)))
 		return TRUE;
 
+	if (itemEffect == ITEM_EFFECT_FROST_ORB
+	&& CanBeFrozen(bank, FALSE)
+	&& (ability == ABILITY_GUTS
+	 || ability == ABILITY_MAGICGUARD
+	 || MoveInMoveset(MOVE_FACADE, bank)))
+		return TRUE;
+
 	return FALSE;
 }
 
@@ -1894,6 +1901,83 @@ void IncreaseSleepViability(s16* originalViability, u8 class, u8 bankAtk, u8 ban
 				INCREASE_VIABILITY(19);
 			else
 				INCREASE_STATUS_VIABILITY(3);
+			break;
+	}
+
+	*originalViability = MathMin(viability, 255);
+}
+
+void IncreaseFreezeViability(s16* originalViability, u8 class, u8 bankAtk, u8 bankDef)
+{
+	s16 viability = *originalViability;
+
+	if (BadIdeaToFreeze(bankDef, bankAtk))
+		return;
+
+	switch (class) {
+		case FIGHT_CLASS_SWEEPER_KILL:
+			break;
+
+		case FIGHT_CLASS_SWEEPER_SETUP_STATS:
+			INCREASE_VIABILITY(9);
+			break;
+
+		case FIGHT_CLASS_SWEEPER_SETUP_STATUS:
+			INCREASE_VIABILITY(8);
+			break;
+
+		case FIGHT_CLASS_STALL:
+			INCREASE_VIABILITY(8);
+			break;
+
+		case FIGHT_CLASS_TEAM_SUPPORT_BATON_PASS:
+			INCREASE_VIABILITY(9);
+			break;
+
+		case FIGHT_CLASS_TEAM_SUPPORT_CLERIC:
+			INCREASE_VIABILITY(7);
+			break;
+
+		case FIGHT_CLASS_TEAM_SUPPORT_SCREENS:
+		//case FIGHT_CLASS_SWEEPER_SETUP_SCREENS:
+			INCREASE_VIABILITY(8);
+			break;
+
+		case FIGHT_CLASS_TEAM_SUPPORT_PHAZING:
+			INCREASE_VIABILITY(9);
+			break;
+
+		case FIGHT_CLASS_ENTRY_HAZARDS:
+			INCREASE_VIABILITY(8);
+			break;
+
+		case FIGHT_CLASS_DOUBLES_ALL_OUT_ATTACKER:
+			INCREASE_VIABILITY(17);
+			break;
+
+		case FIGHT_CLASS_DOUBLES_SETUP_ATTACKER:
+			INCREASE_VIABILITY(18);
+			break;
+
+		case FIGHT_CLASS_DOUBLES_TRICK_ROOM_ATTACKER:
+			INCREASE_VIABILITY(16);
+			break;
+
+		case FIGHT_CLASS_DOUBLES_TRICK_ROOM_SETUP:
+			INCREASE_VIABILITY(16);
+			break;
+
+		case FIGHT_CLASS_DOUBLES_UTILITY:
+			INCREASE_VIABILITY(17);
+			break;
+
+		case FIGHT_CLASS_DOUBLES_PHAZING:
+			INCREASE_VIABILITY(17);
+			break;
+
+		case FIGHT_CLASS_DOUBLES_TEAM_SUPPORT:
+		//case FIGHT_CLASS_DOUBLES_TOTAL_TEAM_SUPPORT:
+			INCREASE_VIABILITY(19);
 			break;
 	}
 

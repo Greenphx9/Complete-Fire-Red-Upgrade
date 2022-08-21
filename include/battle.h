@@ -954,6 +954,8 @@ struct NewBattleStruct
 	{
 		u16 zMoveHelper;
 		bool8 sideSwitchedThisRound;
+		u32 randSeed; //Seeded every frame regardless of whether or not the Random seed is normally
+		bool8 suckerPunchOkay[MAX_BATTLERS_COUNT];
 		u8 switchingCooldown[MAX_BATTLERS_COUNT]; //~0x2017B5B
 		u8 itemEffects[MAX_BATTLERS_COUNT];
 		u16 movePredictions[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT]; //movePredictions[bankAtk][bankDef]

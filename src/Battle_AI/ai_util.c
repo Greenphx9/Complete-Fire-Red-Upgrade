@@ -34,6 +34,15 @@ static u32 CalcPredictedDamageForCounterMoves(u16 move, u8 bankAtk, u8 bankDef);
 static bool8 CalculateMoveKnocksOutXHits(u16 move, u8 bankAtk, u8 bankDef, u8 numHits);
 u16 PriorityMoveInMoveset(u8 bank);
 
+u16 AIRandom()
+{
+	if (gBattleTypeFlags & BATTLE_TYPE_MOCK_BATTLE)
+		return Random(); //Use regular random since AI vs AI isn't exploitable
+
+    gNewBS->ai.randSeed = 1103515245 * gNewBS->ai.randSeed + 24691; //Seeded every frame no matter what
+    return gNewBS->ai.randSeed >> 16;
+}
+
 bool8 CanKillAFoe(u8 bank)
 {
 	u8 foe = FOE(bank);
@@ -620,7 +629,9 @@ void UpdateBestDoubleKillingMoveScore(u8 bankAtk, u8 bankDef, u8 bankAtkPartner,
 			{
 				u8 status1 = gBattleMons[bankAtkPartner].status1;
 				if ((status1 & STATUS1_SLEEP) <= 1 //Partner will be awake to use move
+				#ifndef FROSTBITE
 				&& !(status1 & STATUS1_FREEZE)
+				#endif
 				&& !gDisableStructs[bankAtkPartner].truantCounter)
 				{
 					if (partnerMove != MOVE_NONE) //Partner has chosen a move
@@ -1195,8 +1206,10 @@ bool8 IsBankIncapacitated(u8 bank)
 	if (IsBankAsleep(bank))
 		return TRUE;
 
+	#ifndef FROSTBITE
 	if (gBattleMons[bank].status1 & STATUS1_FREEZE)
 		return TRUE;
+	#endif
 
 	if (gBattleMons[bank].status2 & STATUS2_RECHARGE
 	||  (ABILITY(bank) == ABILITY_TRUANT && gDisableStructs[bank].truantCounter != 0))
@@ -1392,6 +1405,240 @@ u8 GetMonAbilityAfterTrace(struct Pokemon* mon, u8 foe)
 	return ability;
 }
 
+//Basically a bunch of checks handled in the Negatives but still needed for damage calcs to work properly
+//These by default are not handled in IsUnusableMove
+bool8 IsDamagingMoveUnusable(u16 move, u8 bankAtk, u8 bankDef)
+{
+	if (NO_MOLD_BREAKERS(ABILITY(bankAtk), move))
+	{
+		switch (ABILITY(bankDef))
+		{
+			//Electric
+			case ABILITY_VOLTABSORB:
+			case ABILITY_MOTORDRIVE:
+			case ABILITY_LIGHTNINGROD:
+				if (GetMoveTypeSpecial(bankAtk, move) == TYPE_ELECTRIC)
+					return TRUE;
+				break;
+
+			//Water
+			case ABILITY_WATERABSORB:
+			case ABILITY_DRYSKIN:
+			case ABILITY_STORMDRAIN:
+				if (GetMoveTypeSpecial(bankAtk, move) == TYPE_WATER)
+					return TRUE;
+				break;
+
+			//Fire
+			case ABILITY_FLASHFIRE:
+				if (GetMoveTypeSpecial(bankAtk, move) == TYPE_FIRE)
+					return TRUE;
+				break;
+
+			//Grass
+			case ABILITY_SAPSIPPER:
+				if (GetMoveTypeSpecial(bankAtk, move) == TYPE_GRASS)
+					return TRUE;
+				break;
+
+			//Move category checks
+			case ABILITY_SOUNDPROOF:
+				if (CheckSoundMove(move))
+					return TRUE;
+				break;
+
+			case ABILITY_BULLETPROOF:
+				if (CheckTableForMove(move, gBallBombMoves))
+					return TRUE;
+				break;
+
+			case ABILITY_QUEENLYMAJESTY:
+				if (PriorityCalc(bankAtk, ACTION_USE_MOVE, move) > 0) //Check if right num
+					return TRUE;
+				break;
+		}
+	}
+
+	switch (gBattleMoves[move].effect) {
+		case EFFECT_FAKE_OUT:
+			if (!gDisableStructs[bankAtk].isFirstTurn)
+				return TRUE;
+			break;
+		case EFFECT_BURN_UP:
+			if (!IsOfType(bankAtk, TYPE_FIRE))
+				return TRUE;
+			break;
+		case EFFECT_POLTERGEIST:
+			if (WillPoltergeistFail(ITEM(bankDef), ABILITY(bankDef)))
+				return TRUE;
+			break;
+		case EFFECT_0HKO:
+			if (gBattleMons[bankAtk].level < gBattleMons[bankDef].level)
+				return TRUE;
+			if (move == MOVE_SHEERCOLD && IsOfType(bankDef, TYPE_ICE))
+				return TRUE;
+			if (IsDynamaxed(bankDef) && !HasRaidShields(bankDef))
+				return TRUE;
+			if (NO_MOLD_BREAKERS(ABILITY(bankAtk), move) && ABILITY(bankDef) == ABILITY_STURDY)
+				return TRUE;
+			break;
+		case EFFECT_SUCKER_PUNCH:
+			if (!IsSuckerPunchOkayToUseThisRound(move, bankAtk, bankDef))
+				return TRUE;
+			break;
+	}
+
+	if (IsDynamaxed(bankDef) && CheckTableForMove(move, gDynamaxBannedMoves))
+		return TRUE;
+
+	//Raid Battle Check
+	if (IsRaidBattle())
+	{
+		if (bankAtk == BANK_RAID_BOSS && CheckTableForMove(move, gRaidBattleBannedRaidMonMoves))
+			return TRUE;
+	}
+
+	//Primal Weather Check
+	if ((gBattleWeather & WEATHER_SUN_PRIMAL && GetMoveTypeSpecial(bankAtk, move) == TYPE_WATER)
+	|| (gBattleWeather & WEATHER_RAIN_PRIMAL && GetMoveTypeSpecial(bankAtk, move) == TYPE_FIRE))
+	{
+		if (WEATHER_HAS_EFFECT)
+			return TRUE;
+	}
+
+	//Terrain Check
+	switch (gTerrainType) {
+		case PSYCHIC_TERRAIN:
+			if (CheckGrounding(bankDef) == GROUNDED
+			&& PriorityCalc(bankAtk, ACTION_USE_MOVE, move) > 0)
+				return TRUE;
+			break;
+	}
+
+	return FALSE;
+}
+
+bool8 IsDamagingMoveUnusableByMon(u16 move, struct Pokemon* monAtk, u8 bankDef)
+{
+	if (NO_MOLD_BREAKERS(GetMonAbilityAfterTrace(monAtk, bankDef), move))
+	{
+		switch (ABILITY(bankDef))
+		{
+			//Electric
+			case ABILITY_VOLTABSORB:
+			case ABILITY_MOTORDRIVE:
+			case ABILITY_LIGHTNINGROD:
+				if (GetMonMoveTypeSpecial(monAtk, move) == TYPE_ELECTRIC)
+					return TRUE;
+				break;
+
+			//Water
+			case ABILITY_WATERABSORB:
+			case ABILITY_DRYSKIN:
+			case ABILITY_STORMDRAIN:
+				if (GetMonMoveTypeSpecial(monAtk, move) == TYPE_WATER)
+					return TRUE;
+				break;
+
+			//Fire
+			case ABILITY_FLASHFIRE:
+				if (GetMonMoveTypeSpecial(monAtk, move) == TYPE_FIRE)
+					return TRUE;
+				break;
+
+			//Grass
+			case ABILITY_SAPSIPPER:
+				if (GetMonMoveTypeSpecial(monAtk, move) == TYPE_GRASS)
+					return TRUE;
+				break;
+
+			//Move category checks
+			case ABILITY_SOUNDPROOF:
+				if (CheckSoundMove(move))
+					return TRUE;
+				break;
+
+			case ABILITY_BULLETPROOF:
+				if (CheckTableForMove(move, gBallBombMoves))
+					return TRUE;
+				break;
+
+			case ABILITY_QUEENLYMAJESTY:
+				if (PriorityCalcMon(monAtk, move) > 0) //Check if right num
+					return TRUE;
+				break;
+		}
+	}
+
+	switch (gBattleMoves[move].effect)
+	{
+		case EFFECT_BURN_UP:
+			if (!IsMonOfType(monAtk, TYPE_FIRE))
+				return TRUE;
+			break;
+		case EFFECT_POLTERGEIST:
+			if (WillPoltergeistFail(ITEM(bankDef), ABILITY(bankDef)))
+				return TRUE;
+			break;
+		case EFFECT_0HKO:
+			if (GetMonData(monAtk, MON_DATA_LEVEL, NULL) < gBattleMons[bankDef].level)
+				return TRUE;
+			if (move == MOVE_SHEERCOLD && IsOfType(bankDef, TYPE_ICE))
+				return TRUE;
+			break;
+		case EFFECT_COUNTER: //Includes Metal Burst
+		case EFFECT_MIRROR_COAT:
+			return TRUE;
+	}
+
+	if (IsDynamaxed(bankDef) && CheckTableForMove(move, gDynamaxBannedMoves))
+		return TRUE;
+
+	//Primal Weather Check
+	if ((gBattleWeather & WEATHER_SUN_PRIMAL && GetMonMoveTypeSpecial(monAtk, move) == TYPE_WATER)
+	|| (gBattleWeather & WEATHER_RAIN_PRIMAL && GetMonMoveTypeSpecial(monAtk, move) == TYPE_FIRE))
+	{
+		//TODO: if (WEATHER_HAS_EFFECT) but include monAtk instead of AI mons
+			return TRUE;
+	}
+
+	//Terrain Check
+	switch (gTerrainType) {
+		case PSYCHIC_TERRAIN:
+			if (CheckGrounding(bankDef) == GROUNDED
+			&& PriorityCalcMon(monAtk, move) > 0)
+				return TRUE;
+			break;
+	}
+
+	return FALSE;
+}
+
+bool8 IsSuckerPunchOkayToUseThisRound(u16 move, u8 bankAtk, u8 bankDef)
+{
+	u8 movePos = FindMovePositionInMoveset(move, bankAtk);
+
+	if (AI_THINKING_STRUCT->aiFlags > AI_SCRIPT_SEMI_SMART //Only smart AI
+	&& movePos < MAX_MON_MOVES //Mon actually knows Sucker Punch (and isn't just copying it from somewhere)
+	&& SIDE(bankAtk) == B_SIDE_OPPONENT //AI side is attacker
+	&& gBattleMons[bankAtk].pp[movePos] < CalculatePPWithBonus(move, gBattleMons[bankAtk].ppBonuses, movePos) //Mon has revealed Sucker Punch
+	&& (StatusMoveInMoveset(bankDef) //Player can cheese AI with status move spam
+	 || (DamagingPriorityMoveInMovesetThatAffects(bankDef, bankAtk) && SpeedCalc(bankDef) > SpeedCalc(bankAtk)))) //Player can cheese AI with priority spam
+	{
+		if (!gNewBS->ai.suckerPunchOkay[bankAtk]) //This turn wasn't randomly chosen to be okay for Sucker Punch
+			return FALSE;
+	}
+	
+	//Regular Sucker Punch logic
+	u16 predictedMove = IsValidMovePrediction(bankDef, bankAtk);
+	if (predictedMove == MOVE_NONE //Probably going to switch
+	|| SPLIT(predictedMove) == SPLIT_STATUS
+	|| !MoveWouldHitFirst(move, bankAtk, bankDef))
+		return FALSE;
+
+	return TRUE;
+}
+
 bool8 IsTrapped(u8 bank, bool8 switching)
 {
 	if (IsOfType(bank, TYPE_GHOST)
@@ -1507,6 +1754,9 @@ bool8 WillFaintFromSecondaryDamage(u8 bank)
 		+  GetLeechSeedDamage(bank)
 		+  GetPoisonDamage(bank)
 		+  GetBurnDamage(bank)
+		#ifdef FROSTBITE
+		+  GetFrostbiteDamage(bank)
+		#endif
 		+  GetCurseDamage(bank)
 		+  GetSeaOfFireDamage(bank) //Sea of Fire runs on last turn
 		+  GetGMaxVineLashDamage(bank)
@@ -1525,6 +1775,11 @@ u16 CalcSecondaryEffectChance(u8 bank, u16 move)
 
 	if (ABILITY(bank) == ABILITY_SERENEGRACE || BankSideHasRainbow(bank))
 		chance *= 2;
+
+	#ifdef FROSTBITE
+	if (gBattleWeather & WEATHER_HAIL_ANY && (move == MOVE_ICEFANG || gBattleMoves[move].effect == EFFECT_FREEZE_HIT) && WEATHER_HAS_EFFECT)
+		chance *= 2;
+	#endif
 
 	return chance;
 }
@@ -1700,6 +1955,17 @@ bool8 GoodIdeaToBurnSelf(u8 bankAtk)
 		 ||  atkAbility == ABILITY_MAGICGUARD
 		 || (atkAbility == ABILITY_FLAREBOOST && SpecialMoveInMoveset(bankAtk))
 		 || (atkAbility == ABILITY_GUTS && PhysicalMoveInMoveset(bankAtk))
+		 || MoveInMoveset(MOVE_FACADE, bankAtk)
+		 || MoveInMoveset(MOVE_PSYCHOSHIFT, bankAtk));
+}
+
+bool8 GoodIdeaToFrostbiteSelf(u8 bankAtk)
+{
+	u8 atkAbility = ABILITY(bankAtk);
+
+	return CanBeFrozen(bankAtk, FALSE)
+		&&  (atkAbility == ABILITY_QUICKFEET
+		 || (atkAbility == ABILITY_GUTS && RealPhysicalMoveInMoveset(bankAtk))
 		 || MoveInMoveset(MOVE_FACADE, bankAtk)
 		 || MoveInMoveset(MOVE_PSYCHOSHIFT, bankAtk));
 }
@@ -1978,6 +2244,33 @@ bool8 PhysicalMoveInMoveset(u8 bank)
 	return FALSE;
 }
 
+//Doesn't factor in Foul Play, or Body Press
+bool8 RealPhysicalMoveInMoveset(u8 bank)
+{
+	u16 move;
+	u8 moveLimitations = CheckMoveLimitations(bank, 0, 0xFF);
+
+	for (u32 i = 0; i < MAX_MON_MOVES; ++i)
+	{
+		move = GetBattleMonMove(bank, i);
+		if (move == MOVE_NONE)
+			break;
+
+		if (!(gBitTable[i] & moveLimitations))
+		{
+			if (CalcMoveSplit(move, bank, bank) == SPLIT_PHYSICAL
+			&& gBattleMoves[move].power != 0
+			&& gBattleMoves[move].effect != EFFECT_COUNTER
+			&& move != MOVE_FAKEOUT
+			&& move != MOVE_FOULPLAY
+			&& move != MOVE_BODYPRESS)
+				return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
 bool8 AtLeastTwoPhysicalMoveInMoveset(u8 bank, u8 amount)
 {
 	u16 move;
@@ -2026,6 +2319,30 @@ bool8 SpecialMoveInMoveset(u8 bank)
 	}
 
 	return FALSE;
+}
+
+bool8 DamagingPriorityMoveInMovesetThatAffects(u8 bankAtk, u8 bankDef)
+{
+	u16 move;
+	u8 moveLimitations = CheckMoveLimitations(bankAtk, 0, 0xFF);
+
+	for (u32 i = 0; i < MAX_MON_MOVES; ++i)
+	{
+		move = GetBattleMonMove(bankAtk, i);
+		if (move == MOVE_NONE)
+			break;
+
+		if (!(gBitTable[i] & moveLimitations))
+		{
+			if (SPLIT(move) != SPLIT_STATUS
+			&& PriorityCalc(bankAtk, ACTION_USE_MOVE, move) > 0
+			&& !(AI_SpecialTypeCalc(move, bankAtk, bankDef) & MOVE_RESULT_NO_EFFECT) //Move affects
+			&& !IsDamagingMoveUnusable(move, bankAtk, bankDef)) //Move is usable
+				return TRUE;
+		}
+	}
+
+	return FALSE;	
 }
 
 bool8 AtLeastTwoSpecialMoveInMoveset(u8 bank, u8 amount)
@@ -2770,6 +3087,32 @@ bool8 OnlyBadMovesLeftInMoveset(u8 bankAtk, u8 bankDef)
 		gNewBS->ai.onlyBadMovesLeft[bankAtk][bankDef] = CalcOnlyBadMovesLeftInMoveset(bankAtk, bankDef);
 
 	return gNewBS->ai.onlyBadMovesLeft[bankAtk][bankDef];
+}
+
+bool8 DoubleDamageWithStatusMoveInMovesetThatAffects(u8 bankAtk, u8 bankDef)
+{
+	u8 moveLimitations = CheckMoveLimitations(bankAtk, 0, 0xFF);
+
+	for (u32 i = 0; i < MAX_MON_MOVES; ++i)
+	{
+		u16 move = GetBattleMonMove(bankAtk, i);
+
+		if (move == MOVE_NONE)
+			break;
+
+		if (!(gBitTable[i] & moveLimitations))
+		{
+			if ((move == MOVE_HEX
+			|| move == MOVE_INFERNALPARADE
+			|| move == MOVE_BITTERMALICE
+			|| move == MOVE_BARBBARRAGE)
+			&& !(AI_SpecialTypeCalc(move, bankAtk, bankDef) & MOVE_RESULT_NO_EFFECT) //Move affects
+			&& !IsDamagingMoveUnusable(move, bankAtk, bankDef)) //Move is usable
+				return TRUE;
+		}
+	}
+
+	return FALSE;
 }
 
 u16 TryReplaceMoveWithZMove(u8 bankAtk, u8 bankDef, u16 move)

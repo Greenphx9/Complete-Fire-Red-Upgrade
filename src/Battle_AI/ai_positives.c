@@ -102,6 +102,11 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				goto AI_POISON_CHECKS;
 			break;
 
+		case EFFECT_FREEZE_HIT:
+			if (CalcSecondaryEffectChance(bankAtk, move) >= 75 && !MoveBlockedBySubstitute(move, bankAtk, bankDef))
+				goto AI_FREEZE_CHECKS;
+			break;
+
 		case EFFECT_EXPLOSION:
 			if (//predictedMove != MOVE_NONE //If foe isn't going to attack, don't kill yourself now
 			gBattleMoves[predictedMove].effect != EFFECT_PROTECT)
@@ -120,6 +125,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 					INCREASE_VIABILITY(5);
 			}
 			break;
+
 
 		case EFFECT_MIRROR_MOVE: //May cause issues with priority calcs?
 			switch (move) {
@@ -844,6 +850,11 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 					case ITEM_EFFECT_LAGGING_TAIL:
 					case ITEM_EFFECT_STICKY_BARB:
+						break;
+				
+					case ITEM_EFFECT_FROST_ORB:
+						if (GoodIdeaToFrostbiteSelf(bankAtk))
+							INCREASE_STATUS_VIABILITY(2);
 						break;
 
 					default:
@@ -1639,6 +1650,11 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 						INCREASE_STATUS_VIABILITY(2);
 					break;
 
+				case ITEM_EFFECT_FROST_ORB:
+					if (!GoodIdeaToFrostbiteSelf(bankAtk) && !BadIdeaToFreeze(bankDef, bankAtk))
+						INCREASE_STATUS_VIABILITY(2);
+					break;
+
 				case ITEM_EFFECT_BLACK_SLUDGE:
 					if (!IsOfType(bankDef, TYPE_POISON))
 						INCREASE_STATUS_VIABILITY(3);
@@ -1707,6 +1723,11 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 							case ITEM_EFFECT_LAGGING_TAIL:
 							case ITEM_EFFECT_STICKY_BARB:
+								break;
+
+							case ITEM_EFFECT_FROST_ORB:
+								if (GoodIdeaToFrostbiteSelf(bankAtk))
+									INCREASE_STATUS_VIABILITY(2);
 								break;
 
 							default:
@@ -1834,6 +1855,10 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 						goto AI_BURN_CHECKS;
 					else if (data->atkStatus1 & STATUS1_PARALYSIS)
 						goto AI_PARALYZE_CHECKS;
+					#ifdef FROSTBITE
+					else if (data->atkStatus1 & STATUS1_FREEZE)
+						goto AI_FREEZE_CHECKS;
+					#endif
 					else if (data->atkStatus1 & STATUS1_SLEEP)
 						goto AI_SLEEP_CHECKS;
 					break;
@@ -2197,10 +2222,35 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				case MOVE_EFFECT_TOXIC:
 					goto AI_POISON_CHECKS;
 
-				case MOVE_EFFECT_FREEZE:
-					if (!BadIdeaToFreeze(bankDef, bankAtk))
-						INCREASE_STATUS_VIABILITY(3); //Freeze the sucker
-					break;
+					case MOVE_EFFECT_FREEZE:
+					AI_FREEZE_CHECKS:
+					#ifndef FROSTBITE
+						IncreaseFreezeViability(&viability, class, bankAtk, bankDef);
+					#else
+						if (!BadIdeaToFreeze(bankDef, bankAtk))
+						{
+							if ((IsClassDoublesUtility(class) || IsClassDoublesTeamSupport(class))
+							&& SpecialMoveInMoveset(bankDef))
+							{
+								//They're split up for now so just in case they change - make sure to modify AI_BURN_CHECKS as well if this is modified
+								if (IsClassDoublesUtility(class))
+									INCREASE_VIABILITY(11);
+								else //(IsClassDoublesTeamSupport(class))
+									INCREASE_VIABILITY(11);
+							}
+							else if (CalcMoveSplit(predictedMove, bankDef, bankAtk) == SPLIT_SPECIAL
+							&& MoveKnocksOutXHits(predictedMove, bankDef, bankAtk, 1))
+								INCREASE_STATUS_VIABILITY(3); //If the enemy can kill with a special move, try frostbiting them so they can't anymore
+							else if (DoubleDamageWithStatusMoveInMovesetThatAffects(bankAtk, bankDef)
+							|| (IS_DOUBLE_BATTLE && DoubleDamageWithStatusMoveInMovesetThatAffects(data->bankAtkPartner, bankDef))
+							|| MoveInMoveset(MOVE_BITTERMALICE, bankAtk)
+							|| SpecialMoveInMoveset(bankDef))
+								INCREASE_STATUS_VIABILITY(2);
+							else
+								INCREASE_STATUS_VIABILITY(1);
+						}
+					#endif
+						break;
 			}
 			break;
 
@@ -2446,6 +2496,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 		}
 	}
 
+	#ifndef FROSTBITE
 	if (data->atkStatus1 & STATUS1_FREEZE && CheckTableForMove(move, gMovesCanUnfreezeAttacker))
 	{
 		//Unfreeze yourself
@@ -2454,6 +2505,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 		else
 			INCREASE_VIABILITY(10);
 	}
+	#endif
 
 	return MathMin(viability, 255);
 }
@@ -2583,6 +2635,7 @@ u8 AIScript_SemiSmart(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			}
 		}
 
+		#ifndef FROSTBITE
 		if (data->atkStatus1 & STATUS1_FREEZE && CheckTableForMove(move, gMovesCanUnfreezeAttacker))
 		{
 			//Unfreeze yourself
@@ -2591,6 +2644,7 @@ u8 AIScript_SemiSmart(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			else
 				INCREASE_VIABILITY(10);
 		}
+		#endif
 		
 		return viability;
 	}

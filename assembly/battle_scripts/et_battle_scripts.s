@@ -19,6 +19,7 @@ et_battle_scripts.s
 .global BattleScript_AquaRing
 .global BattleScript_LeechSeedTurnDrain
 .global BattleScript_PoisonHeal
+.global BattleScript_FrostbiteTurnDmg
 .global BattleScript_YawnMakesAsleep
 .global BattleScript_MagnetRiseEnd
 .global BattleScript_TelekinesisEnd
@@ -38,6 +39,7 @@ et_battle_scripts.s
 .global BattleScript_TerrainEnd
 .global BattleScript_ToxicOrb
 .global BattleScript_FlameOrb
+.global BattleScript_FrostOrb
 .global BattleScript_PowerConstruct
 .global BattleScript_StartedSchooling
 .global BattleScript_StoppedSchooling
@@ -73,6 +75,7 @@ et_battle_scripts.s
 .global AbilityActivatedString
 
 .equ BattleScript_DoTurnDmg, 0x81D905B
+.equ BattleScript_DoStatusTurnDmg, 0x81d9059
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -215,6 +218,14 @@ BattleScript_PoisonHeal:
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+BattleScript_FrostbiteTurnDmg:
+	setword BATTLE_STRING_LOADER gText_HurtByFrostbite
+	printstring 0x184
+	waitmessage 0x40
+	goto BattleScript_DoStatusTurnDmg
+
+@;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 BattleScript_YawnMakesAsleep:
 	statusanimation BANK_EFFECT
 	printstring 0x23 @;STRINGID_PKMNFELLASLEEP
@@ -352,6 +363,17 @@ BattleScript_ToxicOrb:
 BattleScript_FlameOrb:
 	statusanimation BANK_EFFECT
 	setword BATTLE_STRING_LOADER FlameOrbString
+	printstring 0x184
+	waitmessage DELAY_1SECOND
+	refreshhpbar BANK_EFFECT
+	waitstateatk
+	end2
+
+@;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+BattleScript_FrostOrb:
+	statusanimation BANK_EFFECT
+	setword BATTLE_STRING_LOADER FrostOrbString
 	printstring 0x184
 	waitmessage DELAY_1SECOND
 	refreshhpbar BANK_EFFECT

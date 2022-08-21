@@ -40,6 +40,7 @@ enum EndTurnEffects
 	ET_Item_Effects3,
 	ET_Switch_Out_Abilities3,
 	ET_Burn,
+	ET_Frostbite,
 	ET_Item_Effects4,
 	ET_Switch_Out_Abilities4,
 	ET_Nightmare,
@@ -635,6 +636,20 @@ u8 TurnBasedEffects(void)
 					BattleScriptExecute(BattleScript_BurnTurnDmg);
 					effect++;
 				}
+				gNewBS->turnDamageTaken[gActiveBattler] = gBattleMoveDamage; //For Emergency Exit
+				break;
+
+			case ET_Frostbite:
+				#ifdef FROSTBITE
+				if (gBattleMons[gActiveBattler].status1 & STATUS_FREEZE
+				&& BATTLER_ALIVE(gActiveBattler)
+				&& ABILITY(gActiveBattler) != ABILITY_MAGICGUARD)
+				{
+					gBattleMoveDamage = GetFrostbiteDamage(gActiveBattler);
+					BattleScriptExecute(BattleScript_FrostbiteTurnDmg);
+					effect++;
+				}
+				#endif
 				gNewBS->turnDamageTaken[gActiveBattler] = gBattleMoveDamage; //For Emergency Exit
 				break;
 
@@ -1353,6 +1368,20 @@ u8 TurnBasedEffects(void)
 										++effect;
 									}
 									break;
+								case ITEM_EFFECT_FROST_ORB:
+									if (CanBeBurned(gActiveBattler, FALSE))
+									{
+										gLastUsedItem = ITEM(gActiveBattler);
+										RecordItemEffectBattle(gActiveBattler, itemEffect);
+										gBattleMons[gActiveBattler].status1 |= STATUS1_FREEZE;
+										EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
+										MarkBufferBankForExecution(gActiveBattler);
+
+										gEffectBank = gActiveBattler;
+										BattleScriptExecute(BattleScript_FrostOrb);
+										++effect;
+									}
+									break;
 							}
 						}
 						break;
@@ -1711,6 +1740,27 @@ u32 GetBurnDamage(u8 bank)
 			#endif
 		}
 	}
+
+	return damage;
+}
+
+u32 GetFrostbiteDamage(unusedArg u8 bank)
+{
+	u32 damage = 0;
+
+	#ifdef FROSTBITE
+	u8 ability = ABILITY(bank);
+
+	if (gBattleMons[bank].status1 & STATUS_FREEZE
+	&& ability != ABILITY_MAGICGUARD)
+	{
+		#ifdef OLD_BURN_DAMAGE
+			damage = MathMax(1, GetBaseMaxHP(bank) / 8);
+		#else
+			damage = MathMax(1, GetBaseMaxHP(bank) / 16);
+		#endif
+	}
+	#endif
 
 	return damage;
 }

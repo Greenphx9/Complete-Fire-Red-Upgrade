@@ -1359,6 +1359,12 @@ void LoadStatustoPsychoShiftTransfer(void)
 	{
 		gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_PARALYSIS;
 	}
+	#ifdef FROSTBITE
+	else if (status & STATUS_FREEZE && CanBeFrozen(gBankTarget, TRUE))
+	{
+		gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_FREEZE;
+	}
+	#endif
 	else
 		gBattlescriptCurrInstr = BattleScript_ButItFailed - 5;
 }

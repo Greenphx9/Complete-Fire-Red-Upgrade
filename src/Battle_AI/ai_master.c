@@ -1848,6 +1848,11 @@ static bool8 ShouldSwitchIfWonderGuard(void)
 										break;
 									case ITEM_EFFECT_STICKY_BARB:
 										return FALSE;
+									case ITEM_EFFECT_FROST_ORB:
+									FRZ_CHECK:
+										if (CanBeFrozen(bankDef, TRUE))
+											return FALSE;
+										break;
 								}
 							}
 						}
@@ -2600,6 +2605,8 @@ static void UpdateStrongestMoves(void)
 		struct BattlePokemon backupMonAtk;
 		u8 backupAbilityAtk = ABILITY_NONE;
 		u16 backupSpeciesAtk = SPECIES_NONE;
+
+		gNewBS->ai.suckerPunchOkay[bankAtk] = AIRandom() & 1; //Randomly choose if turn is okay for a revealed Sucker Punch
 
 		if (!IS_TRANSFORMED(bankAtk)
 		&& !BankMegaEvolved(bankAtk, FALSE)

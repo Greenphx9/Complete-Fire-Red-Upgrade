@@ -5,6 +5,7 @@
 #include "damage_calc.h"
 
 //Exported Functions
+u16 AIRandom(void);
 bool8 CanKillAFoe(u8 bank);
 bool8 CanKnockOut(u8 bankAtk, u8 bankDef);
 bool8 GetCanKnockOut(u8 bankAtk, u8 bankDef);
@@ -44,6 +45,9 @@ u16 GetBattleMonMove(u8 bank, u8 index);
 u8 GetAIAbility(u8 bankAtk, u8 bankDef, u16 move);
 u8 GetPredictedAIAbility(u8 bankAtk, u8 bankDef);
 u8 GetMonAbilityAfterTrace(struct Pokemon* mon, u8 foe);
+bool8 IsDamagingMoveUnusable(u16 move, u8 bankAtk, u8 bankDef);
+bool8 IsDamagingMoveUnusableByMon(u16 move, struct Pokemon* monAtk, u8 bankDef);
+bool8 IsSuckerPunchOkayToUseThisRound(u16 move, u8 bankAtk, u8 bankDef);
 u16 GetAIChosenMove(u8 bankAtk, u8 bankDef);
 bool8 IsTrapped(u8 bank, bool8 switching);
 bool8 BankHasMonToSwitchTo(u8 bank);
@@ -60,6 +64,7 @@ bool8 BadIdeaToParalyze(u8 bankDef, u8 bankAtk);
 bool8 GoodIdeaToParalyzeSelf(u8 bankAtk);
 bool8 BadIdeaToBurn(u8 bankDef, u8 bankAtk);
 bool8 GoodIdeaToBurnSelf(u8 bankAtk);
+bool8 GoodIdeaToFrostbiteSelf(u8 bankAtk);
 bool8 BadIdeaToFreeze(u8 bankDef, u8 bankAtk);
 
 bool8 GoodIdeaToLowerAttack(u8 bankDef, u8 bankAtk, u16 move);
@@ -82,7 +87,9 @@ bool8 CanMovePredictionProtectAgainstMove(u8 bankAtk, u8 bankDef, u16 move);
 
 bool8 DamagingMoveInMoveset(u8 bank);
 bool8 PhysicalMoveInMoveset(u8 bank);
+bool8 RealPhysicalMoveInMoveset(u8 bank);
 bool8 SpecialMoveInMoveset(u8 bank);
+bool8 DamagingPriorityMoveInMovesetThatAffects(u8 bankAtk, u8 bankDef);
 bool8 MoveSplitInMoveset(u8 bank, u8 moveSplit);
 bool8 PhysicalMoveInMonMoveset(struct Pokemon* mon, u8 moveLimitations);
 bool8 SpecialMoveInMonMoveset(struct Pokemon* mon, u8 moveLimitations);
@@ -106,6 +113,7 @@ bool8 ContactMovesThatAffectTargetInMoveset(u8 bankAtk, u8 bankDef);
 bool8 UnfreezingMoveInMoveset(u8 bank);
 bool8 SleepMoveInMovesetWithLowAccuracy(u8 bankAtk, u8 bankDef);
 bool8 OnlyBadMovesLeftInMoveset(u8 bankAtk, u8 bankDef);
+bool8 DoubleDamageWithStatusMoveInMovesetThatAffects(u8 bankAtk, u8 bankDef);
 u16 TryReplaceMoveWithZMove(u8 bankAtk, u8 bankDef, u16 move);
 u8 GetAIMoveEffectForMaxMove(u16 move, u8 bankAtk, u8 bankDef);
 

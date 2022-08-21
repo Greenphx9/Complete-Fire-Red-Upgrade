@@ -356,9 +356,17 @@ void atkEF_handleballthrow(void)
 		}
 		#endif
 
-		if (gBattleMons[gBankTarget].status1 & (STATUS_SLEEP | STATUS_FREEZE))
+		if (gBattleMons[gBankTarget].status1 & (STATUS_SLEEP
+		#ifndef FROSTBITE
+		                                      | STATUS_FREEZE
+		#endif
+		                                       ))
 			odds = (odds * 25) / 10;
-		if (gBattleMons[gBankTarget].status1 & (STATUS_PSN_ANY | STATUS_BURN | STATUS_PARALYSIS))
+		if (gBattleMons[gBankTarget].status1 & (STATUS_PSN_ANY | STATUS_BURN | STATUS_PARALYSIS
+		#ifdef FROSTBITE
+		                                      | STATUS_FREEZE
+		#endif
+		                                       ))
 			odds = (odds * 15) / 10;
 
 		if (IsRaidBattle()) //Dynamax Raid Pokemon can be caught easier

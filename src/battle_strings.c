@@ -34,10 +34,11 @@ extern u8 gMoveNames[][MOVE_NAME_LENGTH + 1];
 extern u8 gLongMoveNames[][MOVE_NAME_LENGTH + 5];
 extern const u8 gAbilityNames[][ABILITY_NAME_LENGTH + 1];
 
-extern u8 gStatusConditionString_DisableProblem[];
-extern u8 gStatusConditionString_EncoreProblem[];
-extern u8 gStatusConditionString_MentalState[];
-extern u8 gStatusConditionString_TauntProblem[];
+extern const u8 gStatusConditionString_Frostbite[];
+extern const u8 gStatusConditionString_DisableProblem[];
+extern const u8 gStatusConditionString_EncoreProblem[];
+extern const u8 gStatusConditionString_MentalState[];
+extern const u8 gStatusConditionString_TauntProblem[];
 
 const u8 * const gStatusConditionStringsTable[11][2] =
 {
@@ -45,7 +46,11 @@ const u8 * const gStatusConditionStringsTable[11][2] =
 	{gStatusConditionString_Sleep, (const u8*) 0x83FE82A},
 	{gStatusConditionString_Paralysis, (const u8*) 0x83FE83C},
 	{gStatusConditionString_Burn, (const u8*) 0x83FE837},
+	#ifdef FROSTBITE
+	{gStatusConditionString_Frostbite, gStatusConditionString_Frostbite},
+	#else
 	{gStatusConditionString_Ice, (const u8*) 0x83FE846},
+	#endif
 	{gStatusConditionString_Confusion, (const u8*) 0x83FE84A},
 	{gStatusConditionString_Love, (const u8*) 0x83FE854},
 	{gStatusConditionString_MentalState, gStatusConditionString_MentalState},

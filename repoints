@@ -122,6 +122,17 @@ gText_UsedVar2WildWeaker 080A1AEC
 
 gText_PokemonAreNeeded 0845A32C
 
+#ifdef FROSTBITE
+PokeSummary_StatusAilmentIcons_FrostbiteTiles 0813A314
+StatusGfx_Icons_FrostbiteTiles 0845A574
+ANIM_FROSTBITE 081C6E9C
+gText_GotFrostbite 083FDFD0
+gText_RemovedTargetFrostbite 083FDFDC
+gText_RemovedAttackerFrostbite 083FDFE0
+gText_MoveUsedFrostbiteRemoved 083FDFE4
+gText_ItemRemovedFrostbite 083FE3A4
+#endif
+
 ##Gen 4 Player OW Running Fix
 gEventObjectImageAnim_RunSouth 083A3460
 gEventObjectImageAnim_RunNorth 083A3464
@@ -138,7 +149,9 @@ EventScript_TrainerSpottedInitiate 08080374
 BattleScript_ItemSteal 08020E74
 BattleScript_PoisonedBy 08250634
 BattleScript_BurnedBy 08250638
+#ifndef FROSTBITE
 BattleScript_WasFrozen 0825063C
+#endif
 BattleScript_MoveEffectWrap 08250660
 BattleScript_BadPoisonedBy 08250644
 BattleScript_ActionSwitch 0801640C
@@ -525,5 +538,8 @@ Bag_Duraludonite_SpritePal 093C93D4
 
 Bag_Time_Turner_SpriteTiles 093C9808
 Bag_Time_Turner_SpritePal 093C980C
+
+Bag_Frost_Orb_SpriteTiles 093C9810
+Bag_Frost_Orb_SpritePal 093C9814
 
 gText_StoleItem 083FE144

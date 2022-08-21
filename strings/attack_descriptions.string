@@ -1,8 +1,45 @@
+#include "src/config.h"
+
 #org @DESC_BLANK
 -
 
 #org @DESC_NO_MOVE
 No move information.
+
+#org @DESC_ICEPUNCH
+#ifdef FROSTBITE
+The foe is punched\nwith an icy fist.\nIt may leave the\nfoe with frostbite.
+#else
+The foe is punched\nwith an icy fist.\nIt may leave the\nfoe frozen.
+#endif
+
+#org @DESC_ICEBEAM
+#ifdef FROSTBITE
+The foe is struck\nwith an icy beam.\nIt may leave the\nfoe with frostbite.
+#else
+The foe is struck\nwith an icy beam.\nIt may leave the\nfoe frozen.
+#endif
+
+#org @DESC_BLIZZARD
+#ifdef FROSTBITE
+A blizzard strikes\nthe opposing team.\nIt may also leave\nthem with frostbite.
+#else
+A blizzard strikes\nthe opposing team.\nIt may also freeze\nthem solid.
+#endif
+
+#org @DESC_TRIATTACK
+#ifdef FROSTBITE
+A simultaneous\n3-beam attack that\nmay paralyze, burn,\nor frostbite the foe.
+#else
+A simultaneous\n3-beam attack that\nmay paralyze, burn,\nor freeze the foe.
+#endif
+
+#org @DESC_POWDERSNOW
+#ifdef FROSTBITE
+The opposing team is\nhit with powdery snow\nthat may leave them\nwith frostbite.
+#else
+The opposing team is\nhit with powdery snow\nthat may leave them\nfrozen solid.
+#endif
 
 #org @DESC_FLASH
 A blast of light\nthat deals damage.\nIt also illuminates\ncaves.
@@ -260,13 +297,17 @@ The foe is stabbed\nby sharpened stones.\nIt has a high\ncritical-hit ratio.
 If the user moves\nafter the target,\nthis attack's power\nwill be doubled.
 
 #org @DESC_FIREFANG
-The user bites the\nfoe. It may also\nmake the foe flinch,\nor leave it burned.
+The user bites the\nfoe. It may make\nthe foe flinch or\nleave it burned.
 
 #org @DESC_ICEFANG
-The user bites the\nfoe. It may also\nmake the foe flinch,\nor leave it frozen.
+#ifdef FROSTBITE
+The user bites the\nfoe. It may make\nthe foe flinch or\nleave it frostbitten.
+#else
+The user bites the\nfoe. It may make\nthe foe flinch or\nleave it frozen.
+#endif
 
 #org @DESC_THUNDERFANG
-The user bites the\nfoe. It may also\nmake the foe flinch,\nor paralyze it.     
+The user bites the\nfoe. It may make\nthe foe flinch or\nleave it paralyzed.   
 
 #org @DESC_FLAREBLITZ
 A fiery tackle that\nmay leave the foe\nburned. It also hurts\nthe user a little.
@@ -470,7 +511,11 @@ A physical attack\nin which the user\ncharges, full body,\ninto the foe.
 An attack which\nchanges type,\ndepending on which\nkind of Plate the\nuser is holding.
 
 #org @DESC_FREEZEDRY
+#ifdef FROSTBITE
+An attack which may\nleave the foe with\nfrostbite. It is also\nsuper effective on\nWater-types.
+#else
 An attack which may\nleave the target\nfrozen. It is also\nsuper effective on\nWater types.
+#endif
 
 #org @DESC_PSYSHOCK
 An odd psychic wave\nattacks the target.\nThis attack does\nphysical damage.
@@ -1172,7 +1217,11 @@ The user strikes\nthe foe fiercely.\nIt always results in\na critical hit.
 The user strikes\nthree consecutive times.\nIt always results in\na critical hit.
 
 #org @DESC_FREEZING_GLARE
+#ifdef FROSTBITE
+The user attacks\nwith psychic power.\nIt may leave the\ntarget with frostbite.
+#else
 The user attacks\nwith psychic power.\nIt may leave the\ntarget frozen.
+#endif
 
 #org @DESC_THUNDEROUS_KICK
 The user delivers\na fierce kick that\nlower's the target's\ndefense stat.

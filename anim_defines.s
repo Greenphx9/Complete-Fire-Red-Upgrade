@@ -532,6 +532,8 @@
 .equ Template_MegaPunchKick, 0x83e67c0
 .equ Template_ComplexPaletteBlend, 0x83e7b3c
 .equ AnimTask_GlareEyeDots, 0x80e21cd
+.equ Template_IceCrystalHitLarge, 0x83E63E0
+.equ Template_IceCrystalHitSmall, 0x83E63F8
 
 .equ SpriteCB_AnimSpriteOnMonPos, 0x8075D9D
 .equ Callback_TranslateAnimSpriteToTargetMonLocation, 0x8075DF5

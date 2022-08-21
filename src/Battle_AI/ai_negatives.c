@@ -78,6 +78,9 @@ ai_negatives.c
 										&& gChosenMovesByBanks[bankAtkPartner] != MOVE_NONE \
 										&& move == partnerMove)
 
+#define ATTACKER_ASLEEP (data->atkStatus1 & STATUS1_SLEEP && data->atkStatus1 > 1)
+#define TARGET_ASLEEP (data->defStatus1 & STATUS1_SLEEP && data->defStatus1 > 1)
+
 //Doubles is now defined as being a non 1v1 Double Battle
 #undef IS_DOUBLE_BATTLE
 #define IS_DOUBLE_BATTLE (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && ((BATTLER_ALIVE(data->foe1) && BATTLER_ALIVE(data->foe2)) || BATTLER_ALIVE(bankAtkPartner)))
@@ -1021,8 +1024,14 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 		case EFFECT_BIDE:
 			if (!DamagingMoveInMoveset(bankDef)
 			||  GetHealthPercentage(bankAtk) < 30 //Close to death
-			||  data->defStatus1 & (STATUS1_SLEEP | STATUS1_FREEZE)) //No point in biding if can't take damage
+			||  data->defStatus1 & (STATUS1_SLEEP
+			#ifndef FROSTBITE
+			                      | STATUS1_FREEZE
+			#endif
+			                       )) //No point in biding if can't take damage
 				DECREASE_VIABILITY(10);
+			else
+				goto AI_STANDARD_DAMAGE;
 			break;
 
 		case EFFECT_ROAR:
@@ -2110,7 +2119,11 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 			break;
 
 		case EFFECT_REFRESH:
-			if (!(data->atkStatus1 & (STATUS1_PSN_ANY | STATUS1_BURN | STATUS1_PARALYSIS)))
+			if (!(data->atkStatus1 & (STATUS1_PSN_ANY | STATUS1_BURN | STATUS1_PARALYSIS
+			#ifdef FROSTBITE
+			                       | STATUS1_FREEZE
+			#endif
+			                         )))
 			{
 				DECREASE_VIABILITY(10);
 				break;
@@ -2123,8 +2136,17 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 					goto AI_BURN_CHECK;
 				else if (data->atkStatus1 & STATUS1_PARALYSIS)
 					goto AI_PARALYZE_CHECK;
-				else if (data->atkStatus1 & STATUS1_SLEEP)
+				else if (ATTACKER_ASLEEP)
 					goto AI_CHECK_SLEEP;
+				#ifdef FROSTBITE
+				else if (data->atkStatus1 & STATUS1_FREEZE)
+				{
+					if (!CanBeFrozen(bankDef, TRUE)
+					|| MoveBlockedBySubstitute(move, bankAtk, bankDef)
+					|| PARTNER_MOVE_EFFECT_IS_STATUS_SAME_TARGET)
+						DECREASE_VIABILITY(10);
+				}
+				#endif
 				else
 					DECREASE_VIABILITY(10);
 			}
@@ -2408,12 +2430,16 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 				&&  gBattleMoves[partnerMove].effect == EFFECT_PLEDGE
 				&&  move != partnerMove) //Different pledge moves
 				{
-					if (gBattleMons[bankAtkPartner].status1 & (STATUS1_SLEEP | STATUS1_FREEZE)
+					if (gBattleMons[bankAtkPartner].status1 & (STATUS1_SLEEP
+					#ifndef FROSTBITE
+					                                         | STATUS1_FREEZE
+					#endif
+					                                          )
 					&&  gBattleMons[bankAtkPartner].status1 != 1) //Will wake up this turn
 						DECREASE_VIABILITY(10); //Don't use combo move if your partner will cause failure
 				}
 			}
-			break;
+			goto AI_STANDARD_DAMAGE;
 
 		case EFFECT_FIELD_EFFECTS:
 			switch (move) {

@@ -981,7 +981,7 @@ const struct BattleMove gBattleMoves[] =
 		.type = TYPE_ICE,
 		.accuracy = 70,
 		.pp = 5,
-		.secondaryEffectChance = 10,
+		.secondaryEffectChance = 50,
 		.target = MOVE_TARGET_BOTH,
 		.priority = 0,
 		.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
@@ -8125,7 +8125,11 @@ const struct BattleMove gBattleMoves[] =
 		.type = TYPE_ICE,
 		.accuracy = 100,
 		.pp = 20,
+		#ifndef FROSTBITE
 		.secondaryEffectChance = 10,
+		#else
+		.secondaryEffectChance = 30,
+		#endif
 		.target = MOVE_TARGET_SELECTED,
 		.priority = 0,
 		.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
@@ -11885,7 +11889,11 @@ const struct BattleMove gBattleMoves[] =
 		.type = TYPE_PSYCHIC,
 		.accuracy = 100,
 		.pp = 10,
-		.secondaryEffectChance = 0,
+		#ifndef FROSTBITE
+		.secondaryEffectChance = 10,
+		#else
+		.secondaryEffectChance = 20,
+		#endif
 		.target = MOVE_TARGET_SELECTED,
 		.priority = 0,
 		.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
@@ -14867,7 +14875,11 @@ const struct BattleMove gBattleMoves[] =
 		.type = TYPE_GHOST,
 		.accuracy = 100,
 		.pp = 15,
+		#ifndef FROSTBITE
+		.secondaryEffectChance = 20, //30% Freeze chance is way too OP
+		#else
 		.secondaryEffectChance = 30,
+		#endif
 		.target = MOVE_TARGET_SELECTED,
 		.priority = 0,
 		.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
