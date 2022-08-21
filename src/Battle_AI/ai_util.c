@@ -1396,7 +1396,7 @@ u8 GetMonAbilityAfterTrace(struct Pokemon* mon, u8 foe)
 	if (IS_SINGLE_BATTLE && ability == ABILITY_TRACE)
 	{
 		u8 foeAbility = *GetAbilityLocation(foe);
-		if (CheckTableForAbility(foeAbility, gTraceBannedAbilities))
+		if (gSpecialAbilityFlags[foeAbility].gTraceBannedAbilities)
 			ability = foeAbility; //What the Ability will become
 	}
 

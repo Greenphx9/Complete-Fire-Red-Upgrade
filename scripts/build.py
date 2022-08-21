@@ -225,7 +225,10 @@ def ProcessC(cFile: str) -> str:
     objectFile, regenerateObjectFile = MakeGeneralOutputFile(cFile)
     if regenerateObjectFile is False:
         return objectFile  # No point in recompiling file
+    return ProcessCToObjectFile(cFile, objectFile)
 
+
+def ProcessCToObjectFile(cFile: str, objectFile: str) -> str:
     try:
         print('Compiling %s' % cFile)
         cmd = [CC] + CFLAGS + ['-c', cFile, '-o', objectFile]
@@ -251,7 +254,7 @@ def ProcessSpecialFlagFile(flagFile: str) -> str:
         tableHeader = "const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =\n{\n"
     elif "species_tables" in cFile:
         includes = '#include "../../include/constants/species.h"\n#include "../../include/new/species_tables.h"\n\n'
-        tableHeader = "const struct SpecialSpeciesFlags gSpecialSpeciesFlags[SPECIES_COUNT] =\n{\n"
+        tableHeader = "const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =\n{\n"
     elif "ability_tables" in cFile:
         includes = '#include "../../include/constants/abilities.h"\n#include "../../include/new/ability_tables.h"\n\n'
         tableHeader = "const struct SpecialAbilityFlags gSpecialAbilityFlags[ABILITIES_COUNT] =\n{\n"
@@ -277,15 +280,19 @@ def ProcessSpecialFlagFile(flagFile: str) -> str:
         outputString += tableHeader
 
         for move in flags:
+            if not move[0].isdigit():
+                outputString += "#ifdef {}\n".format(move)  # Allows adding defines that may not currently be in the engine
             outputString += "\t[{}] =\n".format(move)
             outputString += "\t{\n"
             for flag in flags[move]:
                 outputString += "\t\t.{} = TRUE,\n".format(flag)
             outputString += "\t},\n"
+            if not move[0].isdigit():
+                outputString += "#endif\n"
         outputString += "};\n"
         output.write(outputString)
 
-    objectFile = ProcessC(cFile)
+    objectFile = ProcessCToObjectFile(cFile, objectFile)
     #Not necessary, I just like it:
     if cFile == './assembly\data\ability_tables.c':
         newPath = r'D:\Modding\Complete-Fire-Red-Upgrade\tables\ability_tables.c';

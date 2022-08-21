@@ -28,5 +28,3 @@ struct SpecialAbilityFlags
 
 extern const struct SpecialAbilityFlags gSpecialAbilityFlags[];
 extern const s8 gAbilityRatings[];
-extern const ability_t gAbilityReplacement1[];
-extern const ability_t gAbilityReplacement2[];
