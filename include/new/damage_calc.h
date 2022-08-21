@@ -63,6 +63,11 @@ struct DamageCalc
 	u8 resultFlags;
 	u8 basePower;
 
+	u8 atkImposterBank;
+	u8 defImposterBank;
+	bool8 atkImposter;
+	bool8 defImposter;
+
 	u8 specialFlags;
 	bool8 attackerLoaded;
 	bool8 defenderLoaded;
@@ -89,6 +94,7 @@ u8 CalcMonHiddenPowerType(struct Pokemon* mon);
 
 void atk05_damagecalc(void);
 void FutureSightDamageCalc(void);
+u32 SplintersDamageCalc(u8 bankAtk, u8 bankDef, u16 move);
 s32 ConfusionDamageCalc(void);
 u32 AI_CalcDmg(const u8 bankAtk, const u8 bankDef, const u16 move, struct DamageCalc* damageData);
 u32 AI_CalcPartyDmg(u8 bankAtk, u8 bankDef, u16 move, struct Pokemon* mon, struct DamageCalc* damageData);

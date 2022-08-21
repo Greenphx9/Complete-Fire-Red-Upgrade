@@ -351,6 +351,24 @@ HowlPrintPartnerString:
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
 
+BattleScript_CantRaiseMultipleStats:
+	pause DELAY_HALFSECOND
+	orbyte OUTCOME OUTCOME_FAILED
+	jumpifability BANK_ATTACKER ABILITY_CONTRARY BattleScript_CantLowerMultipleStatsPrintString
+BattleScript_CantRaiseMultipleStatsPrintString:
+	printstring 0x19 @;STRINGID_STATSWONTINCREASE2
+	waitmessage DELAY_1SECOND
+	goto BS_MOVE_END
+
+BattleScript_CantLowerMultipleStats:
+	pause DELAY_HALFSECOND
+	orbyte OUTCOME OUTCOME_FAILED
+	jumpifability BANK_TARGET ABILITY_CONTRARY BattleScript_CantRaiseMultipleStatsPrintString
+BattleScript_CantLowerMultipleStatsPrintString:
+	printstring 0x15D @;STRINGID_STATSWONTDECREASE2
+	waitmessage DELAY_1SECOND
+	goto BS_MOVE_END
+
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 .global BattleScript_FlowerShieldRototillerStatBoost
@@ -3137,9 +3155,11 @@ BS_149_Gust:
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-.global BS_150_Blank @;Was Stomp
-BS_150_Blank:
+.global BS_150_Splinters @;Was Stomp
+BS_150_Splinters:
+	setmoveeffect MOVE_EFFECT_SPLINTERS
 	goto BS_STANDARD_HIT
+
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -4273,9 +4293,32 @@ BS_199_Blank:
 	
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-.global BS_200_Blank @;Was Blaze Kick
-BS_200_Blank:
-	goto BS_STANDARD_HIT
+.global BS_200_RaiseUserDefSpeed @;Was Blaze Kick
+BS_200_RaiseUserDefSpeed:
+	attackcanceler
+	attackstring
+	ppreduce
+	jumpifstat BANK_TARGET LESSTHAN STAT_DEF STAT_MAX RaiseUserDefSpeed_Def
+	jumpifstat BANK_TARGET EQUALS STAT_SPD STAT_MAX BattleScript_CantRaiseMultipleStats
+
+RaiseUserDefSpeed_Def:
+	attackanimation
+	waitanimation
+	setbyte STAT_ANIM_PLAYED 0x0
+	playstatchangeanimation BANK_ATTACKER, STAT_ANIM_DEF | STAT_ANIM_SPD, STAT_ANIM_UP | STAT_ANIM_IGNORE_ABILITIES
+	setstatchanger STAT_DEF | INCREASE_1
+	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN RaiseUserDefSpeed_Evasion
+	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 RaiseUserDefSpeed_Evasion
+	printfromtable gStatUpStringIds
+	waitmessage DELAY_1SECOND
+
+RaiseUserDefSpeed_Evasion:
+	setstatchanger STAT_SPD | INCREASE_1
+	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN BS_MOVE_END
+	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 BS_MOVE_END
+	printfromtable gStatUpStringIds
+	waitmessage DELAY_1SECOND
+	goto BS_MOVE_END
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -4555,8 +4598,6 @@ BS_211_CalmMind:
 	jumpifhalfword EQUALS CURRENT_MOVE MOVE_QUIVERDANCE QuiverDanceBS
 	jumpifhalfword EQUALS CURRENT_MOVE MOVE_VICTORYDANCE VictoryDanceBS
 	jumpifhalfword EQUALS CURRENT_MOVE MOVE_GEOMANCY GeomancyBS
-	jumpifhalfword EQUALS CURRENT_MOVE MOVE_SHELTER ShelterBS
-
 CalmMindBS:
 	attackstring
 	ppreduce

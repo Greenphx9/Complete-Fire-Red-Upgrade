@@ -739,6 +739,10 @@ struct NewBattleStruct
 	u8 SlowStartTimers[MAX_BATTLERS_COUNT];
 	u8 StakeoutCounters[MAX_BATTLERS_COUNT];
 	u8 StompingTantrumTimers[MAX_BATTLERS_COUNT];
+	u8 splinterTimer[MAX_BATTLERS_COUNT];
+	u8 splinterAttackerBank[MAX_BATTLERS_COUNT];
+	u8 splinterAttackerMonId[MAX_BATTLERS_COUNT];
+	u16 splinterMove[MAX_BATTLERS_COUNT];
 	u8 NimbleCounters[MAX_BATTLERS_COUNT];
 	u8 DestinyBondCounters[MAX_BATTLERS_COUNT];
 	u8 MetronomeCounter[MAX_BATTLERS_COUNT];
@@ -1181,11 +1185,14 @@ struct FlingStruct
 #define B_ANIM_DYNAMAX_ENERGY_SWIRL 0x46
 #define B_ANIM_RAID_BATTLE_STORM 0x47
 #define B_ANIM_RAID_BATTLE_ENERGY_BURST 0x48
-#define B_ANIM_G_MAX_VINE_LASH 0x49
-#define B_ANIM_G_MAX_WILDFIRE 0x4A
-#define B_ANIM_G_MAX_CANNONADE 0x4B
-#define B_ANIM_G_MAX_VOLCALITH 0x4C
-#define B_ANIM_GULP_MISSILE 0x4D
+#define B_ANIM_RAID_BATTLE_BLOW_AWAY 0x49
+#define B_ANIM_G_MAX_VINE_LASH 0x4A
+#define B_ANIM_G_MAX_WILDFIRE 0x4B
+#define B_ANIM_G_MAX_CANNONADE 0x4C
+#define B_ANIM_G_MAX_VOLCALITH 0x4D
+#define B_ANIM_AI_ITEM_HEAL 0x4E
+#define B_ANIM_HOOPA_RING_SPAWN 0x4F
+#define B_ANIM_SPLINTER_DAMAGE 0x50
 
 #define B_ANIM_TRANSFORM_MOVE 0xFF
 
@@ -1306,6 +1313,7 @@ enum BackSprites
 u8 GetBattlerSide(u8 bank);
 u8 GetBattlerPosition(u8 bank);
 u8 GetBattlerAtPosition(u8 bank);
+bool8 __attribute__((long_call)) IsBattlerSpritePresent(u8 bank);
 
 struct BattleSpriteInfo
 {

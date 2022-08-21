@@ -51,6 +51,8 @@ static const u16 sCriticalHitChances[] =
 #define FLAG_CONFUSION_DAMAGE 0x2
 #define FLAG_CHECKING_FROM_MENU 0x4
 #define FLAG_AI_CALC 0x8
+#define FLAG_FUTURE_SIGHT_DAMAGE 0x10
+#define FLAG_SPLINTER_DAMAGE 0x20
 
 //This file's functions:
 static u8 CalcPossibleCritChance(u8 bankAtk, u8 bankDef, u16 move, struct Pokemon* monAtk, struct Pokemon* monDef);
@@ -273,14 +275,91 @@ void atk05_damagecalc(void)
 	++gBattlescriptCurrInstr;
 }
 
+static bool8 IsFutureSightAttackerOnField(u8 bankDef, u8 possibleUser)
+{
+	u8 monIndexAttacker = gWishFutureKnock.futureSightPartyIndex[bankDef];
+
+	if (BATTLER_ALIVE(possibleUser) && gBattlerPartyIndexes[possibleUser] == monIndexAttacker)
+		return TRUE;
+
+	if (IS_DOUBLE_BATTLE && BATTLER_ALIVE(PARTNER(possibleUser)) && gBattlerPartyIndexes[PARTNER(possibleUser)] == monIndexAttacker)
+		return TRUE;
+
+	return FALSE;
+}
+
+static struct Pokemon* GetFutureSightMon(u8 bankDef, u8 bankAtk)
+{
+	u8 monId = gWishFutureKnock.futureSightPartyIndex[bankDef];
+	return SIDE(bankAtk) == B_SIDE_PLAYER ? &gPlayerParty[monId] : &gEnemyParty[monId];
+}
+
 void FutureSightDamageCalc(void)
 {
 	struct DamageCalc data = {0};
 	data.bankAtk = gBankAttacker;
 	data.bankDef = gBankTarget;
 	data.move = gCurrentMove;
+	data.specialFlags |= FLAG_FUTURE_SIGHT_DAMAGE;
+
+	if (!IsFutureSightAttackerOnField(gBankTarget, gBankAttacker))
+	{
+		//Uses the data from the party if the user of Future Sight switched out
+		data.monAtk = GetFutureSightMon(gBankTarget, gBankAttacker);
+	}
+
 	gBattleMoveDamage = (CalculateBaseDamage(&data) * gCritMultiplier) / BASE_CRIT_MULTIPLIER;
 	gNewBS->DamageTaken[gBankTarget] = gBattleMoveDamage;
+}
+
+static bool8 IsSplinterAttackerOnField(u8 bankDef, u8 possibleUser)
+{
+	u8 monIdAttacker = gNewBS->splinterAttackerMonId[bankDef];
+
+	if (BATTLER_ALIVE(possibleUser) && gBattlerPartyIndexes[possibleUser] == monIdAttacker)
+		return TRUE;
+
+	if (IS_DOUBLE_BATTLE && BATTLER_ALIVE(PARTNER(possibleUser)) && gBattlerPartyIndexes[PARTNER(possibleUser)] == monIdAttacker)
+		return TRUE;
+
+	return FALSE;
+}
+
+static u8 GetSplinterBankAttacker(u8 bankDef, u8 possibleUser) //Assumes IsSplinterAttackerOnField returns TRUE
+{
+	u8 monIdAttacker = gNewBS->splinterAttackerMonId[bankDef];
+
+	if (BATTLER_ALIVE(possibleUser) && gBattlerPartyIndexes[possibleUser] == monIdAttacker)
+		return possibleUser;
+
+	return PARTNER(possibleUser);
+}
+
+static struct Pokemon* GetSplinterMon(u8 bankDef, u8 bankAtk)
+{
+	u8 monId = gNewBS->splinterAttackerMonId[bankDef];
+	return SIDE(bankAtk) == B_SIDE_PLAYER ? &gPlayerParty[monId] : &gEnemyParty[monId];
+}
+
+u32 SplintersDamageCalc(u8 bankAtk, u8 bankDef, u16 move)
+{
+	struct DamageCalc data = {0};
+	data.bankAtk = bankAtk;
+	data.bankDef = bankDef;
+	data.move = move;
+	data.specialFlags |= FLAG_FUTURE_SIGHT_DAMAGE | FLAG_SPLINTER_DAMAGE;
+
+	if (!IsSplinterAttackerOnField(bankDef, bankAtk))
+	{
+		//Uses the data from the party if the user of the splinters switched out
+		data.monAtk = GetSplinterMon(bankDef, bankAtk);
+	}
+	else
+		data.bankAtk = GetSplinterBankAttacker(bankDef, bankAtk);
+
+	gBattleMoveDamage = CalculateBaseDamage(&data);
+	TypeCalc(move, data.bankAtk, bankDef, data.monAtk, FALSE);
+	return gBattleMoveDamage;
 }
 
 s32 ConfusionDamageCalc(void)
@@ -1802,20 +1881,57 @@ void PopulateDamageCalcStructWithBaseAttackerData(struct DamageCalc* data)
 
 	if (useMonAtk)
 	{
+		u8 side = SIDE(bankAtk);
 		struct Pokemon* monAtk = data->monAtk;
 
-		data->atkSpecies = monAtk->species;
-		data->atkAbility = GetMonAbility(monAtk);
+		if (!(data->specialFlags & FLAG_FUTURE_SIGHT_DAMAGE)) //Ignores Abilities and held items if mon who used Future Sight isn't on the field
+		{
+			data->atkAbility = GetMonAbilityAfterTrace(monAtk, FOE(side));
+			data->atkItemEffect = GetMonItemEffect(monAtk);
+			data->atkItem = monAtk->item;
+			data->atkItemQuality = ItemId_GetHoldEffectParam(monAtk->item);
+			
+			if (data->atkAbility == ABILITY_IMPOSTER && ImposterWorks(bankAtk, TRUE))
+			{
+				data->atkImposter = TRUE;
+				data->atkImposterBank = GetImposterBank(bankAtk);
+				data->atkIsGrounded = CheckGrounding(data->atkImposterBank);
+			}
+			else
+				data->atkIsGrounded = CheckMonGrounding(monAtk); //Set later on for an imposter mon
+		}
+
 		data->atkPartnerAbility = ABILITY_NONE;
-		data->atkItemEffect = GetMonItemEffect(monAtk);
-		data->atkItem = monAtk->item;
-		data->atkItemQuality = ItemId_GetHoldEffectParam(monAtk->item);
 		data->atkHP = monAtk->hp;
 		data->atkMaxHP = monAtk->maxHP;
-		data->atkSpeed = SpeedCalcMon(SIDE(bankAtk), monAtk);
-		data->atkStatus1 = monAtk->condition;
 		data->atkStatus3 = 0;
-		data->atkIsGrounded = CheckGroundingFromPartyData(monAtk);
+
+		if (data->atkImposter) //Would only be set in a non-Future Sight damage calc
+		{
+			u8 imposterBank = data->atkImposterBank;
+			data->atkAbility = ABILITY(imposterBank);
+			data->atkSpecies = SPECIES(imposterBank);
+			data->atkSpeed = SpeedCalc(imposterBank);
+		}
+		else
+		{
+			data->atkSpecies = monAtk->species;
+			data->atkSpeed = SpeedCalcMon(side, monAtk);
+		}
+
+		data->atkStatus1 = monAtk->condition;
+		if (data->atkStatus1 == 0 && !(data->specialFlags & FLAG_FUTURE_SIGHT_DAMAGE))
+		{
+			if (gSideTimers[side].tspikesAmount > 0
+			&& data->atkIsGrounded
+			&& !IsMonOfType(monAtk, TYPE_POISON)
+			&& IsMonAffectedByHazardsByItemEffect(monAtk, data->atkItemEffect) //Affected by hazards
+			&& !BankSideHasSafeguard(bankAtk)
+			&& CanPartyMonBePoisoned(monAtk))
+				data->atkStatus1 = STATUS1_POISON; //Will be poisoned - relevant for Facade
+			//else //TO-DO Flame Orb when switching in
+			//	data->atkStatus1 = GetMonPotentialStatus1(monAtk, data->atkItemEffect);
+		}
 	}
 	else //Load from bank
 	{
@@ -2023,6 +2139,11 @@ static s32 CalculateBaseDamage(struct DamageCalc* data)
 	data->basePower = gBattleMoves[move].power; //Save real base power for later
 
 //Load correct move power
+	if (data->specialFlags & FLAG_SPLINTER_DAMAGE)
+	{
+		power = data->basePower = 25;
+		data->moveType = gBattleMoves[move].type;
+	}
 	if (!(data->specialFlags & FLAG_CONFUSION_DAMAGE))
 	{
 		power = GetBasePower(data);
@@ -3538,36 +3659,38 @@ static u16 AdjustBasePower(struct DamageCalc* data, u16 power)
 	#endif
 
 	//Terrain Checks
-	switch (gTerrainType) {
-		case ELECTRIC_TERRAIN:
-		//1.5x Boost
-			if (data->atkIsGrounded && data->moveType == TYPE_ELECTRIC)
-				power = (power * TERRAIN_BOOST) / 10;
-			break;
+	if (!useMonAtk || !(data->specialFlags & FLAG_FUTURE_SIGHT_DAMAGE)) //Future Sight mon in back of party isn't affected by Terrain
+	{
+		switch (gTerrainType) {
+			case ELECTRIC_TERRAIN:
+			//1.5x Boost
+				if ((data->atkIsGrounded || IsFloatingWithMagnetism(bankAtk)) && data->moveType == TYPE_ELECTRIC)
+					power = (power * TERRAIN_BOOST) / 10;
+				break;
 
-		case GRASSY_TERRAIN:
-		//1.5x / 0.5 Boost
-			if (data->atkIsGrounded && data->moveType == TYPE_GRASS)
-				power = (power * TERRAIN_BOOST) / 10;
+			case GRASSY_TERRAIN:
+			//1.5x / 0.5 Boost
+				if (data->atkIsGrounded && data->moveType == TYPE_GRASS)
+					power = (power * TERRAIN_BOOST) / 10;
 
-			if ((move == MOVE_MAGNITUDE || move == MOVE_EARTHQUAKE || move == MOVE_BULLDOZE)
-			&& !(data->defStatus3 & STATUS3_SEMI_INVULNERABLE))
-				power /= 2;
-			break;
+				if ((move == MOVE_MAGNITUDE || move == MOVE_EARTHQUAKE || move == MOVE_BULLDOZE)
+				&& !(data->defStatus3 & STATUS3_SEMI_INVULNERABLE))
+					power /= 2;
+				break;
 
-		case MISTY_TERRAIN:
-		//0.5x Boost
-			if (data->defIsGrounded && data->moveType == TYPE_DRAGON)
-				power /= 2;
-			break;
+			case MISTY_TERRAIN:
+			//0.5x Boost
+				if (data->defIsGrounded && data->moveType == TYPE_DRAGON)
+					power /= 2;
+				break;
 
-		case PSYCHIC_TERRAIN:
-		//1.5x Boost
-			if (data->atkIsGrounded && data->moveType == TYPE_PSYCHIC)
-				power = (power * TERRAIN_BOOST) / 10;
-			break;
+			case PSYCHIC_TERRAIN:
+			//1.5x Boost
+				if (data->atkIsGrounded && data->moveType == TYPE_PSYCHIC)
+					power = (power * TERRAIN_BOOST) / 10;
+				break;
+		}
 	}
-
 	//Sport Checks
 	switch (data->moveType) {
 		case TYPE_FIRE:

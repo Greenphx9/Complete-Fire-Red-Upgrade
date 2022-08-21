@@ -26,6 +26,7 @@ ai_negatives.c
 	All possible subtractions to an AIs move viability.
 */
 
+#define GOOD_AI (AI_THINKING_STRUCT->aiFlags > AI_SCRIPT_CHECK_BAD_MOVE)
 #define TARGETING_PARTNER (bankDef == bankAtkPartner)
 #define PARTNER_MOVE_EFFECT_IS_SAME (IS_DOUBLE_BATTLE \
 									&& gBattleMoves[move].effect == gBattleMoves[partnerMove].effect \
@@ -77,6 +78,8 @@ ai_negatives.c
 #define PARTNER_MOVE_IS_SAME_NO_TARGET (IS_DOUBLE_BATTLE \
 										&& gChosenMovesByBanks[bankAtkPartner] != MOVE_NONE \
 										&& move == partnerMove)
+#define GOOD_AI_MOVE_LOCKED (GOOD_AI \
+                               && (IsChoiceItemEffectOrAbility(data->atkItemEffect, data->atkAbility) || gDisableStructs[bankAtk].encoreTimer > 0))
 
 #define ATTACKER_ASLEEP (data->atkStatus1 & STATUS1_SLEEP && data->atkStatus1 > 1)
 #define TARGET_ASLEEP (data->defStatus1 & STATUS1_SLEEP && data->defStatus1 > 1)
@@ -2181,6 +2184,13 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 				}
 			}
 			goto AI_SUBSTITUTE_CHECK;
+
+		case EFFECT_DEF_SPD_UP: //Shelter
+			if (data->atkAbility == ABILITY_CONTRARY || GOOD_AI_MOVE_LOCKED)
+				DECREASE_VIABILITY(10);
+			else if (!AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_DEF) && !AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_SPEED))
+				DECREASE_VIABILITY(10);
+			break;
 
 		case EFFECT_COSMIC_POWER:
 			if (data->atkAbility == ABILITY_CONTRARY)

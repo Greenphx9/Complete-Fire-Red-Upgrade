@@ -332,13 +332,13 @@ enum
 
 enum
 {
-    BG_ANIM_SCREEN_SIZE,
-    BG_ANIM_AREA_OVERFLOW_MODE,
-    BG_ANIM2,
-    BG_ANIM3,
-    BG_ANIM_PRIORITY,
-    BG_ANIM_5,
-    BG_ANIM_6
+	BG_ANIM_SCREEN_SIZE,
+	BG_ANIM_AREA_OVERFLOW_MODE,
+	BG_ANIM_MOSAIC,
+	BG_ANIM_CHAR_BASE_BLOCK,
+	BG_ANIM_PRIORITY,
+	BG_ANIM_PALETTES_MODE,
+	BG_ANIM_SCREEN_BASE_BLOCK
 };
 
 struct UnknownAnimStruct2
@@ -349,6 +349,15 @@ struct UnknownAnimStruct2
     u8 unk9;
     u16 unkA;
     u16 unkC;
+};
+struct BattleAnimBgData
+{
+	u8 *bgTiles;
+	u16 *bgTilemap;
+	u8 paletteId;
+	u8 bgId;
+	u16 tilesOffset;
+	u16 unused;
 };
 
 struct BattleAnimBackground
@@ -443,6 +452,11 @@ void __attribute__((long_call)) CompleteOnSpecialAnimDone(void);
 bool8 __attribute__((long_call)) CreateShockWaveLightning(struct Task *task, u8 taskId);
 u8 __attribute__((long_call)) CreateMonPicBattleAnim(u16 species, bool8 isBackpic, u8 a3, s16 x, s16 y, u8 subpriority, u32 personality, u32 trainerId, u32 battlerId, u32 a10);
 void __attribute__((long_call)) TranslateSpriteLinearFixedPoint(struct Sprite *sprite);
+void __attribute__((long_call)) GetBattleAnimBg1Data(struct BattleAnimBgData *animBgData);
+void __attribute__((long_call)) SetAnimBgAttribute(u8 bgId, u8 attributeId, u8 value);
+void __attribute__((long_call)) AnimLoadCompressedBgTilemap(u32 bgId, const u32 *src);
+void __attribute__((long_call)) AnimLoadCompressedBgGfx(u32 bgId, const u32 *src, u32 tilesOffset);
+void __attribute__((long_call)) RelocateBattleBgPal(u16 paletteNum, u16 *dest, s32 offset, u8 largeScreen);
 
 // battle_anim_80A9C70.s
 #define STAT_ANIM_PLUS1  15

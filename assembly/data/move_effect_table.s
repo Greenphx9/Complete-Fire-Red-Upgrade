@@ -165,7 +165,7 @@ gBattleScriptsForMoveEffects:
 .word BS_147_Earthquake
 .word BS_148_FutureSight
 .word BS_149_Gust
-.word BS_150_Blank
+.word BS_150_Splinters
 .word BS_151_Solarbeam
 .word BS_152_Thunder
 .word BS_153_Teleport
@@ -215,7 +215,7 @@ gBattleScriptsForMoveEffects:
 .word BS_197_SecretPower
 .word BS_198_Blank	@was 33% recoil
 .word BS_199_Blank	@was teeter dance
-.word BS_200_Blank	@was blaze kick
+.word BS_200_RaiseUserDefSpeed	@was blaze kick
 .word BS_201_MudSport
 .word BS_202_Blank	@was poison fang
 .word BS_203_Blank	@was weather ball

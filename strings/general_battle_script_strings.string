@@ -37,6 +37,15 @@ Gravity intensified!
 #org @IonDelugeShowerString
 A deluge of ions showers the\nbattlefield!
 
+#org @gText_EffectBankAfflictedBySplinters
+Jagged splinters dug into\n[EFFECT_BANK]!
+
+#org @gText_HurtBySplinters
+[ATTACKER] was hurt by\nthe splinters!
+
+#org @gText_SplintersEnded
+[ATTACKER] is no longer\nafflicted by splinters!
+
 #org @NoMoreAirborneFromGravityString
 [SCRIPTING_BANK] couldn't\nstay airborne due to Gravity!
 

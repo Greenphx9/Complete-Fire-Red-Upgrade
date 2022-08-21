@@ -146,3 +146,6 @@ definitions for battle backgrounds
 .equ BG_BITTER_MALICE_IMG, NightmareTiles
 .equ BG_BITTER_MALICE_PAL, Bitter_MalicePal
 .equ BG_BITTER_MALICE_RAW, NightmareMap
+.equ BG_CHLOROBLAST_IMG, Hydro_CannonTiles
+.equ BG_CHLOROBLAST_PAL, ChloroblastPal
+.equ BG_CHLOROBLAST_RAW, Hydro_CannonMap

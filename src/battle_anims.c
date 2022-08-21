@@ -433,42 +433,6 @@ const union AnimCmd *const gAnimCmdTable_SmallRock[] =
 	sAnimCmdSmallRock,
 };
 
-static const union AnimCmd sAnimCmdHoopaRing[] =
-{
-	ANIMCMD_FRAME(0, 8),
-	ANIMCMD_FRAME(16, 8),
-	ANIMCMD_FRAME(32, 8),
-	ANIMCMD_FRAME(48, 8),
-	ANIMCMD_JUMP(0)
-};
-
-const union AnimCmd *const gAnimCmdTable_HoopaRing[] =
-{
-	sAnimCmdHoopaRing,
-};
-
-static const union AffineAnimCmd sSpriteAffineAnim_HoopaRing[] =
-{
-	AFFINEANIMCMD_FRAME(4, 4, 10, 1), //Grow & Spin
-	AFFINEANIMCMD_JUMP(0),
-};
-
-const union AffineAnimCmd* const gSpriteAffineAnimTable_HoopaRing[] =
-{
-	sSpriteAffineAnim_HoopaRing,
-};
-
-static const union AffineAnimCmd sSpriteAffineAnim_GrowingRing[] =
-{
-	AFFINEANIMCMD_FRAME(8, 8, 0, 16), //Double in size
-	AFFINEANIMCMD_END,
-};
-
-const union AffineAnimCmd* const gSpriteAffineAnimTable_GrowingRing[] =
-{
-	sSpriteAffineAnim_GrowingRing,
-};
-
 static const union AffineAnimCmd sSpriteAffineAnim_IcicleCrash[] =
 {
 	AFFINEANIMCMD_FRAME(0, 0, 128, 1), //180 degree turn
@@ -1118,6 +1082,36 @@ bank_t LoadBattleAnimTarget(u8 arg)
 	return battler;
 }
 
+static void AnimTask_FadeOutParticlesHelper(u8 taskId)
+{
+	if (gTasks[taskId].data[1] == 0) //Target reached
+	{
+		DestroyAnimVisualTask(taskId);
+	}
+	else if (gTasks[taskId].data[4]++ >= gTasks[taskId].data[3])
+	{
+		gTasks[taskId].data[4] = 0; //Reset timer
+		gTasks[taskId].data[1]--;
+		gTasks[taskId].data[2]++;
+		SetGpuReg(REG_OFFSET_BLDALPHA, (gTasks[taskId].data[2] * 256) + gTasks[taskId].data[1]);
+	}
+}
+
+void AnimTask_FadeOutParticles(u8 taskId)
+{
+	u8 existingTaskId = FindTaskIdByFunc(AnimTask_FadeOutParticlesHelper);
+	if (existingTaskId != 0xFF)
+		DestroyAnimVisualTask(existingTaskId); //Can only have one of these tasks going at a time
+
+	SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(16, 0));
+	SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_EFFECT_BLEND | BLDCNT_TGT2_ALL); //Blend sprites out
+	gTasks[taskId].data[1] = 16;
+	gTasks[taskId].data[2] = 0;
+	gTasks[taskId].data[3] = gBattleAnimArgs[0]; //Delay
+	gTasks[taskId].data[4] = 0; //Delay Timer
+	gTasks[taskId].func = AnimTask_FadeOutParticlesHelper;
+}
+
 #define GET_TRUE_SPRITE_INDEX(i) ((i - ANIM_SPRITES_START))
 void ScriptCmd_loadspritegfx(void)
 {
@@ -1280,14 +1274,8 @@ void AnimTask_GetTrappedMoveAnimId(u8 taskId)
 		case MOVE_THUNDERCAGE:
 			gBattleAnimArgs[0] = 9;
 			break;
-		case MOVE_CEASELESSEDGE:
-			gBattleAnimArgs[0] = 10;
-			break;
-		case MOVE_STONEAXE:
-			gBattleAnimArgs[0] = 11;
-			break;
 		case MOVE_LEAFTORNADO:
-			gBattleAnimArgs[0] = 12;
+			gBattleAnimArgs[0] = 10;
 			break;
 		default:
 			gBattleAnimArgs[0] = 0;
@@ -1302,6 +1290,56 @@ void AnimTask_GetRaidBattleStormLevel(u8 taskId)
 	DestroyAnimVisualTask(taskId);
 }
 
+//Shell Smash//
+static const union AffineAnimCmd sShellSmashShrinkAffineAnimCmds[] =
+{
+	AFFINEANIMCMD_FRAME(64, 64, 0, 16), //Flatten
+	AFFINEANIMCMD_FRAME(0, 0, 0, 48),
+	AFFINEANIMCMD_FRAME(-64, -64, 0, 16),
+	AFFINEANIMCMD_END,
+};
+
+//Shrinks the attacker, pauses, then scales up the attacker again
+void AnimTask_ShellSmashShrinkAttacker(u8 taskId)
+{
+	struct Task* task = &gTasks[taskId];
+	
+	task->data[0] = gBattleAnimArgs[0]; //Pause
+
+	u8 spriteId = GetAnimBattlerSpriteId(ANIM_TARGET);
+	PrepareAffineAnimInTaskData(task, spriteId, sShellSmashShrinkAffineAnimCmds);
+	task->func = AnimTask_DynamaxGrowthStep;
+}
+
+//Moves the shells towards the attacker and leaves them there until they fade out
+//arg 0: Initial x-pos
+//arg 1: Final x-pos
+//arg 2: Movement duration
+//arg 3: Affine anim
+static void SpriteCB_ShellSmashShell_DestroyDuringFadeOut(struct Sprite* sprite);
+void SpriteCB_ShellSmashShell(struct Sprite* sprite)
+{
+	//Init Position
+	sprite->pos1.x = GetBattlerSpriteCoord2(gBattleAnimAttacker, BATTLER_COORD_X_2) + gBattleAnimArgs[0];
+	sprite->pos1.y = GetBattlerSpriteCoord2(gBattleAnimAttacker, BATTLER_COORD_Y_PIC_OFFSET) + 2; //2 to slightly encompass the entire sprite
+
+	//Prepare linear movement
+	sprite->data[0] = gBattleAnimArgs[2]; //Duration
+	sprite->data[2] = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_X_2) + gBattleAnimArgs[1];
+	sprite->data[4] = sprite->pos1.y;
+	sprite->callback = StartAnimLinearTranslation;
+	StoreSpriteCallbackInData6(sprite, SpriteCB_ShellSmashShell_DestroyDuringFadeOut);
+
+	//Rotate properly
+	StartSpriteAffineAnim(sprite, gBattleAnimArgs[3]);
+}
+
+static void SpriteCB_ShellSmashShell_DestroyDuringFadeOut(struct Sprite* sprite)
+{
+	if (GetGpuReg(REG_OFFSET_BLDALPHA) >= BLDALPHA_BLEND(0, 8)) //Fade out 1/2 done
+		DestroyAnimSprite(sprite);
+}
+
 void AnimTask_IsUnbound(u8 taskId)
 {
 	#ifdef UNBOUND
@@ -1309,6 +1347,16 @@ void AnimTask_IsUnbound(u8 taskId)
 	#else
 	gBattleAnimArgs[0] = FALSE;
 	#endif
+	DestroyAnimVisualTask(taskId);
+}
+
+void AnimTask_IsAttackerPlayerSide(u8 taskId)
+{
+	if (SIDE(gBattleAnimAttacker) == B_SIDE_OPPONENT)
+		gBattleAnimArgs[7] = 0;
+	else
+		gBattleAnimArgs[7] = 1;
+
 	DestroyAnimVisualTask(taskId);
 }
 
@@ -1652,6 +1700,21 @@ static void InitSpritePosToAnimAttackersCentre(struct Sprite *sprite, bool8 resp
 
 	SetAnimSpriteInitialXOffset(sprite, gBattleAnimArgs[0]);
 	sprite->pos1.y += gBattleAnimArgs[1];
+}
+
+void SpriteCB_SpriteOnMonUntilAffineAnimEnds(struct Sprite* sprite)
+{
+	u8 target = LoadBattleAnimTarget(0);
+
+	if (!IsBattlerSpriteVisible(target))
+		DestroyAnimSprite(sprite);
+	else
+	{
+		sprite->pos1.x = GetBattlerSpriteCoord(target, BATTLER_COORD_X_2);
+		sprite->pos1.y = GetBattlerSpriteCoord(target, BATTLER_COORD_Y_PIC_OFFSET);
+		StoreSpriteCallbackInData6(sprite, DestroySpriteAndMatrix);
+		sprite->callback = RunStoredCallbackWhenAffineAnimEnds;
+	}
 }
 
 void SpriteCB_SpriteToCentreOfSide(struct Sprite* sprite)
@@ -2501,6 +2564,129 @@ void SpriteCB_ShellSideArmBlast(struct Sprite* sprite)
 	sprite->callback = (void*) (0x80B563C | 1); //AnimShadowBall
 }
 
+//Glacial Lance//
+static const union AffineAnimCmd sSpriteAffineAnim_GlacialLance_Grow[] =
+{
+    AFFINEANIMCMD_FRAME(0x20, 0x20, 0, 0),
+    AFFINEANIMCMD_FRAME(0x10, 0x10, 0, 30), //Double sprite size
+	AFFINEANIMCMD_END,
+};
+
+static const union AffineAnimCmd sSpriteAffineAnim_GlacialLance_OnFoe[] =
+{
+	AFFINEANIMCMD_FRAME(256, 256, 0, 1), //Double sprite size
+	AFFINEANIMCMD_FRAME(0, 0, -8, 4), //Rotate 45 degrees right
+	AFFINEANIMCMD_END,
+};
+
+static const union AffineAnimCmd sSpriteAffineAnim_GlacialLance_OnPlayer[] =
+{
+	AFFINEANIMCMD_FRAME(256, 256, 0, 1), //Double sprite size
+	AFFINEANIMCMD_FRAME(0, 0, 24, 4), //Rotate 135 degrees left
+	AFFINEANIMCMD_END,
+};
+
+const union AffineAnimCmd* const gSpriteAffineAnimTable_GlacialLance[] =
+{
+	sSpriteAffineAnim_GlacialLance_Grow,
+	sSpriteAffineAnim_GlacialLance_OnFoe,
+	sSpriteAffineAnim_GlacialLance_OnPlayer,
+};
+
+//Moves the ice lance for Glacial Lance
+//arg 0: initial x pixel offset (from attacker)
+//arg 1: initial y pixel offset (from attacker)
+//arg 2: target x pixel offset (from target)
+//arg 3: target y pixel offset (from target)
+//arg 4: distance moved up
+//arg 5: pause in middle
+//arg 6: duration to target
+static void SpriteCB_GlacialLance_Step1(struct Sprite* sprite);
+static void SpriteCB_GlacialLance_Step2(struct Sprite* sprite);
+void SpriteCB_GlacialLance(struct Sprite* sprite)
+{
+	u8 def1 = gBattleAnimTarget;
+	u8 def2 = PARTNER(def1);
+	
+	InitSpritePosToAnimAttacker(sprite, TRUE);
+	sprite->data[5] = gBattleAnimArgs[4];
+	sprite->data[6] = gBattleAnimArgs[5];
+	
+	sprite->data[0] = gBattleAnimArgs[6];
+	
+	if (IS_SINGLE_BATTLE || SIDE(gBattleAnimAttacker) == SIDE(gBattleAnimTarget))
+	{
+		sprite->data[2] = GetBattlerSpriteCoord(def1, BATTLER_COORD_X_2) + gBattleAnimArgs[2]; //Converge on target
+		sprite->data[4] = GetBattlerSpriteCoord(def1, BATTLER_COORD_Y_PIC_OFFSET) + gBattleAnimArgs[3];
+	}
+	else
+	{
+		sprite->data[2] = (GetBattlerSpriteCoord(def1, BATTLER_COORD_X_2) + GetBattlerSpriteCoord(def2, BATTLER_COORD_X_2)) / 2 + gBattleAnimArgs[2]; //Converge on target
+		sprite->data[4] = (GetBattlerSpriteCoord(def1, BATTLER_COORD_Y_PIC_OFFSET) + GetBattlerSpriteCoord(def2, BATTLER_COORD_Y_PIC_OFFSET)) / 2 + gBattleAnimArgs[3];
+	}
+
+	sprite->oam.priority = 1; //Above the ice cube
+	sprite->callback = SpriteCB_GlacialLance_Step1;
+}
+
+static void SpriteCB_GlacialLance_Step1(struct Sprite* sprite)
+{
+	if (sprite->data[7]++ >= sprite->data[5])
+	{
+		sprite->data[7] = 0;
+		sprite->callback = SpriteCB_GlacialLance_Step2;
+	}
+	else
+		--sprite->pos1.y; //Move up
+}
+
+static void SpriteCB_GlacialLance_Step2(struct Sprite* sprite)
+{
+	if (sprite->data[7]++ >= sprite->data[6])
+	{
+		if (SIDE(gBattleAnimTarget) == B_SIDE_PLAYER)
+			StartSpriteAffineAnim(sprite, 2);
+		else
+			StartSpriteAffineAnim(sprite, 1);
+
+		sprite->data[5] = 0;
+		sprite->data[6] = 0;
+		sprite->data[7] = 0;
+		sprite->callback = StartAnimLinearTranslation;
+		StoreSpriteCallbackInData6(sprite, DestroyAnimSprite);
+	}
+}
+
+void AnimTask_CentredFrozenIceCube(u8 taskId)
+{
+	s16 x, y;
+	u8 spriteId;
+	u8 bank1 = gBattleAnimTarget;
+	u8 bank2 = PARTNER(bank1);
+
+	if (IS_SINGLE_BATTLE || SIDE(gBattleAnimAttacker) == SIDE(gBattleAnimTarget))
+	{
+		x = GetBattlerSpriteCoord(bank1, BATTLER_COORD_X_2);
+		y = GetBattlerSpriteCoord(bank1, BATTLER_COORD_Y_PIC_OFFSET);
+	}
+	else
+	{
+		x = (GetBattlerSpriteCoord(bank1, BATTLER_COORD_X_2) + GetBattlerSpriteCoord(bank2, BATTLER_COORD_X_2)) / 2;
+		y = (GetBattlerSpriteCoord(bank1, BATTLER_COORD_Y_PIC_OFFSET) + GetBattlerSpriteCoord(bank2, BATTLER_COORD_Y_PIC_OFFSET)) / 2;
+	}
+
+	x -= 32;
+	y -= 36;
+
+	spriteId = CreateSprite((void*) 0x83BF55C, x, y, 4);
+	if (GetSpriteTileStartByTag(ANIM_TAG_ICE_CUBE) == SPRITE_INVALID_TAG)
+		gSprites[spriteId].invisible = TRUE;
+
+	SetSubspriteTables(&gSprites[spriteId], (void*) 0x83BF554);
+	gTasks[taskId].data[15] = spriteId;
+	gTasks[taskId].func = (void*) (0x80784D8 | 1);
+}
+
 const struct OamData sAppleOAM =
 {
 	.affineMode = ST_OAM_AFFINE_DOUBLE,
@@ -2917,6 +3103,53 @@ void SpriteCB_SpriteOnMonForDurationUseY(struct Sprite *sprite)
 	}
 }
 
+//Dragon Energy//
+
+//Moves the balls for Dragon Energy sideways along the target side
+//arg 0: Duration
+void SpriteCB_DragonEnergyShot(struct Sprite* sprite)
+{
+	s16 startingX, finishingX, y;
+	u8 def1 = gBattleAnimTarget;
+	u8 def2 = PARTNER(def1);
+
+	if (IS_SINGLE_BATTLE || SIDE(gBattleAnimAttacker) == SIDE(gBattleAnimTarget))
+		y = GetBattlerSpriteCoord(def1, BATTLER_COORD_Y_PIC_OFFSET);
+	else
+	{
+		y = 0;
+		
+		if (IsBattlerSpritePresent(def1))
+			y = GetBattlerSpriteCoord(def1, BATTLER_COORD_Y_PIC_OFFSET);
+		
+		if (IsBattlerSpritePresent(def2))
+			y += GetBattlerSpriteCoord(def2, BATTLER_COORD_Y_PIC_OFFSET);
+
+		if (IsBattlerSpritePresent(def1) && IsBattlerSpritePresent(def2)) //Both targets are visible
+			y /= 2;
+	}
+
+	if (SIDE(gBattleAnimTarget) == B_SIDE_OPPONENT)
+	{
+		startingX = 0;
+		finishingX = 255;
+	}
+	else
+	{
+		startingX = 255;
+		finishingX = 0;
+	}
+
+	sprite->pos1.x = startingX;
+	sprite->pos1.y = y;
+	sprite->pos2.x = 0;
+	sprite->data[0] = gBattleAnimArgs[0];
+	sprite->data[2] = finishingX;
+	sprite->data[4] = y;
+	sprite->callback = StartAnimLinearTranslation;
+	StoreSpriteCallbackInData6(sprite, DestroySpriteAndMatrix);
+}
+
 const struct OamData sFishiousRendTeethOam =
 {
 	.affineMode = ST_OAM_AFFINE_OFF,
@@ -3106,6 +3339,126 @@ void SpriteCB_FairyLockChain(struct Sprite *sprite)
 		DestroySprite(sprite);
 	}
 }
+
+//Hoopa SOS//
+static const union AnimCmd sAnimCmdHoopaRing[] =
+{
+	ANIMCMD_FRAME(0, 8),
+	ANIMCMD_FRAME(16, 8),
+	ANIMCMD_FRAME(32, 8),
+	ANIMCMD_FRAME(48, 8),
+	ANIMCMD_JUMP(0)
+};
+
+const union AnimCmd *const gAnimCmdTable_HoopaRing[] =
+{
+	sAnimCmdHoopaRing,
+};
+
+static const union AffineAnimCmd sSpriteAffineAnim_HoopaRing[] =
+{
+	AFFINEANIMCMD_FRAME(4, 4, 10, 1), //Grow & Spin
+	AFFINEANIMCMD_JUMP(0),
+};
+
+const union AffineAnimCmd* const gSpriteAffineAnimTable_HoopaRing[] =
+{
+	sSpriteAffineAnim_HoopaRing,
+};
+
+static const union AnimCmd sAnimCmdLargeHoopaRing[] =
+{
+	ANIMCMD_FRAME(0, 8),
+	ANIMCMD_FRAME(64, 8),
+	ANIMCMD_FRAME(128, 8),
+	ANIMCMD_FRAME(192, 8),
+	ANIMCMD_JUMP(0)
+};
+
+const union AnimCmd *const gAnimCmdTable_LargeHoopaRing[] =
+{
+	sAnimCmdLargeHoopaRing,
+};
+
+static const union AffineAnimCmd sSpriteAffineAnim_LargeHoopaRing[] =
+{
+	AFFINEANIMCMD_FRAME(16, 16, 0, 0), //Start small
+	AFFINEANIMCMD_FRAME(4, 4, -16, 60), //Spin and grow sprite
+	AFFINEANIMCMD_FRAME(0, 0, -16, 4), //Keep spinning until back to proper orientation
+	AFFINEANIMCMD_FRAME(0, 0, 0, 0x22), //Pause
+	AFFINEANIMCMD_FRAME(0, 0, 0, 64), //Pause
+	AFFINEANIMCMD_FRAME(-16, -16, 16, 15), //Spin and shrink sprite
+	AFFINEANIMCMD_END,
+};
+
+const union AffineAnimCmd* const gSpriteAffineAnimTable_LargeHoopaRing[] =
+{
+	sSpriteAffineAnim_LargeHoopaRing,
+};
+
+static const union AffineAnimCmd sSpriteAffineAnim_GrowingRing[] =
+{
+	AFFINEANIMCMD_FRAME(8, 8, 0, 16), //Double in size
+	AFFINEANIMCMD_END,
+};
+
+const union AffineAnimCmd* const gSpriteAffineAnimTable_GrowingRing[] =
+{
+	sSpriteAffineAnim_GrowingRing,
+};
+
+static const union AffineAnimCmd sSpinAndGrowMonSpriteAffineAnimCmds[] =
+{
+	AFFINEANIMCMD_FRAME(16, 16, 0, 0), //Start small
+	AFFINEANIMCMD_FRAME(4, 4, -16, 60), //Spin and grow sprite
+	AFFINEANIMCMD_FRAME(0, 0, -16, 4), //Keep spinning until back to proper orientation
+	AFFINEANIMCMD_FRAME(0, 0, 0, 2), //Pause
+	AFFINEANIMCMD_END,
+};
+
+const union AffineAnimCmd* const sSpinAndGrowMonSpriteAffineAnimTable[] =
+{
+	sSpinAndGrowMonSpriteAffineAnimCmds,
+};
+
+#define tSpriteId data[0]
+void AnimTask_SpinInAttacker_Step(u8 taskId);
+void AnimTask_SpinInAttacker(u8 taskId)
+{
+	struct Task* task = &gTasks[taskId];
+	u8 spriteId = GetAnimBattlerSpriteId(ANIM_ATTACKER);
+	PrepareBattlerSpriteForRotScale(spriteId, ST_OAM_OBJ_NORMAL);
+
+	if (spriteId < MAX_SPRITES)
+	{
+		struct Sprite* sprite = &gSprites[spriteId];
+
+		task->data[1] = ((u32) sprite->affineAnims) & 0xFFFF; //Backup old affine anims
+		task->data[2] = ((u32) sprite->affineAnims) >> 16;
+		sprite->affineAnims = sSpinAndGrowMonSpriteAffineAnimTable;
+		StartSpriteAffineAnim(sprite, 0);
+		sprite->affineAnimPaused = FALSE;
+
+		task->tSpriteId = spriteId;
+		task->func = AnimTask_SpinInAttacker_Step;
+	}
+	else
+		DestroyAnimVisualTask(taskId);
+}
+
+void AnimTask_SpinInAttacker_Step(u8 taskId)
+{
+	struct Task* task = &gTasks[taskId];
+
+	if (gSprites[task->tSpriteId].affineAnimEnded)
+	{
+		gSprites[task->tSpriteId].affineAnims = (void*) (task->data[1] | (task->data[2] << 16)); //Restore old affine anims
+		ResetSpriteRotScale(task->tSpriteId);
+		gSprites[task->tSpriteId].affineAnimPaused = TRUE; //So the Pokemon coming out a Poke Ball animation doesn't play
+		DestroyAnimVisualTask(taskId);
+	}
+}
+#undef tSpriteId
 
 void SpriteCB_SurroundingRing(struct Sprite *sprite)
 {
@@ -4804,7 +5157,6 @@ void UpdateOamPriorityInAllHealthboxes(u8 priority)
 				case B_ANIM_ULTRA_BURST:
 				case B_ANIM_DYNAMAX_START:
 				case B_ANIM_RAID_BATTLE_ENERGY_BURST:
-				case B_ANIM_GULP_MISSILE:
 					goto HIDE_BOXES;
 			}
 		__attribute__ ((fallthrough));
@@ -5139,6 +5491,7 @@ static bool8 ShouldSubstituteRecedeForSpecialBattleAnim(u8 animId)
 		case B_ANIM_ULTRA_BURST:
 		case B_ANIM_DYNAMAX_START:
 		case B_ANIM_RAID_BATTLE_ENERGY_BURST:
+		case B_ANIM_RAID_BATTLE_BLOW_AWAY:
 			return TRUE;
 		default:
 			return FALSE;
@@ -5264,3 +5617,219 @@ void SpriteCB_AnimSpriteOnTargetSideCentre(struct Sprite *sprite)
 		DestroySpriteAndMatrix(sprite);
 	}
 }
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////PLA//////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+//Bitter Malice//
+
+#define gBattleAnim_ScaryFaceGfx (void*) 0x8D24BCC
+#define gBattleAnim_ScaryFacePal (void*) 0x8D24BA4
+#define gBattleAnimBgTilemap_ScaryFaceOnOpponent (void*) 0x8E7F4AC
+#define gBattleAnimBgTilemap_ScaryFaceOnPlayer (void*) 0x8E7f690
+#define ScaryFace_Step (void*) (0x80AA024 | 1)
+void AnimTask_ScaryFaceOnAttacker(u8 taskId)
+{
+	struct BattleAnimBgData animBg;
+
+	SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT2_ALL | BLDCNT_TGT1_BG1 | BLDCNT_EFFECT_BLEND);
+	SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(0, 16));
+	SetAnimBgAttribute(1, BG_ANIM_PRIORITY, 1);
+	SetAnimBgAttribute(1, BG_ANIM_SCREEN_SIZE, 0);
+	SetAnimBgAttribute(1, BG_ANIM_CHAR_BASE_BLOCK, 1);
+
+	gBattle_BG1_X = 0;
+	gBattle_BG1_Y = 0;
+
+	if (IS_DOUBLE_BATTLE) //By default is in the centre of both Pokemon
+	{
+		switch (GetBattlerPosition(gBattleAnimAttacker))
+		{
+			case B_POSITION_PLAYER_LEFT:
+				gBattle_BG1_X = 30;
+				break;
+			case B_POSITION_PLAYER_RIGHT:
+				gBattle_BG1_X = -20;
+				break;
+			case B_POSITION_OPPONENT_LEFT:
+				gBattle_BG1_X = -20;
+				break;
+			case B_POSITION_OPPONENT_RIGHT:
+				gBattle_BG1_X = 25;
+				break;
+		}
+	}
+
+	SetGpuReg(REG_OFFSET_BG1HOFS, gBattle_BG1_X);
+	SetGpuReg(REG_OFFSET_BG1VOFS, gBattle_BG1_Y);
+	GetBattleAnimBg1Data(&animBg);
+
+	if (SIDE(gBattleAnimAttacker) == B_SIDE_PLAYER)
+		AnimLoadCompressedBgTilemap(animBg.bgId, gBattleAnimBgTilemap_ScaryFaceOnPlayer);
+	else
+		AnimLoadCompressedBgTilemap(animBg.bgId, gBattleAnimBgTilemap_ScaryFaceOnOpponent);
+
+	AnimLoadCompressedBgGfx(animBg.bgId, gBattleAnim_ScaryFaceGfx, animBg.tilesOffset);
+	LoadCompressedPalette(gBattleAnim_ScaryFacePal, animBg.paletteId * 16, 32);
+	RelocateBattleBgPal(animBg.paletteId, animBg.bgTilemap, 0, 0);
+
+	gTasks[taskId].func = ScaryFace_Step;
+}
+
+
+//Ceaseless Edge//
+
+#define AnimFalseSwipeSliceStep3 (void*) (0x80A5A8C | 1)
+
+//Creates slashes that can be flipped.
+//arg 0: x pixel offset (from target)
+//arg 1: y pixel offset (from target)
+//arg 2: flip x
+//arg 3: flip y
+void SpriteCB_FlippableSlash(struct Sprite* sprite)
+{
+	InitSpritePosToAnimTarget(sprite, TRUE);
+
+	if (gBattleAnimArgs[2]) //Flip X
+		sprite->hFlip = TRUE;
+
+	if (gBattleAnimArgs[3]) //Flip Y
+		sprite->vFlip = TRUE;
+
+	sprite->data[0] = 0;
+	sprite->data[1] = 0;
+	StoreSpriteCallbackInData6(sprite, AnimFalseSwipeSliceStep3);
+	sprite->callback = RunStoredCallbackWhenAnimEnds;
+}
+
+
+//Mystical Power//
+
+static const union AffineAnimCmd sSpriteAffineAnim_MysticalPowerRing[] =
+{
+	AFFINEANIMCMD_FRAME(16, 16, 0, 0), //Start small
+	AFFINEANIMCMD_FRAME(16, 16, 0, 15), //Grow sprite
+    AFFINEANIMCMD_END,
+};
+
+const union AffineAnimCmd* const gSpriteAffineAnimTable_MysticalPowerRing[] =
+{
+	sSpriteAffineAnim_MysticalPowerRing,
+};
+
+
+//Power Shift//
+
+//Launches the stat ball for Power Shift
+//arg 0: X starting offset
+//arg 1: Y starting offset
+//arg 2: X finishing offset
+//arg 3: Y finishing offset
+//arg 4: Duration
+//arg 5: Wave Amplitude
+static void SpriteCB_PowerShiftBallStep(struct Sprite *sprite);
+void SpriteCB_PowerShiftBall(struct Sprite* sprite)
+{
+	InitSpritePosToAnimAttacker(sprite, TRUE);
+
+	if (SIDE(gBattleAnimAttacker) == B_SIDE_OPPONENT)
+		gBattleAnimArgs[2] *= -1; //Flip X
+
+	sprite->data[0] = gBattleAnimArgs[4]; //Duration
+	sprite->data[2] = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_X_2) + gBattleAnimArgs[2]; //Target X
+	sprite->data[4] = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_Y_PIC_OFFSET) + gBattleAnimArgs[3]; //Target Y
+	sprite->data[5] = gBattleAnimArgs[5]; //Wave Amplitude
+
+	InitAnimArcTranslation(sprite);
+	sprite->callback = SpriteCB_PowerShiftBallStep;
+}
+
+static void SpriteCB_PowerShiftBallStep(struct Sprite* sprite) //Also used by Triple Arrows
+{
+	if (TranslateAnimHorizontalArc(sprite))
+		DestroySpriteAndMatrix(sprite);
+}
+
+
+//Stone Axe//
+
+static const union AnimCmd sAnimCmdFlippedX[] =
+{
+	ANIMCMD_FRAME(0, 1, .hFlip = TRUE),
+	ANIMCMD_END,
+};
+
+const union AnimCmd *const gAnimCmdTable_FlippedX[] =
+{
+	sAnimCmdFlippedX,
+};
+
+//Same args as AnimNeedleArmSpike
+#define AnimNeedleArmSpikeStep (void*) (0x80A43A0 | 1)
+void SpriteCB_SplinterIn(struct Sprite* sprite)
+{
+	s16 targetX, targetY, initialX, initialY, rot;
+	u8 target = LoadBattleAnimTarget(0);
+
+	if (gBattleAnimArgs[3] == 0 || !IsBattlerSpriteVisible(target))
+	{
+		DestroyAnimSprite(sprite);
+		return;
+	}
+
+	//Aim the splinters towards the target
+	sprite->data[0] = gBattleAnimArgs[3];
+	targetX = sprite->data[5] = GetBattlerSpriteCoord(target, BATTLER_COORD_X_2);
+	targetY = sprite->data[6] = GetBattlerSpriteCoord(target, BATTLER_COORD_Y_PIC_OFFSET);
+	initialX = sprite->pos1.x = gBattleAnimArgs[1] + targetX;
+	initialY = sprite->pos1.y = gBattleAnimArgs[2] + targetY;
+
+	sprite->data[1] = initialX * 16;
+	sprite->data[2] = initialY * 16;
+	sprite->data[3] = (targetX - initialX) * 16 / gBattleAnimArgs[3];
+	sprite->data[4] = (targetY - initialY) * 16 / gBattleAnimArgs[3];
+	rot = ArcTan2Neg(targetX - initialX, targetY - initialY);
+	rot += 0xC000;
+
+	TrySetSpriteRotScale(sprite, 0, 0x100, 0x100, rot);
+	sprite->callback = AnimNeedleArmSpikeStep;
+}
+
+
+//Triple Arrows//
+
+//Delivers a rainbow kick for Triple Arrows
+//arg 0: Initial x pixel offset
+//arg 1: Initial y pixel offset
+//arg 2: Duration
+//arg 3: Wave Amplitude
+void SpriteCB_TripleArrowKick(struct Sprite* sprite)
+{
+	InitSpritePosToAnimTarget(sprite, TRUE);
+	StartSpriteAnim(sprite, 1); //Feet
+
+	sprite->data[0] = gBattleAnimArgs[2];
+	sprite->data[2] = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2); //Target X
+	sprite->data[4] = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y_PIC_OFFSET); //Target Y
+	sprite->data[5] = gBattleAnimArgs[3];
+
+	InitAnimArcTranslation(sprite);
+	sprite->callback = SpriteCB_PowerShiftBallStep; //Arc until complete
+}
+
+
+//Wildbolt Storm//
+
+static const union AnimCmd sAnimCmdAnimatedSpark2[] =
+{
+	ANIMCMD_FRAME((16 * 16) / (8 * 8) * 0, 8),
+	ANIMCMD_FRAME((16 * 16) / (8 * 8) * 1, 8),
+	ANIMCMD_FRAME((16 * 16) / (8 * 8) * 2, 8),
+	ANIMCMD_JUMP(0)
+};
+
+const union AnimCmd *const gAnimCmdTable_AnimatedSpark2[] =
+{
+	sAnimCmdAnimatedSpark2,
+};

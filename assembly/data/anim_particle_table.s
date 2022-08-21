@@ -392,6 +392,8 @@ animparticle 0x8d1aea4, 0x1c0, ANIM_TAG_FREEZING_GLARE_BEAM
 animparticle LASH_OUT_IMG,	0x800,	ANIM_TAG_LASH_OUT
 animparticle BLUE_RAZOR_LEAF_IMG,	0x100,	ANIM_TAG_BLUE_RAZOR_LEAF
 animparticle 0x8d213f0,	0x800,	ANIM_TAG_MISTY_EXPLOSION
+animparticle LARGE_HOOPA_RING_IMG, (64 * 64 * 4) / 2, ANIM_TAG_HOOPA_RING_LARGE
+
 gBattleAnimPaletteTable:
 animparticlepal 0x8d028b4,	ANIM_TAG_BONE
 animparticlepal 0x8d1c90c,	ANIM_TAG_SPARK
@@ -772,3 +774,4 @@ animparticlepal LASH_OUT_PAL,	ANIM_TAG_LASH_OUT
 animparticlepal BLUE_RAZOR_LEAF_PAL,	ANIM_TAG_BLUE_RAZOR_LEAF
 animparticlepal Misty_ExplosionPal,	ANIM_TAG_MISTY_EXPLOSION
 animparticlepal BLUE_ROCKS_PAL,	ANIM_TAG_ROCKS
+animparticlepal LARGE_HOOPA_RING_PAL, ANIM_TAG_HOOPA_RING_LARGE

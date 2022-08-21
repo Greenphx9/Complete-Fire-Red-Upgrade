@@ -1759,6 +1759,7 @@ bool8 WillFaintFromSecondaryDamage(u8 bank)
 		#endif
 		+  GetCurseDamage(bank)
 		+  GetSeaOfFireDamage(bank) //Sea of Fire runs on last turn
+		+  GetSplintersDamage(bank)
 		+  GetGMaxVineLashDamage(bank)
 		+  GetGMaxWildfireDamage(bank)
 		+  GetGMaxCannonadeDamage(bank)
@@ -2140,19 +2141,53 @@ bool8 IsPredictedToUsePursuitableMove(u8 bankAtk, u8 bankDef)
 
 bool8 IsMovePredictionPhazingMove(u8 bankAtk, u8 bankDef)
 {
-	u16 move = IsValidMovePrediction(bankAtk, bankDef);
+	if (IsPlayerInControl(bankAtk)
+	&& !(gBattleTypeFlags & BATTLE_TYPE_FRONTIER) //Outside of the Frontier facing a known enemy
+	&& HazingMoveInMoveset(bankAtk))
+		return TRUE; //Assume the player knows the foe has a setup move and will try to cheese them with Hazing
 
-	if (IsDynamaxed(bankDef))
-		return FALSE; //Dynamax Pokemon can't be phazed out
+	u16 move = IsValidMovePrediction(bankAtk, bankDef);
 
 	if (move != MOVE_NONE)
 	{
 		u8 effect = gBattleMoves[move].effect;
-		return effect == EFFECT_ROAR || effect == EFFECT_HAZE || effect == EFFECT_REMOVE_TARGET_STAT_CHANGES;
+
+		if (effect == EFFECT_ROAR)
+			return !IsDynamaxed(bankDef); //Dynamax Pokemon can't be phazed out
+
+		return effect == EFFECT_HAZE || effect == EFFECT_REMOVE_TARGET_STAT_CHANGES; //Check hazing move
 	}
 
 	return FALSE;
 }
+
+bool8 IsMovePredictionHPDrainingMove(u8 bankAtk, u8 bankDef)
+{
+	u16 move = IsValidMovePrediction(bankAtk, bankDef);
+
+	if (move != MOVE_NONE)
+	{
+		u8 effect = gBattleMoves[move].effect;
+		return effect == EFFECT_ABSORB || effect == EFFECT_DREAM_EATER;
+	}
+
+	return FALSE;
+}
+
+bool8 IsMovePredictionHighAccSleepingMove(u8 bankAtk, u8 bankDef)
+{
+	u16 move = IsValidMovePrediction(bankAtk, bankDef);
+
+	if (move != MOVE_NONE)
+	{
+		u8 effect = gBattleMoves[move].effect;
+		if (effect == EFFECT_SLEEP || effect == EFFECT_YAWN)
+			return MoveWillHit(move, bankAtk, bankDef) || AccuracyCalc(move, bankAtk, bankDef) >= 80;
+	}
+
+	return FALSE;
+}
+
 
 //bankAtk is the protector
 bool8 CanMovePredictionProtectAgainstMove(u8 bankAtk, u8 bankDef, u16 move)
@@ -2165,6 +2200,12 @@ bool8 CanMovePredictionProtectAgainstMove(u8 bankAtk, u8 bankDef, u16 move)
 	}
 
 	return FALSE;
+}
+
+bool8 IsStrongestMoveHPDrainingMove(u8 bankAtk, u8 bankDef)
+{
+	u8 moveEffect = gBattleMoves[GetStrongestMove(bankAtk, bankDef)].effect;
+	return moveEffect == EFFECT_ABSORB || moveEffect == EFFECT_DREAM_EATER;
 }
 
 bool8 DamagingMoveInMoveset(u8 bank)
@@ -2560,6 +2601,30 @@ bool8 DamagingAllHitMoveTypeInMoveset(u8 bank, u8 moveType)
 			if (GetMoveTypeSpecial(bank, move) == moveType
 			&&  SPLIT(move) != SPLIT_STATUS
 			&&  gBattleMoves[move].target & MOVE_TARGET_ALL)
+				return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+bool8 DamagingMoveTypeInMovesetThatAffects(u8 bankAtk, u8 bankDef, u8 moveType)
+{
+	u16 move;
+	u8 moveLimitations = CheckMoveLimitations(bankAtk, 0, AdjustMoveLimitationFlagsForAI(bankAtk, bankDef));
+
+	for (u32 i = 0; i < MAX_MON_MOVES; ++i)
+	{
+		move = GetBattleMonMove(bankAtk, i);
+		if (move == MOVE_NONE)
+			break;
+
+		if (!(gBitTable[i] & moveLimitations))
+		{
+			if (SPLIT(move) != SPLIT_STATUS //Damaging move
+			&& GetMoveTypeSpecial(bankAtk, move) == moveType //Correct type
+			&& !(AI_SpecialTypeCalc(move, bankAtk, bankDef) & MOVE_RESULT_NO_EFFECT) //Wil have effect
+			&& !IsDamagingMoveUnusable(move, bankAtk, bankDef)) //Is usable
 				return TRUE;
 		}
 	}
@@ -3113,6 +3178,95 @@ bool8 DoubleDamageWithStatusMoveInMovesetThatAffects(u8 bankAtk, u8 bankDef)
 	}
 
 	return FALSE;
+}
+
+bool8 HazingMoveInMoveset(u8 bank)
+{
+	u8 moveLimitations = CheckMoveLimitations(bank, 0, 0xFF);
+
+	for (u32 i = 0; i < MAX_MON_MOVES; ++i)
+	{
+		u16 move = GetBattleMonMove(bank, i);
+
+		if (move == MOVE_NONE)
+			break;
+
+		if (!(gBitTable[i] & moveLimitations))
+		{
+			if (gBattleMoves[move].effect == EFFECT_HAZE
+			|| gBattleMoves[move].effect == EFFECT_REMOVE_TARGET_STAT_CHANGES)
+				return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+static bool8 IsUsablePhazingMove(u16 move, u8 bankAtk, u8 bankDef)
+{
+	u8 effect = gBattleMoves[move].effect;
+
+	if (effect == EFFECT_ROAR
+	&& !IsDynamaxed(bankDef)
+	&& !IsDamagingMoveUnusable(move, bankAtk, bankDef)) //Contains just Soundproof check for Roar
+		return TRUE;
+
+	if (effect == EFFECT_HAZE || move == MOVE_TOPSYTURVY)
+		return TRUE;
+
+	if (effect == EFFECT_REMOVE_TARGET_STAT_CHANGES
+	&& !(AI_SpecialTypeCalc(move, bankAtk, bankDef) & MOVE_RESULT_NO_EFFECT) //Move affects
+	&& !IsDamagingMoveUnusable(move, bankAtk, bankDef)) //Move is usable
+		return TRUE;
+
+	return FALSE;
+}
+
+bool8 PhazingMoveInMovesetThatAffects(u8 bankAtk, u8 bankDef)
+{
+	u8 moveLimitations = CheckMoveLimitations(bankAtk, 0, 0xFF);
+
+	for (u32 i = 0; i < MAX_MON_MOVES; ++i)
+	{
+		u16 move = GetBattleMonMove(bankAtk, i);
+
+		if (move == MOVE_NONE)
+			break;
+
+		if (!(gBitTable[i] & moveLimitations))
+		{
+			if (IsUsablePhazingMove(move, bankAtk, bankDef))
+				return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+bool8 HighChanceOfBeingImmobilized(u8 bank)
+{
+	u32 odds = 100; //The odds of being able to land an attack
+
+	if (gBattleMons[bank].status1 & STATUS1_PARALYSIS)
+		odds = (odds * 75) / 100; //75% chance of attacking
+	#ifndef FROSTBITE
+	else if (gBattleMons[bank].status1 & STATUS1_FREEZE)
+		odds = (odds * 20) / 100; //20% chance of attacking
+	#endif
+
+	if (gBattleMons[bank].status2 & STATUS2_INFATUATION)
+		odds = (odds * 50) / 100; //50% chance of attacking
+
+	if ((gBattleMons[bank].status2 & STATUS2_CONFUSION) > 1)
+	{
+		#ifdef OLD_CONFUSION_CHANCE
+		odds = (odds * 50) / 100; //50% chance of attacking
+		#else
+		odds = (odds * 67) / 100; //67% chance of attacking
+		#endif
+	}
+
+	return odds <= 50;
 }
 
 u16 TryReplaceMoveWithZMove(u8 bankAtk, u8 bankDef, u16 move)

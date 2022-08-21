@@ -13,6 +13,7 @@
 #include "../include/new/frontier.h"
 #include "../include/new/item.h"
 #include "../include/new/mega.h"
+#include "../include/new/multi.h"
 #include "../include/new/move_tables.h"
 #include "../include/new/util2.h"
 #include "../include/base_stats.h"
@@ -304,6 +305,56 @@ bool8 CheckGroundingFromPartyData(struct Pokemon* mon)
 		|| gBaseStats2[species].type2 == TYPE_FLYING)
 			return IN_AIR;
 	return GROUNDED;
+}
+
+bool8 CheckMonGrounding(struct Pokemon* mon)
+{
+	u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+	u16 item = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
+
+	if (IsGravityActive()
+	|| (ItemId_GetHoldEffect(item) == ITEM_EFFECT_IRON_BALL && GetMonAbility(mon) != ABILITY_KLUTZ))
+		return GROUNDED;
+
+	else if (GetMonAbility(mon) == ABILITY_LEVITATE
+	|| IsMonFloatingWithMagnetism(mon)
+	|| gBaseStats[species].type1 == TYPE_FLYING
+	|| gBaseStats[species].type2 == TYPE_FLYING)
+		return IN_AIR;
+
+	return GROUNDED;
+}
+
+bool8 ItemEffectPreventsHazards(u8 itemEffect)
+{
+	return itemEffect == ITEM_EFFECT_HEAVY_DUTY_BOOTS;
+}
+
+bool8 IsAffectedByHazards(u8 bank)
+{
+	return !ItemEffectPreventsHazards(ITEM_EFFECT(bank));
+}
+
+bool8 IsMonAffectedByHazards(struct Pokemon* mon)
+{
+	return IsMonAffectedByHazardsByItemEffect(mon, GetMonItemEffect(mon));
+}
+
+bool8 IsMonAffectedByHazardsByItemEffect(struct Pokemon* mon, u8 itemEffect)
+{
+	return !ItemEffectPreventsHazards(itemEffect);
+}
+
+bool8 IsFloatingWithMagnetism(u8 bank)
+{
+	return FALSE;//IsMagnetRiseBattle()
+		//&& (IsOfType(bank, TYPE_ELECTRIC) || IsOfType(bank, TYPE_STEEL));
+}
+
+bool8 IsMonFloatingWithMagnetism(unusedArg struct Pokemon* mon)
+{
+	return FALSE;//IsMagnetRiseBattle()
+		//&& (IsMonOfType(mon, TYPE_ELECTRIC) || IsMonOfType(mon, TYPE_STEEL));
 }
 
 u8 ViableMonCountFromBank(u8 bank)
@@ -1414,6 +1465,62 @@ bool8 WillPoltergeistFail(u16 item, u8 ability)
 	return item == ITEM_NONE
 		|| ability == ABILITY_KLUTZ
 		|| IsMagicRoomActive();
+}
+
+bool8 IsChoiceAbility(u8 ability)
+{
+	return ability == ABILITY_GORILLATACTICS;
+}
+
+bool8 IsChoiceItemEffectOrAbility(u8 itemEffect, u8 ability)
+{
+	return itemEffect == ITEM_EFFECT_CHOICE_BAND || IsChoiceAbility(ability);
+}
+
+u8 GetImposterBank(u8 bank)
+{
+	u8 transformBank;
+
+	if (IS_SINGLE_BATTLE)
+		transformBank = FOE(bank);
+	else if (IsRaidBattle())
+	{
+		if (SIDE(bank) == B_SIDE_PLAYER)
+			transformBank = BANK_RAID_BOSS;
+		else //Raid boss always transforms into player's Pokemon
+			transformBank = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
+	}
+	else //Standard double battle
+		transformBank = GetBattlerAtPosition(PARTNER(BATTLE_OPPOSITE(GetBattlerPosition(bank)))); //Directly in front of in doubles
+
+	return transformBank;
+}
+
+bool8 ImposterWorks(u8 bankAtk, bool8 checkingMonAtk) //bankAtk here is mainly used for the battle slot
+{
+	u8 targetBank = GetImposterBank(bankAtk);
+
+	return BATTLER_ALIVE(targetBank)
+		&& !(gBattleMons[targetBank].status2 & (STATUS2_TRANSFORMED | STATUS2_SUBSTITUTE))
+		&& !(gStatuses3[targetBank] & (STATUS3_SEMI_INVULNERABLE | STATUS3_ILLUSION))
+		&& (checkingMonAtk || !IS_TRANSFORMED(bankAtk)) //Obviously a party mon can't be transformed
+		#ifdef UNBOUND
+		&& SPECIES(targetBank) != SPECIES_SHADOW_WARRIOR
+		&& (SPECIES(targetBank) < SPECIES_CELEBI || SPECIES(targetBank) > SPECIES_TREECKO) //Those Pokemon in between are used for Fakemon bosses
+		#endif
+		&& !HasRaidShields(targetBank)
+		&& !ABILITY_ON_FIELD(ABILITY_NEUTRALIZINGGAS);
+}
+
+bool8 IsPlayerInControl(u8 bank)
+{
+	if (SIDE(bank) == B_SIDE_OPPONENT || IsMockBattle()) //AI side or AI controls everyone
+		return FALSE;
+
+	if (IsTagBattle() && GetBattlerPosition(bank) == B_POSITION_PLAYER_RIGHT)
+		return FALSE;
+
+	return TRUE;
 }
 
 void ClearBankStatus(u8 bank)

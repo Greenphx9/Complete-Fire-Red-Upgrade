@@ -53,6 +53,7 @@ enum EndTurnEffects
 	ET_Octolock,
 	ET_Item_Effects7,
 	ET_Switch_Out_Abilities7,
+	ET_Splinters,
 	ET_Taunt_Timer,
 	ET_Encore_Timer,
 	ET_Disable_Timer,
@@ -743,6 +744,28 @@ u8 TurnBasedEffects(void)
 					BattleScriptExecute(BattleScript_OctolockTurnDmg);
 					effect++;
 				}
+				break;
+
+			case ET_Splinters:
+				if (BATTLER_ALIVE(gActiveBattler) && gNewBS->splinterTimer[gActiveBattler] > 0)
+				{
+					if (--gNewBS->splinterTimer[gActiveBattler] == 0)
+					{
+						gBattleStringLoader = gText_SplintersEnded;
+						BattleScriptExecute(BattleScript_PrintCustomStringEnd2);
+						effect++;
+					}
+					else
+					{
+						gBattleMoveDamage = GetSplintersDamage(gActiveBattler);
+						if (gBattleMoveDamage != 0)
+						{
+							BattleScriptExecute(BattleScript_SplintersTurnDmg);
+							effect++;
+						}
+					}
+				}
+				gNewBS->turnDamageTaken[gActiveBattler] = gBattleMoveDamage; //For Emergency Exit
 				break;
 
 			case ET_Taunt_Timer:
@@ -1819,6 +1842,17 @@ u32 GetSeaOfFireDamage(u8 bank)
 	{
 		damage = MathMax(1, GetBaseMaxHP(bank) / 8);
 	}
+
+	return damage;
+}
+
+u32 GetSplintersDamage(u8 bank)
+{
+	u32 damage = 0;
+
+	if (gNewBS->splinterTimer[bank] > 0
+	&& ABILITY(bank) != ABILITY_MAGICGUARD)
+		damage = SplintersDamageCalc(gNewBS->splinterAttackerBank[bank], bank, gNewBS->splinterMove[bank]);
 
 	return damage;
 }

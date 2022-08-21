@@ -89,10 +89,14 @@ gBattleAnims_General:
 .word ANIM_DYNAMAX_ENERGY_SWIRL
 .word ANIM_RAID_BATTLE_STORM
 .word ANIM_RAID_BATTLE_ENERGY_BURST
+.word ANIM_RAID_BATTLE_BLOW_AWAY
 .word ANIM_G_MAX_VINE_LASH
 .word ANIM_G_MAX_WILDFIRE
 .word ANIM_G_MAX_CANNONADE
 .word ANIM_G_MAX_VOLCALITH
+.word ANIM_AI_ITEM_HEAL
+.word ANIM_HOOPA_RING_SPAWN
+.word ANIM_SPLINTER_DAMAGE
 
 .word ANIM_LEECHSEED2
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -151,10 +155,8 @@ ANIM_WRAPPED_END_TURN:
 	jumpifargmatches 0x0 0x6 ANIM_INFESTATION
 	jumpifargmatches 0x0 0x7 ANIM_SNAP_TRAP
 	jumpifargmatches 0x0 0x8 ANIM_OCTOLOCK
-	jumpifargmatches 0x0 0x9 ANIM_THUNDERCAGE_TRAP
-	jumpifargmatches 0x0 0xA ANIM_CEASELESSEDGE_WRAP
-	jumpifargmatches 0x0 0xB ANIM_CEASELESSEDGE_WRAP
-	jumpifargmatches 0x0 0xC ANIM_LEAFTORNADO
+	jumpifargmatches 0x0 0x9 ANIM_THUNDER_CAGE
+	jumpifargmatches 0x0 0xA ANIM_LEAFTORNADO
 	goto 0x81d5c8b
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -1026,6 +1028,15 @@ ANIM_RAID_BATTLE_ENERGY_BURST:
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
+ANIM_RAID_BATTLE_BLOW_AWAY:
+	playsound2 0x7a SOUND_PAN_TARGET
+	launchtask AnimTask_SlideOffScreen 0x5 0x2 bank_target 0x8
+	launchtask AnimTask_SlideOffScreen 0x5 0x2 target_partner 0x8
+	waitanimation
+	endanimation
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+.pool
 ANIM_G_MAX_VINE_LASH:
 	loadparticle ANIM_TAG_UNUSED_VINE_2
 	launchtask AnimTask_move_bank 0x2 0x5 bank_target 0x3 0x0 17 0x1
@@ -1064,6 +1075,57 @@ ANIM_G_MAX_VOLCALITH:
 	endanimation
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+.pool
+ANIM_AI_ITEM_HEAL:
+	playsound2 0xE8 SOUND_PAN_ATTACKER
+	launchtask AnimTask_StatusClearedEffect 0x2 0x1 FALSE
+	waitanimation
+	endanimation
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+.pool
+ANIM_HOOPA_RING_SPAWN:
+	loadparticle ANIM_TAG_HOOPA_RING_LARGE
+	playsound2 0x72 SOUND_PAN_ATTACKER @;SE_HOOPA_RING
+	launchtemplate HOOPA_RING_SPAWNER TEMPLATE_ATTACKER | TEMPLATE_BELOW | 2, 0x1, bank_attacker
+	pause 72
+	playsound2 0x27 SOUND_PAN_ATTACKER @;SE_TELEPORT
+	launchtask AnimTask_SpinInAttacker 0x5 0x0
+	pause 64
+	launchtask AnimTask_PlayAttackerCry 0x1 0x2 0x0 0xff
+	waitanimation
+	endanimation
+
+.align 2
+HOOPA_RING_SPAWNER: objtemplate ANIM_TAG_HOOPA_RING_LARGE ANIM_TAG_HOOPA_RING_LARGE OAM_NORMAL_64x64 gAnimCmdTable_LargeHoopaRing 0x0 gSpriteAffineAnimTable_LargeHoopaRing SpriteCB_SpriteOnMonUntilAffineAnimEnds
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+.pool
+.equ SPLINTER_PAUSE, 0x4
+
+ANIM_SPLINTER_DAMAGE:
+	loadparticle ANIM_TAG_ICICLE_SPEAR
+	loadparticle ANIM_TAG_ROCKS @Brown colour
+	soundcomplex 0x7c SOUND_PAN_TARGET, SPLINTER_PAUSE, 0x4
+	launchtask AnimTask_move_bank 0x2 0x5 bank_target 0x0 0x5 0x13 0x1
+	call SPLINTERS_IN
+	call SPLINTERS_IN
+	waitanimation
+	endanimation
+
+SPLINTERS_IN:
+	launchtemplate SPLINTER TEMPLATE_TARGET | 2, 0x4, bank_target, 22, -22, 0x10
+	pause SPLINTER_PAUSE
+	launchtemplate SPLINTER TEMPLATE_TARGET | 2, 0x4, bank_target, -22, -22, 0x10
+	pause SPLINTER_PAUSE
+	return
+
+.align 2
+SPLINTER: objtemplate ANIM_TAG_ICICLE_SPEAR ANIM_TAG_ROCKS OAM_NORMAL_32x32 gDummySpriteAnimTable 0x0 gDummySpriteAffineAnimTable SpriteCB_SplinterIn
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 .pool
 .global ANIM_FROSTBITE
 ANIM_FROSTBITE:

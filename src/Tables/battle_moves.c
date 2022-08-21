@@ -981,7 +981,7 @@ const struct BattleMove gBattleMoves[] =
 		.type = TYPE_ICE,
 		.accuracy = 70,
 		.pp = 5,
-		.secondaryEffectChance = 50,
+		.secondaryEffectChance = 10,
 		.target = MOVE_TARGET_BOTH,
 		.priority = 0,
 		.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
@@ -14825,8 +14825,8 @@ const struct BattleMove gBattleMoves[] =
 	},
 	[MOVE_CEASELESSEDGE] =
 	{
-		.effect = EFFECT_TRAP,
-		.power = 65,
+		.effect = EFFECT_SPLINTER,
+		.power = 80,
 		.type = TYPE_DARK,
 		.accuracy = 90,
 		.pp = 15,
@@ -14856,7 +14856,7 @@ const struct BattleMove gBattleMoves[] =
 	[MOVE_DIRECLAW] =
 	{
 		.effect = EFFECT_TRI_ATTACK,
-		.power = 65,
+		.power = 60,
 		.type = TYPE_POISON,
 		.accuracy = 100,
 		.pp = 15,
@@ -14864,7 +14864,7 @@ const struct BattleMove gBattleMoves[] =
 		.target = MOVE_TARGET_SELECTED,
 		.priority = 0,
 		.flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
-		.z_move_power = 140,
+		.z_move_power = 120,
 		.split = SPLIT_PHYSICAL,
 		.z_move_effect = 0
 	},
@@ -14919,8 +14919,9 @@ const struct BattleMove gBattleMoves[] =
 	},
 	[MOVE_STONEAXE] =
 	{
-		.effect = EFFECT_TRAP,
-		.power = 65,
+		.effect = EFFECT_SPLINTER,
+		.power = 80,
+		.z_move_power = 160,
 		.type = TYPE_ROCK,
 		.accuracy = 90,
 		.pp = 15,
@@ -14928,7 +14929,6 @@ const struct BattleMove gBattleMoves[] =
 		.target = MOVE_TARGET_SELECTED,
 		.priority = 0,
 		.flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
-		.z_move_power = 100,
 		.split = SPLIT_PHYSICAL,
 		.z_move_effect = 0
 	},
@@ -14979,7 +14979,7 @@ const struct BattleMove gBattleMoves[] =
 	},
 	[MOVE_SHELTER] =
 	{
-		.effect = EFFECT_CALM_MIND,
+		.effect = EFFECT_DEF_SPD_UP,
 		.power = 0,
 		.type = TYPE_STEEL,
 		.accuracy = 0,
@@ -15540,13 +15540,13 @@ const u8 gDynamaxMovePowers[MOVES_COUNT] =
 	[MOVE_ESPERWING] = 130,
 	[MOVE_BARBBARRAGE] = 90,
 	[MOVE_TRIPLEARROWS] = 80,
-	[MOVE_CEASELESSEDGE] = 120,
+	[MOVE_CEASELESSEDGE] = 130,
 	[MOVE_INFERNALPARADE] = 130,
-	[MOVE_DIRECLAW] = 90,
+	[MOVE_DIRECLAW] = 110,
 	[MOVE_BITTERMALICE] = 110,
 	[MOVE_RAGINGFURY] = 140,
 	[MOVE_WAVECRASH] = 120,
-	[MOVE_STONEAXE] = 120,
+	[MOVE_STONEAXE] = 130,
 	[MOVE_SHADOWSTORM] = 140,
 	[MOVE_MOUNTAINGALE] = 140,
 	[MOVE_SPRINGTIDESTORM] = 140,

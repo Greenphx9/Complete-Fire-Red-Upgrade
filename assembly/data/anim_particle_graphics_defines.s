@@ -106,6 +106,7 @@ definitions for animation particles
 .equ BLUE_RAZOR_LEAF_IMG, Blue_Razor_LeafTiles
 .equ SHELL_SIDE_ARM_IMG, Shell_Side_ArmTiles
 .equ SHELL_SIDE_ARM_BALL_IMG, Shell_Side_Arm_BallTiles
+.equ LARGE_HOOPA_RING_IMG, Hoopa_Ring_LargeTiles
 
 @;Palettes
 .equ SWORD_PAL, SwordPal
@@ -216,3 +217,4 @@ definitions for animation particles
 .equ MISTY_EXPLOSION_PAL, Misty_ExplosionPal
 .equ SHELL_SIDE_ARM_PAL, Shell_Side_ArmPal
 .equ SHELL_SIDE_ARM_BALL_PAL, Shell_Side_Arm_BallPal
+.equ LARGE_HOOPA_RING_PAL, Hoopa_Ring_LargePal

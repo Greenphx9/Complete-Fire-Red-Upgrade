@@ -13,6 +13,8 @@
 
 @For launchtemplate
 .equ TEMPLATE_ATTACKER, 0x0
+.equ TEMPLATE_ABOVE, 0x20
+.equ TEMPLATE_BELOW, 0x40 @;Appears underneath the sprite
 .equ TEMPLATE_TARGET, 0x80
 
 @background IDs
@@ -93,6 +95,7 @@
 .equ BG_AURA_SPHERE, 0x4B
 .equ BG_GLITCH_CITY, 0x4C
 .equ BG_BITTER_MALICE, 0x4D
+.equ BG_CHLOROBLAST, 0x4E
 
 @pals for pal fading tasks
 .equ PAL_BG, 0x1
@@ -432,7 +435,7 @@
 .equ AnimTask_scroll_background, 0x80BB82D
 .equ AnimTask_steel_sprite, 0x80B86ED
 .equ AnimTask_surf_wave, 0x80AB38D
-.equ AnimTask_splash_down, 0x80A8339
+.equ AnimTask_Splash, 0x80A8339
 .equ AnimTask_create_haze, 0x80AFAE5
 .equ AnimTask_SwaggerBulkUp, 0x80A84B5
 .equ AnimTask_flash_anim, 0x80BB661
@@ -466,6 +469,13 @@
 .equ AnimTask_TraceMonBlended, 0x80bab99
 .equ AnimTask_SmokescreenImpact, 0x80de34d
 .equ AnimTask_AttackerPunchWithTrace, 0x8077031
+.equ AnimTask_StatusClearedEffect, 0x80e2085
+.equ AnimTask_SpiteTargetShadow, 0x80b5aad
+.equ AnimTask_ElectricBolt, 0x80AE221
+.equ AnimTask_WindUpLunge, 0x809949D
+.equ AnimTask_FlashAnimTagWithColor, 0x80b9f6d
+.equ AnimTask_BlendNonAttackerPalettes, 0x80bb7dd
+.equ AnimTask_IsTargetPlayerSide, 0x80DEAB5
 
 @launchtemplate
 
@@ -534,6 +544,14 @@
 .equ AnimTask_GlareEyeDots, 0x80e21cd
 .equ Template_IceCrystalHitLarge, 0x83E63E0
 .equ Template_IceCrystalHitSmall, 0x83E63F8
+.equ Template_IngrainRoot, 0x83e2dc4
+.equ Template_IngrainOrb, 0x83e2e04
+.equ Template_ThunderboltOrb, 0x83e6058
+.equ Template_ThunderWave, 0x83E60B8
+.equ Template_SlashSlice, 0x83e35a4
+.equ Template_ThinRingShrinking, 0x83E40C8
+.equ Template_WillOWispFire, 0x83e5ee4
+.equ Template_DragonDanceOrb, 0x83e7848
 
 .equ SpriteCB_AnimSpriteOnMonPos, 0x8075D9D
 .equ Callback_TranslateAnimSpriteToTargetMonLocation, 0x8075DF5
@@ -1032,3 +1050,4 @@ waitbgfadein
 .equ ANIM_TAG_LASH_OUT, 0x2886
 .equ ANIM_TAG_BLUE_RAZOR_LEAF, 0x2887
 .equ ANIM_TAG_MISTY_EXPLOSION, 0x2888
+.equ ANIM_TAG_HOOPA_RING_LARGE, 0x2889

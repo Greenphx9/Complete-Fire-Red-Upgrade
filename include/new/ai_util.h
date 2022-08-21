@@ -67,6 +67,23 @@ bool8 GoodIdeaToBurnSelf(u8 bankAtk);
 bool8 GoodIdeaToFrostbiteSelf(u8 bankAtk);
 bool8 BadIdeaToFreeze(u8 bankDef, u8 bankAtk);
 
+bool8 BadIdeaToRaiseStatAgainst(u8 bankAtk, u8 bankDef, bool8 checkDefAbility);
+bool8 BadIdeaToRaiseAttackAgainst(u8 bankAtk, u8 bankDef, u8 amount, bool8 checkPartner);
+bool8 BadIdeaToRaiseDefenseAgainst(u8 bankAtk, u8 bankDef, u8 amount, bool8 checkPartner);
+bool8 BadIdeaToRaiseSpAttackAgainst(u8 bankAtk, u8 bankDef, u8 amount, bool8 checkPartner);
+bool8 BadIdeaToRaiseSpDefenseAgainst(u8 bankAtk, u8 bankDef, u8 amount, bool8 checkPartner);
+bool8 BadIdeaToRaiseSpeedAgainst(u8 bankAtk, u8 bankDef, u8 amount, bool8 checkPartner);
+bool8 BadIdeaToRaiseEvasionAgainst(u8 bankAtk, u8 bankDef, u8 amount, bool8 checkPartner);
+bool8 BadIdeaToRaiseAccuracyAgainst(u8 bankAtk, u8 bankDef, u8 amount, bool8 checkPartner);
+
+bool8 GoodIdeaToRaiseAttackAgainst(u8 bankAtk, u8 bankDef, u8 amount);
+bool8 GoodIdeaToRaiseDefenseAgainst(u8 bankAtk, u8 bankDef, u8 amount);
+bool8 GoodIdeaToRaiseSpAttackAgainst(u8 bankAtk, u8 bankDef, u8 amount);
+bool8 GoodIdeaToRaiseSpDefenseAgainst(u8 bankAtk, u8 bankDef, u8 amount);
+bool8 GoodIdeaToRaiseSpeedAgainst(u8 bankAtk, u8 bankDef, u8 amount, u16 atkSpeed, u16 defSpeed);
+bool8 GoodIdeaToRaiseEvasionAgainst(u8 bankAtk, u8 bankDef, u8 amount);
+bool8 GoodIdeaToRaiseAccuracyAgainst(u8 bankAtk, u8 bankDef, u8 amount);
+
 bool8 GoodIdeaToLowerAttack(u8 bankDef, u8 bankAtk, u16 move);
 bool8 GoodIdeaToLowerDefense(u8 bankDef, u8 bankAtk, u16 move);
 bool8 GoodIdeaToLowerSpAtk(u8 bankDef, u8 bankAtk, u16 move);
@@ -83,7 +100,10 @@ bool8 IsMovePredictionSemiInvulnerable(u8 bankAtk, u8 bankDef);
 bool8 IsMovePredictionHealingMove(u8 bankAtk, u8 bankDef);
 bool8 IsPredictedToUsePursuitableMove(u8 bankAtk, u8 bankDef);
 bool8 IsMovePredictionPhazingMove(u8 bankAtk, u8 bankDef);
+bool8 IsMovePredictionHPDrainingMove(u8 bankAtk, u8 bankDef);
+bool8 IsMovePredictionHighAccSleepingMove(u8 bankAtk, u8 bankDef);
 bool8 CanMovePredictionProtectAgainstMove(u8 bankAtk, u8 bankDef, u16 move);
+bool8 IsStrongestMoveHPDrainingMove(u8 bankAtk, u8 bankDef);
 
 bool8 DamagingMoveInMoveset(u8 bank);
 bool8 PhysicalMoveInMoveset(u8 bank);
@@ -98,6 +118,7 @@ bool8 HasProtectionMoveInMoveset(u8 bank, u8 checkType);
 bool8 MoveTypeInMoveset(u8 bank, u8 moveType);
 bool8 DamagingMoveTypeInMoveset(u8 bank, u8 moveType);
 bool8 DamagingAllHitMoveTypeInMoveset(u8 bank, u8 moveType);
+bool8 DamagingMoveTypeInMovesetThatAffects(u8 bankAtk, u8 bankDef, u8 moveType);
 bool8 DamagingSpreadMoveInMoveset(u8 bank);
 bool8 HasSnatchableMove(u8 bank);
 bool8 MoveEffectInMoveset(u8 moveEffect, u8 bank);
@@ -114,8 +135,11 @@ bool8 UnfreezingMoveInMoveset(u8 bank);
 bool8 SleepMoveInMovesetWithLowAccuracy(u8 bankAtk, u8 bankDef);
 bool8 OnlyBadMovesLeftInMoveset(u8 bankAtk, u8 bankDef);
 bool8 DoubleDamageWithStatusMoveInMovesetThatAffects(u8 bankAtk, u8 bankDef);
+bool8 HazingMoveInMoveset(u8 bank);
+bool8 PhazingMoveInMovesetThatAffects(u8 bankAtk, u8 bankDef);
 u16 TryReplaceMoveWithZMove(u8 bankAtk, u8 bankDef, u16 move);
 u8 GetAIMoveEffectForMaxMove(u16 move, u8 bankAtk, u8 bankDef);
+bool8 HighChanceOfBeingImmobilized(u8 bank);
 
 bool8 GetHealthPercentage(u8 bank);
 bool8 TeamFullyHealedMinusBank(u8 bank);

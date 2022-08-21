@@ -96,7 +96,7 @@ static const u32 sStatusFlagsForMoveEffects[] =
 
 const u16 gTrappingMoves[] =
 {
-	MOVE_BIND, MOVE_WRAP, MOVE_FIRESPIN, MOVE_CLAMP, MOVE_WHIRLPOOL, MOVE_SANDTOMB, MOVE_MAGMASTORM, MOVE_INFESTATION, MOVE_SNAPTRAP, MOVE_OCTOLOCK, MOVE_THUNDERCAGE, MOVE_CEASELESSEDGE, MOVE_STONEAXE, MOVE_LEAFTORNADO, 0xFFFF
+	MOVE_BIND, MOVE_WRAP, MOVE_FIRESPIN, MOVE_CLAMP, MOVE_WHIRLPOOL, MOVE_SANDTOMB, MOVE_MAGMASTORM, MOVE_INFESTATION, MOVE_SNAPTRAP, MOVE_OCTOLOCK, MOVE_THUNDERCAGE, MOVE_LEAFTORNADO, 0xFFFF
 };
 
 const u16 gWrappedStringIds[] =
@@ -386,32 +386,25 @@ void SetMoveEffect(bool8 primary, u8 certain)
 				break;
 
 			case MOVE_EFFECT_TRI_ATTACK:
-				if (gBattleMons[gEffectBank].status1)
+				if (gBattleMons[gEffectBank].status1 != 0)
 				{
 					gBattlescriptCurrInstr++;
 				}
 				else
 				{
+					gBattleCommunication[MOVE_EFFECT_BYTE] = (Random() % 3);
+
 					if (gCurrentMove == MOVE_DIRECLAW)
 					{
-						u8 effect = umodsi(Random(), 2);
-						switch (effect)
-						{
-						case 0:
-							gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_POISON;
-							SetMoveEffect(FALSE, 0);
-							break;
-						case 1:
-							gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_PARALYSIS;
-							SetMoveEffect(FALSE, 0);
-							break;
-						}
+						gBattleCommunication[MOVE_EFFECT_BYTE] += MOVE_EFFECT_SLEEP; //Sleep, Poison, Paralysis
+						
+						if (gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_BURN)
+							gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_PARALYSIS; //Paralyzes, doesn't burn
 					}
 					else
-					{
-						gBattleCommunication[MOVE_EFFECT_BYTE] = umodsi(Random(), 3) + 3;
-						SetMoveEffect(FALSE, 0);
-					}
+						gBattleCommunication[MOVE_EFFECT_BYTE] += MOVE_EFFECT_BURN; //Burn, Freeze, Paralysis
+
+					SetMoveEffect(FALSE, 0);
 				}
 				break;
 
@@ -473,12 +466,6 @@ void SetMoveEffect(bool8 primary, u8 certain)
 							break;
 						case MOVE_THUNDERCAGE:
 							gBattleStringLoader = gText_TargetTrappedThunderCage;
-							break;
-						case MOVE_CEASELESSEDGE:
-							gBattleStringLoader = gText_TargetSplinters;
-							break;
-						case MOVE_STONEAXE:
-							gBattleStringLoader = gText_TargetSplinters;
 							break;
 						case MOVE_LEAFTORNADO:
 							gBattleStringLoader = gText_StormOfLeaves;
@@ -827,6 +814,21 @@ void SetMoveEffect(bool8 primary, u8 certain)
 					gActiveBattler = 0;
 					EmitDataTransfer(0, &gTerrainType, 1, &gTerrainType);
 					MarkBufferBankForExecution(gActiveBattler);
+				}
+				else
+					gBattlescriptCurrInstr++;
+				break;
+
+			case MOVE_EFFECT_SPLINTERS:
+				if (gNewBS->splinterTimer[gEffectBank] == 0)
+				{
+					gNewBS->splinterTimer[gEffectBank] = 4; //3 turns of splinters
+					gNewBS->splinterAttackerBank[gEffectBank] = gBankAttacker;
+					gNewBS->splinterAttackerMonId[gEffectBank] = gBattlerPartyIndexes[gBankAttacker];
+					gNewBS->splinterMove[gEffectBank] = gCurrentMove;
+					BattleScriptPush(gBattlescriptCurrInstr + 1);
+					gBattleStringLoader = gText_EffectBankAfflictedBySplinters;
+					gBattlescriptCurrInstr = BattleScript_PrintCustomString;	
 				}
 				else
 					gBattlescriptCurrInstr++;

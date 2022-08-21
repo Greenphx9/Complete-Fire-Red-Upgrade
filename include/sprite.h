@@ -4,6 +4,7 @@
 
 #define MAX_SPRITES 64
 #define MAX_NPCS 16
+#define SPRITE_INVALID_TAG 0xFFFF
 
 
 struct SpriteSheet

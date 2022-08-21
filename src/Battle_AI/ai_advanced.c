@@ -427,6 +427,7 @@ u8 PredictFightingStyle(const u16* const moves, const u8 ability, const u8 itemE
 				case EFFECT_DRAGON_DANCE:
 				case EFFECT_CALM_MIND:
 				case EFFECT_BULK_UP:
+				case EFFECT_DEF_SPD_UP:
 					boostingMove = TRUE;
 					break;
 
