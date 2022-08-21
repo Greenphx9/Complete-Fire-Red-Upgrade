@@ -1,4 +1,5 @@
 #include "defines.h"
+#include "../include/bg.h"
 #include "../include/link.h"
 #include "../include/script.h"
 #include "../include/field_player_avatar.h"
@@ -250,7 +251,10 @@ bool8 StartRButtonFunc(void)
 		case OPTIONS_R_BUTTON_MODE_DEXNAV:
 			if (dexNavSpecies != SPECIES_NONE && FlagGet(FLAG_SYS_DEXNAV))
 			{
-				InitDexNavHUD(dexNavSpecies & 0x7FFF, dexNavSpecies >> 15);
+				DismissMapNamePopup();
+				ChangeBgY(0, 0, 0);
+				if (!InitDexNavHUD(dexNavSpecies & 0x7FFF, dexNavSpecies >> 15, FALSE))
+					return TRUE; //HUD wasn't enabled and a script was started instead
 				return FALSE; //Don't enable the script context
 			}
 			break;

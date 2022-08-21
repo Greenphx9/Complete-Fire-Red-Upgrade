@@ -10,6 +10,9 @@ AM
 #org @gText_StartMenu_PM
 PM
 
+#org @gText_MenuDexNav
+DexNav
+
 #org @gText_StartMenu_RedText
 [MAIN_COLOUR][0C][SHADOW_COLOUR][0D]
 

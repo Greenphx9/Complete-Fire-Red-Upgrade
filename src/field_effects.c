@@ -540,7 +540,6 @@ bool8 IsValidMiningSpot(s16 x, s16 y)
 	
 	return FALSE;
 }
-
 #endif
 
 void ResetMiningSpots(void)

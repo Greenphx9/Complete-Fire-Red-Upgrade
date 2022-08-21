@@ -2742,3 +2742,12 @@ const union AnimCmd gEventObjectImageAnim_RunEast[] =
 	ANIMCMD_JUMP(0),
 };
 #endif
+
+bool8 MetatileBehavior_IsStairs(u8 behaviour)
+{
+	return behaviour == MB_ROCK_STAIRS
+		|| behaviour == MB_SIDEWAYS_STAIRS_LEFT_UP_1
+		|| behaviour == MB_SIDEWAYS_STAIRS_LEFT_UP_2
+		|| behaviour == MB_SIDEWAYS_STAIRS_RIGHT_UP_1
+		|| behaviour == MB_SIDEWAYS_STAIRS_RIGHT_UP_2;
+}

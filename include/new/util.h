@@ -41,3 +41,6 @@ bool8 CanPartyMonBePoisoned(struct Pokemon* mon);
 bool8 CanPartyMonBeParalyzed(struct Pokemon* mon);
 bool8 CanPartyMonBeBurned(struct Pokemon* mon);
 bool8 CanPartyMonBeFrozen(struct Pokemon* mon);
+u8 GetAbility1(const u16 species);
+u8 GetAbility2(const u16 species);
+u8 GetHiddenAbility(const u16 species);

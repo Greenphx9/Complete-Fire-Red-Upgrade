@@ -7,8 +7,15 @@
 
 void sub_81DB52C(const u8 *src);
 void TVShowConvertInternationalString(u8 *dest, const u8 *src, u8 language);
-s32 GetStringCenterAlignXOffset(s32 fontId, const u8 *str, s32 totalWidth);
-s32 GetStringRightAlignXOffset(s32 fontId, const u8 *str, s32 totalWidth);
+#define GetStringCenterAlignXOffset(fontId, string, totalWidth) ({        \
+	int stringWidth = GetStringWidth(fontId, string, 0);                  \
+	int diff = (totalWidth > stringWidth) ? totalWidth - stringWidth : 0; \
+	diff / 2;                                                             \
+})
+#define GetStringRightAlignXOffset(fontId, string, destWidth) ({ \
+	s32 w = GetStringWidth(fontId, string, 0);                   \
+	destWidth - w;                                               \
+})
 s32 GetStringCenterAlignXOffsetWithLetterSpacing(s32 fontId, const u8 *str, s32 totalWidth, s32 letterSpacing);
 s32 GetStringWidthDifference(s32 fontId, const u8 *str, s32 totalWidth, s32 letterSpacing);
 s32 GetMaxWidthInMenuTable(const struct MenuAction *str, s32 arg1);

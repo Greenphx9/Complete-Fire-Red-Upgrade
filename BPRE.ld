@@ -10,6 +10,7 @@ gFollowerState = 0x203B818;
 gLastUsedBall = 0x203B774;
 gNewBS = 0x203E038;
 gInShop = 0x203E043;
+gDexNavSearchLevels = 0x203C75C;
 sItemDescriptionPocket = 0x203E053;
 sStartMenuOpen = 0x203E054;
 sPrintedRTCWarning = 0x203E055;
@@ -1192,7 +1193,7 @@ TextboxFdecodeAutoAndCreateTask = 0x80694C8 | 1;
 ShowFieldMessage = 0x806943C | 1;
 HideFieldMessageBox = 0x80694F4 | 1;
 ReturnEmptyStringIfNull = 0x80806C8 | 1;
-RunTextPrintersAndIsPrinter0Active = 0x80F6CBC | 1;
+RunTextPrinters_CheckPrinter0Active = 0x80F6CBC | 1;
 DrawHelpMessageWindowWithText = 0x80F7974 | 1;
 AddTextPrinterForMessage = 0x80F6D5C | 1;
 DisplayItemMessageOnField = 0x80F7808 | 1;
@@ -1271,6 +1272,7 @@ FldEff_JumpLongGrass = 0x80DB798 | 1;
 FldEff_SurfBlob = 0x80DC3D0 | 1;
 BindFieldEffectToSprite = 0x80DC44C | 1;
 DoBobbingFieldEffect = 0x80DC6B0 | 1;
+WaitFieldEffectSpriteAnim = 0x80DCD1C | 1;
 StartSweetScentFieldEffect = 0x80DE134 | 1;
 
 /*Battle Transition Functions*/
@@ -1383,6 +1385,7 @@ PartyMenuDisplayYesNoMenu = 0x812200C | 1;
 UpdatePartyMonHeldItemSprite = 0x81224B4 | 1;
 SetPartyMonAilmentGfx = 0x8122904 | 1;
 CB2_ShowPokemonSummaryScreen = 0x8122D78 | 1;
+SwitchSelectedMons = 0x8122E5C | 1;
 Task_UpdatePartyMenuHeldItemSprite = 0x8123BF0 | 1;
 PartyMenu_MoveCursorToConfirm = 0x8124258 | 1;
 FieldCallback_PrepareFadeInFromMenu = 0x81248B0 | 1;
@@ -1477,6 +1480,7 @@ NameChooserSelectLetter = 0x809F75C | 1;
 /* Menu Functions */
 MenuHelpers_LinkSomething = 0x80BF708 | 1;
 Menu_LoadStdPalAt = 0x80F77CC | 1;
+GetStdWindowBaseTileNum = 0x80F796C | 1;
 Menu_InitCursor = 0x810F7D8 | 1;
 Menu_MoveCursor = 0x810F904 | 1;
 Menu_MoveCursorNoWrapAround = 0x810F948 | 1;
@@ -1729,6 +1733,9 @@ ClearGpuRegBits = 0x8000B14 | 1;
 ResetBgsAndClearDma3BusyFlags = 0x8001618 | 1;
 InitBgsFromTemplates = 0x8001658 | 1;
 RequestDma3Fill = 0x8000F44 | 1;
+RequestDma3Copy = 0x8000EAC | 1;
+WaitDma3Request = 0x8000FE8 | 1;
+GetBgControlAttribute = 0x80011E4 | 1;
 LoadBgTiles = 0x80017D0 | 1;
 LoadBgTilemap = 0x8001888 | 1;
 IsDma3ManagerBusyWithBgCopy = 0x8001960 | 1;
@@ -1752,6 +1759,7 @@ ResetBgPositions = 0x80F6C14 | 1;
 free_temp_tile_data_buffers_if_possible = 0x80F682C | 1;
 decompress_and_copy_tile_data_to_vram = 0x80F6878 | 1;
 ResetBGs = 0x812D594 | 1;
+
 
 
 /* Scanline Effect Functions */
@@ -1790,6 +1798,8 @@ PlayBGM = 0x80722A0 | 1;
 PlaySE = 0x80722CC | 1;
 PlaySE2WithPanning = 0x0807237C | 1;
 IsSEPlaying = 0x80723E0 | 1;
+SetBGMVolume_SuppressHelpSystemReduction = 0x8072474 | 1;
+BGMVolumeMax_EnableHelpSystemReduction = 0x807249C | 1;
 m4aSongNumStop = 0x81DD1C0 | 1;
 m4aMPlayContinue = 0x81DD26C | 1;
 MPlayStart = 0x81DD858 | 1;

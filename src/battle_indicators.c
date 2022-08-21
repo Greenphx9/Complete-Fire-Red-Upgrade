@@ -69,7 +69,7 @@ static const struct OamData sHeldItemOam =
 	.priority = 0, //Above everything
 };
 
-const struct SpriteTemplate gHeldItemTemplate =
+const struct SpriteTemplate sHeldItemTemplate =
 {
 	.tileTag = GFX_TAG_HELD_ITEM,
 	.paletteTag = GFX_TAG_HELD_ITEM,
@@ -1692,7 +1692,7 @@ static void Task_DisplayInBattleTeamPreview(u8 taskId)
 						{
 							x = (80 + (8 / 2)) + (40 * (i % 3)); //Based on the item icon positions on the summary screen
 							y = (44 + (8 / 2)) + (40 * (i / 3));
-							CreateSprite(&gHeldItemTemplate, x, y, 0);
+							CreateSprite(&sHeldItemTemplate, x, y, 0);
 						}
 
 						u32 status = GetMonData(&gEnemyParty[i], MON_DATA_STATUS, NULL);

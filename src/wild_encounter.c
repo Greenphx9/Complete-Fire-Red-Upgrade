@@ -512,6 +512,46 @@ void TryUpdateSwarm(void)
 	#endif
 }
 
+u8 GetCurrentSwarmIndex(void)
+{
+	if (gSwarmTableLength == 0)
+		return 0xFF;
+
+	if (gMapHeader.mapType == MAP_TYPE_UNDERWATER) //No swarms underwater
+		return 0xFF;
+
+	#ifdef SWARM_CHANGE_HOURLY
+	u8 index;
+
+	if (VarGet(VAR_SWARM_INDEX) < gSwarmTableLength)
+	{
+		index = VarGet(VAR_SWARM_INDEX); //Override
+	}
+	else if (gSwarmTableLength == 24) //24 different species: 1 for each hour
+	{
+		index = gSwarmOrders[gClock.day - 1][gClock.hour];
+	}
+	else
+	{
+		u8 dayOfWeek = (gClock.dayOfWeek == 0) ? 8 : gClock.dayOfWeek;
+		u8 hour = (gClock.hour == 0) ? 12 : gClock.hour / 2; //Change every two hours
+		u8 day = (gClock.day == 0) ? 32 : gClock.day;
+		u8 month = (gClock.month == 0) ? 13 : gClock.month;
+		u32 val = ((hour * (day + month)) + ((hour * (day + month)) ^ dayOfWeek)) ^ T1_READ_32(gSaveBlock2->playerTrainerId);
+		index = val % gSwarmTableLength;
+	}
+	#else
+	u8 index = VarGet(VAR_SWARM_INDEX);
+	#endif
+
+	return index;
+}
+
+bool8 IsValidSwarmIndex(u8 index)
+{
+	return index < gSwarmTableLength;
+}
+
 static bool8 TryGenerateSwarmMon(u8 level, u8 wildMonIndex, bool8 purgeParty)
 {
 	if (gSwarmTableLength == 0)

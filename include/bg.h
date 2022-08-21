@@ -63,6 +63,7 @@ void __attribute__((long_call)) ShowBg(u8 bg);
 void __attribute__((long_call)) HideBg(u8 bg);
 void __attribute__((long_call)) SetBgAttribute(u8 bg, u8 attributeId, u8 value);
 u16 __attribute__((long_call)) GetBgAttribute(u8 bg, u8 attributeId);
+u16 __attribute__((long_call)) GetBgControlAttribute(u8 bg, u8 attributeId);
 u32 __attribute__((long_call)) ChangeBgX(u8 bg, u32 value, u8 op);
 u32 __attribute__((long_call)) ChangeBgY(u8 bg, u32 value, u8 op);
 

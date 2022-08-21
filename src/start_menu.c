@@ -55,7 +55,7 @@ extern const u8 gText_MenuExit[];
 extern const u8 gText_MenuExitRight[];
 extern const u8 gText_MenuExitLeft[];
 extern const u8 gText_MenuRetire[];
-extern const u8 gText_DexNav[];
+extern const u8 gText_MenuDexNav[];
 extern const u8 gText_MissionLog[];
 extern const u8 gText_MenuBag[];
 extern const u8 gText_MenuCube[];
@@ -147,7 +147,7 @@ const struct MenuAction sStartMenuActionTable[] =
 	[STARTMENU_EXIT] = {gText_MenuExit, {.u8_void = StartMenuExitCallback}},
 	[STARTMENU_RETIRE_SAFARI] = {gText_MenuRetire, {.u8_void = StartMenuSafariZoneRetireCallback}},
 	[STARTMENU_PLAYER_LINK] = {gText_MenuPlayer, {.u8_void = StartMenuLinkModePlayerCallback}},
-	[STARTMENU_DEXNAV] = {gText_DexNav, {.u8_void = StartMenuDexNavCallback}},
+	[STARTMENU_DEXNAV] = {gText_MenuDexNav, {.u8_void = StartMenuDexNavCallback}},
 	#ifdef FLAG_SYS_QUEST_LOG
 	[STARTMENU_QUEST_LOG] = {gText_MissionLog, {.u8_void = (void*)(0x801D768 | 1)}},
 	#endif

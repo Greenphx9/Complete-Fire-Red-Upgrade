@@ -182,7 +182,7 @@ static u8 BuildFrontierParty(struct Pokemon* const party, const u16 trainerNum, 
 static void BuildFrontierMultiParty(u8 multiId);
 static void BuildRaidMultiParty(void);
 static void CreateFrontierMon(struct Pokemon* mon, const u8 level, const struct BattleTowerSpread* spread, const u16 trainerId, const u8 trainerNum, const u8 trainerGender, const bool8 forPlayer);
-static void SetWildMonHeldItem(void);
+void SetWildMonHeldItem(void);
 static u8 ConvertFrontierAbilityNumToAbility(const u8 abilityNum, const u16 species);
 static bool8 BaseStatsTotalGEAlreadyOnTeam(const u16 toCheck, const u8 partySize, u16* speciesArray);
 static bool8 SpeciesAlreadyOnTeam(const u16 species, const u8 partySize, const species_t* const speciesArray);
@@ -1970,43 +1970,57 @@ static void CreateFrontierMon(struct Pokemon* mon, const u8 level, const struct 
 	HealMon(mon);
 }
 
-static void SetWildMonHeldItem(void)
+u16 GenerateWildMonHeldItem(u16 species, u8 bonus)
 {
-	u16 rnd = umodsi(Random(), 100);
-	u16 species;
+	u16 rnd = Random() % 100;
 	u16 var1 = 45;
 	u16 var2 = 95;
+	u8 ability = GetMonAbility(&gPlayerParty[0]);
 
-	if (!GetMonData(&gPlayerParty[0], MON_DATA_IS_EGG, 0)
-		&& (GetMonAbility(&gPlayerParty[0]) == ABILITY_COMPOUNDEYES || GetMonAbility(&gPlayerParty[0]) == ABILITY_SUPERLUCK))
+	if (gBaseStats[species].item1 == gBaseStats[species].item2 && gBaseStats[species].item1 != ITEM_NONE)
+		return gBaseStats[species].item1; //100% chance
+
+	if (!GetMonData(&gPlayerParty[0], MON_DATA_IS_EGG, NULL)
+	&& (ability == ABILITY_COMPOUNDEYES || ability == ABILITY_SUPERLUCK)) //Increased chance of finding an item
 	{
 		var1 = 20;
 		var2 = 80;
 	}
 
+	if (bonus < var1)
+		var1 -= bonus;
+	else
+		var1 = 0; //Guaranteed at least one item
+
+	if (bonus < var2)
+		var2 -= bonus;
+	else
+		var2 = 0; //Guaranteed the second item
+
+	if (rnd < var1)
+		return ITEM_NONE;
+
+	if (rnd < var2)
+		return gBaseStats[species].item1;
+
+	return gBaseStats[species].item2;
+}
+
+void SetWildMonHeldItem(void)
+{
 	if (!(gBattleTypeFlags & (BATTLE_TYPE_POKE_DUDE | BATTLE_TYPE_SCRIPTED_WILD_1 | BATTLE_TYPE_TRAINER))
-	&& !gDexNavStartedBattle)
+	&& !gDexNavStartedBattle) //Items would be set earlier
 	{
-		for (int i = 0; i < 2; ++i) //Two possible wild opponents
+		for (u8 i = 0; i < 2; ++i) //Two possible wild opponents
 		{
 			if (i > 0 && !IS_DOUBLE_BATTLE)
 				break;
 
-			species = gEnemyParty[i].species;
-
-			if (gBaseStats2[species].item1 == gBaseStats2[species].item2 && gBaseStats2[species].item1 != 0)
-			{
-				SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &gBaseStats2[species].item1);
-				continue;
-			}
-
-			if (rnd < var1)
-				continue;
-
-			if (rnd < var2)
-				SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &gBaseStats2[species].item1);
-			else
-				SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &gBaseStats2[species].item2);
+			u16 species = GetMonData(&gEnemyParty[i], MON_DATA_SPECIES, NULL);
+			u16 item = GenerateWildMonHeldItem(species, 0);
+			
+			if (item != ITEM_NONE)
+				SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &item);
 		}
 	}
 }
@@ -2048,6 +2062,34 @@ void GiveMonNatureAndAbility(struct Pokemon* mon, u8 nature, u8 abilityNum, bool
 		|| (keepLetterCore && isMinior && GetMiniorCoreFromPersonality(personality) != miniorCore)); //Make sure the Minior core doesn't change
 
 	mon->personality = personality;
+}
+
+void GiveMonXPerfectIVs(struct Pokemon* mon, u8 totalPerfectStats)
+{
+	//Pick potential ivs to set to 31
+	u8 i, numPerfectStats;
+	u8 perfect = 31;
+	bool8 perfectStats[NUM_STATS] = {0};
+
+	for (i = 0, numPerfectStats = 0; i < NUM_STATS; ++i) //Count how many stats are already perfect
+	{
+		if (GetMonData(mon, MON_DATA_HP_IV + i, NULL) >= 31)
+		{
+			perfectStats[i] = TRUE;
+			++numPerfectStats;
+		}
+	}
+
+	while (numPerfectStats < totalPerfectStats) //Assign the rest of the prefect stats
+	{
+		u8 statId = Random() % NUM_STATS;
+		if (!perfectStats[statId]) //Must be unique
+		{
+			perfectStats[statId] = TRUE;
+			++numPerfectStats;
+			SetMonData(mon, MON_DATA_HP_IV + statId, &perfect);
+		}
+	}
 }
 
 static u8 ConvertFrontierAbilityNumToAbility(const u8 abilityNum, const u16 species)
