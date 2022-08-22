@@ -473,14 +473,14 @@ ANIM_LUNAR_DANCE_HEAL:
 	launchtemplate LUNARDANCE_RING 0x2 0x0
 	pause 0x4
 	launchtemplate LUNARDANCE_RING 0x2 0x0
-	pause 0x40
 	waitanimation
 	pokespritefromBG side_attacker
 	resetblends
 	endanimation
 
 .align 2
-LUNARDANCE_RING: objtemplate ANIM_TAG_GUARD_RING ANIM_TAG_SMALL_EMBER 0x83ACBE0 gDummySpriteAnimTable 0x0 0x83E44D4 0x80AAAE5
+.global LUNARDANCE_RING
+LUNARDANCE_RING: objtemplate ANIM_TAG_GUARD_RING ANIM_TAG_SMALL_EMBER 0x83ACBE0 gDummySpriteAnimTable 0x0 0x83E44D4 SpriteCB_SurroundingRing
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool

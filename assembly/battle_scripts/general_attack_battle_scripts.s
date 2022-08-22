@@ -3303,9 +3303,9 @@ BS_156_DefenseCurl:
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-.global BS_157_Blank @;Was softboiled
-BS_157_Blank:
-	goto BS_STANDARD_HIT
+.global BS_157_SpringtideStorm @;Was Softboiled
+BS_157_SpringtideStorm:
+	callasm ChooseMoveEffectForSpringtideStorm
 
 @;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -4603,21 +4603,24 @@ BS_211_CalmMind:
 	jumpifhalfword EQUALS CURRENT_MOVE MOVE_QUIVERDANCE QuiverDanceBS
 	jumpifhalfword EQUALS CURRENT_MOVE MOVE_VICTORYDANCE VictoryDanceBS
 	jumpifhalfword EQUALS CURRENT_MOVE MOVE_GEOMANCY GeomancyBS
+	jumpifhalfword EQUALS CURRENT_MOVE MOVE_TAKEHEART TakeHeartBS
 CalmMindBS:
 	attackstring
 	ppreduce
+CalmMindBS_CheckStats:
 	jumpifstat BANK_TARGET LESSTHAN STAT_SPATK STAT_MAX CalmMind_SpAtk
 	jumpifstat BANK_TARGET EQUALS STAT_SPDEF STAT_MAX BattleScript_CantRaiseMultipleStats
 
 CalmMind_SpAtk:
 	attackanimation
 	waitanimation
+CalmMind_SpAtk_SkipAttackAnim:
 	setbyte STAT_ANIM_PLAYED 0x0
 	playstatchangeanimation BANK_ATTACKER, STAT_ANIM_SPATK | STAT_ANIM_SPDEF, STAT_ANIM_UP | STAT_ANIM_IGNORE_ABILITIES
 	setstatchanger STAT_SPATK | INCREASE_1
 	statbuffchange STAT_ATTACKER | STAT_BS_PTR | STAT_CERTAIN CalmMind_SpDef
 	jumpifbyte EQUALS MULTISTRING_CHOOSER 0x2 CalmMind_SpDef
-	printfromtable 0x83FE57C
+	printfromtable gStatUpStringIds
 	waitmessage DELAY_1SECOND
 
 CalmMind_SpDef:
@@ -4627,6 +4630,19 @@ CalmMind_SpDef:
 	printfromtable 0x83FE57C
 	waitmessage DELAY_1SECOND
 	goto BS_MOVE_END
+
+TakeHeartBS: @;Also heals status conditions
+	attackstring
+	ppreduce
+	cureifburnedparalysedorpoisoned CalmMindBS_CheckStats
+	attackanimation
+	waitanimation
+	printstring 0xA7 @;STRINGID_PKMNSTATUSNORMAL
+	waitmessage DELAY_1SECOND
+	refreshhpbar BANK_ATTACKER
+	jumpifstat BANK_TARGET LESSTHAN STAT_SPATK STAT_MAX CalmMind_SpAtk_SkipAttackAnim
+	jumpifstat BANK_TARGET LESSTHAN STAT_SPDEF STAT_MAX CalmMind_SpAtk_SkipAttackAnim
+	goto BattleScript_CantRaiseMultipleStats
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 

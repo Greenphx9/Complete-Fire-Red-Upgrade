@@ -172,7 +172,7 @@ gBattleScriptsForMoveEffects:
 .word BS_154_BeatUp
 .word BS_155_Fly
 .word BS_156_DefenseCurl
-.word BS_157_Blank	@was softboiled
+.word BS_157_SpringtideStorm	@was softboiled
 .word BS_158_FakeOut
 .word BS_159_Uproar
 .word BS_160_Stockpile

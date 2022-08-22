@@ -14992,25 +14992,62 @@ const struct BattleMove gBattleMoves[] =
 		.split = SPLIT_STATUS,
 		.z_move_effect = Z_EFFECT_RESET_STATS
 	},
-	[MOVE_SPRINGTIDESTORM] =
+[MOVE_BLEAKWINDSTORM] =
 	{
-		.effect = EFFECT_ALL_STATS_UP_HIT,
+		.effect = EFFECT_FREEZE_HIT,
+		#ifdef ACTUAL_PLA_MOVE_POWERS
 		.power = 95,
-		.type = TYPE_FAIRY,
+		.z_move_power = 175,
+		#else
+		.power = 105,
+		.z_move_power = 180,
+		#endif
+		.type = TYPE_FLYING,
 		.accuracy = 80,
 		.pp = 5,
-		.secondaryEffectChance = 10,
+		#ifndef FROSTBITE
+		.secondaryEffectChance = 20, //30% Freeze chance is way too OP
+		#else
+		.secondaryEffectChance = 30,
+		#endif
 		.target = MOVE_TARGET_SELECTED,
 		.priority = 0,
 		.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
-		.z_move_power = 120,
 		.split = SPLIT_SPECIAL,
 		.z_move_effect = 0
 	},
+
+	[MOVE_WILDBOLTSTORM] =
+	{
+		.effect = EFFECT_PARALYZE_HIT,
+		#ifdef ACTUAL_PLA_MOVE_POWERS
+		.power = 95,
+		.z_move_power = 175,
+		#else
+		.power = 105,
+		.z_move_power = 180,
+		#endif
+		.type = TYPE_ELECTRIC,
+		.accuracy = 80,
+		.pp = 5,
+		.secondaryEffectChance = 30,
+		.target = MOVE_TARGET_SELECTED,
+		.priority = 0,
+		.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+		.split = SPLIT_SPECIAL,
+		.z_move_effect = 0
+	},
+
 	[MOVE_SANDSEARSTORM] =
 	{
 		.effect = EFFECT_BURN_HIT,
+		#ifdef ACTUAL_PLA_MOVE_POWERS
 		.power = 95,
+		.z_move_power = 175,
+		#else
+		.power = 105,
+		.z_move_power = 180,
+		#endif
 		.type = TYPE_GROUND,
 		.accuracy = 80,
 		.pp = 5,
@@ -15018,9 +15055,61 @@ const struct BattleMove gBattleMoves[] =
 		.target = MOVE_TARGET_SELECTED,
 		.priority = 0,
 		.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
-		.z_move_power = 160,
 		.split = SPLIT_SPECIAL,
 		.z_move_effect = 0
+	},
+
+	[MOVE_SPRINGTIDESTORM] =
+	{
+		.effect = EFFECT_SPRINGTIDE_STORM, //Omniboost for Incarnate, Lower foe Sp. Def for Therian
+		#ifdef ACTUAL_PLA_MOVE_POWERS
+		.power = 95,
+		.z_move_power = 175,
+		#else
+		.power = 105,
+		.z_move_power = 180,
+		#endif
+		.type = TYPE_FAIRY,
+		.accuracy = 80,
+		.pp = 5,
+		.secondaryEffectChance = 30,
+		.target = MOVE_TARGET_SELECTED,
+		.priority = 0,
+		.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+		.split = SPLIT_SPECIAL,
+		.z_move_effect = 0
+	},
+
+	[MOVE_LUNARBLESSING] =
+	{
+		.effect = EFFECT_RESTORE_HP,
+		.power = 0,
+		.type = TYPE_PSYCHIC,
+		.accuracy = 0,
+		.pp = 10,
+		.secondaryEffectChance = 0,
+		.target = MOVE_TARGET_USER,
+		.priority = 0,
+		.flags = FLAG_TRIAGE_AFFECTED,
+		.z_move_power = 0,
+		.split = SPLIT_STATUS,
+		.z_move_effect = Z_EFFECT_RESET_STATS
+	},
+
+	[MOVE_TAKEHEART] =
+	{
+		.effect = EFFECT_CALM_MIND, //Also heals status conditions
+		.power = 0,
+		.type = TYPE_PSYCHIC,
+		.accuracy = 0,
+		.pp = 20,
+		.secondaryEffectChance = 0,
+		.target = MOVE_TARGET_USER,
+		.priority = 0,
+		.flags = FLAG_SNATCH_AFFECTED,
+		.z_move_power = 0,
+		.split = SPLIT_STATUS,
+		.z_move_effect = Z_EFFECT_RECOVER_HP
 	},
 #endif
 };
@@ -15549,7 +15638,9 @@ const u8 gDynamaxMovePowers[MOVES_COUNT] =
 	[MOVE_STONEAXE] = 130,
 	[MOVE_SHADOWSTORM] = 140,
 	[MOVE_MOUNTAINGALE] = 140,
-	[MOVE_SPRINGTIDESTORM] = 140,
-	[MOVE_SANDSEARSTORM] = 140,
+	[MOVE_BLEAKWINDSTORM] = 130,
+	[MOVE_WILDBOLTSTORM] = 130,
+	[MOVE_SANDSEARSTORM] = 130,
+	[MOVE_SPRINGTIDESTORM] = 130,
 };
 #endif

@@ -2230,3 +2230,24 @@ void TryFailPoltergeist(void)
 		RecordItemEffectBattle(gBankTarget, ITEM_EFFECT(gBankTarget));
 	}
 }
+
+bool8 IsSpringtideStormSpDefDown(unusedArg u8 bank)
+{
+	#ifdef SPECIES_ENAMORUS_THERIAN
+	return SPECIES(bank) == SPECIES_ENAMORUS_THERIAN;
+	#else
+	return FALSE;
+	#endif
+}
+
+void ChooseMoveEffectForSpringtideStorm(void)
+{
+	u8 moveEffect;
+
+	if (IsSpringtideStormSpDefDown(gBankAttacker))
+		moveEffect = EFFECT_SPECIAL_DEFENSE_DOWN_HIT;
+	else
+		moveEffect = EFFECT_ALL_STATS_UP_HIT;
+
+	gBattlescriptCurrInstr = gBattleScriptsForMoveEffects[moveEffect] - 5;
+}

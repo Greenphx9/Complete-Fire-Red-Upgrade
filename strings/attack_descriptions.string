@@ -1340,11 +1340,27 @@ The user performs\na dance to usher in\nvictory, raising its\nAtk, Def, and Spee
 #org @DESC_SHELTER
 The user makes its\nskin as hard as an\niron shield, raising\nits Def and\nspeed.
 
-#org @DESC_SPRINGTIDE_STORM
-Fierce winds brimming\nwith love and hate\nare used to attack.\nIt may also raise\nall the user's stats.
+#org @DESC_BLEAKWIND_STORM
+#ifdef FROSTBITE
+The user attacks\nwith savagely cold\nwinds. This may\ncause a frostbite.
+#else
+The user attacks\nwith savagely cold\nwinds. This may\nfreeze the foe.
+#endif
+
+#org @DESC_WILDBOLT_STORM
+The user savagely\nattacks with wind\nand lightning. This\nmay cause paralysis.
 
 #org @DESC_SANDSEAR_STORM
-Fierce winds and\nsearingly hot sand\nare used to attack.\nThis may also leave\nthe target with a burn.
+The user attacks\nwith fierce winds\nand hot sand. This\nmay cause a burn.
+
+#org @DESC_SPRINGTIDE_STORM
+The user attacks\nwith love and hate.\nThe effects depend\non the user's form.
+
+#org @DESC_LUNAR_BLESSING
+The user heals its\nown statuses and\nrestores HP. It also\nraises evasiveness.
+
+#org @DESC_TAKE_HEART
+The user heals its\nown statuses and\nraises its Sp. Atk\nand Sp. Def.
 
 #org @DESC_MAX_GUARD
 Enables the user to\nevade all attacks.\nIt may fail if used\nin succession.

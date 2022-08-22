@@ -812,12 +812,12 @@ gMoveAnimations:
 .word ANIM_MOUNTAIN_GALE
 .word ANIM_VICTORY_DANCE
 .word ANIM_SHELTER
-.word ANIM_HURRICANE
-.word ANIM_PLACEHOLDER
-.word ANIM_PLACEHOLDER
-.word ANIM_PLACEHOLDER
-.word ANIM_PLACEHOLDER
-.word ANIM_PLACEHOLDER
+.word ANIM_BLEAKWIND_STORM
+.word ANIM_WILDBOLT_STORM
+.word ANIM_SANDSEAR_STORM
+.word ANIM_SPRINGTIDE_STORM
+.word ANIM_LUNAR_BLESSING
+.word ANIM_TAKE_HEART
 .word ANIM_BREAKNECK_BLITZ
 .word ANIM_BREAKNECK_BLITZ
 .word ANIM_ALL_OUT_PUMMELING
@@ -18973,6 +18973,257 @@ ANIM_SHELTER:
 	waitanimation
 	resetblends
 	endanimation
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+.pool
+@Credits to Skeli
+ANIM_BLEAKWIND_STORM:
+	loadparticle ANIM_TAG_GUST
+	loadparticle ANIM_TAG_ICE_CRYSTALS
+	playsound2 0x7d SOUND_PAN_TARGET
+	launchtask AnimTask_move_bank 0x2 0x5 bank_target 0x0 0x4 0x58 0x1
+	launchtask AnimTask_pal_fade 0xa 0x5 PAL_DEF 0x4 0x0 0xB 0x7FFF
+	call HURRICANE_GUST
+	call BLEAKWIND_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call BLEAKWIND_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call BLEAKWIND_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call BLEAKWIND_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call BLEAKWIND_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call BLEAKWIND_TRAP_PARTICLES
+	waitanimation
+	stopmusic
+	launchtask AnimTask_pal_fade 0xa 0x5 PAL_DEF 0x1 0xB 0x0 0x7FFF
+	waitanimation
+	endanimation
+
+BLEAKWIND_TRAP_PARTICLES:
+	launchtemplate ICE_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x20 0x210 0x1e 0xa 0x32 bank_target
+	pause 0x2
+	launchtemplate ICE_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x24 0x1e0 0x14 0xd 0xffd2 bank_target
+	pause 0x2
+	launchtemplate ICE_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x25 0x240 0x14 0x5 0x2a bank_target
+	pause 0x2
+	launchtemplate ICE_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x23 0x190 0x19 0x8 0xffd6 bank_target
+	pause 0x2
+	launchtemplate ICE_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x20 0x200 0x19 0xd 0x2e bank_target
+	pause 0x2
+	launchtemplate ICE_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x25 0x1d0 0x1e 0xc 0xffce bank_target
+	return
+
+.align 2
+ICE_SWIRL: objtemplate ANIM_TAG_ICE_CRYSTALS ANIM_TAG_ICE_CRYSTALS OAM_OFF_8x16 0x83E6320 0x0 gDummySpriteAffineAnimTable 0x80B477D
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+.pool
+@Credits to Skeli
+ANIM_WILDBOLT_STORM:
+	loadparticle ANIM_TAG_GUST
+	loadparticle ANIM_TAG_SPARK_2
+	loadBG1 BG_MAX_LIGHTNING
+	waitbgfadeout
+	launchtask AnimTask_scroll_background 0x5 0x4 0xff00 0x0 0x1 0xffff
+	waitbgfadein
+	playsound2 0x7d SOUND_PAN_TARGET
+	launchtask AnimTask_move_bank 0x2 0x5 bank_target 0x0 0x4 0x58 0x1
+	launchtask AnimTask_pal_fade 0xa 0x5 PAL_DEF 0x4 0x0 0xB 0x07FE @;Yellow
+	call HURRICANE_GUST
+	call WILDBOLT_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call WILDBOLT_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call WILDBOLT_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call WILDBOLT_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call WILDBOLT_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call WILDBOLT_TRAP_PARTICLES
+	waitanimation
+	stopmusic
+	launchtask AnimTask_pal_fade 0xa 0x5 PAL_DEF 0x1 0xB 0x0 0x07FE @;Yellow
+	call UNSET_SCROLLING_BG
+	waitanimation
+	endanimation
+
+WILDBOLT_TRAP_PARTICLES:
+	launchtemplate SPARK_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x20 0x210 0x1e 0xa 0x32 bank_target
+	pause 0x2
+	launchtemplate SPARK_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x24 0x1e0 0x14 0xd 0xffd2 bank_target
+	pause 0x2
+	launchtemplate SPARK_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x25 0x240 0x14 0x5 0x2a bank_target
+	pause 0x2
+	launchtemplate SPARK_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x23 0x190 0x19 0x8 0xffd6 bank_target
+	pause 0x2
+	launchtemplate SPARK_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x20 0x200 0x19 0xd 0x2e bank_target
+	pause 0x2
+	launchtemplate SPARK_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x25 0x1d0 0x1e 0xc 0xffce bank_target
+	return
+
+.align 2
+SPARK_SWIRL: objtemplate ANIM_TAG_SPARK_2 ANIM_TAG_SPARK_2 OAM_OFF_16x16 gAnimCmdTable_AnimatedSpark2 0x0 gDummySpriteAffineAnimTable 0x80B477D
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+.pool
+@Credits to Skeli
+ANIM_SANDSEAR_STORM:
+	loadparticle ANIM_TAG_GUST
+	loadparticle ANIM_TAG_SMALL_EMBER
+	launchtask AnimTask_BlendParticle 0x5 0x5 ANIM_TAG_GUST 0x0 0xA 0xA 0x190B @;Brown
+	playsound2 0x7d SOUND_PAN_TARGET
+	launchtask AnimTask_move_bank 0x2 0x5 bank_target 0x0 0x4 0x58 0x1
+	launchtask AnimTask_pal_fade 0xa 0x5 PAL_DEF 0x4 0x0 0xB 0x1F @;Red
+	call HURRICANE_GUST
+	call SANDSEAR_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call SANDSEAR_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call SANDSEAR_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call SANDSEAR_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call SANDSEAR_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call SANDSEAR_TRAP_PARTICLES
+	waitanimation
+	stopmusic
+	launchtask AnimTask_pal_fade 0xa 0x5 PAL_DEF 0x1 0xB 0x0 0x1F @;Red
+	waitanimation
+	endanimation
+
+SANDSEAR_TRAP_PARTICLES:
+	launchtemplate Template_FireSpin TEMPLATE_TARGET | 2, 0x7 0x0 0x1c 0x210 0x1e 0xd 0x32 bank_target
+	pause 0x2
+	launchtemplate Template_FireSpin TEMPLATE_TARGET | 2, 0x7 0x0 0x20 0x1e0 0x14 0x10 0xffd2 bank_target
+	pause 0x2
+	launchtemplate Template_FireSpin TEMPLATE_TARGET | 2, 0x7 0x0 0x21 0x240 0x14 0x8 0x2a bank_target
+	pause 0x2
+	launchtemplate Template_FireSpin TEMPLATE_TARGET | 2, 0x7 0x0 0x1f 0x190 0x19 0xb 0xffd6 bank_target
+	pause 0x2
+	launchtemplate Template_FireSpin TEMPLATE_TARGET | 2, 0x7 0x0 0x1c 0x200 0x19 0x10 0x2e bank_target
+	pause 0x2
+	launchtemplate Template_FireSpin TEMPLATE_TARGET | 2, 0x7 0x0 0x21 0x1d0 0x1e 0xf 0xffce bank_target
+	return
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+.pool
+@Credits to Skeli
+ANIM_SPRINGTIDE_STORM:
+	loadparticle ANIM_TAG_GUST
+	loadparticle ANIM_TAG_RED_HEART
+	playsound2 0x7d SOUND_PAN_TARGET
+	launchtask AnimTask_move_bank 0x2 0x5 bank_target 0x0 0x4 0x58 0x1
+	launchtask AnimTask_pal_fade_complex 0x2 0x6 PAL_DEF 0x2 0x6 0x0 0xB 0x7ADF @;Pink
+	call HURRICANE_GUST
+	call SPRINGTIDE_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call SPRINGTIDE_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call SPRINGTIDE_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call SPRINGTIDE_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call SPRINGTIDE_TRAP_PARTICLES
+	call HURRICANE_GUST
+	call SPRINGTIDE_TRAP_PARTICLES
+	waitanimation
+	stopmusic
+	endanimation
+
+SPRINGTIDE_TRAP_PARTICLES:
+	launchtemplate HEART_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x20 0x210 0x1e 0xa 0x32 bank_target
+	pause 0x2
+	launchtemplate HEART_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x24 0x1e0 0x14 0xd 0xffd2 bank_target
+	pause 0x2
+	launchtemplate HEART_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x25 0x240 0x14 0x5 0x2a bank_target
+	pause 0x2
+	launchtemplate HEART_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x23 0x190 0x19 0x8 0xffd6 bank_target
+	pause 0x2
+	launchtemplate HEART_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x20 0x200 0x19 0xd 0x2e bank_target
+	pause 0x2
+	launchtemplate HEART_SWIRL TEMPLATE_TARGET | 2, 0x7 0x0 0x25 0x1d0 0x1e 0xc 0xffce bank_target
+	return
+
+.align 2
+HEART_SWIRL: objtemplate ANIM_TAG_RED_HEART ANIM_TAG_RED_HEART OAM_OFF_16x16 gDummySpriteAnimTable 0x0 gDummySpriteAffineAnimTable 0x80B477D
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+.pool
+@Credits to Skeli
+ANIM_LUNAR_BLESSING:
+	loadparticle ANIM_TAG_MOON
+	loadparticle ANIM_TAG_SPARKLE_2
+	loadparticle ANIM_TAG_GUARD_RING
+	loadparticle ANIM_TAG_SMALL_EMBER @Yellow colour for ring
+	loadparticle ANIM_TAG_BLUE_STAR
+	pokespritetoBG side_attacker
+	setblends 0x1000
+	launchtask AnimTask_pal_fade 0xa 0x5 PAL_BG 0x1 0x0 0x10 0x0
+	launchtask AnimTask_BlendNonAttackerPalettes 0x2 0x4 0x1 0x0 0x10 0x0 
+	waitanimation
+	launchtemplate Template_Moon TEMPLATE_ATTACKER | 2, 0x2 0x78 0x38
+	launchtask AnimTask_AlphaFadeIn 0x3 0x5 0x0 0x10 0x10 0x0 0x1
+	launchtask AnimTask_pal_fade 0xa 0x5 PAL_ATK 0x7 0x0 0x10 0x0
+	soundcomplex 0xbc SOUND_PAN_ATTACKER 0x10 0x3
+	call HEALING_STARS
+	launchtemplate LUNARDANCE_RING TEMPLATE_ATTACKER | 2, 0x0
+	pause 0x4
+	launchtemplate LUNARDANCE_RING TEMPLATE_ATTACKER | 2, 0x0
+	pause 0x4
+	launchtemplate LUNARDANCE_RING TEMPLATE_ATTACKER | 2, 0x0
+	pause 0x24
+	pokespritefromBG side_attacker
+	call HEALING_ANIM
+	pause 0x28
+	launchtask AnimTask_AllBanksInvisible 0xA 0x0
+	launchtask AnimTask_FadeScreenBlue 0x2 0x0
+	pause 0x10
+	launchtask AnimTask_AllBanksVisible 0xA 0x0
+	waitanimation
+	resetblends
+	endanimation
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+.pool
+@Credits to Skeli
+ANIM_TAKE_HEART:
+	loadparticle ANIM_TAG_RED_HEART
+	loadparticle ANIM_TAG_SPARKLE_2
+	loadparticle ANIM_TAG_GUARD_RING
+	playsound2 0x75 SOUND_PAN_ATTACKER
+	launchtemplate FALLING_HEART TEMPLATE_ATTACKER | 2, 0x4, 0, 0x3a, 4, bank_attacker
+	pause 0x15 
+	soundcomplex 0xbc SOUND_PAN_ATTACKER 0x10 0x4
+	launchtask AnimTask_StatusClearedEffect 0x2 0x1 0x0
+	call TAKE_HEART_RING_UP
+	call TAKE_HEART_RING_UP
+	call TAKE_HEART_RING_UP
+	call TAKE_HEART_RING_UP
+	call TAKE_HEART_RING_UP
+	call TAKE_HEART_RING_UP
+	call TAKE_HEART_RING_UP
+	call TAKE_HEART_RING_UP
+	call TAKE_HEART_RING_UP
+	call TAKE_HEART_RING_UP
+	call TAKE_HEART_RING_UP
+	call TAKE_HEART_RING_UP
+	waitanimation
+	endanimation
+
+TAKE_HEART_RING_UP:
+	launchtemplate TAKE_HEART_RING TEMPLATE_ATTACKER | 2, 0x0
+	pause 0x4
+	return
+
+.align 2
+FALLING_HEART: objtemplate ANIM_TAG_RED_HEART ANIM_TAG_RED_HEART OAM_OFF_16x16 gDummySpriteAnimTable 0x0 gDummySpriteAffineAnimTable SpriteCB_FallingObject
+TAKE_HEART_RING: objtemplate ANIM_TAG_GUARD_RING ANIM_TAG_RED_HEART 0x83ACBE0 gDummySpriteAnimTable 0x0 0x83E44D4 SpriteCB_SurroundingRing
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	.pool

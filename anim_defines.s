@@ -478,6 +478,8 @@
 .equ AnimTask_WindUpLunge, 0x809949D
 .equ AnimTask_RotateMonSpriteToSide, 0x8099981
 .equ AnimTask_RockMonBackAndForth, 0x80e0559
+.equ AnimTask_AlphaFadeIn, 0x8076049
+.equ AnimTask_FadeScreenBlue, 0x80A5FC1
 
 @launchtemplate
 
@@ -554,6 +556,9 @@
 .equ Template_ThinRingShrinking, 0x83E40C8
 .equ Template_WillOWispFire, 0x83e5ee4
 .equ Template_DragonDanceOrb, 0x83e7848
+.equ Template_FireSpin, 0x83e7438
+.equ Template_Moon, 0x83E3734
+.equ Template_MoonlightSparkle, 0x83E3764
 
 .equ SpriteCB_AnimSpriteOnMonPos, 0x8075D9D
 .equ Callback_TranslateAnimSpriteToTargetMonLocation, 0x8075DF5

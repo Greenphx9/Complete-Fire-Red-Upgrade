@@ -2327,23 +2327,23 @@ VictoryDance
 #org @NAME_SHELTER
 Shelter
 
-#org @NAME_SPRINGTIDESTORM
-Spring Storm
+#org @NAME_BLEAKWIND_STORM
+BleakwndStrm
 
-#org @NAME_SANDSEARSTORM
+#org @NAME_WILDBOLT_STORM
+WildboltStrm
+
+#org @NAME_SANDSEAR_STORM
 SandsearStrm
 
-#org @NAME_PLACE17
-Placeholder
+#org @NAME_SPRINGTIDE_STORM
+Spring Storm
 
-#org @NAME_PLACE18
-Placeholder
+#org @NAME_LUNAR_BLESSING
+Lunar Bless
 
-#org @NAME_PLACE19
-Placeholder
-
-#org @NAME_PLACE20
-Placeholder
+#org @NAME_TAKE_HEART
+Take Heart
 
 #org @Z_Long_Move_1
 Z-Move 1
