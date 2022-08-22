@@ -1699,7 +1699,7 @@ static void DexNavDrawAbility(u8 ability, u16 species, u8* spriteIdAddr)
 
 		//Copy ability string from table using state id
 		TryRandomizeSpecies(&species);
-		CopyAbilityNameByMon(gStringVar4, ability, species);
+		CopyAbilityName(gStringVar4, ability, species);
 
 		//Format string so it's even length or if it's odd ends in two spaces
 		len = StringLength(gStringVar4);
@@ -2726,7 +2726,7 @@ static void PrintGUIHiddenAbility(u16 species)
 			u8 hiddenAbility = GetHiddenAbility(species);
 
 			if (species != SPECIES_NONE && hiddenAbility != ABILITY_NONE)
-				text = GetAbilityNameByMon(hiddenAbility, species);
+				text = GetAbilityName(hiddenAbility, species);
 		}
 		else
 			text = gText_DexNav_CaptureToSee;

@@ -76,9 +76,6 @@ The power of [SCRIPTING_BANK]'s\nFire-type moves rose!
 #org @gText_GorillaTacticsMoveMenuBlockage
 [LAST_ABILITY] allows only\n[CURRENT_MOVE] to be used!\p
 
-#org @gText_CrabbyTacticsMoveMenuBlockage
-Crabby Tactics allows only\n[CURRENT_MOVE] to be used!\p
-
 #org @gText_IceFaceTookDamage
 The Ice Face took damage for\n[TARGET]!
 
