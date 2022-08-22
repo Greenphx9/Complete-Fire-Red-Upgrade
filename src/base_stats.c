@@ -10179,7 +10179,7 @@ const struct BaseStats gBaseStats2[] =
 	{
 		.baseHP = 85,
 		.baseAttack = 130,
-		.baseDefense = 100,
+		.baseDefense = 90,
 		.baseSpAttack = 90,
 		.baseSpDefense = 80,
 		.baseSpeed = 115,
