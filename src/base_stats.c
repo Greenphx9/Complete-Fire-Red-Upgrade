@@ -10116,7 +10116,7 @@ const struct BaseStats gBaseStats2[] =
 		.baseDefense = 45,
 		.baseSpAttack = 45,
 		.baseSpDefense = 45,
-		.baseSpeed = 10,
+		.baseSpeed = 20,
 		.type1 = TYPE_GROUND,
 		.type2 = TYPE_GROUND,
 		.catchRate = 255,
@@ -10144,10 +10144,10 @@ const struct BaseStats gBaseStats2[] =
 
 	[SPECIES_VIBRAVA] =
 	{
-		.baseHP = 50,
-		.baseAttack = 70,
-		.baseDefense = 50,
-		.baseSpAttack = 50,
+		.baseHP = 65,
+		.baseAttack = 110,
+		.baseDefense = 55,
+		.baseSpAttack = 70,
 		.baseSpDefense = 50,
 		.baseSpeed = 70,
 		.type1 = TYPE_GROUND,
@@ -10177,12 +10177,12 @@ const struct BaseStats gBaseStats2[] =
 
 	[SPECIES_FLYGON] =
 	{
-		.baseHP = 80,
-		.baseAttack = 100,
-		.baseDefense = 80,
-		.baseSpAttack = 80,
+		.baseHP = 85,
+		.baseAttack = 130,
+		.baseDefense = 100,
+		.baseSpAttack = 900,
 		.baseSpDefense = 80,
-		.baseSpeed = 100,
+		.baseSpeed = 115,
 		.type1 = TYPE_GROUND,
 		.type2 = TYPE_DRAGON,
 		.catchRate = 45,
