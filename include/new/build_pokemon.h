@@ -16,6 +16,7 @@ struct ReplaceAbility
 	u16 species;
 	u8 currAbility;
 	const u8* replaceAbilityString;
+	const u8* replaceDescString;
 };
 
 void __attribute__ ((long_call)) CB2_ReturnToTradeMenuFromSummary(void);

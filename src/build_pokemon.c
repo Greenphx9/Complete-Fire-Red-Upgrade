@@ -20,6 +20,7 @@
 #include "../include/constants/tutors.h"
 
 #include "../include/new/ability_tables.h"
+#include "../include/new/ability_util.h"
 #include "../include/new/ai_advanced.h"
 #include "../include/new/build_pokemon.h"
 #include "../include/new/build_pokemon_2.h"
@@ -4533,7 +4534,12 @@ void DoDuplicateAbiltiyStuff(void) {
 
 void PokeSum_PrintAbilityNameAndDesc(void)
 {
+	struct Pokemon* mon = &(sMonSummaryScreen->currentMon);
+	u8 ability = GetMonAbility(mon);
+	u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
 	DoDuplicateAbiltiyStuff();
+
+	CopyAbilityDescription(sMonSummaryScreen->summary.abilityDescStrBuf, ability, species);
 
 	FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
 

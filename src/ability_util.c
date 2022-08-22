@@ -15,6 +15,7 @@
 #include "Tables/replace_abilities.h"
 
 extern const u8 gAbilityNames[][ABILITY_NAME_LENGTH + 1];
+extern const u8* gAbilityDescriptions[];
 
 const u8* GetAbilityNameOverride(const u8 ability, const u16 species) //Bypasses the 255 Ability limitation and implements clone Abilities
 {
@@ -47,6 +48,37 @@ void CopyAbilityName(u8* dst, const u8 ability, const u16 species)
 	StringCopy(dst, GetAbilityName(ability, species));
 }
 
+const u8* GetAbilityDescriptionOverride(const u8 ability, const u16 species) //Bypasses the 255 Ability limitation and implements new Abilities
+{
+	for(u8 i = 0; i < ARRAY_COUNT(sReplaceAbilities); i++)
+	{
+		if (sReplaceAbilities[i].replaceDescString != NULL)
+		{
+			if(ability == sReplaceAbilities[i].currAbility && species == sReplaceAbilities[i].species)
+			{
+				return sReplaceAbilities[i].replaceDescString;
+			}
+		}
+	}
+
+	return NULL;
+}
+
+const u8* GetAbilityDescription(const u8 ability, unusedArg const u16 species)
+{	
+	const u8* override = GetAbilityDescriptionOverride(ability, species);
+	if (override != NULL)
+		return override;
+
+	const u8* desc = gAbilityDescriptions[ability];
+	return desc;
+}
+
+void CopyAbilityDescription(u8* dst, const u8 ability, const u16 species)
+{
+	StringCopy(dst, GetAbilityDescription(ability, species));
+}
+
 bool8 IsMoldBreakerAbility(u8 ability)
 {
 	return ability == ABILITY_MOLDBREAKER;
@@ -60,4 +92,9 @@ bool8 SpeciesHasTurboblaze(u16 species)
 bool8 SpeciesHasTeravolt(u16 species)
 {
 	return gSpecialReplaceAbilityFlags[species].hasTeravolt;
+}
+
+bool8 SpeciesHasStrongBeak(u16 species)
+{
+	return gSpecialReplaceAbilityFlags[species].hasStrongBeak;
 }

@@ -3,6 +3,7 @@
 #include "../../include/constants/items.h"
 #include "../../include/constants/moves.h"
 
+//Ability names
 extern const u8 NAME_IRON_BARBS[];
 extern const u8 NAME_PURE_POWER[];
 extern const u8 NAME_LIBERO[];
@@ -22,6 +23,10 @@ extern const u8 NAME_HUNDRED_LEGS[];
 extern const u8 NAME_SOLID_STEEL[];
 extern const u8 NAME_TURBOBLAZE[];
 extern const u8 NAME_TERAVOLT[];
+extern const u8 NAME_STRONG_BEAK[];
+
+//Ability descs
+extern const u8 DESC_STRONG_BEAK[];
 
 static struct ReplaceAbility sReplaceAbilities[] =
 {
@@ -274,5 +279,29 @@ static struct ReplaceAbility sReplaceAbilities[] =
         .species = SPECIES_KYUREM_BLACK,
         .currAbility = ABILITY_MOLDBREAKER,
         .replaceAbilityString = NAME_TERAVOLT,
+    },
+    {
+        .species = SPECIES_FEAROW,
+        .currAbility = ABILITY_IRONKICK,
+        .replaceAbilityString = NAME_STRONG_BEAK,
+        .replaceDescString = DESC_STRONG_BEAK,
+    },
+    {
+        .species = SPECIES_PIKIPEK,
+        .currAbility = ABILITY_IRONKICK,
+        .replaceAbilityString = NAME_STRONG_BEAK,
+        .replaceDescString = DESC_STRONG_BEAK,
+    },
+    {
+        .species = SPECIES_TRUMBEAK,
+        .currAbility = ABILITY_IRONKICK,
+        .replaceAbilityString = NAME_STRONG_BEAK,
+        .replaceDescString = DESC_STRONG_BEAK,
+    },
+    {
+        .species = SPECIES_TOUCANNON,
+        .currAbility = ABILITY_IRONKICK,
+        .replaceAbilityString = NAME_STRONG_BEAK,
+        .replaceDescString = DESC_STRONG_BEAK,
     },
 };

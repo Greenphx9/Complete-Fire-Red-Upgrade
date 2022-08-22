@@ -162,6 +162,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 		.gSleepTalkBannedMoves = TRUE,
 		.gRaidBattleBannedRaidMonMoves = TRUE,
 		.gBallBombMoves = TRUE,
+		.gBeakRelatedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_COUNTER
@@ -1397,6 +1398,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	[MOVE_PLUCK] =
 	{
 		.gRaidBattleBannedMoves = TRUE,
+		.gBeakRelatedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_SUPERFANG
@@ -2858,6 +2860,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	[MOVE_DRILLPECK] =
 	{
 		.gDrillMoves = TRUE,
+		.gBeakRelatedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_HORNDRILL
@@ -3516,6 +3519,12 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	[MOVE_COURTCHANGE] =
 	{
 		.gRandomizerBanTable = TRUE,
+	},
+#endif
+#ifdef MOVE_PECK
+	[MOVE_PECK] =
+	{
+		.gBeakRelatedMoves = TRUE,
 	},
 #endif
 };

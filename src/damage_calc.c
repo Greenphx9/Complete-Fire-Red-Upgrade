@@ -7,6 +7,7 @@
 #include "../include/constants/pokedex.h"
 
 #include "../include/new/accuracy_calc.h"
+#include "../include/new/ability_util.h"
 #include "../include/new/ai_util.h"
 #include "../include/new/battle_start_turn_start.h"
 #include "../include/new/battle_util.h"
@@ -3419,8 +3420,16 @@ static u16 AdjustBasePower(struct DamageCalc* data, u16 power)
 			break;
 		case ABILITY_IRONKICK:
 		//1.2x Boost
-			if (gSpecialMoveFlags[move].gKickingMoves)
-				power = (power * 12) / 10;
+			if (SpeciesHasStrongBeak(data->atkSpecies))
+			{
+				if (gSpecialMoveFlags[move].gBeakRelatedMoves)
+					power = (power * 12) / 10;
+			}
+			else
+			{
+				if (gSpecialMoveFlags[move].gKickingMoves)
+					power = (power * 12) / 10;
+			}
 			break;
 
 		case ABILITY_TOXICBOOST:

@@ -28,4 +28,28 @@ const struct SpecialReplaceAbilityFlags gSpecialReplaceAbilityFlags[NUM_SPECIES]
 		.hasTeravolt = TRUE,
 	},
 #endif
+#ifdef SPECIES_FEAROW
+	[SPECIES_FEAROW] =
+	{
+		.hasStrongBeak = TRUE,
+	},
+#endif
+#ifdef SPECIES_PIKIPEK
+	[SPECIES_PIKIPEK] =
+	{
+		.hasStrongBeak = TRUE,
+	},
+#endif
+#ifdef SPECIES_TRUMBEAK
+	[SPECIES_TRUMBEAK] =
+	{
+		.hasStrongBeak = TRUE,
+	},
+#endif
+#ifdef SPECIES_TOUCANNON
+	[SPECIES_TOUCANNON] =
+	{
+		.hasStrongBeak = TRUE,
+	},
+#endif
 };

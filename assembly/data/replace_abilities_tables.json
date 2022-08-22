@@ -7,5 +7,12 @@
     "hasTeravolt": [
         "SPECIES_ZEKROM",
         "SPECIES_KYUREM_BLACK"
+    ],
+
+    "hasStrongBeak": [
+        "SPECIES_FEAROW",
+        "SPECIES_PIKIPEK",
+        "SPECIES_TRUMBEAK",
+        "SPECIES_TOUCANNON"
     ]
 }
