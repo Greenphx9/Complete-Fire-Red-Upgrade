@@ -5,6 +5,7 @@
 #include "../../include/constants/item_effects.h"
 #include "../../include/constants/trainers.h"
 
+#include "../../include/new/ability_util.h"
 #include "../../include/new/ai_advanced.h"
 #include "../../include/new/ai_util.h"
 #include "../../include/new/ai_master.h"
@@ -1589,9 +1590,7 @@ static bool8 ShouldSwitchIfWonderGuard(void)
 			if (SPLIT(move) != SPLIT_STATUS)
 			{
 				u8 atkAbility = GetAIAbility(bankAtk, bankDef, move);
-				if (atkAbility == ABILITY_MOLDBREAKER
-				||  atkAbility == ABILITY_TERAVOLT
-				||  atkAbility == ABILITY_TURBOBLAZE)
+				if (IsMoldBreakerAbility(atkAbility))
 					return FALSE;
 
 				moveFlags = AI_SpecialTypeCalc(move, bankAtk, bankDef);

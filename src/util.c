@@ -195,18 +195,24 @@ u16 GetNationalPokedexCount(u8 caseID)
 	return count;
 }
 
-bool8 CanEvolve(struct Pokemon* mon)
+bool8 CanSpeciesEvolve(u16 species)
 {
-	u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
 	const struct Evolution* evolutions = gEvolutionTable[species];
 
 	for (u32 i = 0; i < EVOS_PER_MON; ++i)
 	{
-		if (evolutions[i].method != MEGA_EVOLUTION && evolutions[i].method != EVO_GIGANTAMAX && evolutions[i].method != 0)
+		if (evolutions[i].method == EVO_NONE) //Most likely end of entries
+			break; //Break now to save time
+		else if (evolutions[i].method != MEGA_EVOLUTION && evolutions[i].method != EVO_GIGANTAMAX)
 			return TRUE;
 	}
 
 	return FALSE;
+}
+
+bool8 CanEvolve(struct Pokemon* mon)
+{
+	return CanSpeciesEvolve(GetMonData(mon, MON_DATA_SPECIES, NULL));
 }
 
 bool8 CouldHaveEvolvedViaLevelUp(struct Pokemon* mon)
@@ -355,6 +361,33 @@ bool8 IsMonOfType(struct Pokemon* mon, u8 type)
 	u8 type2 = GetMonType(mon, 1);
 
 	return type1 == type || type2 == type;
+}
+
+bool8 IsSpeciesAffectedByScalemons(u16 species)
+{
+	if (species == SPECIES_SHEDINJA) //Shedinja would get OP stats because of its low HP and BST
+		return FALSE;
+
+	if (!IsOnlyScalemonsGame())
+		return FALSE;
+
+	if (CanSpeciesEvolve(species))	
+		return FALSE; //Only Pokemon that are fully evolved are affected by the scaling outside of the Frontier
+
+	return TRUE;
+}
+
+u8 GetVisualBaseStat(u8 statId, u16 species) //For the Pokedex screen
+{
+	u16 base = ((u8*) (&gBaseStats[species].baseHP))[statId];
+
+	if (statId != STAT_HP && IsScaleMonsBattle() && IsSpeciesAffectedByScalemons(species))
+	{
+		u8 baseHP = gBaseStats[species].baseHP;
+		base = MathMin((base * (600 - baseHP)) / (GetBaseStatsTotal(species) - baseHP), 255); //Max 255
+	}
+
+	return base;
 }
 
 #define TILE_SIZE 32

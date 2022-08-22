@@ -665,6 +665,16 @@ bool8 IsScaleMonsBattle(void)
 	return FlagGet(FLAG_SCALEMONS);
 }
 
+bool8 IsOnlyScalemonsGame(void)
+{
+	#ifdef FLAG_SCALEMONS
+	if (FlagGet(FLAG_SCALEMONS))
+		return TRUE;
+	#endif
+
+	return FALSE;
+}
+
 bool8 IsCamomonsBattle(void)
 {
 	return FlagGet(FLAG_BATTLE_FACILITY) && IsCamomonsTier(VarGet(VAR_BATTLE_FACILITY_TIER));

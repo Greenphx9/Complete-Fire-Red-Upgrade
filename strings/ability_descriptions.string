@@ -246,8 +246,6 @@ Changes type to match move.
 Attacks hit twice. 2nd deals less.
 
 #org @DESC_MOLDBREAKER
-#org @DESC_TURBOBLAZE
-#org @DESC_TERAVOLT
 Moves ignore Abilities.
 
 #org @DESC_ZENMODE
@@ -560,3 +558,6 @@ Protects team from poison.
 
 #org @DESC_HUNGERSWITCH
 Changes form each turn.
+
+#org @DESC_NOABILITY
+-

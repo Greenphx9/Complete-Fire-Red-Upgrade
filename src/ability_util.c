@@ -46,3 +46,18 @@ void CopyAbilityName(u8* dst, const u8 ability, const u16 species)
 {
 	StringCopy(dst, GetAbilityName(ability, species));
 }
+
+bool8 IsMoldBreakerAbility(u8 ability)
+{
+	return ability == ABILITY_MOLDBREAKER;
+}
+
+bool8 SpeciesHasTurboblaze(u16 species)
+{
+	return gSpecialReplaceAbilityFlags[species].hasTurboblaze;
+}
+
+bool8 SpeciesHasTeravolt(u16 species)
+{
+	return gSpecialReplaceAbilityFlags[species].hasTeravolt;
+}

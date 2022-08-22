@@ -1,0 +1,11 @@
+{
+    "hasTurboblaze": [
+        "SPECIES_RESHIRAM",
+        "SPECIES_KYUREM_WHITE"
+    ],
+
+    "hasTeravolt": [
+        "SPECIES_ZEKROM",
+        "SPECIES_KYUREM_BLACK"
+    ]
+}

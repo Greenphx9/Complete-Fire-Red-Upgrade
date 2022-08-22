@@ -11,6 +11,7 @@
 #include "../include/new/ability_battle_effects.h"
 #include "../include/new/ability_battle_scripts.h"
 #include "../include/new/ability_tables.h"
+#include "../include/new/ability_util.h"
 #include "../include/new/battle_start_turn_start.h"
 #include "../include/new/battle_strings.h"
 #include "../include/new/battle_script_util.h"
@@ -249,7 +250,7 @@ const s8 gAbilityRatings[ABILITIES_COUNT] =
 	[ABILITY_UNSEENFIST] = 5,
 	[ABILITY_TECHNICIAN] = 8,
 	[ABILITY_TELEPATHY] = 0,
-	[ABILITY_TERAVOLT] = 7,
+	//[ABILITY_TERAVOLT] = 7,
 	[ABILITY_THICKFAT] = 7,
 	[ABILITY_TINTEDLENS] = 7,
 	[ABILITY_TORRENT] = 5,
@@ -258,7 +259,7 @@ const s8 gAbilityRatings[ABILITIES_COUNT] =
 	[ABILITY_TRACE] = 6,
 	[ABILITY_TRIAGE] = 7,
 	[ABILITY_TRUANT] = -2,
-	[ABILITY_TURBOBLAZE] = 7,
+	//[ABILITY_TURBOBLAZE] = 7,
 	[ABILITY_UNAWARE] = 6,
 	[ABILITY_UNBURDEN] = 7,
 	[ABILITY_UNNERVE] = 3,
@@ -665,19 +666,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 			break;
 
 		case ABILITY_MOLDBREAKER:
-			gBattleStringLoader = gText_MoldBreakerActivate;
-			BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-			effect++;
-			break;
-
-		case ABILITY_TERAVOLT:
-			gBattleStringLoader = gText_TeravoltActivate;
-			BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-			effect++;
-			break;
-
-		case ABILITY_TURBOBLAZE:
-			gBattleStringLoader = gText_TurboblazeActivate;
+			if (SpeciesHasTurboblaze(SPECIES(bank)))
+				gBattleStringLoader = gText_TurboblazeActivate;
+			else if (SpeciesHasTeravolt(SPECIES(bank)))
+				gBattleStringLoader = gText_TeravoltActivate;
+			else
+				gBattleStringLoader = gText_MoldBreakerActivate;
+				
 			BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
 			effect++;
 			break;

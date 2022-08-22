@@ -7,6 +7,7 @@
 #include "../include/new/ability_battle_effects.h"
 #include "../include/new/ability_battle_scripts.h"
 #include "../include/new/ability_tables.h"
+#include "../include/new/ability_util.h"
 #include "../include/new/battle_start_turn_start_battle_scripts.h"
 #include "../include/new/battle_util.h"
 #include "../include/new/battle_script_util.h"
@@ -238,9 +239,7 @@ void MoldBreakerRemoveAbilitiesOnForceSwitchIn(void)
 	else
 		bank = gBankAttacker;
 
-	if (ABILITY(bank) == ABILITY_MOLDBREAKER
-		|| ABILITY(bank) == ABILITY_TURBOBLAZE
-		|| ABILITY(bank) == ABILITY_TERAVOLT)
+	if (IsMoldBreakerAbility(ABILITY(bank)))
 	{
 		if (gSpecialAbilityFlags[ABILITY(gBankSwitching)].gMoldBreakerIgnoredAbilities)
 		{

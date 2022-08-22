@@ -258,6 +258,9 @@ def ProcessSpecialFlagFile(flagFile: str) -> str:
     elif "ability_tables" in cFile:
         includes = '#include "../../include/constants/abilities.h"\n#include "../../include/new/ability_tables.h"\n\n'
         tableHeader = "const struct SpecialAbilityFlags gSpecialAbilityFlags[ABILITIES_COUNT] =\n{\n"
+    elif "replace_abilities_tables" in cFile:
+        includes = '#include "../../include/constants/species.h"\n#include "../../include/new/ability_util.h"\n\n'
+        tableHeader = "const struct SpecialReplaceAbilityFlags gSpecialReplaceAbilityFlags[NUM_SPECIES] =\n{\n"
     else:
         print("Error! Can't compile JSON file \"{}\"".format(flagFile))
         sys.exit(1)
@@ -294,10 +297,12 @@ def ProcessSpecialFlagFile(flagFile: str) -> str:
 
     objectFile = ProcessCToObjectFile(cFile, objectFile)
     #Not necessary, I just like it:
-    if cFile == './assembly\data\move_tables.c':
+    if 'move_tables.c' in cFile:
         newPath = r'D:\Modding\Complete-Fire-Red-Upgrade\tables\move_tables.c';
-    elif cFile == './assembly\data\species_tables.c':
+    elif 'species_tables.c' in cFile:
         newPath = r'D:\Modding\Complete-Fire-Red-Upgrade\tables\species_tables.c';
+    elif 'replace_abilities_tables.c' in cFile:
+        newPath = r'D:\Modding\Complete-Fire-Red-Upgrade\tables\replace_abilities_tables.c';
     else:
         newPath = r'D:\Modding\Complete-Fire-Red-Upgrade\tables\ability_tables.c';
     shutil.copyfile(cFile, newPath)

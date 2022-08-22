@@ -461,11 +461,11 @@ Parental Bond
 #org @NAME_MOLD_BREAKER
 Mold Breaker
 
-#org @NAME_TURBOBLAZE
-Turboblaze
+#org @NAME_FREE1
+Free 1
 
-#org @NAME_TERAVOLT
-Teravolt
+#org @NAME_FREE2
+Free 2
 
 #org @NAME_ZEN_MODE
 Zen Mode
@@ -819,3 +819,9 @@ Hundred Legs
 
 #org @NAME_SOLID_STEEL
 Solid Steel
+
+#org @NAME_TURBOBLAZE
+Turboblaze
+
+#org @NAME_TERAVOLT
+Teravolt
