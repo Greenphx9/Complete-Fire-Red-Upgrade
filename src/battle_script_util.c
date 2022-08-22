@@ -336,7 +336,6 @@ void TryActivatePartnerSapSipper(void)
 		gBattleScripting.animArg1 = 0xE + STAT_STAGE_ATK;
 		gBattleScripting.animArg2 = 0;
 		gLastUsedAbility = ABILITY(gBankTarget);
-		gLastUsedSpecies = SPECIES(gBankTarget);
 		BattleScriptPush(gBattlescriptCurrInstr + 5);
 		gBattlescriptCurrInstr = BattleScript_SapSipperAromatherapy - 5;
 	}

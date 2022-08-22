@@ -580,7 +580,7 @@ u32 BattleStringExpandPlaceholders(const u8* src, u8* dst)
 				break;
 			case B_TXT_LAST_ABILITY: // last used ability
 				//species = 
-				toCpy = GetAbilityNameByMon(gLastUsedAbility, gLastUsedSpecies);
+				toCpy = GetAbilityName(gLastUsedAbility);
 				break;
 			case B_TXT_ATK_ABILITY: // attacker ability
 				species = GetBankPartyData(gBankAttacker)->species;

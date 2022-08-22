@@ -340,7 +340,6 @@ u8 ChangeStatBuffs(s8 statValue, u8 statId, u8 flags, const u8* BS_ptr)
 					gBattleCommunication[0] = gActiveBattler;
 					gBattlescriptCurrInstr = BattleScript_AbilityNoStatLoss;
 					gLastUsedAbility = gBattleMons[gActiveBattler].ability;
-					gLastUsedSpecies = gBattleMons[gActiveBattler].species;
 					RecordAbilityBattle(gActiveBattler, gLastUsedAbility);
 					gSpecialStatuses[gActiveBattler].statLowered = 1;
 				}

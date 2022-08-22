@@ -1680,11 +1680,10 @@ static void HighlightPossibleTargets(void)
 u8 TrySetCantSelectMoveBattleScript(void)
 {
 	u8 limitations, ability, holdEffect, isAnyMaxMove;
-	u16 move, *choicedMove, species;
+	u16 move, *choicedMove;
 
 	limitations = 0; isAnyMaxMove = FALSE;
 	ability = ABILITY(gActiveBattler);
-	species = SPECIES(gActiveBattler);
 	holdEffect = ITEM_EFFECT(gActiveBattler);
 	move = gBattleMons[gActiveBattler].moves[gBattleBufferB[gActiveBattler][2]];
 	choicedMove = &gBattleStruct->choicedMove[gActiveBattler];
@@ -1736,7 +1735,6 @@ u8 TrySetCantSelectMoveBattleScript(void)
 	{
 		gCurrentMove = *choicedMove;
 		gLastUsedAbility = ability;
-		gLastUsedSpecies = species;
 		gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedMoveChoiceAbility;
 		++limitations;
 	}

@@ -1464,7 +1464,6 @@ extern s32 gHpDealt;
 extern s32 gTakenDmg[MAX_BATTLERS_COUNT];
 extern u16 gLastUsedItem;
 extern u8 gLastUsedAbility;
-extern u16 gLastUsedSpecies;
 extern u8 gBankAttacker;
 extern u8 gBankTarget;
 extern u8 gBankFainted;
