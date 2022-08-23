@@ -26956,11 +26956,11 @@ ANIM_MAX_QUAKE:
 	waitanimation
 	pokespritefromBG bank_target
 	resetblends
-    pause 0x1
-    pokespritetoBG2 bank_attacker
-    pause 0x1
-    pokespritefromBG2 bank_attacker
-    endanimation
+	pause 0x1
+	pokespritetoBG2 bank_attacker
+	pause 0x1
+	pokespritefromBG2 bank_attacker
+	endanimation
 
 DIRT_GEYSER:
 	launchtemplate TECTONIC_EXPLODE TEMPLATE_TARGET | 2, 0x4 0x0003 0x0005 0x1 0x0
