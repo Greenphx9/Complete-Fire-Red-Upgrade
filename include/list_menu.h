@@ -103,7 +103,6 @@ extern struct ScrollArrowsTemplate gTempScrollArrowTemplate;
 s32 __attribute__((long_call)) DoMysteryGiftListMenu(const struct WindowTemplate *windowTemplate, const struct ListMenuTemplate *listMenuTemplate, u8 arg2, u16 tileNum, u16 palNum);
 u8 __attribute__((long_call)) ListMenuInit(const struct ListMenuTemplate *listMenuTemplate, u16 cursorPos, u16 itemsAbove);
 u8 __attribute__((long_call)) ListMenuInitInRect(struct ListMenuTemplate *listMenuTemplate, struct ListMenuWindowRect *arg1, u16 scrollOffset, u16 selectedRow);
-s32 __attribute__((long_call)) ListMenu_ProcessInput(u8 listTaskId);
 void __attribute__((long_call)) DestroyListMenuTask(u8 listTaskId, u16 *scrollOffset, u16 *selectedRow);
 void __attribute__((long_call)) RedrawListMenu(u8 listTaskId);
 void __attribute__((long_call)) ChangeListMenuPals(u8 listTaskId, u8 cursorPal, u8 fillValue, u8 cursorShadowPal);
@@ -120,3 +119,6 @@ u8 __attribute__((long_call)) AddScrollIndicatorArrowPair(const struct ScrollArr
 u8 __attribute__((long_call)) AddScrollIndicatorArrowPairParameterized(u32 arrowType, s32 commonPos, s32 firstPos, s32 secondPos, s32 fullyDownThreshold, s32 tileTag, s32 palTag, u16 *currItemPtr);
 void __attribute__((long_call)) RemoveScrollIndicatorArrowPair(u8 taskId);
 void __attribute__((long_call)) Task_ScrollIndicatorArrowPairOnMainMenu(u8 taskId);
+bool8 __attribute__((long_call)) ListMenuChangeSelection(struct ListMenu *list, bool8 updateCursorAndCallCallback, u8 count, bool8 movingDown);
+s32 __attribute__((long_call)) ListMenu_ProcessInput(u8 listTaskId);
+//s32 ListMenu_ProcessInput(u8 listTaskId);

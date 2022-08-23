@@ -4633,3 +4633,71 @@ static const struct WindowTemplate sNameBoxWindowTemplate = {
 	.paletteNum = 15,
 	.baseBlock = 0x008
 };
+
+s32 ListMenu_ProcessInput(u8 listTaskId)
+{
+    struct ListMenu *list = (struct ListMenu *)gTasks[listTaskId].data;
+
+    if (JOY_NEW(A_BUTTON))
+    {
+        return list->template.items[list->scrollOffset + list->selectedRow].id;
+    }
+    else if (JOY_NEW(B_BUTTON))
+    {
+        return LIST_CANCEL;
+    }
+    else if (gMain.newAndRepeatedKeys & DPAD_UP)
+    {
+		if(Var8000 == 3)
+		{
+			HideFieldMessageBox();
+			ShowFieldMessage(gText_WelcomeToHOF);
+		}
+        ListMenuChangeSelection(list, TRUE, 1, FALSE);
+        return LIST_NOTHING_CHOSEN;
+    }
+    else if (gMain.newAndRepeatedKeys & DPAD_DOWN)
+    {
+		if(Var8000 == 3)
+		{
+			HideFieldMessageBox();
+			ShowFieldMessage(gText_WelcomeToHOF);
+		}
+        ListMenuChangeSelection(list, TRUE, 1, TRUE);
+        return LIST_NOTHING_CHOSEN;
+    }
+    else // try to move by one window scroll
+    {
+        bool16 rightButton, leftButton;
+        switch (list->template.scrollMultiple)
+        {
+        case LIST_NO_MULTIPLE_SCROLL:
+        default:
+            leftButton = FALSE;
+            rightButton = FALSE;
+            break;
+        case LIST_MULTIPLE_SCROLL_DPAD:
+            leftButton = gMain.newAndRepeatedKeys & DPAD_LEFT;
+            rightButton = gMain.newAndRepeatedKeys & DPAD_RIGHT;
+            break;
+        case LIST_MULTIPLE_SCROLL_L_R:
+            leftButton = gMain.newAndRepeatedKeys & L_BUTTON;
+            rightButton = gMain.newAndRepeatedKeys & R_BUTTON;
+            break;
+        }
+        if (leftButton)
+        {
+            ListMenuChangeSelection(list, TRUE, list->template.maxShowed, FALSE);
+            return LIST_NOTHING_CHOSEN;
+        }
+        else if (rightButton)
+        {
+            ListMenuChangeSelection(list, TRUE, list->template.maxShowed, TRUE);
+            return LIST_NOTHING_CHOSEN;
+        }
+        else
+        {
+            return LIST_NOTHING_CHOSEN;
+        }
+    }
+}

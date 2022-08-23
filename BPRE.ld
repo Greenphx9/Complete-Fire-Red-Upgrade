@@ -2055,3 +2055,6 @@ gText_ButtonTypeLR = 0x8419e4f;
 gText_FrameType = 0x8419e52;
 
 sNameBoxWindowId = 0x203EFF8;
+
+ListMenuChangeSelection = 0x810799C | 1;
+sMessageBoxType = 0x203709C;
