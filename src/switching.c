@@ -594,20 +594,6 @@ void atk52_switchineffects(void)
 			++gNewBS->switchInEffectsState;
 			break;
 
-		case SwitchIn_NeutralizingGasRemoveAbility:
-			if (!IsAbilitySuppressed(gActiveBattler) //Gastro Acid has higher priority
-			&& ABILITY(gActiveBattler) != ABILITY_NONE
-			&& !CheckTableForAbility(ABILITY(gActiveBattler), gNeutralizingGasBannedAbilities)
-			&& AbilityBattleEffects(ABILITYEFFECT_CHECK_FIELD_EXCEPT_BANK, gActiveBattler, ABILITY_NEUTRALIZINGGAS, 0, 0))
-			{
-				u8* abilityLoc = GetAbilityLocation(gActiveBattler);
-				gNewBS->neutralizingGasBlockedAbilities[gActiveBattler] = *abilityLoc;
-				*abilityLoc = 0;
-				gNewBS->SlowStartTimers[gActiveBattler] = 0;
-			}
-			++gNewBS->switchInEffectsState;
-			break;
-
 		case SwitchIn_HealingWish:
 			if (gBattleMons[gActiveBattler].hp != gBattleMons[gActiveBattler].maxHP
 			|| gBattleMons[gActiveBattler].status1 != STATUS1_NONE)
