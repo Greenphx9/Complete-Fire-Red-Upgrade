@@ -5238,6 +5238,18 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.randomizerBan = TRUE,
 	},
 #endif
+#ifdef SPECIES_DIALGA_PRIMAL
+	[SPECIES_DIALGA_PRIMAL] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_PALKIA_PRIMAL
+	[SPECIES_PALKIA_PRIMAL] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
 #ifdef SPECIES_WISHIWASHI_S
 	[SPECIES_WISHIWASHI_S] =
 	{

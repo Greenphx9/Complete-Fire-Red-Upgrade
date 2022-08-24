@@ -29,7 +29,6 @@ u8 GetBankFromPartyData(struct Pokemon* mon);
 bool8 CanHitSemiInvulnerableTarget(u8 bankAtk, u8 bankDef, u16 move);
 bool8 CheckGrounding(u8 bank);
 bool8 NonInvasiveCheckGrounding(u8 bank);
-bool8 CheckGroundingFromPartyData(struct Pokemon* mon);
 bool8 CheckMonGrounding(struct Pokemon* mon);
 bool8 IsAffectedByHazards(u8 bank);
 bool8 IsMonAffectedByHazards(struct Pokemon* mon);

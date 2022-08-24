@@ -302,23 +302,6 @@ bool8 CheckMonGrounding(struct Pokemon* mon)
 		return GROUNDED;
 
 	else if (GetMonAbility(mon) == ABILITY_LEVITATE
-	|| gBaseStats[species].type1 == TYPE_FLYING
-	|| gBaseStats[species].type2 == TYPE_FLYING)
-		return IN_AIR;
-
-	return GROUNDED;
-}
-
-bool8 CheckMonGrounding(struct Pokemon* mon)
-{
-	u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
-	u16 item = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
-
-	if (IsGravityActive()
-	|| (ItemId_GetHoldEffect(item) == ITEM_EFFECT_IRON_BALL && GetMonAbility(mon) != ABILITY_KLUTZ))
-		return GROUNDED;
-
-	else if (GetMonAbility(mon) == ABILITY_LEVITATE
 	|| IsMonFloatingWithMagnetism(mon)
 	|| gBaseStats[species].type1 == TYPE_FLYING
 	|| gBaseStats[species].type2 == TYPE_FLYING)

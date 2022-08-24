@@ -1215,7 +1215,7 @@ bool8 ShouldSetUpScreens(u8 bankAtk, u8 bankDef, u16 move)
 
 						if (defPhysicalMoveInMoveset && defSpecialMoveInMoveset //Foe has both physical and special moves
 						&& hasLightScreen //Attacker could also use Light Screen instead
-						&& CalcMoveSplit(bankDef, defPrediction) == SPLIT_SPECIAL) //Foe is probably going to hit with a special move
+						&& CalcMoveSplit(defPrediction, bankDef, bankAtk) == SPLIT_SPECIAL) //Foe is probably going to hit with a special move
 							return FALSE; //Use Light Screen to survive longer
 
 						if (defPhysicalMoveInMoveset //Foe just has a physical move
@@ -1235,7 +1235,7 @@ bool8 ShouldSetUpScreens(u8 bankAtk, u8 bankDef, u16 move)
 
 						if (defPhysicalMoveInMoveset && defSpecialMoveInMoveset //Foe has both physical and special moves
 						&& hasReflect //Attacker could also use Reflect instead
-						&& CalcMoveSplit(bankDef, defPrediction) == SPLIT_PHYSICAL) //Foe is probably going to hit with a physcial move
+						&& CalcMoveSplit(defPrediction, bankDef, bankAtk) == SPLIT_PHYSICAL) //Foe is probably going to hit with a physcial move
 							return FALSE; //Use Reflect to survive longer
 
 						if (defSpecialMoveInMoveset //Foe just has a special move
