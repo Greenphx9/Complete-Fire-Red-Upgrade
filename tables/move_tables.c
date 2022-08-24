@@ -3453,6 +3453,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	[MOVE_BRAVEBIRD] =
 	{
 		.gPercent33RecoilMoves = TRUE,
+		.gBeakRelatedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_WOODHAMMER
@@ -3523,6 +3524,12 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 #endif
 #ifdef MOVE_PECK
 	[MOVE_PECK] =
+	{
+		.gBeakRelatedMoves = TRUE,
+	},
+#endif
+#ifdef MOVE_FlOATYFALL
+	[MOVE_FlOATYFALL] =
 	{
 		.gBeakRelatedMoves = TRUE,
 	},
