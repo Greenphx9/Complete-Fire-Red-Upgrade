@@ -2924,13 +2924,6 @@ if (data->atkAbility != ABILITY_CONTRARY && data->defAbility != ABILITY_UNAWARE 
 			}
 			break;
 
-		case EFFECT_POLTERGEIST:
-			if (WillPoltergeistFail(data->defItem, data->defAbility))
-				DECREASE_VIABILITY(10);
-			else
-				goto AI_STANDARD_DAMAGE;
-			break;
-
 		case EFFECT_SYNCHRONOISE:
 			//Check holding ring target or is of same type
 			if (data->defItemEffect == ITEM_EFFECT_RING_TARGET
