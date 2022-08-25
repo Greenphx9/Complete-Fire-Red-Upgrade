@@ -1338,11 +1338,12 @@ static void ModulateDmgByType(u8 multiplier, const u16 move, const u8 moveType, 
 u8 GetMoveTypeSpecial(u8 bankAtk, u16 move)
 {
 	u8 atkAbility = ABILITY(bankAtk);
+	u16 species = SPECIES(bankAtk);
 	u8 moveType = GetMoveTypeSpecialPreAbility(move, bankAtk, NULL);
 	if (moveType != 0xFF)
 		return moveType;
 
-	return GetMoveTypeSpecialPostAbility(move, atkAbility, gNewBS->zMoveData.active || gNewBS->zMoveData.viewing);
+	return GetMoveTypeSpecialPostAbility(move, species, atkAbility, gNewBS->zMoveData.active || gNewBS->zMoveData.viewing);
 }
 
 u8 GetMoveTypeSpecialPreAbility(u16 move, u8 bankAtk, struct Pokemon* monAtk)
@@ -1366,7 +1367,7 @@ u8 GetMoveTypeSpecialPreAbility(u16 move, u8 bankAtk, struct Pokemon* monAtk)
 	return 0xFF;
 }
 
-u8 GetMoveTypeSpecialPostAbility(u16 move, u8 atkAbility, bool8 zMoveActive)
+u8 GetMoveTypeSpecialPostAbility(u16 move, u16 species, u8 atkAbility, bool8 zMoveActive)
 {
 	u8 moveType = gBattleMoves[move].type;
 	bool8 moveTypeCanBeChanged = !zMoveActive || SPLIT(move) == SPLIT_STATUS;
@@ -1378,7 +1379,10 @@ u8 GetMoveTypeSpecialPostAbility(u16 move, u8 atkAbility, bool8 zMoveActive)
 		{
 			switch (atkAbility) {
 				case ABILITY_REFRIGERATE:
-					return TYPE_ICE;
+					if(SpeciesHasEarthilate(species))
+						return TYPE_GROUND;
+					else
+						return TYPE_ICE;
 				case ABILITY_PIXILATE:
 					return TYPE_FAIRY;
 				case ABILITY_AERILATE:
@@ -1405,11 +1409,12 @@ u8 GetMoveTypeSpecialPostAbility(u16 move, u8 atkAbility, bool8 zMoveActive)
 u8 GetMonMoveTypeSpecial(struct Pokemon* mon, u16 move)
 {
 	u8 atkAbility = GetMonAbility(mon);
+	u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
 	u8 moveType = GetMoveTypeSpecialPreAbility(move, 0, mon);
 	if (moveType != 0xFF)
 		return moveType;
 
-	return GetMoveTypeSpecialPostAbility(move, atkAbility, FALSE);
+	return GetMoveTypeSpecialPostAbility(move, species, atkAbility, FALSE);
 }
 
 static bool8 AbilityCanChangeTypeAndBoost(u16 move, u8 atkAbility, u8 electrifyTimer, bool8 checkIonDeluge, bool8 zMoveActive)

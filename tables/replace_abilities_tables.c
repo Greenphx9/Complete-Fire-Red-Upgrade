@@ -52,4 +52,16 @@ const struct SpecialReplaceAbilityFlags gSpecialReplaceAbilityFlags[NUM_SPECIES]
 		.hasStrongBeak = TRUE,
 	},
 #endif
+#ifdef SPECIES_VIBRAVA
+	[SPECIES_VIBRAVA] =
+	{
+		.hasEarthilate = TRUE,
+	},
+#endif
+#ifdef SPECIES_FLYGON
+	[SPECIES_FLYGON] =
+	{
+		.hasEarthilate = TRUE,
+	},
+#endif
 };

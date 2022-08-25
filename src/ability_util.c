@@ -98,3 +98,8 @@ bool8 SpeciesHasStrongBeak(u16 species)
 {
 	return gSpecialReplaceAbilityFlags[species].hasStrongBeak;
 }
+
+bool8 SpeciesHasEarthilate(u16 species)
+{
+	return gSpecialReplaceAbilityFlags[species].hasEarthilate;
+}

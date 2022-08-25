@@ -14,5 +14,10 @@
         "SPECIES_PIKIPEK",
         "SPECIES_TRUMBEAK",
         "SPECIES_TOUCANNON"
+    ],
+
+    "hasEarthilate": [
+        "SPECIES_VIBRAVA",
+        "SPECIES_FLYGON"
     ]
 }
