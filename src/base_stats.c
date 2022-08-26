@@ -38719,9 +38719,9 @@ const struct BaseStats gBaseStats2[] =
 
 	[SPECIES_EISCUE_NOICE] =
 	{
-		.baseHP = 75,
+		.baseHP = 85,
 		.baseAttack = 80,
-		.baseDefense = 70,
+		.baseDefense = 100,
 		.baseSpAttack = 65,
 		.baseSpDefense = 50,
 		.baseSpeed = 130,

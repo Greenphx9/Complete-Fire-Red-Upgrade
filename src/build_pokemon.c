@@ -1949,6 +1949,10 @@ static void BuildRaidMultiParty(void)
 			Memset(gPlayerParty[i + 3].moves, 0, sizeof(gPlayerParty[i + 3].moves));
 			GiveBoxMonInitialMoveset((void*) &gPlayerParty[i + 3]); //Give the randomized Pokemon moves it would normally have
 		}
+		if(GetMonData(&gPlayerParty[i + 3], MON_DATA_POKEBALL, 0) == 0) //Make raid partners have Pokeballs instead of Masterballs
+		{
+			SetMonData(&gPlayerParty[i + 3], MON_DATA_POKEBALL, &ball);
+		}
 	}
 }
 

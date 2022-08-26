@@ -6739,9 +6739,9 @@ static const struct BattleTowerSpread sRaidPartnerSpread_Steven_Rank6[] =
 static const struct BattleTowerSpread sRaidPartnerSpread_Adrian_Rank2[] =
 {
     {
-        .species = SPECIES_BELDUM,
-        .item = ITEM_ASSAULT_VEST,
-        .ability = FRONTIER_ABILITY_1, //Clear Body
+        .species = SPECIES_NIDORAN_M,
+        .item = ITEM_LIFE_ORB,
+        .ability = FRONTIER_ABILITY_1, //Poison Point
         .nature = NATURE_ADAMANT,
         .atkEv = 252,
         .spDefEv = 4,
@@ -6754,20 +6754,178 @@ static const struct BattleTowerSpread sRaidPartnerSpread_Adrian_Rank2[] =
         .spdIv = 31,
         .moves = 
         {
-            MOVE_TACKLE,
-            MOVE_HEADBUTT,
-            MOVE_ZENHEADBUTT,
-            MOVE_IRONHEAD,
+            MOVE_POISONTAIL,
+            MOVE_PECK,
+            MOVE_FURYATTACK,
+            MOVE_THIEF,
         },
         .forSingles = TRUE,
         .forDoubles = TRUE,
         .modifyMovesDoubles = FALSE,
     },
     {
-        .species = SPECIES_DRILBUR,
-        .item = ITEM_MUSCLE_BAND,
-        .ability = FRONTIER_ABILITY_HIDDEN, //Mold Breaker
+        .species = SPECIES_PAWNIARD,
+        .item = ITEM_EVIOLITE,
+        .ability = FRONTIER_ABILITY_1, //Defiant
         .nature = NATURE_JOLLY,
+        .atkEv = 252,
+        .defEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_METALCLAW,
+            MOVE_REVENGE,
+            MOVE_KNOCKOFF,
+            MOVE_DUALCHOP,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_SLOWPOKE,
+        .item = ITEM_LEFTOVERS,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Regenerator
+        .nature = NATURE_QUIET,
+        .hpEv = 252,
+        .spAtkEv = 252,
+        .spDefEv = 4,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_WATERPULSE,
+            MOVE_DREAMEATER,
+            MOVE_SIGNALBEAM,
+            MOVE_MUDSHOT,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+};
+
+static const struct BattleTowerSpread sRaidPartnerSpread_Adrian_Rank5[] =
+{
+    {
+        .species = SPECIES_NIDOKING,
+        .item = ITEM_LIFE_ORB,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Sheer Force
+        .nature = NATURE_TIMID,
+        .spAtkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_SLUDGEWAVE,
+            MOVE_EARTHPOWER,
+            MOVE_FLAMETHROWER,
+            MOVE_ICEBEAM,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_BISHARP,
+        .item = ITEM_LEFTOVERS,
+        .ability = FRONTIER_ABILITY_1, //Defiant
+        .nature = NATURE_JOLLY,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_IRONHEAD,
+            MOVE_KNOCKOFF,
+            MOVE_PSYCHOCUT,
+            MOVE_SUCKERPUNCH,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_SLOWKING,
+        .item = ITEM_ASSAULT_VEST,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Regenerator
+        .nature = NATURE_QUIET,
+        .hpEv = 252,
+        .spAtkEv = 252,
+        .spDefEv = 4,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_DREAMEATER,
+            MOVE_HYDROPUMP,
+            MOVE_FIREBLAST,
+            MOVE_SHADOWBALL,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+};
+
+static const struct BattleTowerSpread sRaidPartnerSpread_Adrian_Rank6[] =
+{
+    {
+        .species = SPECIES_ETERNATUS,
+        .item = ITEM_LIFE_ORB,
+        .ability = FRONTIER_ABILITY_1, //Pressure
+        .nature = NATURE_TIMID,
+        .defEv = 4,
+        .spAtkEv = 252,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_DYNAMAXCANNON,
+            MOVE_FLAMETHROWER,
+            MOVE_SLUDGEBOMB,
+            MOVE_RECOVER,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+    },
+    {
+        .species = SPECIES_YVELTAL,
+        .item = ITEM_MUSCLE_BAND,
+        .ability = FRONTIER_ABILITY_1, //Dark Aura
+        .nature = NATURE_ADAMANT,
         .hpEv = 4,
         .atkEv = 252,
         .spdEv = 252,
@@ -6779,179 +6937,21 @@ static const struct BattleTowerSpread sRaidPartnerSpread_Adrian_Rank2[] =
         .spdIv = 31,
         .moves = 
         {
-            MOVE_BULLDOZE,
-            MOVE_ROCKTOMB,
-            MOVE_METALCLAW,
-            MOVE_CRUSHCLAW,
-        },
-        .forSingles = TRUE,
-        .forDoubles = TRUE,
-        .modifyMovesDoubles = FALSE,
-    },
-    {
-        .species = SPECIES_ARON,
-        .item = ITEM_LEFTOVERS,
-        .ability = FRONTIER_ABILITY_1, //Sturdy
-        .nature = NATURE_IMPISH,
-        .hpEv = 144,
-        .atkEv = 252,
-        .defEv = 112,
-        .hpIv = 31,
-        .atkIv = 31,
-        .defIv = 31,
-        .spAtkIv = 31,
-        .spDefIv = 31,
-        .spdIv = 31,
-        .moves = 
-        {
-            MOVE_BODYPRESS,
-            MOVE_IRONTAIL,
-            MOVE_FACADE,
-            MOVE_DIG,
-        },
-        .forSingles = TRUE,
-        .forDoubles = TRUE,
-        .modifyMovesDoubles = FALSE,
-    },
-};
-
-static const struct BattleTowerSpread sRaidPartnerSpread_Adrian_Rank5[] =
-{
-    {
-        .species = SPECIES_METAGROSS,
-        .item = ITEM_STEEL_GEM,
-        .ability = FRONTIER_ABILITY_1, //Clear Body
-        .nature = NATURE_JOLLY,
-        .atkEv = 252,
-        .spDefEv = 4,
-        .spdEv = 252,
-        .hpIv = 31,
-        .atkIv = 31,
-        .defIv = 31,
-        .spAtkIv = 31,
-        .spDefIv = 31,
-        .spdIv = 31,
-        .moves = 
-        {
-            MOVE_METEORMASH,
-            MOVE_EARTHQUAKE,
-            MOVE_ZENHEADBUTT,
-            MOVE_BULLETPUNCH,
-        },
-        .forSingles = TRUE,
-        .forDoubles = TRUE,
-        .modifyMovesDoubles = FALSE,
-    },
-    {
-        .species = SPECIES_EXCADRILL,
-        .item = ITEM_LIFE_ORB,
-        .ability = FRONTIER_ABILITY_HIDDEN, //Mold Breaker
-        .nature = NATURE_JOLLY,
-        .atkEv = 252,
-        .spDefEv = 4,
-        .spdEv = 252,
-        .hpIv = 31,
-        .atkIv = 31,
-        .defIv = 31,
-        .spAtkIv = 31,
-        .spDefIv = 31,
-        .spdIv = 31,
-        .moves = 
-        {
-            MOVE_EARTHQUAKE,
+            MOVE_KNOCKOFF,
+            MOVE_DUALWINGBEAT,
+            MOVE_SUCKERPUNCH,
             MOVE_ROCKSLIDE,
-            MOVE_IRONHEAD,
-            MOVE_ROCKTOMB,
         },
         .forSingles = TRUE,
         .forDoubles = TRUE,
         .modifyMovesDoubles = FALSE,
     },
     {
-        .species = SPECIES_AGGRON,
-        .item = ITEM_ASSAULT_VEST,
-        .ability = FRONTIER_ABILITY_2, //Rock Head
-        .nature = NATURE_IMPISH,
-        .hpEv = 12,
-        .atkEv = 252,
-        .defEv = 236,
-        .spDefEv = 8,
-        .hpIv = 31,
-        .atkIv = 31,
-        .defIv = 31,
-        .spAtkIv = 31,
-        .spDefIv = 31,
-        .spdIv = 31,
-        .moves = 
-        {
-            MOVE_HEADSMASH,
-            MOVE_IRONHEAD,
-            MOVE_BODYPRESS,
-            MOVE_EARTHQUAKE,
-        },
-        .forSingles = TRUE,
-        .forDoubles = TRUE,
-        .modifyMovesDoubles = FALSE,
-    },
-};
-
-static const struct BattleTowerSpread sRaidPartnerSpread_Adrian_Rank6[] =
-{
-    {
-        .species = SPECIES_METAGROSS,
-        .item = ITEM_METAGROSSITE,
-        .ability = FRONTIER_ABILITY_1, //Clear Body
-        .nature = NATURE_JOLLY,
-        .atkEv = 252,
-        .spDefEv = 4,
-        .spdEv = 252,
-        .hpIv = 31,
-        .atkIv = 31,
-        .defIv = 31,
-        .spAtkIv = 31,
-        .spDefIv = 31,
-        .spdIv = 31,
-        .moves = 
-        {
-            MOVE_METEORMASH,
-            MOVE_EARTHQUAKE,
-            MOVE_ZENHEADBUTT,
-            MOVE_THUNDERPUNCH,
-        },
-        .forSingles = TRUE,
-        .forDoubles = TRUE,
-        .modifyMovesDoubles = FALSE,
-    },
-    {
-        .species = SPECIES_NECROZMA_DUSK_MANE,
-        .item = ITEM_LIFE_ORB,
+        .species = SPECIES_NECROZMA_DAWN_WINGS,
+        .item = ITEM_POWER_HERB,
         .ability = FRONTIER_ABILITY_1, //Prism Armor
-        .nature = NATURE_JOLLY,
-        .atkEv = 252,
-        .spdEv = 252,
-        .hpIv = 31,
-        .atkIv = 31,
-        .defIv = 31,
-        .spAtkIv = 31,
-        .spDefIv = 31,
-        .spdIv = 31,
-        .moves = 
-        {
-            MOVE_SUNSTEELSTRIKE,
-            MOVE_EARTHQUAKE,
-            MOVE_PHOTONGEYSER,
-            MOVE_MORNINGSUN,
-        },
-        .forSingles = TRUE,
-        .forDoubles = TRUE,
-        .modifyMovesDoubles = FALSE,
-    },
-    {
-        .species = SPECIES_ZACIAN_CROWNED,
-        .item = ITEM_RUSTED_SWORD,
-        .ability = FRONTIER_ABILITY_1, //Intrepid Sword
-        .nature = NATURE_JOLLY,
-        .atkEv = 252,
+        .nature = NATURE_TIMID,
+        .spAtkEv = 252,
         .spDefEv = 4,
         .spdEv = 252,
         .hpIv = 31,
@@ -6962,10 +6962,10 @@ static const struct BattleTowerSpread sRaidPartnerSpread_Adrian_Rank6[] =
         .spdIv = 31,
         .moves = 
         {
-            MOVE_BEHEMOTHBLADE,
-            MOVE_PLAYROUGH,
-            MOVE_WILDCHARGE,
-            MOVE_CLOSECOMBAT,
+            MOVE_METEORBEAM,
+            MOVE_MOONGEISTBEAM,
+            MOVE_PHOTONGEYSER,
+            MOVE_EARTHPOWER,
         },
         .forSingles = TRUE,
         .forDoubles = TRUE,
