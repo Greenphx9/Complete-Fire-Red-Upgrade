@@ -189,9 +189,9 @@
 #define TRAINER_BACK_PIC_HILBERT			12
 #define TRAINER_BACK_PIC_NATE				13
 #define TRAINER_BACK_PIC_CYNTHIA			14
-#define TRAINER_BACK_PIC_SLOWBRO            15
+#define TRAINER_BACK_PIC_LAPHICET            15
 #define TRAINER_BACK_PIC_ANABEL             16
-#define TRAINER_BACK_PIC_FERROTHORN         17
+#define TRAINER_BACK_PIC_KEITH              17
 #define TRAINER_BACK_PIC_WES                18
 #define TRAINER_BACK_PIC_STEVEN             19
 #define TRAINER_BACK_PIC_GREENPHX       	20
@@ -205,6 +205,7 @@
 #define TRAINER_BACK_PIC_CHILI              28
 #define TRAINER_BACK_PIC_CRESS              29
 #define TRAINER_BACK_PIC_CILAN              30
+#define TRAINER_BACK_PIC_ADRIAN             31
 #ifndef UNBOUND //CHANGE THESE
 
 #define TRAINER_ENCOUNTER_MUSIC_MALE         0 // standard male encounter music

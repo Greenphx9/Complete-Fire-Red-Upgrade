@@ -111,8 +111,8 @@ extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Regieleki;
 extern const u16 gEventObjectPic_RegielekiPal[];
 extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Registeel;
 extern const u16 gEventObjectPic_RegisteelPal[];
-extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_ShinySlowbro;
-extern const u16 gEventObjectPic_ShinySlowbroPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Laphicet;
+extern const u16 gEventObjectPic_LaphicetPal[];
 extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Tamer;
 extern const u16 gEventObjectPic_TamerPal[];
 extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_PC2;
@@ -123,8 +123,8 @@ extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Regigigas;
 extern const u16 gEventObjectPic_RegigigasPal[];
 extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Anabel;
 extern const u16 gEventObjectPic_AnabelPal[];
-extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Ferrothorn;
-extern const u16 gEventObjectPic_FerrothornPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Keith;
+extern const u16 gEventObjectPic_KeithPal[];
 extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Wes;
 extern const u16 gEventObjectPic_WesPal[];
 extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Steven;
@@ -151,6 +151,8 @@ extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Cress;
 extern const u16 gEventObjectPic_CressPal[];
 extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Cilan;
 extern const u16 gEventObjectPic_CilanPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Adrian;
+extern const u16 gEventObjectPic_AdrianPal[];
 
 	static NPCPtr sOverworldTable2[] = { 
 		&gEventObjectGraphicsInfo_Cresselia,
@@ -160,13 +162,13 @@ extern const u16 gEventObjectPic_CilanPal[];
 		&gEventObjectGraphicsInfo_Regirock,
 		&gEventObjectGraphicsInfo_Regieleki,
 		&gEventObjectGraphicsInfo_Registeel,
-		&gEventObjectGraphicsInfo_ShinySlowbro,
+		&gEventObjectGraphicsInfo_Laphicet,
 		&gEventObjectGraphicsInfo_Tamer,
 		&gEventObjectGraphicsInfo_PC2,
 		&gEventObjectGraphicsInfo_Regidrago,
 		&gEventObjectGraphicsInfo_Regigigas,
 		&gEventObjectGraphicsInfo_Anabel,
-		&gEventObjectGraphicsInfo_Ferrothorn,
+		&gEventObjectGraphicsInfo_Keith,
 		&gEventObjectGraphicsInfo_Wes,
 		&gEventObjectGraphicsInfo_Steven,
 		&gEventObjectGraphicsInfo_Mira,
@@ -180,6 +182,7 @@ extern const u16 gEventObjectPic_CilanPal[];
 		&gEventObjectGraphicsInfo_Chili,
 		&gEventObjectGraphicsInfo_Cress,
 		&gEventObjectGraphicsInfo_Cilan,
+		&gEventObjectGraphicsInfo_Adrian,
 	};
 
 	const struct EventObjectGraphicsInfo** const gOverworldTableSwitcher[255] =
@@ -198,13 +201,13 @@ extern const u16 gEventObjectPic_CilanPal[];
 		{gEventObjectPic_RegirockPal, 0x1205},
 		{gEventObjectPic_RegielekiPal, 0x1206},	
 		{gEventObjectPic_RegisteelPal, 0x1207},
-		{gEventObjectPic_ShinySlowbroPal, 0x1208},
+		{gEventObjectPic_LaphicetPal, 0x1208},
 		{gEventObjectPic_TamerPal, 0x1209},
 		{gEventObjectPic_PC2Pal, 0x120A},
 		{gEventObjectPic_RegidragoPal, 0x120B},
 		{gEventObjectPic_RegigigasPal, 0x120C},
 		{gEventObjectPic_AnabelPal, 0x120D},
-		{gEventObjectPic_FerrothornPal, 0x120E},
+		{gEventObjectPic_KeithPal, 0x120E},
 		{gEventObjectPic_WesPal, 0x120F},
 		{gEventObjectPic_StevenPal, 0x1210},
 		{gEventObjectPic_MiraPal, 0x1211},
@@ -218,6 +221,7 @@ extern const u16 gEventObjectPic_CilanPal[];
 		{gEventObjectPic_ChiliPal, 0x1219},
 		{gEventObjectPic_CressPal, 0x121A},
 		{gEventObjectPic_CilanPal, 0x121B},
+		{gEventObjectPic_AdrianPal, 0x121C},
 		{NULL, 0x11FF},
 	};
 	const struct SpritePalette* const gObjectEventSpritePalettesSwitcher[255] = {

@@ -190,9 +190,6 @@ static const struct SpriteTemplate sSummaryScreenGigantamaxIconTemplate =
 	.callback = SpriteCallbackDummy,
 };
 
-static const struct CompressedSpriteSheet   sSummaryScreenGigantamaxIconSpriteSheet = { GigantamaxSummaryScreenIconTiles, (16 * 16) / 2, GFX_TAG_GIGANTAMAX_ICON };
-static const struct SpritePalette sSummaryScreenGigantamaxIconSpritePalette = { GigantamaxSummaryScreenIconPal, GFX_TAG_GIGANTAMAX_ICON };
-
 #ifdef FRIENDSHIP_HEART_ON_SUMMARY_SCREEN
 static const struct SpriteTemplate sSummaryScreenMaxFriendshipIconTemplate =
 {
@@ -1487,9 +1484,9 @@ void CreateSummaryScreenGigantamaxIcon(void)
 
 void SummaryScreen_ChangeCaughtBallSpriteVisibility(u8 invisible)
 {
-	u8 ballSpriteId = sMonSummaryScreen->caughtBallSpriteId;
-	u8 gigantamaxIconSpriteId = gSprites[sMonSummaryScreen->caughtBallSpriteId].data[0];
-	unusedArg u8 maxFriendshipIconSpriteId = gSprites[sMonSummaryScreen->caughtBallSpriteId].data[1];
+	u8 ballSpriteId = sMonSummaryScreen->ballIconSpriteId;
+	u8 gigantamaxIconSpriteId = gSprites[sMonSummaryScreen->ballIconSpriteId].data[0];
+	unusedArg u8 maxFriendshipIconSpriteId = gSprites[sMonSummaryScreen->ballIconSpriteId].data[1];
 
 	gSprites[ballSpriteId].invisible = invisible;
 	if (gigantamaxIconSpriteId != MAX_SPRITES)
@@ -1503,9 +1500,9 @@ void SummaryScreen_ChangeCaughtBallSpriteVisibility(u8 invisible)
 
 void SummaryScreen_DestroyCaughtBallSprite(void)
 {
-	u8 ballSpriteId = sMonSummaryScreen->caughtBallSpriteId;
-	u8 gigantamaxIconSpriteId = gSprites[sMonSummaryScreen->caughtBallSpriteId].data[0];
-	unusedArg u8 maxFriendshipIconSpriteId = gSprites[sMonSummaryScreen->caughtBallSpriteId].data[1];
+	u8 ballSpriteId = sMonSummaryScreen->ballIconSpriteId;
+	u8 gigantamaxIconSpriteId = gSprites[sMonSummaryScreen->ballIconSpriteId].data[0];
+	unusedArg u8 maxFriendshipIconSpriteId = gSprites[sMonSummaryScreen->ballIconSpriteId].data[1];
 
 	DestroySpriteAndFreeResources(&gSprites[ballSpriteId]);
 	if (gigantamaxIconSpriteId != MAX_SPRITES)

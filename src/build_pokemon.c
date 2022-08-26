@@ -248,7 +248,7 @@ bool8 ShouldTrainerMugshot()
 		return TRUE;
 	}
 
-	if (trainerClass == CLASS_BOSS || trainerClass == CLASS_CHAMPION || trainerClass == CLASS_DUNCE || trainerClass == CLASS_RIVAL_2 || trainerClass == CLASS_AQUA_LEADER || trainerClass == CLASS_TEAM_AQUA || trainerClass == CLASS_AROMA_LADY_RS || trainerClass == CLASS_PKMN_TRAINER_2 || trainerClass == CLASS_LEADER || trainerClass == CLASS_ELITE_4
+	if (trainerClass == CLASS_BOSS || trainerClass == CLASS_CHAMPION || trainerClass == CLASS_ORACLE || trainerClass == CLASS_RIVAL_2 || trainerClass == CLASS_AQUA_LEADER || trainerClass == CLASS_TEAM_AQUA || trainerClass == CLASS_AROMA_LADY_RS || trainerClass == CLASS_PKMN_TRAINER_2 || trainerClass == CLASS_LEADER || trainerClass == CLASS_ELITE_4
 		|| trainerClass == CLASS_MAGMA_ADMIN || trainerClass == CLASS_MAGMA_LEADER || trainerClass == CLASS_BUG_MANIAC)
 	{
 		return FALSE;
