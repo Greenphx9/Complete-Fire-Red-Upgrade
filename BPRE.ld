@@ -1255,6 +1255,7 @@ EventObjectIsMovementOverridden = 0x8063C70 | 1;
 EventObjectSetHeldMovement = 0x8063CA4 | 1;
 EventObjectClearHeldMovementIfActive = 0x8063D1C | 1;
 EventObjectClearHeldMovement = 0x8063D34 | 1;
+EventObjectCheckHeldMovementStatus = 0x8063D68 | 1;
 EventObjectClearHeldMovementIfFinished = 0x8063D7C | 1;
 GetFaceDirectionMovementAction = 0x8063EB8 | 1;
 GetJumpMovementAction = 0x8064194 | 1;
