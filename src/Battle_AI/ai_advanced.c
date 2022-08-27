@@ -1450,7 +1450,7 @@ bool8 ShouldPivot(u8 bankAtk, u8 bankDef, u16 move, u8 class)
 						if ((switchFlags & SWITCHING_FLAG_KO_FOE && switchFlags & (SWITCHING_FLAG_OUTSPEEDS | SWITCHING_FLAG_WALLS_FOE | SWITCHING_FLAG_RESIST_ALL_MOVES)) //New mon will go first and KO or survive a hit
 						 || (switchFlags & SWITCHING_FLAG_RESIST_ALL_MOVES && switchFlags & SWITCHING_FLAG_CAN_REMOVE_HAZARDS) //Resists all moves and can remove hazards
 						 || (BATTLER_MAX_HP(bankDef)
-						  && (IsBankHoldingFocusSash(bankDef) || defAbility == ABILITY_STURDY || defAbility == ABILITY_MULTISCALE || defAbility == ABILITY_SHADOWSHIELD))) //Pivot to break the sash
+						  && (IsBankHoldingFocusSash(bankDef) || defAbility == ABILITY_STURDY || defAbility == ABILITY_MULTISCALE))) //Pivot to break the sash
 							return PIVOT;
 					}
 

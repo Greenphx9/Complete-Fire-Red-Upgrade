@@ -2292,7 +2292,7 @@ void HandleIllusionShiftSwitch(void)
 {
 	u8 monId, firstMonId, lastMonId;
 	struct Pokemon* party = LoadPartyRange(gBankFainted, &firstMonId, &lastMonId);
-	monId = gBattleBufferB[gActiveBattler][1];
+	monId = gBattleStruct->monToSwitchIntoId[gBankFainted];
 
 	if (!AreAbilitiesSuppressed() && GetMonAbility(&party[monId]) == ABILITY_ILLUSION)
 	{

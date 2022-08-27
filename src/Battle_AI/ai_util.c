@@ -32,7 +32,7 @@ ai_util.c
 //This file's functions:
 static u32 CalcPredictedDamageForCounterMoves(u16 move, u8 bankAtk, u8 bankDef);
 static bool8 CalculateMoveKnocksOutXHits(u16 move, u8 bankAtk, u8 bankDef, u8 numHits);
-u16 PriorityMoveInMoveset(u8 bank);
+bool8 PriorityMoveInMoveset(u8 bank);
 
 u16 AIRandom()
 {
@@ -2370,15 +2370,12 @@ bool8 DamagingMoveInMoveset(u8 bank)
 	return FALSE;
 }
 
-u16 PriorityMoveInMoveset(u8 bank) 
+bool8 PriorityMoveInMoveset(u8 bank)
 {
-	//some problems with this - doesn't account for prankster,
-	//doesn't account for 
 	u16 move;
 	u8 moveLimitations = CheckMoveLimitations(bank, 0, 0xFF);
 
-	u8 highestPriority = 0;
-	for (int i = 0; i < MAX_MON_MOVES; ++i)
+	for (u32 i = 0; i < MAX_MON_MOVES; ++i)
 	{
 		move = GetBattleMonMove(bank, i);
 		if (move == MOVE_NONE)
@@ -2386,18 +2383,12 @@ u16 PriorityMoveInMoveset(u8 bank)
 
 		if (!(gBitTable[i] & moveLimitations))
 		{
-			if(move == MOVE_EXTREMESPEED && highestPriority < 2)
-				highestPriority = 2;
-			else if (ABILITY(bank) == ABILITY_TRIAGE && MoveEffectInMoveset(EFFECT_ABSORB, bank) && highestPriority < 3)
-				highestPriority = 3;
-			else if((gBattleMoves[move].effect == EFFECT_QUICK_ATTACK || move == MOVE_WATERSHURIKEN || move == MOVE_SUCKERPUNCH)  
-			&& highestPriority < 1)
-				highestPriority = 1;
-
+			if (PriorityCalc(bank, ACTION_USE_MOVE, move) > 0)
+				return TRUE;
 		}
 	}
 
-	return highestPriority;
+	return FALSE;	
 }
 
 bool8 PhysicalMoveInMoveset(u8 bank)
@@ -2608,27 +2599,6 @@ bool8 SpecialMoveInMonMoveset(struct Pokemon* mon, u8 moveLimitations)
 	}
 
 	return FALSE;
-}
-
-bool8 PriorityMoveInMoveset(u8 bank)
-{
-	u16 move;
-	u8 moveLimitations = CheckMoveLimitations(bank, 0, 0xFF);
-
-	for (int i = 0; i < MAX_MON_MOVES; ++i)
-	{
-		move = GetBattleMonMove(bank, i);
-		if (move == MOVE_NONE)
-			break;
-
-		if (!(gBitTable[i] & moveLimitations))
-		{
-			if (PriorityCalc(bank, ACTION_USE_MOVE, move) > 0)
-				return TRUE;
-		}
-	}
-
-	return FALSE;	
 }
 
 bool8 MagicCoatableMovesInMoveset(u8 bank)

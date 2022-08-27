@@ -54,6 +54,7 @@ void sub_806E6FC(void);
 #define Var8010 (*((u16*) 0x20370D6))
 #define Var800F (*((u16*) 0x20370d2))
 #define Var800E (*((u16*) 0x203ad30))
+#define Var800C (*((u16*) 0x20370D4))
 #define Var8014 (*((u16*) 0x20370DE))
 
 

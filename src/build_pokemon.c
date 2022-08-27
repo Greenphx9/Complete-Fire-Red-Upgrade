@@ -3817,6 +3817,7 @@ u8 ScriptGiveMon(u16 species, u8 level, u16 item, unusedArg u32 unused1, unusedA
 		u8 nature = Var8004;
 		bool8 shiny = Var8005;
 		u16* ivs = &Var8006; //-0x800B
+		u8 abilityNum = Var800C;
 
 		for (i = 0; i < MAX_MON_MOVES; ++i)
 		{
@@ -3830,7 +3831,9 @@ u8 ScriptGiveMon(u16 species, u8 level, u16 item, unusedArg u32 unused1, unusedA
 		if (nature >= NUM_NATURES)
 			nature = Random() % NUM_NATURES;
 
-		GiveMonNatureAndAbility(&mon, nature, GetMonData(&mon, MON_DATA_PERSONALITY, NULL) & 1, shiny, FALSE, FALSE);
+		GiveMonNatureAndAbility(&mon, nature, abilityNum, shiny, FALSE, FALSE);
+		if(abilityNum == 2)
+			mon.hiddenAbility = TRUE;
 		HealMon(&mon);
 		CalculateMonStats(&mon);
 	}

@@ -2008,7 +2008,7 @@ static bool8 ShouldSwitchWhenOffensiveStatsAreLow(void)
 			if (!(gBitTable[i] & moveLimitations) //Can use move
 			&& gBattleMoves[move].power != 0) //Move actually does damage
 			{
-				u8 split = CalcMoveSplit(gActiveBattler, move);
+				u8 split = CalcMoveSplit(move, gActiveBattler, foe1);
 
 				if (split == SPLIT_PHYSICAL)
 				{

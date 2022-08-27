@@ -2440,6 +2440,7 @@ extern const u8 gText_NormalModeHOF[];
 extern const u8 gText_HardModeHOF[];
 extern const u8 gText_NoIVGrinding[];
 extern const u8 gText_Scalemons[];
+extern const u8 gText_ShrinkTextHOF[];
 
 extern const struct TextColor sHOFTextColors[];
 void HallOfFame_PrintWelcomeText(void)
@@ -2451,33 +2452,31 @@ void HallOfFame_PrintWelcomeText(void)
 	WindowPrint(0, 2, x, 1, &sHOFTextColors[0], 0, gText_WelcomeToHOF);
 
 	const u8* difficultyString = NULL;
+	StringAppend(gStringVar1, gText_ShrinkTextHOF);
+	if(FlagGet(FLAG_NO_GRINDING_IV) || FlagGet(FLAG_NO_GRINDING_EV))
+	{
+		StringAppend(gStringVar1, gText_NoIVGrinding);
+	}
 	if(FlagGet(FLAG_HAS_USED_NORMAL_MODE))
 	{
-		difficultyString = gText_NormalModeHOF;
+		StringAppend(gStringVar1, gText_NormalModeHOF);
 	}
 	else if(!FlagGet(FLAG_HARD_MODE))
 	{
-		difficultyString = gText_NormalModeHOF;
+		StringAppend(gStringVar1, gText_NormalModeHOF);
 	}
 	else
 	{
-		difficultyString = gText_HardModeHOF;
+		StringAppend(gStringVar1, gText_HardModeHOF);
 	}
 	if(FlagGet(FLAG_SCALEMONS))
 	{
 		StringAppend(gStringVar1, gText_Scalemons);
 	}
-	if(FlagGet(FLAG_NO_GRINDING_IV) || FlagGet(FLAG_NO_GRINDING_EV))
-	{
-		StringAppend(gStringVar1, gText_NoIVGrinding);
-	}
 
-	StringCopy(gStringVar4, difficultyString);
-	StringAppend(gStringVar4, gText_Difficulty);
+	StringAppend(gStringVar1, gText_Difficulty);
 
-	x = (0xD0 - GetStringWidth(2, gStringVar4, 0)) / 2;
 	u8 x2 = (0xD0 - GetStringWidth(2, gStringVar1, 0)) / 2;
-	WindowPrint(0, 2, x, 17, &sHOFTextColors[0], 0, gStringVar4);
 	WindowPrint(0, 2, x2, 20, &sHOFTextColors[0], 0, gStringVar1);
 
 	CopyWindowToVram(0, COPYWIN_BOTH);

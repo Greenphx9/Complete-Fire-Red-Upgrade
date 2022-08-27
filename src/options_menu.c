@@ -127,7 +127,7 @@ extern const u8 gText_RButtonMode[];
 extern const u8 gText_BattleMusic[];
 extern const u8 gText_WildLevelScaling[];
 extern const u8 gText_AutoSortBag[];
-extern const u8 gText_Difficulty[];
+extern const u8 gText_DifficultyOptions[];
 
 static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
 {
@@ -146,7 +146,7 @@ static const u8 *const sOptionMenuItemsNames_SecondPage[MENUITEM_COUNT] =
     [MENUITEM_BATTLEMUSIC] = gText_BattleMusic,
     [MENUITEM_WILDLEVELSCALING] = gText_WildLevelScaling,
     [MENUITEM_AUTOSORTBAG] = gText_AutoSortBag,
-    [MENUITEM_DIFFICULTY]  = gText_Difficulty,
+    [MENUITEM_DIFFICULTY]  = gText_DifficultyOptions,
     [MENUITEM_CANCEL_PAGE_2] = gText_OptionMenuCancel,
 };
 

@@ -260,11 +260,14 @@ Stop zooming!
 #org @gText_WelcomeToHOF
 Welcome to the Hall Of Fame!
 
+#org @gText_ShrinkTextHOF
+[SHRINK]
+
 #org @gText_NormalModeHOF
-\n[SHRINK]Normal
+ Normal
 
 #org @gText_HardModeHOF
-\n[SHRINK]Hard
+ Hard
 
 #org @gText_NoIVGrinding
  No Grinding Mode
@@ -282,6 +285,9 @@ Expert
 Insane 
 
 #org @gText_Difficulty
+ Difficulty
+
+#org @gText_DifficultyOptions
 Difficulty
 
 #org @gText_PostGame
