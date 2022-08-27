@@ -16405,19 +16405,19 @@ ANIM_DECORATE:
 	loadparticle ANIM_TAG_SPARKLE_2
 	playsound2 0xBC SOUND_PAN_ATTACKER
 	launchtask AnimTask_RockMonBackAndForth 0x5 0x3 bank_attacker 0x3 0x0
-	launchtemplate DECORATE_HEART 0x2 0x5 bank_target, -10, 0, 0x60 0x0
+	launchtemplate DECORATE_HEART TEMPLATE_TARGET | 2, 0x5 bank_target, -10, 0, 0x60 0x0
 	playsound2 0xcd SOUND_PAN_TARGET
 	pause 0x10
-	launchtemplate DECORATE_HEART 0x2 0x5 bank_target, 10, 10, 0x50 0x0
+	launchtemplate DECORATE_HEART TEMPLATE_TARGET | 2, 0x5 bank_target, 10, 10, 0x50 0x0
 	playsound2 0xcd SOUND_PAN_TARGET
 	pause 0x10
-	launchtemplate DECORATE_HEART 0x2 0x5 bank_target, 0, -15, 0x40 0x0
+	launchtemplate DECORATE_HEART TEMPLATE_TARGET | 2, 0x5 bank_target, 0, -15, 0x40 0x0
 	playsound2 0xcd SOUND_PAN_TARGET
 	pause 0x10
-	launchtemplate DECORATE_HEART 0x2 0x5 bank_target, -15, 16, 0x30 0x0
+	launchtemplate DECORATE_HEART TEMPLATE_TARGET | 2, 0x5 bank_target, -15, 16, 0x30 0x0
 	playsound2 0xcd SOUND_PAN_TARGET
 	pause 0x10
-	launchtemplate DECORATE_HEART 0x2 0x5 bank_target, -20, -14 0x20 0x0
+	launchtemplate DECORATE_HEART TEMPLATE_TARGET | 2, 0x5 bank_target, -20, -14 0x20 0x0
 	playsound2 0xcd SOUND_PAN_TARGET
 	waitanimation
 	endanimation
