@@ -21,6 +21,8 @@ bool8 SpeciesHasStrongBeak(u16 species);
 bool8 SpeciesHasEarthilate(u16 species);
 
 bool8 AbilityIncreasesWildItemChance(u8 ability);
+bool8 IsUnnerveAbility(u8 ability);
+bool8 UnnerveOnOpposingField(u8 bank);
 
 struct SpecialReplaceAbilityFlags
 {

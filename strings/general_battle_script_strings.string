@@ -160,7 +160,7 @@ Neither Pok\emon can run away!
 [SCRIPTING_BANK] can act\nfaster, thanks to its [LAST_ITEM]!
 
 #org @gText_AbilityIncreasedSpeedBracket
-[SCRIPTING_BANK] can act\nfaster, thanks to Quick Draw!
+[SCRIPTING_BANK] can act\nfaster!
 
 #org @gText_MeteorBeamCharge
 [ATTACKER] is\noverflowing with space power!

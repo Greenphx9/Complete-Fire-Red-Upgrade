@@ -108,3 +108,27 @@ bool8 AbilityIncreasesWildItemChance(u8 ability)
 {
 	return ability == ABILITY_COMPOUNDEYES || ability == ABILITY_SUPERLUCK;
 }
+
+bool8 IsUnnerveAbility(u8 ability)
+{
+	return ability == ABILITY_UNNERVE
+		#ifdef ABILITY_ASONE_GRIM
+		|| ability == ABILITY_ASONE_GRIM
+		#endif
+		#ifdef ABILITY_ASONE_CHILLING
+		|| ability == ABILITY_ASONE_CHILLING
+		#endif
+		;
+}
+
+bool8 UnnerveOnOpposingField(u8 bank)
+{
+	return ABILITY_ON_OPPOSING_FIELD(bank, ABILITY_UNNERVE)
+		#ifdef ABILITY_ASONE_GRIM
+		|| ABILITY_ON_OPPOSING_FIELD(bank, ABILITY_ASONE_GRIM)
+		#endif
+		#ifdef ABILITY_ASONE_CHILLING
+		|| ABILITY_ON_OPPOSING_FIELD(bank, ABILITY_ASONE_CHILLING)
+		#endif
+		;
+}

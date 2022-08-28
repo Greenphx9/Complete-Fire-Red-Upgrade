@@ -215,10 +215,11 @@ QuickClawBS:
 BattleScript_QuickDraw:
 	setword BATTLE_STRING_LOADER StringNull
 	printstring 0x184
+	call BattleScript_AbilityPopUp
 	setword BATTLE_STRING_LOADER gText_AbilityIncreasedSpeedBracket
-	playanimation 0xA ANIM_ITEM_USE 0x0
 	printstring 0x184
 	waitmessage DELAY_HALFSECOND
+	call BattleScript_AbilityPopUpRevert
 	end3
 
 

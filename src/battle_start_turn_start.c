@@ -582,6 +582,7 @@ void BattleBeginFirstTurn(void)
 				gNewBS->statRoseThisRound[i] = FALSE;
 				gNewBS->statFellThisTurn[i] = FALSE;
 				gNewBS->statFellThisRound[i] = FALSE;
+				UpdateQuickClawRandomNumber(i);
 			}
 
 			gBattleStruct->turnEffectsTracker = 0;
@@ -904,11 +905,28 @@ void RunTurnActionsFunctions(void)
 			u8 bank = gBanksByTurnOrder[i];
 			u8 action = gActionsByTurnOrder[i];
 
-			if (gNewBS->quickClawCustapIndicator & gBitTable[bank])
+			if (gNewBS->quickDrawIndicator & gBitTable[bank])
 			{
-				gNewBS->quickClawCustapIndicator &= ~(gBitTable[bank]);
+				gNewBS->quickDrawIndicator &= ~(gBitTable[bank]);
+				gNewBS->quickClawCustapIndicator &= ~(gBitTable[bank]); //One or the other
 
 				if (action == ACTION_USE_ITEM || action == ACTION_SWITCH || action == ACTION_RUN)
+					continue;
+
+				gBattleScripting.bank = bank;
+				BattleScriptExecute(BattleScript_QuickDraw);
+				gCurrentActionFuncId = savedActionFuncId;
+				return;
+			}
+			else if (gNewBS->quickClawCustapIndicator & gBitTable[bank])
+			{
+				gNewBS->quickClawCustapIndicator &= ~(gBitTable[bank]);
+				gNewBS->quickDrawIndicator &= ~(gBitTable[bank]); //One or the other
+
+				if (action == ACTION_USE_ITEM)
+					continue;
+				else if (ITEM_EFFECT(bank) == ITEM_EFFECT_CUSTAP_BERRY
+				&& (action == ACTION_USE_ITEM || action == ACTION_SWITCH || action == ACTION_RUN)) //Only Quick Claw activates on the switch
 					continue;
 
 				gBattleScripting.bank = bank;
@@ -918,10 +936,9 @@ void RunTurnActionsFunctions(void)
 				else
 					gNewBS->ateCustapBerry |= gBitTable[bank];
 
-					BattleScriptExecute(BattleScript_QuickClaw);
-					gCurrentActionFuncId = savedActionFuncId;
-					return;
-				}
+				BattleScriptExecute(BattleScript_QuickClaw);
+				gCurrentActionFuncId = savedActionFuncId;
+				return;
 			}
 		}
 	}
@@ -1829,20 +1846,28 @@ u8 GetWhoStrikesFirst(u8 bank1, u8 bank2, bool8 ignoreMovePriorities)
 	s32 bank1Bracket, bank2Bracket;
 	u32 bank1Spd, bank2Spd;
 
-	//Priority Calc
+//Priority Calc
 	if (!ignoreMovePriorities)
 	{
-		bank1Priority = PriorityCalc(bank1, gChosenActionByBank[bank1], ReplaceWithZMoveRuntime(bank1, gBattleMons[bank1].moves[gBattleStruct->chosenMovePositions[bank1]]));
-		bank2Priority = PriorityCalc(bank2, gChosenActionByBank[bank2], ReplaceWithZMoveRuntime(bank2, gBattleMons[bank2].moves[gBattleStruct->chosenMovePositions[bank2]]));
+		u16 move1 = ReplaceWithZMoveRuntime(bank1, gBattleMons[bank1].moves[gBattleStruct->chosenMovePositions[bank1]]);
+		u16 move2 = ReplaceWithZMoveRuntime(bank2, gBattleMons[bank2].moves[gBattleStruct->chosenMovePositions[bank2]]);
+	
+		bank1Priority = PriorityCalc(bank1, gChosenActionByBank[bank1], move1);
+		bank2Priority = PriorityCalc(bank2, gChosenActionByBank[bank2], move2);
 		if (bank1Priority > bank2Priority)
 			return FirstMon;
 		else if (bank1Priority < bank2Priority)
 			return SecondMon;
-	}
 
-	//BracketCalc
-	bank1Bracket = gNewBS->lastBracketCalc[bank1] = BracketCalc(bank1);
-	bank2Bracket = gNewBS->lastBracketCalc[bank2] = BracketCalc(bank2);
+		bank1Bracket = gNewBS->lastBracketCalc[bank1] = BracketCalc(bank1, gChosenActionByBank[bank1], move1);
+		bank2Bracket = gNewBS->lastBracketCalc[bank2] = BracketCalc(bank2, gChosenActionByBank[bank2], move2);
+	}
+	else
+	{
+		//Bracket Calc
+		bank1Bracket = gNewBS->lastBracketCalc[bank1] = BracketCalc(bank1, 0, MOVE_NONE);
+		bank2Bracket = gNewBS->lastBracketCalc[bank2] = BracketCalc(bank2, 0, MOVE_NONE);
+	}
 
 	if (bank1Bracket > bank2Bracket)
 		return FirstMon;
@@ -1995,22 +2020,36 @@ s8 PriorityCalcMon(struct Pokemon* mon, u16 move)
 	return priority;
 }
 
-s32 BracketCalc(u8 bank)
+bool8 QuickClawActivatesThisTurn(u8 bank)
+{
+	return gNewBS->quickClawRandomNumber[bank] < ITEM_QUALITY(bank);
+}
+
+s32 BracketCalc(u8 bank, u8 action, u16 move)
 {
 	u8 itemEffect = ITEM_EFFECT(bank);
-	u8 itemQuality = ITEM_QUALITY(bank);
 	u8 ability = ABILITY(bank);
 
 	gNewBS->quickClawCustapIndicator &= ~(gBitTable[bank]); //Reset the Quick Claw counter just in case
+	gNewBS->quickDrawIndicator &= ~(gBitTable[bank]); //Reset the Quick Claw counter just in case
 	if (BATTLER_ALIVE(bank))
 	{
 		if (gNewBS->ateCustapBerry & gBitTable[bank]) //Already ate the Berry
 			return 1;
 		else
 		{
+			if (ability == ABILITY_QUICKDRAW
+			&& gNewBS->quickDrawRandomNumber[bank] < 30 //30% chance - activates before items
+			&& action == ACTION_USE_MOVE
+			&& SPLIT(move) != SPLIT_STATUS) //Only damaging moves
+			{
+				gNewBS->quickDrawIndicator |= gBitTable[bank];
+				return 1;
+			}
+
 			switch (itemEffect) {
 				case ITEM_EFFECT_QUICK_CLAW:
-					if (gRandomTurnNumber < (0xFFFF * itemQuality) / 100)
+					if (QuickClawActivatesThisTurn(bank))
 					{
 						gNewBS->quickClawCustapIndicator |= gBitTable[bank];
 						return 1;
@@ -2018,15 +2057,7 @@ s32 BracketCalc(u8 bank)
 					break;
 
 				case ITEM_EFFECT_CUSTAP_BERRY:
-					if (PINCH_BERRY_CHECK(bank)
-						&& !ABILITY_ON_OPPOSING_FIELD(bank, ABILITY_UNNERVE)
-						#ifdef ABILITY_ASONE_GRIM
-						&& !ABILITY_ON_OPPOSING_FIELD(bank, ABILITY_ASONE_GRIM)
-						#endif
-						#ifdef ABILITY_ASONE_CHILLING
-						&& !ABILITY_ON_OPPOSING_FIELD(bank, ABILITY_ASONE_CHILLING)
-						#endif
-						)
+					if (PINCH_BERRY_CHECK(bank) && !UnnerveOnOpposingField(bank))
 					{
 						gNewBS->quickClawCustapIndicator |= gBitTable[bank];
 						return 1;

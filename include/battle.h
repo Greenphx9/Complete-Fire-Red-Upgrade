@@ -781,6 +781,8 @@ struct NewBattleStruct
 	u8 chiStrikeCritBoosts[MAX_BATTLERS_COUNT];
 	u8 sandblastCentiferno[MAX_BATTLERS_COUNT]; //Records if any banks are trapped by G-Max Centiferno or G-Max Sandblast
 	u8 disguisedAs[MAX_BATTLERS_COUNT]; //The party index + 1 the mon with Illusion is disguised as
+	u8 quickClawRandomNumber[MAX_BATTLERS_COUNT];
+	u8 quickDrawRandomNumber[MAX_BATTLERS_COUNT];
 
 	//Bit Fields for Banks
 	u8 MicleBerryBits;
@@ -790,6 +792,7 @@ struct NewBattleStruct
 	u8 playedShellTrapMessage;
 	u8 RoostCounter;
 	u8 quickClawCustapIndicator;
+	u8 quickDrawIndicator;
 	u8 ateCustapBerry;
 	u8 HealingWishLoc;
 	u8 PowderByte;

@@ -109,6 +109,7 @@ void AddBankToPickupStack(const u8 bank);
 void RemoveBankFromPickupStack(const u8 bank);
 u8 GetTopOfPickupStackNotIncludingBank(const u8 bank);
 void RemoveScreensFromSide(const u8 side);
+void UpdateQuickClawRandomNumber(u8 bank);
 bool8 WillPoltergeistFail(u16 item, u8 ability);
 bool8 IsChoiceItemEffectOrAbility(u8 itemEffect, u8 ability);
 u8 GetImposterBank(u8 bank);

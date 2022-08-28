@@ -297,15 +297,6 @@ void TryDoDynamaxTrainerSlide(void)
 			gBattleStringLoader = sDynamaxTrainerSlides[i].dynamaxMsg;
 	}
 
-	//Try giving any Trainer named "Red" a special string
-	if (i >= NELEMS(sDynamaxTrainerSlides))
-	{
-		u8 redName[] = {CHAR_R, CHAR_e, CHAR_d, EOS};
-
-		if (StringCompare(GetTrainerName(gBattleScripting.bank), redName) == 0) //Trainer's name is "Red"
-			gBattleStringLoader = gText_RedDynamaxMsg;
-	}
-
 	BattleScriptPush(gBattlescriptCurrInstr + 5); //After callasm
 	gBattlescriptCurrInstr = BattleScript_TrainerSlideMsgRet - 5;
 }
