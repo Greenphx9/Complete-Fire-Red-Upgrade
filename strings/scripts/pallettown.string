@@ -32,7 +32,7 @@ Would you like to enable No IV \nGrinding Mode? Every Pokemon will \lhave 31 IVs
 No IV Grinding Mode enabled.
 
 #org @gText_AskNoGrindingEV
-Would you like to enable No EV\nGrinding Mode? EV increasing items will \lgive 252 EVs.
+Would you like to enable No EV\nGrinding Mode? This makes all Power\lItems level 6 (up to 252 EVs with\lthe EV Selector in Cerulean).
 
 #org @gText_AskNoGrindingEVYes
 No EV Grinding Mode enabled.
