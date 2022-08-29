@@ -2467,7 +2467,7 @@ void GiveMonNatureAndAbility(struct Pokemon* mon, u8 nature, u8 abilityNum, bool
 		if (abilityNum != 0xFF)
 		{
 			personality &= ~(1);
-			personality |= abilityNum;
+			personality |= abilityNum; 
 		}
 	} while (GetNatureFromPersonality(personality) != nature
 	|| (keepGender && GetGenderFromSpeciesAndPersonality(species, personality) != gender)

@@ -351,7 +351,7 @@ gMonFrontPicTable = 0x82350AC;
 gMonBackPicCoords = 0x8235E6C;
 gMonBackPicTable = 0x823654C;
 gMonPaletteTable = 0x823730C;
-gMonShinyPaletteTable = 0x82380CC;
+gMonShinyPaletteTable = 0x8000134;
 gFrontAnimTable = 0x82390DC;
 gTrainerFrontPicTable = 0x823957C;
 gTrainerFrontPicPaletteTable = 0x8239A1C;
@@ -1573,6 +1573,7 @@ Menu_PrintFormatIntlPlayerName = 0x812E6DC | 1;
 /* PicBox Functions */
 Task_PokemonPicWindow = 0x809D288 | 1;
 TaskDestroyPicBox = 0x809D494 | 1;
+ScriptMenu_ShowPokemonPic = 0x809d2f0 | 1;
 CreateWindowFromRect = 0x809D654 | 1;
 PicBoxSetter = 0x809D6D4 | 1;
 BoxCreateTask = 0x81119D4 | 1;
@@ -2176,3 +2177,5 @@ sNameBoxWindowId = 0x203EFF8;
 
 ListMenuChangeSelection = 0x810799C | 1;
 sMessageBoxType = 0x203709C;
+
+Task_ScriptShowMonPic = 0x809D288 | 1;

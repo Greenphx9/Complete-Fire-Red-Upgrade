@@ -10,6 +10,7 @@
 #include "../include/string_util.h"
 #include "../include/constants/game_stat.h"
 #include "../include/constants/items.h"
+#include "../include/constants/region_map_sections.h"
 
 #include "../include/new/battle_util.h"
 #include "../include/new/catching.h"
@@ -549,6 +550,11 @@ u8 GiveMonToPlayer(struct Pokemon* mon) //Hook in
 	SetMonData(mon, MON_DATA_OT_NAME, gSaveBlock2->playerName);
 	SetMonData(mon, MON_DATA_OT_GENDER, &gSaveBlock2->playerGender);
 	SetMonData(mon, MON_DATA_OT_ID, gSaveBlock2->playerTrainerId);
+	if (Var8008 == 0xFE) //Mystery Gift Mon
+	{
+		u8 metLoc = METLOC_FATEFUL_ENCOUNTER;
+    	SetMonData(mon, MON_DATA_MET_LOCATION, &metLoc);
+	}
 
 	if (gMain.inBattle
 	&&  GetPocketByItemId(gLastUsedItem) == POCKET_POKE_BALLS)

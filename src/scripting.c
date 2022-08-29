@@ -43,6 +43,7 @@
 #include "../include/new/item.h"
 #include "../include/new_menu_helpers.h"
 #include "../include/new/multi.h"
+#include "../include/new/mystery_gift.h"
 #include "../include/new/overworld.h" 
 #include "../include/new/pokemon_storage_system.h"
 #include "../include/new/ram_locs_battle.h"
@@ -2721,7 +2722,12 @@ void sp12C_DoEnterPhraseScreen(void)
 
 void sp12D_CompareEnteredPhrase(void)
 {
-	gSpecialVar_LastResult = StringCompare(gLoadPointer, gStringVar1);
+	if(Var8001 == 1) // Mystery Gift
+	{
+		gSpecialVar_LastResult = CheckMysteryGiftPassword();
+	}
+	else
+		gSpecialVar_LastResult = StringCompare(gLoadPointer, gStringVar1);
 }
 
 extern const u8 gText_EnterNumber[];

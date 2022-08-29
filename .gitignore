@@ -431,3 +431,5 @@ FodyWeavers.xsd
 *.cheats
 *.ips
 *.toml
+
+strings/mystery_gift_passwords.string

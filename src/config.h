@@ -610,3 +610,6 @@ enum //These vars need to be one after the other (hence the enum)
 //See "include/new/dexnav_config.h"
 
 //#define INSTANT_TEXT // Enable Instant Text. Some Hack Authors might want this disabled because of the effects instant text has on pacing
+
+/*===== Mystery Gift Flags =====*/
+#define MYSTERY_GIFT_FLAGS_START 0x1700 //New flags = MYSTERY_GIFT_FLAGS_START + gift index. 0x1700 == Entei

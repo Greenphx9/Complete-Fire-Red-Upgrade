@@ -559,3 +559,6 @@ Bag_Frost_Orb_SpriteTiles 093C9810
 Bag_Frost_Orb_SpritePal 093C9814
 
 gText_StoleItem 083FE144
+
+EventScript_MysteryGiftPerson 081BB1D3
+CableClub_EventScript_HideOrShowMysteryGiftMan 081BB1B5

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "global.h"
+#include "sprite.h"
 
 extern const u8 *const gUnknown_0858BAF0[9];
 
@@ -15,4 +16,5 @@ void __attribute__((long_call)) PicBoxSetter(void);
 bool8 __attribute__((long_call)) BoxCreateTask(void* func);
 void __attribute__((long_call)) TaskDestroyPicBox(u8 taskId);
 u8 __attribute__((long_call)) PicBoxWindow(u16 x, u16 y, u8, u8);
-
+void __attribute__((long_call)) Task_ScriptShowMonPic(u8 taskId);
+const struct CompressedSpritePalette* __attribute__((long_call)) GetMGiftMonPal(u16 species, u8 isShiny);

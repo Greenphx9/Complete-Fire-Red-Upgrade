@@ -1,0 +1,17 @@
+#org @gText_WelcomeToMysteryGift
+Welcome to the Mystery Gift Service,\n[PLAYER].\pDo you have a password you would\nlike to enter?
+
+#org @gText_NoRoomInParty
+I'm sorry, but there is no room in\nyour party.
+
+#org @gText_PleaseEnterPassword
+Please enter a password.
+
+#org @gText_InvalidMysteryGift
+The password you entered was\ninvalid. Would you like to enter\lanother?
+
+#org @gText_AlreadyClaimedGift
+You have already received that\ngift.
+
+#org @gText_PlayerReceievedGiftMon
+[BLACK][PLAYER] received a\n[BUFFER1]!
