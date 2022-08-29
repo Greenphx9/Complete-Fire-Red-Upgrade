@@ -74,6 +74,7 @@ void Task_ReturnToItemListAfterItemPurchase(u8 taskId);
 void SetMemoryForBagStorage(void);
 void AllocateBagItemListBuffers(void);
 bool8 AllocateBerryPouchListBuffers(void);
+void BagListMenuGetItemNameColored(u8 *dest, u16 itemId);
 void PokeDudeBackupBag(void);
 void PokeDudeRestoreBag(void);
 void PokeDudeBackupKeyItemsTMs(void);

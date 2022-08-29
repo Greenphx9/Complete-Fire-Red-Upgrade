@@ -1117,7 +1117,7 @@ struct ListBuffer1
 
 struct ListBuffer2
 {
-	s8 name[LARGEST_POCKET_NUM][24];
+	s8 name[LARGEST_POCKET_NUM][20]; //Really 19 but make it 20 just to be safe
 };
 
 struct BagSlots
@@ -1169,6 +1169,65 @@ bool8 AllocateBerryPouchListBuffers(void)
 		return FALSE;
 
 	return TRUE;
+}
+
+#define BagListMenuMoveCursorFunc (void*) (0x081085A4 | 1)
+#define BagListMenuItemPrintFunc (void*) (0x8108654 | 1)
+#define sListItemTextColor_RegularItem (void*) 0x08452F60
+#define gFameCheckerText_Cancel (void*) 0x84161C1
+void Bag_BuildListMenuTemplate(u8 pocket)
+{
+	u32 i, itemCount;
+	struct ItemSlot* itemSlots;
+
+	switch (pocket + 1)
+	{
+		case POCKET_ITEMS:
+		default:
+			itemSlots = gBagPockets->itemRam;
+			break;
+		case POCKET_KEY_ITEMS:
+			itemSlots = gBagPockets->keyItemRam;
+			break;
+		case POCKET_POKE_BALLS:
+			itemSlots = gBagPockets->pokeBallRam;
+			break;
+	}
+
+	for (i = 0, itemCount = GetNumItemsInPocket(pocket); i < itemCount; ++i)
+	{
+		BagListMenuGetItemNameColored(sBagListMenuItemStrings[i], itemSlots[i].itemId);
+		sBagListMenuItems[i].name = sBagListMenuItemStrings[i];
+		sBagListMenuItems[i].id = i;
+	}
+
+	StringCopy(sBagListMenuItemStrings[i], sListItemTextColor_RegularItem);
+	StringAppend(sBagListMenuItemStrings[i], gFameCheckerText_Cancel);
+	sBagListMenuItems[i].name = sBagListMenuItemStrings[i];
+	sBagListMenuItems[i].id = i;
+	gMultiuseListMenuTemplate->items = sBagListMenuItems;
+	gMultiuseListMenuTemplate->totalItems = itemCount + 1;
+	gMultiuseListMenuTemplate->windowId = 0;
+	gMultiuseListMenuTemplate->header_X = 0;
+	gMultiuseListMenuTemplate->item_X = 9;
+	gMultiuseListMenuTemplate->cursor_X = 1;
+	gMultiuseListMenuTemplate->lettersSpacing = 0;
+	gMultiuseListMenuTemplate->itemVerticalPadding = 2;
+	gMultiuseListMenuTemplate->upText_Y = 2;
+	gMultiuseListMenuTemplate->maxShowed = sBagMenuDisplay->maxShowed[pocket];
+	gMultiuseListMenuTemplate->fontId = 2;
+	#ifdef UNBOUND
+	gMultiuseListMenuTemplate->cursorPal = 1;
+	gMultiuseListMenuTemplate->cursorShadowPal = 2;
+	#else
+	gMultiuseListMenuTemplate->cursorPal = 2;
+	gMultiuseListMenuTemplate->cursorShadowPal = 3;
+	#endif
+	gMultiuseListMenuTemplate->fillValue = 0;
+	gMultiuseListMenuTemplate->moveCursorFunc = BagListMenuMoveCursorFunc;
+	gMultiuseListMenuTemplate->itemPrintFunc = BagListMenuItemPrintFunc;
+	gMultiuseListMenuTemplate->cursorKind = 0;
+	gMultiuseListMenuTemplate->scrollMultiple = LIST_MULTIPLE_SCROLL_L_R;
 }
 
 void PocketCalculateInitialCursorPosAndItemsAbove(u8 pocketId)
