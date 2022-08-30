@@ -2836,7 +2836,7 @@ u8 CalcMostSuitableMonToSwitchInto(void)
 
 						if (!(gBitTable[k] & foeMoveLimitations))
 						{
-							u8 split = CalcMoveSplit(foe, move);
+							u8 split = CalcMoveSplit(move, foe, foe);
 							if (split == SPLIT_PHYSICAL)
 								physMoveInMoveset = TRUE;
 							else if (split == SPLIT_SPECIAL)
