@@ -1730,7 +1730,7 @@ u8 AIScript_Positives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 					else //(IsClassDoublesTeamSupport(class))
 						INCREASE_VIABILITY(11);
 				}
-				else if (CalcMoveSplit(bankDef, predictedMove) == SPLIT_PHYSICAL
+				else if (CalcMoveSplit(predictedMove, bankDef, bankAtk) == SPLIT_PHYSICAL
 				&& MoveKnocksOutXHits(predictedMove, bankDef, bankAtk, 1))
 					INCREASE_STATUS_VIABILITY(3); //If the enemy can kill with a physical move, try burning them so they can't anymore
 				else if (MoveInMoveset(MOVE_HEX, bankAtk)
