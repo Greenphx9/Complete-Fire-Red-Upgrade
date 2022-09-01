@@ -751,5 +751,4 @@ EventScript_EvoItems:
 	.hword ITEM_FLOWER_SWEET
 	.hword ITEM_STAR_SWEET
 	.hword ITEM_RIBBON_SWEET
-	.hword ITEM_BLACK_AUGURITE
 	.hword 0x0

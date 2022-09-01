@@ -558,7 +558,12 @@ Bag_Time_Turner_SpritePal 093C980C
 Bag_Frost_Orb_SpriteTiles 093C9810
 Bag_Frost_Orb_SpritePal 093C9814
 
+Bag_Peat_Block_SpriteTiles 093C9818
+Bag_Peat_Block_SpritePal 093C981C
+
 gText_StoleItem 083FE144
 
 EventScript_MysteryGiftPerson 081BB1D3
 CableClub_EventScript_HideOrShowMysteryGiftMan 081BB1B5
+
+gText_BlackAugurite 093C7E80

@@ -349,7 +349,7 @@ BlendPalettesOptimized 80714D4 3
 
 #Shop
 DNSCreateBuyMenuHook 809AC84 0
-##RemoveShopModifierCheats 809B18E 0
+RemoveShopModifierCheats 809B18E 0
 DNSEndBuyMenuHook 809C078 1
 
 ##Select-From-PC
