@@ -901,19 +901,17 @@ bool8 SetMoveEffect2(void)
 	if (gBattleMons[gEffectBank].hp == 0
 	&& gBattleCommunication[MOVE_EFFECT_BYTE] != MOVE_EFFECT_STEAL_ITEM)
 	{
-		#ifdef PICK_UP_KNOCKED_OFF_ITEMS
 		if (gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_KNOCK_OFF
 		&& !(gBattleTypeFlags & BATTLE_TYPE_TRAINER)
 		&& SIDE(gEffectBank) == B_SIDE_OPPONENT
-		#ifdef FLAG_KEEP_CONSUMABLE_ITEMS
-		&& !FlagGet(FLAG_KEEP_CONSUMABLE_ITEMS) //Can't keep these items
-		#endif
+		//#ifdef FLAG_KEEP_CONSUMABLE_ITEMS
+		//&& !FlagGet(FLAG_KEEP_CONSUMABLE_ITEMS) //Can't keep these items
+		//#endif
 		)
 		{
 			//Allow knocking off wild item even if KOd
 		}
 		else
-		#endif
 			RESET_RETURN
 	}
 
@@ -936,7 +934,7 @@ bool8 SetMoveEffect2(void)
 			}
 			else if (!BATTLER_ALIVE(gBankAttacker)
 			|| ITEM(gEffectBank) == ITEM_NONE
-			|| ITEM(gBankAttacker) != ITEM_NONE
+			//|| ITEM(gBankAttacker) != ITEM_NONE //Doesn't matter anymore; Thiefed items will go straight to the bag.
 			|| !CanTransferItem(SPECIES(gEffectBank), ITEM(gEffectBank))
 			|| !CanTransferItem(SPECIES(gBankAttacker), ITEM(gEffectBank))
 			|| (gNewBS->corrodedItems[SIDE(gBankAttacker)] & gBitTable[gBattlerPartyIndexes[gBankAttacker]]))
@@ -960,20 +958,21 @@ bool8 SetMoveEffect2(void)
 			{
 				gLastUsedItem = gBattleMons[gEffectBank].item;
 				gBattleMons[gEffectBank].item = 0;
-				//gBattleMons[gBankAttacker].item = gLastUsedItem;
+				gBattleMons[gBankAttacker].item = gLastUsedItem;
 				HandleUnburdenBoost(gEffectBank); //Give target Unburden boost
-				//HandleUnburdenBoost(gBankAttacker); //Remove attacker's Unburden boost
+				HandleUnburdenBoost(gBankAttacker); //Remove attacker's Unburden boost
 
 				//Handles giving the mon the new held item, I think
-				//gActiveBattler = gBankAttacker;
-				//EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gLastUsedItem);
-				//MarkBufferBankForExecution(gActiveBattler);
+				//Don't give the item to the mon, instead put it in the bag.
+				/*gActiveBattler = gBankAttacker;
+				EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gLastUsedItem);
+				MarkBufferBankForExecution(gActiveBattler);*/
+				AddBagItem(1, gLastUsedItem);
 
 				gActiveBattler = gEffectBank;
 				EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gActiveBattler].item);
 				MarkBufferBankForExecution(gActiveBattler);
 
-				AddBagItem(gLastUsedItem, 1);
 				BattleScriptPushCursor();
 				gBattlescriptCurrInstr = BattleScript_ItemSteal;
 
@@ -1009,25 +1008,23 @@ bool8 SetMoveEffect2(void)
 				EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gActiveBattler].item);
 				MarkBufferBankForExecution(gActiveBattler);
 
-				if(!(gBattleTypeFlags & BATTLE_TYPE_TRAINER && gBattleTypeFlags & BATTLE_TYPE_DYNAMAX))
+				/*if(!(gBattleTypeFlags & BATTLE_TYPE_TRAINER && gBattleTypeFlags & BATTLE_TYPE_DYNAMAX))
 				{
 					AddBagItem(gLastUsedItem, 1);
-				}
+				}*/
 
 				BattleScriptPushCursor();
 				gBattlescriptCurrInstr = BattleScript_KnockedOff;
 
 				gBattleStruct->choicedMove[gEffectBank] = 0;
 
-				#ifdef PICK_UP_KNOCKED_OFF_ITEMS
 				if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER)
 				&& SIDE(gEffectBank) == B_SIDE_OPPONENT //Wild Pokemon's item
-				#ifdef FLAG_KEEP_CONSUMABLE_ITEMS
-				&& !FlagGet(FLAG_KEEP_CONSUMABLE_ITEMS) //Can't keep these items
-				#endif
+				//#ifdef FLAG_KEEP_CONSUMABLE_ITEMS
+				//&& !FlagGet(FLAG_KEEP_CONSUMABLE_ITEMS) //Can't keep these items
+				//#endif
 				)
 					gNewBS->knockedOffWildItem = gLastUsedItem;
-				#endif
 
 				effect = TRUE;
 			}

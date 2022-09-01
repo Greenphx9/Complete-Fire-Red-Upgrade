@@ -4950,9 +4950,6 @@ void atkE5_pickupitemcalculation(void)
 		species = GetMonData(mon, MON_DATA_SPECIES2, NULL);
 
 		if (species == SPECIES_NONE || species == SPECIES_EGG
-		#ifndef PICKUP_ITEMS_STRAIGHT_TO_BAG //No issue with Pokemon already holding an item since they won't carry it anyway
-		|| GetMonData(mon, MON_DATA_HELD_ITEM, NULL) != ITEM_NONE
-		#endif
 		)
 			continue;
 
@@ -4974,7 +4971,6 @@ void atkE5_pickupitemcalculation(void)
 
 		if (Random() % 100 < chance)
 		{
-			#ifdef PICKUP_ITEMS_STRAIGHT_TO_BAG
 			if (CheckBagHasSpace(item, 1))
 			{
 				AddBagItem(item, 1);
@@ -4990,15 +4986,11 @@ void atkE5_pickupitemcalculation(void)
 				gBattlescriptCurrInstr = BattleScript_PrintCustomString;
 				return;
 			}
-			#else
-			SetMonData(mon, MON_DATA_HELD_ITEM, &item);
-			#endif
 		}
 	}
 
 	++gBattlescriptCurrInstr;
 
-	#ifdef PICK_UP_KNOCKED_OFF_ITEMS
 	if (gNewBS->knockedOffWildItem != ITEM_NONE && CheckBagHasSpace(gNewBS->knockedOffWildItem, 1))
 	{
 		AddBagItem(gNewBS->knockedOffWildItem, 1);
@@ -5007,7 +4999,6 @@ void atkE5_pickupitemcalculation(void)
 		gBattleStringLoader = gText_PickedUpKnockedOffItem;
 		gBattlescriptCurrInstr = BattleScript_PrintCustomString;
 	}
-	#endif
 }
 
 static item_t ChoosePickupItem(u8 level)

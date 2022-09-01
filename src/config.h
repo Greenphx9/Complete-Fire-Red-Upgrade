@@ -609,7 +609,7 @@ enum //These vars need to be one after the other (hence the enum)
 #define LAST_USED_BALL_TRIGGER //The player will be given an option to use their last used Poke Ball in wild battles by pressing L
 #define TEAM_PREVIEW_TRIGGER //The player will be given an option to view the opponent's team in Trainer battles by pressing L
 #define PICK_UP_KNOCKED_OFF_ITEMS //Items knocked off wild Pokemon will be picked up at the end of battle
-//#define PICKUP_ITEMS_STRAIGHT_TO_BAG //Items obtained with Pickup or Honey Gather are placed right in the bag
+#define PICKUP_ITEMS_STRAIGHT_TO_BAG //Items obtained with Pickup or Honey Gather are placed right in the bag
 #define FROSTBITE //Replaces the Freeze status condition with the Frostbite status condition from PLA
 
 /*===== Mystery Gift Flags =====*/
