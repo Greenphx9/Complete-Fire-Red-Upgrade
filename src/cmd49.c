@@ -951,38 +951,6 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 					}
 					break;
 				#endif
-				#if (defined SPECIES_CRAMORANT && defined SPECIES_CRAMORANT_GORGING && defined SPECIES_CRAMORANT_GULPING)
-				case ABILITY_GULPMISSILE: 
-					if(SPECIES(gBankAttacker) == SPECIES_CRAMORANT 
-					&& (gCurrentMove == MOVE_SURF || gCurrentMove == MOVE_DIVE)
-					&& MOVE_HAD_EFFECT
-					&& BATTLER_ALIVE(gBankAttacker)
-					&& !IS_TRANSFORMED(gBankAttacker))
-					// && gBattleMons[gBankAttacker].hp > (gBattleMons[gBankAttacker].maxHP / 2))
-					{
-						if (gBattleMons[gBankAttacker].hp > (gBattleMons[gBankAttacker].maxHP / 2))
-							DoFormChange(gBankAttacker, SPECIES_CRAMORANT_GULPING, TRUE, TRUE, FALSE);
-						else 
-							DoFormChange(gBankAttacker, SPECIES_CRAMORANT_GORGING, TRUE, TRUE, FALSE);
-						BattleScriptPushCursor();
-						gBattlescriptCurrInstr = BattleScript_AbilityTransformed;
-						effect = 1;
-					}
-
-					// else if(SPECIES(gBankAttacker) == SPECIES_CRAMORANT 
-					// && (gCurrentMove == MOVE_SURF || gCurrentMove == MOVE_DIVE)
-					// && MOVE_HAD_EFFECT
-					// && BATTLER_ALIVE(gBankAttacker)
-					// && !IS_TRANSFORMED(gBankAttacker) 
-					// && gBattleMons[gBankAttacker].hp < (gBattleMons[gBankAttacker].maxHP / 2))
-					// {
-					//     DoFormChange(gBankAttacker, SPECIES_CRAMORANT_GORGING, TRUE, TRUE, FALSE);
-					// 	BattleScriptPushCursor();
-					// 	gBattlescriptCurrInstr = BattleScript_AbilityTransformed;
-					// 	effect = 1;
-					// }
-					break;
-				#endif
 			}
 			*gSeedHelper = 0; //For Soul-Heart Loop
 			gBattleScripting.atk49_state++;
