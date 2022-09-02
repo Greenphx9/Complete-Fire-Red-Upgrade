@@ -53,7 +53,6 @@ enum
 //They are done here if they didn't activate before.
 
 	ATK49_UNDO_SKY_DROP,
-	ATK49_UNDO_SKY_DROP_2,
 	ATK49_ATTACKER_INVISIBLE,
 	ATK49_TARGET_INVISIBLE,
 	ATK49_ATTACKER_VISIBLE,
