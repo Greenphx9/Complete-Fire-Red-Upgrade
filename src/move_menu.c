@@ -51,7 +51,7 @@ static bool8 TriggerMegaEvolution(void);
 static void MoveNameToDisplayedStringBattle(u8 moveIndex);
 static void MoveSelectionDisplayMoveNames(void);
 static void MoveSelectionDisplayMoveType(void);
-static void MoveSelectionDisplayMoveEffectiveness(void);
+void MoveSelectionDisplayMoveEffectiveness(void);
 static bool8 MoveSelectionDisplayZMove(void);
 static bool8 MoveSelectionDisplayMaxMove(void);
 static void ZMoveSelectionDisplayPpNumber(void);
