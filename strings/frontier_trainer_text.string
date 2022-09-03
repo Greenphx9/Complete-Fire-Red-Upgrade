@@ -1492,3 +1492,8 @@ What? Me, lose?!
 
 #org @sFrontierText_Giovanni_PlayerLose
 Ha!\nThat was a truly intense fight!
+
+#org @gText_GenericWinMessage
+
+
+#org @gText_GenericLoseMessage

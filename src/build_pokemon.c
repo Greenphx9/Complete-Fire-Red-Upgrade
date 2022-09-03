@@ -3,6 +3,7 @@
 #include "../include/battle_setup.h"
 #include "../include/event_data.h"
 #include "../include/field_weather.h"
+#include "../include/mgba.h"
 #include "../include/pokemon.h"
 #include "../include/pokemon_storage_system.h"
 #include "../include/random.h"
@@ -2166,7 +2167,7 @@ static u8 BuildFrontierParty(struct Pokemon* const party, const u16 trainerId, c
 			if (ability == ABILITY_WONDERGUARD && IsRandomBattleTowerBattle())
 				continue; //Don't allow Wonder Guard to appear when you have no control over the Pokemon you get
 
-			#ifdef FLAG_GEN_8_PLACED_IN_GAME
+			#if (!defined BATTLE_TOWER_DEMO && defined FLAG_GEN_8_PLACED_IN_GAME)
 			if (species >= SPECIES_GROOKEY && species < NUM_SPECIES_GEN_8
 			&& !FlagGet(FLAG_GEN_8_PLACED_IN_GAME))
 				continue; //Only allow Gen 8 if they've been unlocked
@@ -2192,7 +2193,11 @@ static u8 BuildFrontierParty(struct Pokemon* const party, const u16 trainerId, c
 		CreateFrontierMon(&party[i], level, spread, trainerId, firstTrainer ^ 1, trainerGender, forPlayer);
 	}
 
-	PostProcessTeam(party, builder);
+	if (forPlayer)
+		PostProcessTeam(gPlayerParty, builder);
+	else
+		PostProcessTeam(gEnemyParty, builder);
+
 	Free(builder);
 
 	if (!forPlayer) //Probably best to put these checks somewhere else
@@ -4021,94 +4026,94 @@ static void PostProcessTeam(struct Pokemon* party, struct TeamBuilder* builder)
 				tailwindTRIndex = i;
 
 			switch (moveEffect) {
-			case EFFECT_SPIKES:
-				hazardsIndex = i;
-				break;
-			case EFFECT_REFLECT:
-			case EFFECT_LIGHT_SCREEN:
-				screensIndex = i;
-				break;
-			case EFFECT_RAIN_DANCE:
-			case EFFECT_SUNNY_DAY:
-			case EFFECT_SANDSTORM:
-			case EFFECT_HAIL:
-				weatherIndex = i;
-				break;
-			case EFFECT_SET_TERRAIN:
-				terrainIndex = i;
-				break;
-			case EFFECT_SLEEP:
-				sleepIndex = i;
-				break;
-			case EFFECT_YAWN:
-				yawnIndex = i;
-				break;
-			case EFFECT_FOLLOW_ME:
-				followMeIndex = i;
-				break;
+				case EFFECT_SPIKES:
+					hazardsIndex = i;
+					break;
+				case EFFECT_REFLECT:
+				case EFFECT_LIGHT_SCREEN:
+					screensIndex = i;
+					break;
+				case EFFECT_RAIN_DANCE:
+				case EFFECT_SUNNY_DAY:
+				case EFFECT_SANDSTORM:
+				case EFFECT_HAIL:
+					weatherIndex = i;
+					break;
+				case EFFECT_SET_TERRAIN:
+					terrainIndex = i;
+					break;
+				case EFFECT_SLEEP:
+					sleepIndex = i;
+					break;
+				case EFFECT_YAWN:
+					yawnIndex = i;
+					break;
+				case EFFECT_FOLLOW_ME:
+					followMeIndex = i;
+					break;
 			}
 		}
 
 		switch (ConvertFrontierAbilityNumToAbility(builder->spreads[i]->ability, builder->spreads[i]->species)) {
-		case ABILITY_DRIZZLE:
-		case ABILITY_DROUGHT:
-		case ABILITY_SANDSTREAM:
-		case ABILITY_SNOWWARNING:
-			weatherIndex = i;
-			break;
-		case ABILITY_ELECTRICSURGE:
-		case ABILITY_GRASSYSURGE:
-		case ABILITY_MISTYSURGE:
-		case ABILITY_PSYCHICSURGE:
-			terrainIndex = i;
-			break;
-		case ABILITY_DEFIANT:
-		case ABILITY_COMPETITIVE:
-		case ABILITY_CONTRARY:
-			defiantIndex = i;
-			break;
-		case ABILITY_INTIMIDATE:
-			intimidateIndex = i;
-			break;
-		case ABILITY_ILLUSION:
-			illusionIndex = i;
-			break;
+			case ABILITY_DRIZZLE:
+			case ABILITY_DROUGHT:
+			case ABILITY_SANDSTREAM:
+			case ABILITY_SNOWWARNING:
+				weatherIndex = i;
+				break;
+			case ABILITY_ELECTRICSURGE:
+			case ABILITY_GRASSYSURGE:
+			case ABILITY_MISTYSURGE:
+			case ABILITY_PSYCHICSURGE:
+				terrainIndex = i;
+				break;
+			case ABILITY_DEFIANT:
+			case ABILITY_COMPETITIVE:
+			case ABILITY_CONTRARY:
+				defiantIndex = i;
+				break;
+			case ABILITY_INTIMIDATE:
+				intimidateIndex = i;
+				break;
+			case ABILITY_ILLUSION:
+				illusionIndex = i;
+				break;
 		}
 
 		//Try to replace healing items depending on tier
 		u16 item;
 		switch (ItemId_GetHoldEffect(builder->spreads[i]->item)) {
-		case ITEM_EFFECT_RESTORE_HP:
-		case ITEM_EFFECT_ENIGMA_BERRY:
-			if (!DuplicateItemsAreBannedInTier(builder->tier, builder->battleType)) //Only replace items if no worry of duplicate items
-			{
-				switch (builder->spreads[i]->item) {
-				case ITEM_ORAN_BERRY:
-				case ITEM_BERRY_JUICE:
-					item = ITEM_SITRUS_BERRY;
-					if (GetMonData(&party[i], MON_DATA_MAX_HP, NULL) / 4 > ItemId_GetHoldEffectParam(item))
-						SetMonData(&party[i], MON_DATA_HELD_ITEM, &item);
-					break;
-				default: //Sitrus Berry + Enigma Berry
+			case ITEM_EFFECT_RESTORE_HP:
+			case ITEM_EFFECT_ENIGMA_BERRY:
+				if (!DuplicateItemsAreBannedInTier(builder->tier, builder->battleType)) //Only replace items if no worry of duplicate items
+				{
+					switch (builder->spreads[i]->item) {
+						case ITEM_ORAN_BERRY:
+						case ITEM_BERRY_JUICE:
+							item = ITEM_SITRUS_BERRY;
+							if (GetMonData(&party[i], MON_DATA_MAX_HP, NULL) / 4 > ItemId_GetHoldEffectParam(item))
+								SetMonData(&party[i], MON_DATA_HELD_ITEM, &item);
+							break;
+						default: //Sitrus Berry + Enigma Berry
+							item = ITEM_BERRY_JUICE;
+							if (GetMonData(&party[i], MON_DATA_MAX_HP, NULL) / 4 < ItemId_GetHoldEffectParam(item))
+								SetMonData(&party[i], MON_DATA_HELD_ITEM, &item);
+							break;
+					}
+				}
+				break;
+			case ITEM_EFFECT_CONFUSE_SPICY:
+			case ITEM_EFFECT_CONFUSE_DRY:
+			case ITEM_EFFECT_CONFUSE_SWEET:
+			case ITEM_EFFECT_CONFUSE_BITTER:
+			case ITEM_EFFECT_CONFUSE_SOUR:
+				if (!DuplicateItemsAreBannedInTier(builder->tier, builder->battleType))
+				{
 					item = ITEM_BERRY_JUICE;
 					if (GetMonData(&party[i], MON_DATA_MAX_HP, NULL) / 4 < ItemId_GetHoldEffectParam(item))
 						SetMonData(&party[i], MON_DATA_HELD_ITEM, &item);
 					break;
 				}
-			}
-			break;
-		case ITEM_EFFECT_CONFUSE_SPICY:
-		case ITEM_EFFECT_CONFUSE_DRY:
-		case ITEM_EFFECT_CONFUSE_SWEET:
-		case ITEM_EFFECT_CONFUSE_BITTER:
-		case ITEM_EFFECT_CONFUSE_SOUR:
-			if (!DuplicateItemsAreBannedInTier(builder->tier, builder->battleType))
-			{
-				item = ITEM_BERRY_JUICE;
-				if (GetMonData(&party[i], MON_DATA_MAX_HP, NULL) / 4 < ItemId_GetHoldEffectParam(item))
-					SetMonData(&party[i], MON_DATA_HELD_ITEM, &item);
-				break;
-			}
 		}
 	}
 
@@ -4161,27 +4166,19 @@ static void PostProcessTeam(struct Pokemon* party, struct TeamBuilder* builder)
 		{
 			if (builder->spreads[i]->modifyMovesDoubles)
 			{
-#ifdef UNBOUND
-				u32 k;
-				u16 levelUpMoves[MAX_LEARNABLE_MOVES] = { MOVE_NONE };
-				GetLevelUpMovesBySpecies(GetMonData(&party[i], MON_DATA_SPECIES, NULL), levelUpMoves);
+				#ifdef UNBOUND
+					u32 k;
+					u16 levelUpMoves[MAX_LEARNABLE_MOVES] = {MOVE_NONE};
+					GetLevelUpMovesBySpecies(GetMonData(&party[i], MON_DATA_SPECIES, NULL), levelUpMoves);
 
-				for (j = 0; j < ARRAY_COUNT(sDoubleSpreadReplacementMoves); ++j)
-				{
-					u16 oldMove = sDoubleSpreadReplacementMoves[j].oldMove;
-					u16 newMove = sDoubleSpreadReplacementMoves[j].replacementMove;
-					u8 pos = FindMovePositionInMonMoveset(oldMove, &party[i]);
-					u8 newPP = gBattleMoves[newMove].pp;
-
-					if (pos < MAX_MON_MOVES && !MoveInMonMoveset(newMove, &party[i]))
+					for (j = 0; j < ARRAY_COUNT(sDoubleSpreadReplacementMoves); ++j)
 					{
 						u16 oldMove = sDoubleSpreadReplacementMoves[j].oldMove;
 						u16 newMove = sDoubleSpreadReplacementMoves[j].replacementMove;
 						u8 pos = FindMovePositionInMonMoveset(oldMove, &party[i]);
 						u8 newPP = CalculatePPWithBonus(newMove, 0xFF, pos);
 
-						if (sDoubleSpreadReplacementMoves[j].yesIfImmunity == 0
-							|| builder->partyIndex[sDoubleSpreadReplacementMoves[j].yesIfImmunity] != i) //There's an immunity on some other Pokemon
+						if (pos < MAX_MON_MOVES && !MoveInMonMoveset(newMove, &party[i]))
 						{
 							//Don't replace the move if the immunity is found on the team
 							//Eg. Earthquake -> High Horsepower if no GROUND_IMMUNITY
@@ -4233,8 +4230,7 @@ static void PostProcessTeam(struct Pokemon* party, struct TeamBuilder* builder)
 							}
 						}
 					}
-				}
-#endif
+				#endif
 			}
 		}
 
@@ -4259,7 +4255,7 @@ static void PostProcessTeam(struct Pokemon* party, struct TeamBuilder* builder)
 			}
 		}
 
-#define INDEX_CHECK(partyId) (index < 2 && partyId > index && partyId != 0xFF)
+		#define INDEX_CHECK(partyId) (index < 2 && partyId > index && partyId != 0xFF)
 
 		if (i == ARRAY_COUNT(sImmunities)) //The two Pokemon up front aren't meant to work off of each other
 		{
@@ -4292,7 +4288,7 @@ static void PostProcessTeam(struct Pokemon* party, struct TeamBuilder* builder)
 				SwapMons(party, index++, followMeIndex);
 
 			if (INDEX_CHECK(defiantIndex) && party == gEnemyParty
-				&& (GetMonAbility(&gPlayerParty[0]) == ABILITY_INTIMIDATE || GetMonAbility(&gPlayerParty[1]) == ABILITY_INTIMIDATE))
+			&& (GetMonAbility(&gPlayerParty[0]) == ABILITY_INTIMIDATE || GetMonAbility(&gPlayerParty[1]) == ABILITY_INTIMIDATE))
 				SwapMons(party, index++, defiantIndex); //Stick Pokemon with Defiant/Competitive up front to absorb the Intimidate
 
 			if (INDEX_CHECK(sleepIndex))
@@ -4312,8 +4308,7 @@ static void PostProcessTeam(struct Pokemon* party, struct TeamBuilder* builder)
 	//Try change last mon
 	if (builder->monsCount >= 3 && GetMonAbility(&party[builder->monsCount - 1]) == ABILITY_ILLUSION)
 	{
-		bool8 onePartyMonOnField = IsFrontierSingles(builder->battleType) || IsFrontierMulti(builder->battleType); //Only one mon from the specific team is on the field at a time
-		for (i = onePartyMonOnField ? 1 : 2; i < (u32) (builder->monsCount - 1); ++i) //-1 because we already know the last mon has Illusion and wants to leave that slot
+		for (i = IS_SINGLE_BATTLE ? 1 : 2; i < ((u32) builder->monsCount - 1); ++i)
 		{
 			if (GetMonAbility(&party[i]) != ABILITY_ILLUSION)
 			{
@@ -4321,7 +4316,7 @@ static void PostProcessTeam(struct Pokemon* party, struct TeamBuilder* builder)
 				break;
 			}
 		}
-	}
+	}	
 }
 
 static void TryShuffleMovesForCamomons(struct Pokemon* party, u8 tier, u16 trainerId)

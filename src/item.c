@@ -1094,6 +1094,15 @@ void Task_ReturnToSellListAfterTmPurchase(u8 taskId)
 	}
 }
 
+void Task_ReturnToSellListAfterRegularItem(u8 taskId)
+{
+    IncrementGameStat(GAME_STAT_SHOPPED);
+    RemoveMoney(&gSaveBlock1->money, gShopData.itemPrice);
+    PlaySE(SE_MONEY);
+    PrintMoneyAmountInMoneyBox(0, GetMoney(&gSaveBlock1->money), 0);
+    gTasks[taskId].func = Task_ReturnToItemListAfterItemPurchase;
+}
+
 void ReloadMartListForTmPurchase(u8 taskId)
 {
 #ifdef REUSABLE_TMS
@@ -1103,7 +1112,7 @@ void ReloadMartListForTmPurchase(u8 taskId)
 		BuyMenuDisplayMessage(taskId, (void*)0x84167E7, Task_ReturnToSellListAfterTmPurchase);
 	else
 #endif
-		BuyMenuDisplayMessage(taskId, (void*)0x84167E7, (TaskFunc)(0x809BF0C | 1)); //BuyMenuSubtractMoney
+		BuyMenuDisplayMessage(taskId, (void*)0x84167E7, Task_ReturnToSellListAfterRegularItem);
 }
 #undef tItemId
 

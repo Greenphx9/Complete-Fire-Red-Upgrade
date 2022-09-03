@@ -1073,8 +1073,49 @@ EventScript_ShowdownPC:
 	lock
 	checkflag 0x82C
 	if NOT_SET _goto EventScript_JustAPC
+	setvar 0x8004 1
+	special 0xD6
+	playse 4
+	msgbox gText_PlayerBootedUpShowdown MSG_KEEPOPEN
+	closeonkeypress
+	msgbox gText_LikeToBattle MSG_YESNO
+	compare LASTRESULT 0x1
+	goto_if_eq EventScript_ShowdownPCSelectTeam
+EventScript_ShowdownPCEnd:
+	special 0xD7
+	playse 3
 	release
 	end
+
+EventScript_ShowdownPCSelectTeam:	
+	setflag 0x930 
+    setvar 0x5015 0x3 
+    setvar 0x5016 0x64
+    setvar 0x5017 0x0
+    setvar 0x5018 0x0
+	msgbox gText_Select3ToUse MSG_KEEPOPEN
+	closeonkeypress	
+    special 0x27
+    special 0xF5
+    waitstate
+    compare LASTRESULT 0x0
+    if 0x1 _goto EventScript_ShowdownPCEnd
+	msgbox gText_SearchingForBattle MSG_KEEPOPEN
+	closeonkeypress
+    setvar 0x8000 0x0
+    setvar 0x8001 0x1
+    special2 0x5028 0x52
+	msgbox gText_TrainerWasFound MSG_KEEPOPEN
+	closeonkeypress
+	special 0x73
+    trainerbattle9 0x9 0x398 0x0 0x0 0x0
+	special 0xD7
+	playse 3
+	special 0x28
+	clearflag 0x930
+	release
+	end
+
 
 EventScript_JustAPC:
 	msgbox gText_ShowdownPCOff MSG_NORMAL

@@ -190,3 +190,18 @@ Would you like to be able to\nDynamax?\pIf yes, you will be able to Dynamax\nin-
 
 #org @gText_DynamaxEnabled
 Dynamax has been enabled.
+
+#org @gText_PlayerBootedUpShowdown
+[PLAYER] booted up the PC and\nlogged into Pok\emon Showdown.
+
+#org @gText_LikeToBattle
+Would you like to battle against a\nrandom trainer?
+
+#org @gText_Select3ToUse
+Please select 3 Pok\emon.
+
+#org @gText_SearchingForBattle
+Searching for a trainer to battle[PAUSE][20].[PAUSE][20].[PAUSE][20].
+
+#org @gText_TrainerWasFound
+A trainer was found! Starting battle\nagainst Trainer [BUFFER1].

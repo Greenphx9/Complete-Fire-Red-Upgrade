@@ -2,6 +2,7 @@
 #include "defines_battle.h"
 #include "../include/event_data.h"
 #include "../include/field_weather.h"
+#include "../include/mgba.h"
 #include "../include/random.h"
 #include "../include/script.h"
 #include "../include/string_util.h"
@@ -393,10 +394,12 @@ void CopyFrontierTrainerText(u8 whichText, u16 trainerId, u8 battlerNum)
 					break;
 
 				case FRONTIER_PLAYER_LOST_TEXT:
+					StringCopy(gStringVar7, gSaveBlock2->playerName);
 					StringCopy(gStringVar4, (gSpecialTowerTrainers[VarGet(VAR_FACILITY_TRAINER_ID + battlerNum)].playerLoseText));
 					break;
 
 				case FRONTIER_PLAYER_WON_TEXT:
+					StringCopy(gStringVar7, gSaveBlock2->playerName);
 					StringCopy(gStringVar4, (gSpecialTowerTrainers[VarGet(VAR_FACILITY_TRAINER_ID + battlerNum)].playerWinText));
 			}
 			break;

@@ -2531,33 +2531,29 @@ const u8 gNumFrontierMultiTrainers = NELEMS(gFrontierMultiBattleTrainers);
 		},
 	};
 
-	const struct SpecialBattleFrontierTrainer gSpecialTowerTrainers[] =
-	{
+extern const u8 gText_GenericWinMessage[];
+extern const u8 gText_GenericLoseMessage[];
+
+const struct SpecialBattleFrontierTrainer gSpecialTowerTrainers[] =
+{
 	{
 		.owNum = 			235,
 		.trainerClass = 	CLASS_CHAMPION_DP,
 		.trainerSprite = 	9,
 		.gender = 			BATTLE_FACILITY_FEMALE,
 		.name =				sTrainerName_Cynthia,
-		//.preBattleText = 	sFrontierText_Skeli_PreBattle,
-		//.playerWinText = 	sFrontierText_Skeli_PlayerWin,
-		.playerLoseText = 	gText_CynthiaLose,
+		.playerWinText = 	gText_GenericWinMessage,
+		.playerLoseText = 	gText_GenericLoseMessage,
 		.regularSpreads =	gSpecialTowerSpread_Cynthia,
-		.middleCupSpreads = gSpecialTowerSpread_Cynthia,
-		.littleCupSpreads = gSpecialTowerSpread_Cynthia,
-		.legendarySpreads = gSpecialTowerSpread_Cynthia,
 		.regSpreadSize = 	NELEMS(gSpecialTowerSpread_Cynthia),
-		.mcSpreadSize =		NELEMS(gSpecialTowerSpread_Cynthia),
-		.lcSpreadSize =		NELEMS(gSpecialTowerSpread_Cynthia),
-		.legSpreadSize =	NELEMS(gSpecialTowerSpread_Cynthia),
 		.songId = 			361,
 		.isMonotype = 		FALSE,
 	},
-	};
+};
 
 	const struct SpecialBattleFrontierTrainer gFrontierBrains[] =
 	{
-		[0] =
+		/*[0] =
 		{
 			.owNum = 			235,
 			.trainerClass = 	CLASS_CHAMPION_DP,
@@ -2572,7 +2568,7 @@ const u8 gNumFrontierMultiTrainers = NELEMS(gFrontierMultiBattleTrainers);
 			.legSpreadSize =	NELEMS(gSpecialTowerSpread_Cynthia),
 			.mcSpreadSize =		NELEMS(gSpecialTowerSpread_Cynthia),
 			.lcSpreadSize =		NELEMS(gSpecialTowerSpread_Cynthia),
-		},
+		},*/
 	};
 
 	const struct MultiBattleTowerTrainer gFrontierMultiBattleTrainers[] =

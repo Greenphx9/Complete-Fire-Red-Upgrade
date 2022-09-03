@@ -151,7 +151,7 @@ const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Chansey =
     .inanimate = FALSE,
     .disableReflectionPaletteLoad = FALSE,
     .tracks = TRACKS_FOOT, //Can also be TRACKS_TIRE
-    .gender = MALE, //Can also be FEMALE
+    .gender = FEMALE, //Can also be FEMALE
     .oam = gEventObjectBaseOam_32x32,
     .subspriteTables = gEventObjectSpriteOamTables_32x32,
     .anims = gEventObjectImageAnimTable_Standard,
@@ -977,5 +977,41 @@ const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Adrian =
     .subspriteTables = gEventObjectSpriteOamTables_16x32,
     .anims = gEventObjectImageAnimTable_Standard,
     .images = gEventObjectPicTable_Adrian,
+    .affineAnims = gDummySpriteAffineAnimTable,
+};
+
+extern const u8 gEventObjectPic_RayquazaTiles[];
+
+static const struct SpriteFrameImage gEventObjectPicTable_Rayquaza[] =
+{
+    overworld_frame(gEventObjectPic_RayquazaTiles, 8, 8, 0),
+    overworld_frame(gEventObjectPic_RayquazaTiles, 8, 8, 1),
+    overworld_frame(gEventObjectPic_RayquazaTiles, 8, 8, 2),
+    overworld_frame(gEventObjectPic_RayquazaTiles, 8, 8, 3),
+    overworld_frame(gEventObjectPic_RayquazaTiles, 8, 8, 4),
+    overworld_frame(gEventObjectPic_RayquazaTiles, 8, 8, 5),
+    overworld_frame(gEventObjectPic_RayquazaTiles, 8, 8, 6),
+    overworld_frame(gEventObjectPic_RayquazaTiles, 8, 8, 7),
+    overworld_frame(gEventObjectPic_RayquazaTiles, 8, 8, 8),
+    overworld_frame(gEventObjectPic_RayquazaTiles, 8, 8, 9),
+};
+
+const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Rayquaza =
+{
+    .tileTag = 0xFFFF,
+    .paletteTag1 = 0x121D,
+    .paletteTag2 = EVENT_OBJ_PAL_TAG_NONE,
+    .size = (64 * 64) / 2,
+    .width = 64,
+    .height = 64,
+    .shadowSize = SHADOW_SIZE_L, //Can also be SHADOW_SIZE_S, SHADOW_SIZE_L, or SHADOW_SIZE_XL
+    .inanimate = FALSE,
+    .disableReflectionPaletteLoad = FALSE,
+    .tracks = TRACKS_FOOT, //Can also be TRACKS_TIRE
+    .gender = MALE, //Can also be FEMALE
+    .oam = gEventObjectBaseOam_64x64,
+    .subspriteTables = gEventObjectSpriteOamTables_64x64,
+    .anims = gEventObjectImageAnimTable_Standard,
+    .images = gEventObjectPicTable_Rayquaza,
     .affineAnims = gDummySpriteAffineAnimTable,
 };

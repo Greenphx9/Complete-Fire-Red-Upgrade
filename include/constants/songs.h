@@ -168,6 +168,7 @@
 #define MUS_DP_ENCOUNTER_CHAMPION 360
 #define MUS_DP_VS_CHAMPION        361
 #define MUS_DP_VS_RIVAL           362
+#define MUS_RS_VS_LEGEND          363
 #define MUS_POKE_CENTER           303 // MUS_RG_POKECEN
 
 #define BGM_BATTLE_REGI_TRIO 347
