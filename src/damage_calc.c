@@ -2385,9 +2385,7 @@ void PopulateDamageCalcStructWithBaseDefenderData(struct DamageCalc* data)
 		&& data->specialFlags & FLAG_AI_CALC
 		&& IsPlayerInControl(bankDef)
 		&& (gBattleTypeFlags & BATTLE_TYPE_FRONTIER //Never allow knowledge in the Frontier
-		#ifdef VAR_GAME_DIFFICULTY
-		 || VarGet(VAR_GAME_DIFFICULTY) < OPTIONS_EXPERT_DIFFICULTY
-		#endif
+		&& !FlagGet(FLAG_HARD_MODE)
 		))
 		{
 			data->defItemEffect = GetRecordedItemEffect(bankDef);

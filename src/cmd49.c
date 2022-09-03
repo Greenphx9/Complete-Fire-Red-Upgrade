@@ -1380,9 +1380,7 @@ void atk49_moveend(void) //All the effects that happen after a move is used
 				if (DidSubstituteJustBreak())
 					gNewBS->dynamaxData.attackAgain = TRUE; //Always attack again no matter what
 				else if (gNewBS->dynamaxData.repeatedAttacks == 0 //Raid boss hasn't attacked again yet
-				#ifdef VAR_GAME_DIFFICULTY
-				&& VarGet(VAR_GAME_DIFFICULTY) != OPTIONS_EASY_DIFFICULTY //Too mean for easy
-				#endif
+				&& !FlagGet(FLAG_HARD_MODE) //Too mean for easy
 				&& ((BATTLER_ALIVE(foe) && gChosenActionByBank[foe] == ACTION_USE_ITEM) //Player used item
 				 || (BATTLER_ALIVE(PARTNER(foe)) && gChosenActionByBank[PARTNER(foe)] == ACTION_USE_ITEM)))
 					gNewBS->dynamaxData.attackAgain = TRUE; //Always attack again no matter what

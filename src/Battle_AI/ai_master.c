@@ -72,11 +72,9 @@ static void UpdateStrongestMoves(void);
 static void UpdateBestDoublesKillingMoves(void);
 static u32 GetMaxByteIndexInList(const u8 array[], const u32 size);
 static bool8 ShouldAIUseItem(void);
-#ifdef VAR_GAME_DIFFICULTY
 static void TryRechooseAIMoveIfPlayerSwitchCheesed(u8 aiBank, u8 playerBank);
 static bool8 IsPlayerTryingToCheeseWithRepeatedSwitches(u8 playerBank);
 static bool8 IsPlayerTryingToCheeseAI(u8 playerBank, u8 aiBank);
-#endif
 static void PickNewAIMove(u8 aiBank, bool8 allowPursuit, bool8 allowNewHostileMove);
 static void UpdateCurrentTargetByMoveTarget(u8 moveTarget, u8 aiBank);
 
@@ -169,10 +167,6 @@ u32 GetAIFlags(void)
 {
 	u32 flags;
 
-	#ifdef VAR_GAME_DIFFICULTY
-	u8 difficulty = VarGet(VAR_GAME_DIFFICULTY);
-	#endif
-
 	if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
 		flags = AI_SCRIPT_SAFARI;
 	else if (gBattleTypeFlags & BATTLE_TYPE_ROAMER)
@@ -198,8 +192,7 @@ u32 GetAIFlags(void)
 		else
 			flags = gTrainers[gTrainerBattleOpponent_A].aiFlags;
 
-		#ifdef VAR_GAME_DIFFICULTY
-		if (difficulty == OPTIONS_EASY_DIFFICULTY && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+		if (!FlagGet(FLAG_HARD_MODE) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
 		{
 			if (flags & AI_SCRIPT_CHECK_GOOD_MOVE) //Trainers who are supposed to be better than the average Trainer
 			{
@@ -209,12 +202,7 @@ u32 GetAIFlags(void)
 			else
 				flags = AI_SCRIPT_CHECK_BAD_MOVE; //Trainers are always barely smart in easy mode
 		}
-		else if (difficulty == OPTIONS_HARD_DIFFICULTY && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-		{
-			if (!(flags & AI_SCRIPT_CHECK_GOOD_MOVE)) //Not Trainers who are already smart
-				flags |= AI_SCRIPT_SEMI_SMART; //Regular Trainers are always semi smart in hard mode
-		}
-		else if (difficulty == OPTIONS_EXPERT_DIFFICULTY)
+		else if (FlagGet(FLAG_HARD_MODE))
 		{
 			if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
 			{
@@ -224,7 +212,6 @@ u32 GetAIFlags(void)
 			else
 				flags = AI_SCRIPT_CHECK_BAD_MOVE | WildMonIsSmart(gActiveBattler); //Even Wild Pokemon are moderately smart in expert mode
 		}
-		#endif
 
 		if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER)) //Generic wild battle
 			flags |= WildMonIsSmart(gActiveBattler);
@@ -1070,11 +1057,9 @@ u32 WildMonIsSmart(u8 bank)
 	)
 		return AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_SEMI_SMART;
 
-	#ifdef VAR_GAME_DIFFICULTY
-	if (VarGet(VAR_GAME_DIFFICULTY) >= OPTIONS_HARD_DIFFICULTY
+	if (FlagGet(FLAG_HARD_MODE)
 	&& gSpecialSpeciesFlags[species].smartWild)
 		return AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_SEMI_SMART;
-	#endif
 
 	if (gSpecialSpeciesFlags[species].smartWild)
 	{
@@ -1577,7 +1562,6 @@ enum
 
 void RechooseAIMoveAfterSwitchIfNecessary(void)
 {
-	#ifdef VAR_GAME_DIFFICULTY
 	if (SIDE(gBankSwitching) == B_SIDE_PLAYER && BATTLER_ALIVE(gBankSwitching))
 	{
 		u8 foe2;
@@ -1589,10 +1573,8 @@ void RechooseAIMoveAfterSwitchIfNecessary(void)
 		if (IS_DOUBLE_BATTLE && BATTLER_ALIVE(foe2 = PARTNER(foe1)) && gChosenActionByBank[foe2] == ACTION_USE_MOVE) //Recalc Foe 2
 			TryRechooseAIMoveIfPlayerSwitchCheesed(foe2, gBankSwitching);
 	}
-	#endif
 }
 
-#ifdef VAR_GAME_DIFFICULTY
 static void TryRechooseAIMoveIfPlayerSwitchCheesed(u8 aiBank, u8 playerBank)
 {
 	u8 cheeseType = IsPlayerTryingToCheeseAI(playerBank, aiBank);
@@ -1624,13 +1606,12 @@ extern u8 GetChanceOfPredictingPlayerNormalSwitch(void);
 static bool8 ShouldPredictRandomPlayerSwitch(u8 playerBank)
 {
 	return gChosenActionByBank[playerBank] == ACTION_SWITCH //Player decided to switch
-		&& (gBattleTypeFlags & BATTLE_TYPE_FRONTIER //In Frontier battles
-		 || VarGet(VAR_GAME_DIFFICULTY) >= OPTIONS_HARD_DIFFICULTY) //Or only on harder game modes
-		#ifdef UNBOUND
+		&& (gBattleTypeFlags & BATTLE_TYPE_FRONTIER) //In Frontier battles
+		/*#ifdef UNBOUND
 		&& AI_THINKING_STRUCT->aiFlags & AI_SCRIPT_CHECK_GOOD_MOVE
 		&& AIRandom() % 100 < GetChanceOfPredictingPlayerNormalSwitch()
-		#endif
-		);
+		#endif*/
+		;
 }
 
 static u8 IsPlayerTryingToCheeseAI(unusedArg u8 playerBank, unusedArg u8 aiBank)
@@ -1639,7 +1620,6 @@ static u8 IsPlayerTryingToCheeseAI(unusedArg u8 playerBank, unusedArg u8 aiBank)
 	&& IsPlayerInControl(playerBank)) //AI isn't in charge of player mon
 	{
 		if (!(gBattleTypeFlags & BATTLE_TYPE_FRONTIER) //Not fair in Frontier where player doesn't know opponent's lead
-		&& VarGet(VAR_GAME_DIFFICULTY) >= OPTIONS_EXPERT_DIFFICULTY //Only on hardest game mode
 		&& (IsPlayerTryingToCheeseWithRepeatedSwitches(playerBank)
 		|| IsPlayerTryingToCheeseChoiceLockFirstTurn(aiBank)))
 			return CHEESING;
@@ -1650,7 +1630,6 @@ static u8 IsPlayerTryingToCheeseAI(unusedArg u8 playerBank, unusedArg u8 aiBank)
 
 	return NOT_CHEESING;
 }
-#endif
 
 static void PickNewAIMove(u8 aiBank, bool8 allowPursuit, bool8 allowHostileMove)
 {
@@ -1727,12 +1706,11 @@ static void UpdateCurrentTargetByMoveTarget(u8 moveTarget, u8 aiBank)
 //If the Player used Protect to cheese AI, cheese back and change target if necessary
 void TryChangeMoveTargetToCounterPlayerProtectCheese(void)
 {
-	#ifdef VAR_GAME_DIFFICULTY
 	u8 playerBank = gBattleStruct->moveTarget[gBankAttacker];
 
 	if (IS_DOUBLE_BATTLE
 	&& !(gBattleTypeFlags & BATTLE_TYPE_FRONTIER) //Unfair in Frontier battles
-	&& VarGet(VAR_GAME_DIFFICULTY) >= OPTIONS_EXPERT_DIFFICULTY //On hardest game modes
+	&& FlagGet(FLAG_HARD_MODE)
 	&& AI_THINKING_STRUCT->aiFlags & AI_SCRIPT_CHECK_GOOD_MOVE //Only very smart Trainers
 	&& SIDE(gBankAttacker) == B_SIDE_OPPONENT //Fake Out user is AI
 	&& IsPlayerInControl(playerBank) //Protect user is player
@@ -1746,7 +1724,6 @@ void TryChangeMoveTargetToCounterPlayerProtectCheese(void)
 				gBattleStruct->moveTarget[gBankAttacker] = PARTNER(playerBank); //Change target to partner
 		}
 	}
-	#endif
 }
 
 //The smart AI should actually pick a good move

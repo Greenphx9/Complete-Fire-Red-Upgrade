@@ -1556,6 +1556,7 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 	[SPECIES_CUBONE_A] =
 	{
 		.smogonLittleCup = TRUE,
+		.randomizerBan = TRUE,
 	},
 #endif
 #ifdef SPECIES_CYNDAQUIL
