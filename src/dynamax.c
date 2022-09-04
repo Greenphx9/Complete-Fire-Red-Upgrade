@@ -4,6 +4,7 @@
 #include "../include/overworld.h"
 #include "../include/random.h"
 #include "../include/pokemon_summary_screen.h"
+#include "../include/string_util.h"
 #include "../include/constants/items.h"
 #include "../include/constants/pokedex.h"
 #include "../include/constants/region_map_sections.h"
@@ -114,7 +115,7 @@ static const struct GMaxMove sGMaxMoveTable[] =
 
 const u8 gRaidBattleStarsByBadges[NUM_BADGE_OPTIONS][2] =
 {
-	[0] = {NO_RAID,         NO_RAID},
+	[0] = {ONE_STAR_RAID,   ONE_STAR_RAID},
 	[1] = {ONE_STAR_RAID, 	ONE_STAR_RAID},
 	[2] = {ONE_STAR_RAID,   TWO_STAR_RAID},
 	[3] = {TWO_STAR_RAID,   THREE_STAR_RAID},
@@ -1999,12 +2000,20 @@ void DetermineRaidSpecies(void)
 		gRaidBattleSpecies = SPECIES_NONE;
 }
 
+extern u8 GetCurrentLevelCap(void);
 void DetermineRaidLevel(void)
 {
 	u8 numStars = gRaidBattleStars;
+
 	u8 min = gRaidBattleLevelRanges[numStars][0];
 	u8 max = gRaidBattleLevelRanges[numStars][1];
 	u32 randomNum = GetRaidRandomNumber();
+
+	if(min > GetCurrentLevelCap() || max > GetCurrentLevelCap())
+	{
+		min = GetCurrentLevelCap();
+		max = GetCurrentLevelCap();
+	}
 
 	if (FlagGet(FLAG_BATTLE_FACILITY)) //Battle Frontier Demo
 		gRaidBattleLevel = VarGet(VAR_BATTLE_FACILITY_POKE_LEVEL);
@@ -2020,6 +2029,10 @@ u8 GetRandomRaidLevel(void)
 		return VarGet(VAR_BATTLE_FACILITY_POKE_LEVEL);
 
 	u8 numStars = gRaidBattleStars;
+	if(gRaidBattleLevelRanges[numStars][0] > GetCurrentLevelCap() || gRaidBattleLevelRanges[numStars][1] > GetCurrentLevelCap())
+	{
+		return GetCurrentLevelCap();
+	}
 	return RandRange(gRaidBattleLevelRanges[numStars][0], gRaidBattleLevelRanges[numStars][1]);
 }
 
@@ -2029,6 +2042,10 @@ u8 GetRaidRecommendedLevel(void)
 		return VarGet(VAR_BATTLE_FACILITY_POKE_LEVEL);
 
 	u8 numStars = gRaidBattleStars;
+	if(gRaidBattleLevelRanges[numStars][1] > GetCurrentLevelCap())
+	{
+		return GetCurrentLevelCap();
+	}
 	return gRaidBattleLevelRanges[numStars][1] + 5; //Max level + 5
 }
 

@@ -291,6 +291,25 @@ static struct Raid sRoute3Raids6Star[] =
 		/*  1 %*/ ITEM_BUG_MEMORY,
 		},
 	},
+	{
+		.species = SPECIES_ARCTOZOLT,
+		.ability = RAID_ABILITY_RANDOM_1_2,
+		.drops =
+		{
+		/*100 %*/ ITEM_PRETTY_WING,
+		/* 80 %*/ ITEM_WACAN_BERRY,
+		/* 80 %*/ ITEM_POMEG_BERRY,
+		/* 50 %*/ ITEM_BALM_MUSHROOM,
+		/* 50 %*/ ITEM_BIG_MUSHROOM,
+		/* 30 %*/ ITEM_SITRUS_BERRY,
+		/* 30 %*/ ITEM_RESIST_WING,
+		/* 25 %*/ ITEM_RARE_CANDY,
+		/* 25 %*/ ITEM_ELECTRIC_GEM,
+		/*  5 %*/ ITEM_CHOICE_SPECS,
+		/*  4 %*/ ITEM_CHOICE_SCARF,
+		/*  1 %*/ ITEM_NUGGET,
+		},
+	},
 };
 
 static struct Raid sRoute4Raids1Star[] =
@@ -539,6 +558,25 @@ static struct Raid sRoute4Raids6Star[] =
 		/* 30 %*/ ITEM_MUSCLE_WING,
 		/* 25 %*/ ITEM_RARE_CANDY,
 		/* 25 %*/ ITEM_STEEL_GEM,
+		/*  5 %*/ ITEM_LUCKY_EGG,
+		/*  4 %*/ ITEM_NONE,
+		/*  1 %*/ ITEM_NUGGET,
+		},
+	},
+	{
+		.species = SPECIES_HEATRAN,
+		.ability = RAID_ABILITY_RANDOM_1_2,
+		.drops =
+		{
+		/*100 %*/ ITEM_CHOPLE_BERRY,
+		/* 80 %*/ ITEM_SHUCA_BERRY,
+		/* 80 %*/ ITEM_PASSHO_BERRY,
+		/* 50 %*/ ITEM_BALM_MUSHROOM,
+		/* 50 %*/ ITEM_BIG_MUSHROOM,
+		/* 30 %*/ ITEM_SITRUS_BERRY,
+		/* 30 %*/ ITEM_MUSCLE_WING,
+		/* 25 %*/ ITEM_RARE_CANDY,
+		/* 25 %*/ ITEM_WATER_GEM,
 		/*  5 %*/ ITEM_LUCKY_EGG,
 		/*  4 %*/ ITEM_NONE,
 		/*  1 %*/ ITEM_NUGGET,
@@ -3746,6 +3784,25 @@ static struct Raid sPokemonTowerRaids6Star[] =
 		/*  5 %*/ ITEM_BALM_MUSHROOM,
 		/*  4 %*/ ITEM_FOCUS_SASH,
 		/*  1 %*/ ITEM_NUGGET,
+		},
+	},
+	{
+		.species = SPECIES_GENGAR,
+		.ability = RAID_ABILITY_HIDDEN,
+		.drops =
+		{
+		/*100 %*/ ITEM_KASIB_BERRY,
+		/* 80 %*/ ITEM_COLBUR_BERRY,
+		/* 80 %*/ ITEM_SPELL_TAG,
+		/* 50 %*/ ITEM_KASIB_BERRY,
+		/* 50 %*/ ITEM_BIG_MUSHROOM,
+		/* 30 %*/ ITEM_CHOICE_SPECS,
+		/* 30 %*/ ITEM_FIGY_BERRY,
+		/* 25 %*/ ITEM_BALM_MUSHROOM,
+		/* 25 %*/ ITEM_GHOST_GEM,
+		/*  5 %*/ ITEM_BIG_MUSHROOM,
+		/*  4 %*/ ITEM_COMET_SHARD,
+		/*  1 %*/ ITEM_CHOICE_SCARF,
 		},
 	},
 };

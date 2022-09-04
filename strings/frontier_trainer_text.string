@@ -1494,6 +1494,7 @@ What? Me, lose?!
 Ha!\nThat was a truly intense fight!
 
 #org @gText_GenericWinMessage
-
+You won the battle!
 
 #org @gText_GenericLoseMessage
+You lost the battle...

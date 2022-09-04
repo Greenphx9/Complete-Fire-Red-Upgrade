@@ -205,3 +205,6 @@ Searching for a trainer to battle[PAUSE][20].[PAUSE][20].[PAUSE][20].
 
 #org @gText_TrainerWasFound
 A trainer was found! Starting battle\nagainst Trainer [BUFFER1].
+
+#org @gText_BattleAgain
+Would you like to battle again?

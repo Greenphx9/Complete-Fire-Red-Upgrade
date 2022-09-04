@@ -2533,6 +2533,8 @@ const u8 gNumFrontierMultiTrainers = NELEMS(gFrontierMultiBattleTrainers);
 
 extern const u8 gText_GenericWinMessage[];
 extern const u8 gText_GenericLoseMessage[];
+extern const u8 sTrainerName_Brock[];
+extern const u8 sTrainerName_Misty[];
 
 const struct SpecialBattleFrontierTrainer gSpecialTowerTrainers[] =
 {
@@ -2549,7 +2551,34 @@ const struct SpecialBattleFrontierTrainer gSpecialTowerTrainers[] =
 		.songId = 			361,
 		.isMonotype = 		FALSE,
 	},
+	{
+		.owNum = 			EVENT_OBJ_GFX_BROCK,
+		.trainerClass = 	CLASS_LEADER,
+		.trainerSprite = 	116,
+		.gender = 			BATTLE_FACILITY_MALE,
+		.name =				sTrainerName_Brock,
+		.playerWinText = 	gText_GenericWinMessage,
+		.playerLoseText = 	gText_GenericLoseMessage,
+		.regularSpreads =	gSpecialTowerSpread_Brock,
+		.regSpreadSize = 	NELEMS(gSpecialTowerSpread_Brock),
+		.songId = 			296,
+		.isMonotype = 		TRUE,
+	},
+	{
+		.owNum = 			EVENT_OBJ_GFX_MISTY,
+		.trainerClass = 	CLASS_LEADER,
+		.trainerSprite = 	117,
+		.gender = 			BATTLE_FACILITY_MALE,
+		.name =				sTrainerName_Misty,
+		.playerWinText = 	gText_GenericWinMessage,
+		.playerLoseText = 	gText_GenericLoseMessage,
+		.regularSpreads =	gSpecialTowerSpread_Misty,
+		.regSpreadSize = 	NELEMS(gSpecialTowerSpread_Misty),
+		.songId = 			296,
+		.isMonotype = 		TRUE,
+	},
 };
+
 
 	const struct SpecialBattleFrontierTrainer gFrontierBrains[] =
 	{

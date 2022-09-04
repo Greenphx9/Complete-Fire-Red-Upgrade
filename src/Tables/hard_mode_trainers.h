@@ -6,150 +6,142 @@
 
 static const struct BattleTowerSpread sHardmodeTeam_Brock[] =
 {
-	{
-		.species = SPECIES_ROGGENROLA,
-		.nature = NATURE_IMPISH,
-		.hpIv = 31,
-		.atkIv = 31,
-		.defIv = 31,
-		.spAtkIv = 31,
-		.spDefIv = 31,
-		.spdIv = 31,
-		.ability = FRONTIER_ABILITY_2,
-		.item = ITEM_CUSTAP_BERRY,
-		.moves =
-		{
-			MOVE_STEALTHROCK,
-			MOVE_ROCKTOMB,
-			MOVE_SANDTOMB,
-			MOVE_SANDATTACK,
-		},
-		.ball = BALL_TYPE_POKE_BALL,
-		.forSingles = TRUE,
-		.forDoubles = TRUE,
-		.modifyMovesDoubles = FALSE,
-		.level = 15,
-	},
-	{
-		.species = SPECIES_TYRUNT,
-		.nature = NATURE_ADAMANT,
-		.hpIv = 31,
-		.atkIv = 31,
-		.defIv = 31,
-		.spAtkIv = 31,
-		.spDefIv = 31,
-		.spdIv = 31,
-		.ability = FRONTIER_ABILITY_1,
-		.item = ITEM_ORAN_BERRY,
-		.moves =
-		{
-			MOVE_BITE,
-			MOVE_DRAGONTAIL,
-			MOVE_ROCKTOMB,
-			MOVE_PSYCHICFANGS,
-		},
-		.ball = BALL_TYPE_POKE_BALL,
-		.forSingles = TRUE,
-		.forDoubles = TRUE,
-		.modifyMovesDoubles = FALSE,
-		.level = 15,
-	},
-	{
-		.species = SPECIES_DWEBBLE,
-		.nature = NATURE_ADAMANT,
-		.hpIv = 31,
-		.atkIv = 31,
-		.defIv = 31,
-		.spAtkIv = 31,
-		.spDefIv = 31,
-		.spdIv = 31,
-		.ability = FRONTIER_ABILITY_HIDDEN,
-		.item = ITEM_SHELL_BELL,
-		.moves =
-		{
-			MOVE_ROCKBLAST,
-			MOVE_BUGBITE,
-			MOVE_POISONJAB,
-			MOVE_FLAIL,
-		},
-		.ball = BALL_TYPE_POKE_BALL,
-		.forSingles = TRUE,
-		.forDoubles = TRUE,
-		.modifyMovesDoubles = FALSE,
-		.level = 15,
-	},
-	{
-		.species = SPECIES_GEODUDE_A,
-		.nature = NATURE_ADAMANT,
-		.hpIv = 31,
-		.atkIv = 31,
-		.defIv = 31,
-		.spAtkIv = 31,
-		.spDefIv = 31,
-		.spdIv = 31,
-		.ability = FRONTIER_ABILITY_HIDDEN,
-		.item = ITEM_SHELL_BELL,
-		.moves =
-		{
-			MOVE_TACKLE,
-			MOVE_ROLLOUT,
-			MOVE_GYROBALL,
-			MOVE_ROCKSMASH,
-		},
-		.ball = BALL_TYPE_POKE_BALL,
-		.forSingles = TRUE,
-		.forDoubles = TRUE,
-		.modifyMovesDoubles = FALSE,
-		.level = 15,
-	},
-	{
-		.species = SPECIES_OMANYTE,
-		.nature = NATURE_MODEST,
-		.hpIv = 31,
-		.atkIv = 31,
-		.defIv = 31,
-		.spAtkIv = 31,
-		.spDefIv = 31,
-		.spdIv = 31,
-		.ability = FRONTIER_ABILITY_1,
-		.item = ITEM_ORAN_BERRY,
-		.moves =
-		{
-			MOVE_WATERGUN,
-			MOVE_ANCIENTPOWER,
-			MOVE_MUDSHOT,
-			MOVE_RAINDANCE,
-		},
-		.ball = BALL_TYPE_POKE_BALL,
-		.forSingles = TRUE,
-		.forDoubles = TRUE,
-		.modifyMovesDoubles = FALSE,
-		.level = 15,
-	},
-	{
-		.species = SPECIES_ONIX,
-		.nature = NATURE_ADAMANT,
-		.hpIv = 31,
-		.atkIv = 31,
-		.defIv = 31,
-		.spAtkIv = 31,
-		.spDefIv = 31,
-		.spdIv = 31,
-		.ability = FRONTIER_ABILITY_1,
-		.item = ITEM_ORAN_BERRY,
-		.moves =
-		{
-			MOVE_ROCKTOMB,
-			MOVE_SANDTOMB,
-			MOVE_CURSE,
-			MOVE_HEAVYSLAM,
-		},
-		.ball = BALL_TYPE_POKE_BALL,
-		.forSingles = TRUE,
-		.forDoubles = TRUE,
-		.modifyMovesDoubles = FALSE,
-		.level = 15,
-	},
+    {
+        .species = SPECIES_ROGGENROLA,
+        .item = ITEM_FOCUS_SASH,
+        .nature = NATURE_ADAMANT,
+        .ability = FRONTIER_ABILITY_2, //Sand Stream
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_STEALTHROCK,
+            MOVE_SMACKDOWN,
+            MOVE_BODYPRESS,
+            MOVE_MAGNITUDE,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 16,
+    },
+    {
+        .species = SPECIES_NOSEPASS,
+        .item = ITEM_BERRY_JUICE,
+        .nature = NATURE_ADAMANT,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Sand Force
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_ROCKTOMB,
+            MOVE_BULLDOZE,
+            MOVE_TACKLE,
+            MOVE_THUNDERWAVE,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 16,
+    },
+    {
+        .species = SPECIES_LILEEP,
+        .nature = NATURE_BOLD,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Storm Drain
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_ACID,
+            MOVE_MEGADRAIN,
+            MOVE_ANCIENTPOWER,
+            MOVE_BRINE,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 16,
+    },
+    {
+        .species = SPECIES_GROWLITHE_H,
+        .item = ITEM_PASSHO_BERRY,
+        .nature = NATURE_ADAMANT,
+        .ability = FRONTIER_ABILITY_1, //Intimidate
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_FIREFANG,
+            MOVE_ROCKTOMB,
+            MOVE_BITE,
+            MOVE_ROCKSMASH,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 16,
+    },
+    {
+        .species = SPECIES_OMANYTE,
+        .item = ITEM_MYSTIC_WATER,
+        .nature = NATURE_MODEST,
+        .ability = FRONTIER_ABILITY_1, //Swift Swim
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_WITHDRAW,
+            MOVE_BUBBLEBEAM,
+            MOVE_MUDSHOT,
+            MOVE_ANCIENTPOWER,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 16,
+    },
+    {
+        .species = SPECIES_ONIX,
+        .nature = NATURE_ADAMANT,
+        .ability = FRONTIER_ABILITY_2, //Sturdy
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_ROCKTOMB,
+            MOVE_HEADBUTT,
+            MOVE_SANDTOMB,
+            MOVE_PAYBACK,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 16,
+    },
 };
 
 static const struct BattleTowerSpread sHardmodeTeam_Misty[] =
@@ -157,7 +149,7 @@ static const struct BattleTowerSpread sHardmodeTeam_Misty[] =
     {
         .species = SPECIES_PELIPPER,
         .item = ITEM_DAMP_ROCK,
-        .ability = FRONTIER_ABILITY_1, //Drizzle
+        .ability = FRONTIER_ABILITY_2, //Drizzle
         .nature = NATURE_BOLD,
         .hpEv = 100,
         .hpIv = 31,
@@ -251,7 +243,7 @@ static const struct BattleTowerSpread sHardmodeTeam_Misty[] =
     {
         .species = SPECIES_BASCULIN_H,
         .item = ITEM_MYSTIC_WATER,
-        .ability = FRONTIER_ABILITY_1, //Adaptability
+        .ability = FRONTIER_ABILITY_2, //Adaptability
         .nature = NATURE_JOLLY,
         .atkEv = 100,
         .hpIv = 31,
@@ -275,7 +267,7 @@ static const struct BattleTowerSpread sHardmodeTeam_Misty[] =
     {
         .species = SPECIES_STARMIE,
         .item = ITEM_EXPERT_BELT,
-        .ability = FRONTIER_ABILITY_1, //Natural Cure
+        .ability = FRONTIER_ABILITY_2, //Natural Cure
         .nature = NATURE_TIMID,
         .spAtkEv = 100,
         .hpIv = 31,
@@ -370,7 +362,7 @@ static const struct BattleTowerSpread sHardmodeTeam_LtSurge[] =
         .forSingles = TRUE,
         .forDoubles = TRUE,
         .modifyMovesDoubles = FALSE,
-        .level = 1, //Placeholder
+        .level = 34,
     },
     {
         .species = SPECIES_GOLEM_A,
@@ -734,12 +726,12 @@ static const struct BattleTowerSpread sHardmodeTeam_Erika[] =
 static const struct BattleTowerSpread sHardmodeTeam_Koga[] =
 {
     {
-        .species = SPECIES_QWILFISH_H,
-        .item = ITEM_EVIOLITE,
-        .ability = FRONTIER_ABILITY_HIDDEN, //Intimidate
+        .species = SPECIES_SCOLIPEDE,
+        .item = ITEM_FOCUS_SASH,
         .nature = NATURE_JOLLY,
-        .hpEv = 252,
-        .atkEv = 4,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Speed Boost
+        .atkEv = 252,
+        .spDefEv = 4,
         .spdEv = 252,
         .hpIv = 31,
         .atkIv = 31,
@@ -750,61 +742,9 @@ static const struct BattleTowerSpread sHardmodeTeam_Koga[] =
         .moves = 
         {
             MOVE_TOXICSPIKES,
-            MOVE_KNOCKOFF,
-            MOVE_POISONJAB,
-            MOVE_EXPLOSION,
-        },
-        .forSingles = TRUE,
-        .forDoubles = TRUE,
-        .modifyMovesDoubles = FALSE,
-        .level = 63,
-    },
-    {
-        .species = SPECIES_TOXAPEX,
-        .item = ITEM_BLACK_SLUDGE,
-        .ability = FRONTIER_ABILITY_HIDDEN, //Regenerator
-        .nature = NATURE_BOLD,
-        .hpEv = 252,
-        .defEv = 252,
-        .spDefEv = 4,
-        .hpIv = 31,
-        .atkIv = 0,
-        .defIv = 31,
-        .spAtkIv = 31,
-        .spDefIv = 31,
-        .spdIv = 31,
-        .moves = 
-        {
-            MOVE_TOXIC,
-            MOVE_HAZE,
-            MOVE_SCALD,
-            MOVE_RECOVER,
-        },
-        .forSingles = TRUE,
-        .forDoubles = TRUE,
-        .modifyMovesDoubles = FALSE,
-        .level = 63,
-    },
-    {
-        .species = SPECIES_WEEZING_G,
-        .item = ITEM_BLACK_SLUDGE,
-        .ability = FRONTIER_ABILITY_1, //Levitate
-        .nature = NATURE_CALM,
-        .hpEv = 252,
-        .spAtkEv = 4,
-        .spDefEv = 252,
-        .hpIv = 31,
-        .atkIv = 0,
-        .defIv = 31,
-        .spAtkIv = 31,
-        .spDefIv = 31,
-        .spdIv = 31,
-        .moves = 
-        {
-            MOVE_WILLOWISP,
-            MOVE_STRANGESTEAM,
-            MOVE_SLUDGEBOMB,
-            MOVE_PAINSPLIT,
+            MOVE_MEGAHORN,
+            MOVE_ENDEAVOR,
+            MOVE_EARTHQUAKE,
         },
         .forSingles = TRUE,
         .forDoubles = TRUE,
@@ -814,8 +754,8 @@ static const struct BattleTowerSpread sHardmodeTeam_Koga[] =
     {
         .species = SPECIES_SLOWKING_G,
         .item = ITEM_ASSAULT_VEST,
+        .nature = NATURE_CALM,
         .ability = FRONTIER_ABILITY_HIDDEN, //Regenerator
-        .nature = NATURE_MODEST,
         .hpEv = 252,
         .defEv = 12,
         .spAtkEv = 124,
@@ -829,9 +769,9 @@ static const struct BattleTowerSpread sHardmodeTeam_Koga[] =
         .moves = 
         {
             MOVE_FUTURESIGHT,
+            MOVE_SLUDGEBOMB,
             MOVE_FLAMETHROWER,
             MOVE_SCALD,
-            MOVE_SLUDGEBOMB,
         },
         .forSingles = TRUE,
         .forDoubles = TRUE,
@@ -839,13 +779,13 @@ static const struct BattleTowerSpread sHardmodeTeam_Koga[] =
         .level = 63,
     },
     {
-        .species = SPECIES_SNEASLER,
-        .item = ITEM_CHOICE_BAND,
-        .ability = FRONTIER_ABILITY_1, //Pressure
-        .nature = NATURE_JOLLY,
-        .atkEv = 252,
-        .spDefEv = 4,
-        .spdEv = 252,
+        .species = SPECIES_DRAPION,
+        .item = ITEM_BLACK_SLUDGE,
+        .nature = NATURE_CAREFUL,
+        .ability = FRONTIER_ABILITY_1, //Battle Armor
+        .hpEv = 252,
+        .spDefEv = 200,
+        .spdEv = 56,
         .hpIv = 31,
         .atkIv = 31,
         .defIv = 31,
@@ -854,10 +794,62 @@ static const struct BattleTowerSpread sHardmodeTeam_Koga[] =
         .spdIv = 31,
         .moves = 
         {
-            MOVE_POISONJAB,
             MOVE_KNOCKOFF,
-            MOVE_CLOSECOMBAT,
-            MOVE_UTURN,
+            MOVE_POISONJAB,
+            MOVE_PROTECT,
+            MOVE_WHIRLWIND,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 63,
+    },
+    {
+        .species = SPECIES_TOXAPEX,
+        .item = ITEM_BLACK_SLUDGE,
+        .nature = NATURE_BOLD,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Regenerator
+        .hpEv = 252,
+        .defEv = 252,
+        .spDefEv = 4,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_RECOVER,
+            MOVE_SCALD,
+            MOVE_HAZE,
+            MOVE_KNOCKOFF,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 63,
+    },
+    {
+        .species = SPECIES_NIHILEGO,
+        .item = ITEM_POWER_HERB,
+        .nature = NATURE_TIMID,
+        .ability = FRONTIER_ABILITY_1, //Beast Boost
+        .hpEv = 80,
+        .spAtkEv = 176,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_METEORBEAM,
+            MOVE_POWERGEM,
+            MOVE_THUNDERBOLT,
+            MOVE_GRASSKNOT,
         },
         .forSingles = TRUE,
         .forDoubles = TRUE,
@@ -867,8 +859,8 @@ static const struct BattleTowerSpread sHardmodeTeam_Koga[] =
     {
         .species = SPECIES_GENGAR,
         .item = ITEM_GENGARITE,
-        .ability = FRONTIER_ABILITY_HIDDEN, //Levitate
         .nature = NATURE_TIMID,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Levitate
         .spAtkEv = 252,
         .spDefEv = 4,
         .spdEv = 252,
@@ -880,17 +872,16 @@ static const struct BattleTowerSpread sHardmodeTeam_Koga[] =
         .spdIv = 31,
         .moves = 
         {
-            MOVE_NASTYPLOT,
             MOVE_SHADOWBALL,
-            MOVE_SLUDGEWAVE,
             MOVE_FOCUSBLAST,
+            MOVE_NASTYPLOT,
+            MOVE_SLUDGEWAVE,
         },
         .forSingles = TRUE,
         .forDoubles = TRUE,
         .modifyMovesDoubles = FALSE,
         .level = 63,
     },
-
 };
 
 static const struct BattleTowerSpread sHardmodeTeam_Sabrina[] =

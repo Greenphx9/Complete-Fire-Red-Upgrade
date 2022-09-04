@@ -3,7 +3,9 @@
 #include "../include/money.h"
 #include "../include/event_data.h"
 #include "../include/item.h"
+#include "../include/script_pokemon_80F8.h"
 #include "../include/constants/items.h"
+#include "../include/constants/pokemon.h"
 
 #include "../include/new/build_pokemon.h"
 #include "../include/new/item.h"
@@ -37,6 +39,17 @@ void DebugMenu_ProcessSetFlag(void)
 			//FlagSet(0x152D);
 			//VarSet(0x500C, 0x28);
 			//FlagClear(0x15AC);
+			//RemoveBagItem(ITEM_DYNAMAX_BAND, 1);
+			//ScriptGiveMon(SPECIES_MEWTWO, 100, ITEM_LIFE_ORB, 0, 0, 0);
+			FlagClear(FLAG_BADGE01_GET);
+			FlagClear(FLAG_BADGE02_GET);
+			FlagClear(FLAG_BADGE03_GET);
+			FlagClear(FLAG_BADGE04_GET);
+			FlagClear(FLAG_BADGE05_GET);
+			FlagClear(FLAG_BADGE06_GET);
+			FlagClear(FLAG_BADGE07_GET);
+			FlagClear(FLAG_BADGE08_GET);
+			FlagClear(FLAG_SYS_GAME_CLEAR);
 			break;
 	}
 }

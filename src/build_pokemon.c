@@ -2546,8 +2546,7 @@ void GiveMonNatureAndAbility(struct Pokemon* mon, u8 nature, u8 abilityNum, bool
 	|| (keepGender && GetGenderFromSpeciesAndPersonality(species, personality) != gender)
 	|| (!forceShiny && IsShinyOtIdPersonality(otId, personality)) //Prevent NPCs from accidentally getting shinies
 	|| (keepLetterCore && species == SPECIES_UNOWN && GetUnownLetterFromPersonality(personality) != letter) //Make sure the Unown letter doesn't change
-	|| (keepLetterCore && isMinior && GetMiniorCoreFromPersonality(personality) != miniorCore)); //Make sure the Minior core doesn't change
-
+	|| (keepLetterCore && isMinior && GetMiniorCoreFromPersonality(personality) != miniorCore)); //Make sure the Minior core doesn't change 
 	mon->personality = personality;
 }
 

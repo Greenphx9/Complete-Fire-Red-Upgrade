@@ -1100,6 +1100,7 @@ EventScript_ShowdownPCSelectTeam:
     waitstate
     compare LASTRESULT 0x0
     if 0x1 _goto EventScript_ShowdownPCEnd
+EventScript_ShowdownPCStartBattle:
 	msgbox gText_SearchingForBattle MSG_KEEPOPEN
 	closeonkeypress
     setvar 0x8000 0x0
@@ -1109,6 +1110,10 @@ EventScript_ShowdownPCSelectTeam:
 	closeonkeypress
 	special 0x73
     trainerbattle9 0x9 0x398 0x0 0x0 0x0
+	msgbox gText_BattleAgain MSG_YESNO
+	compare LASTRESULT 0x1
+	goto_if_eq EventScript_ShowdownPCStartBattle
+	setvar 0x8004 1
 	special 0xD7
 	playse 3
 	special 0x28

@@ -1418,6 +1418,11 @@ const struct TrainersWithEvs gTrainersWithEvsSpreads[] =
 		.ivs = 31,
 		.ability = Ability_1,
 	},
+	[163] = {
+		.nature = NATURE_IMPISH,
+		.ivs = 31,
+		.ability = Ability_Hidden,
+	},
 };
 //#endif
 
