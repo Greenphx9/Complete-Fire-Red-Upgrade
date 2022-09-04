@@ -38,6 +38,7 @@ if used.
 #include "../include/new/build_pokemon_2.h"
 #include "../include/new/util.h"
 #include "../include/new/util2.h"
+#include "../include/mgba.h"
 
 #define FIRERED
 
@@ -167,6 +168,11 @@ struct EvIv
     u16 totalStatsBS;
     u16 tilemapBuffer[0x400];
     u16 monSpriteId;
+    u8 inEditor : 1;
+    u8 inSelector : 1;
+    u8 evSelect : 1;
+    u8 selectedStat;
+    u16 cursorSpriteId;
 };
 
 extern struct EvIv *gEvIv;
@@ -182,6 +188,79 @@ extern struct EvIv *gEvIv;
 #define gTotalStatsEV       gEvIv->totalStatsEV
 #define gTotalStatsIV       gEvIv->totalStatsIV
 #define gTotalStatsBS       gEvIv->totalStatsBS
+#define gInEditor           gEvIv->inEditor
+#define gInSelector         gEvIv->inSelector
+#define gEvSelect           gEvIv->evSelect
+#define gSelectedStat       gEvIv->selectedStat
+#define gCursorSpriteId     gEvIv->cursorSpriteId
+
+#define EVS             0
+#define IVS             1
+
+#define EDITOR_STAT_HP         0
+#define EDITOR_STAT_ATK        1
+#define EDITOR_STAT_DEF        2
+#define EDITOR_STAT_SPATK      3
+#define EDITOR_STAT_SPDEF      4
+#define EDITOR_STAT_SPD        5
+
+#define SELECTION_CURSOR_TAG 0x200
+
+static void SpriteCB_SandboxCursor(struct Sprite* sprite);
+static void MiniEvIvPrintText(struct Pokemon *mon, bool8 ev, u8 stat, u8 newValue, u8 stat2);
+static const struct OamData sCursorOam =
+{
+	.affineMode = ST_OAM_AFFINE_OFF,
+	.objMode = ST_OAM_OBJ_NORMAL,
+	.shape = SPRITE_SHAPE(32x32),
+	.size = SPRITE_SIZE(32x32),
+	.priority = 0, //Above other sprites
+};
+static const union AnimCmd sAnimCmdHandCursor[] =
+{
+	ANIMCMD_FRAME(0, 30),
+	ANIMCMD_FRAME(16, 30),
+	ANIMCMD_JUMP(0)
+};
+
+static const union AnimCmd sAnimCmdHandCursorPointed[] =
+{
+	ANIMCMD_FRAME(16, 30),
+	ANIMCMD_END
+};
+
+static const union AnimCmd *const sAnimCmdTable_HandCursor[] =
+{
+	sAnimCmdHandCursor,
+	sAnimCmdHandCursorPointed,
+};
+static const struct SpriteTemplate sGUICursorTemplate =
+{
+	.tileTag = SELECTION_CURSOR_TAG,
+	.paletteTag = SELECTION_CURSOR_TAG,
+	.oam = &sCursorOam,
+	.anims = sAnimCmdTable_HandCursor,
+	.images = NULL,
+	.affineAnims = gDummySpriteAffineAnimTable,
+	.callback = SpriteCB_SandboxCursor,
+};
+
+static const struct SpriteSheet sCursorSpriteSheet = {(void*) 0x83D2BEC, (32 * 32 * 4) / 2, SELECTION_CURSOR_TAG};
+static const struct SpritePalette sCursorSpritePalette = {(void*) 0x83CE7F0, SELECTION_CURSOR_TAG};
+
+static void SpriteCB_SandboxCursor(struct Sprite* sprite)
+{
+
+}
+
+static void CreateSandboxCursor(void)
+{
+	LoadSpriteSheet(&sCursorSpriteSheet);
+	LoadSpritePalette(&sCursorSpritePalette);
+    u8 x = (gEvSelect) ? 138 : 112;
+    u8 y = 28 + (14 * gSelectedStat); 
+	gCursorSpriteId = CreateSprite(&sGUICursorTemplate, x, y, 1);
+}
 
 static void EvIvBgInit(void)
 {
@@ -254,6 +333,8 @@ static void Task_EvIvInit(u8 taskId)
         break;
     case 8:
         SetVBlankCallback(VCBC_EvIvOam);
+        //if(!FlagGet(FLAG_SANDBOX_MODE))
+        //    CreateSandboxCursor();
         break;
     default:
         if (gPaletteFade->active)
@@ -265,6 +346,110 @@ static void Task_EvIvInit(u8 taskId)
     gCallbackStep++;
 }
 
+static void UpdateCursorSpritePos(u16 spriteId, u8 stat, bool8 goingUp)
+{
+    struct Sprite * sprite = &gSprites[spriteId];
+    u8 newPosX = sprite->pos1.x; 
+    u8 newPosY = sprite->pos1.y;
+
+    if(stat == 0xFF)
+    {
+        if(!goingUp) //reused, actually goingRight
+        {
+            newPosX = 112;
+        }
+        else
+        {
+            newPosX = 138;
+        }
+    }
+    else
+    {
+        if(!goingUp)
+        {
+            if(stat == EDITOR_STAT_HP)
+                newPosY = 28;
+            else
+                newPosY += 14;
+        }
+        else
+        {
+            if(stat == EDITOR_STAT_SPD)
+                newPosY = 98;
+            else
+                newPosY -= 14;
+        }
+    }
+
+    sprite->pos1.x = newPosX;
+    sprite->pos1.y = newPosY;
+}
+
+static void ChangeSelectedStat(u8 stat, u8 ev, bool8 increase)
+{
+    u8 newValue;
+    u8 statToEdit;
+    u8 increaseBy;
+    u16 total = 0;
+    u16 newTotal = 0;
+    switch(stat)
+    {
+        case EDITOR_STAT_SPATK:
+            statToEdit = (ev) ? MON_DATA_SPATK_EV : MON_DATA_SPATK_IV;
+            break;
+        case EDITOR_STAT_SPDEF:
+            statToEdit = (ev) ? MON_DATA_SPDEF_EV : MON_DATA_SPDEF_IV;
+            break;
+        case EDITOR_STAT_SPD:
+            statToEdit = (ev) ? MON_DATA_SPEED_EV : MON_DATA_SPEED_IV;
+            break;
+        default:
+            statToEdit = (ev) ? MON_DATA_HP_EV + stat : MON_DATA_HP_IV + stat;
+            break;
+    }
+
+    struct Pokemon * mon = &gPlayerParty[gCurrentMon];
+    u8 currValue = GetMonData(mon, statToEdit, NULL);
+    u8 maxValue = (ev) ? 252 : 31;
+
+    increaseBy = (ev) ? 2 : 1;
+    if(increase)
+         newValue = currValue + increaseBy;
+    else if(!increase)
+        newValue = currValue - increaseBy;
+    if(increase)
+    {
+        if(currValue == maxValue)
+            newValue = 0;
+    }
+    else
+    {
+        if (currValue == 0)
+            newValue = maxValue;
+    }
+    if(ev)
+    {
+        total += mon->hpEv;
+        total += mon->atkEv;
+        total += mon->defEv;
+        total += mon->spAtkEv;
+        total += mon->spDefEv;
+        total += mon->spdEv;
+        newTotal += (statToEdit == MON_DATA_HP_EV) ? newValue : mon->hpEv;
+        newTotal += (statToEdit == MON_DATA_ATK_EV) ? newValue : mon->atkEv;
+        newTotal += (statToEdit == MON_DATA_DEF_EV) ? newValue : mon->defEv;
+        newTotal += (statToEdit == MON_DATA_SPATK_EV) ? newValue : mon->spAtkEv;
+        newTotal += (statToEdit == MON_DATA_SPDEF_EV) ? newValue : mon->spDefEv;
+        newTotal += (statToEdit == MON_DATA_SPEED_EV) ? newValue : mon->spdEv;
+        if(newTotal > 510)
+            newValue = 510 - total;
+        if(!(newValue % 2 == 0))
+            newValue -= 1;
+    }
+    SetMonData(mon, statToEdit, &newValue);
+    MiniEvIvPrintText(mon, ev, statToEdit, newValue, stat);
+}
+
 static void Task_WaitForExit(u8 taskId)
 {
     switch (gState)
@@ -273,37 +458,149 @@ static void Task_WaitForExit(u8 taskId)
         gState++;
         break;
     case 1:
-        if (JOY_REPT(DPAD_DOWN) && gPlayerPartyCount > 1)
+        if (FlagGet(FLAG_SANDBOX_MODE))
         {
-            if (gCurrentMon == (gPlayerPartyCount - 1))
-                gCurrentMon = 0;
-            else
-                gCurrentMon++;
-            HidePokemonPic2(gSpriteTaskId);
-            ShowSprite(&gPlayerParty[gCurrentMon]);
-            EvIvPrintText(&gPlayerParty[gCurrentMon]);
+            if (JOY_NEW(A_BUTTON))
+            {
+                if (!gInSelector && !gInEditor)
+                {
+                    gInSelector = TRUE;
+                    PlaySE(5);
+                    CreateSandboxCursor();
+                }
+                else if(!gInEditor && gInSelector)
+                {
+                    PlaySE(5);
+                    gInEditor = TRUE;
+                    gInSelector = FALSE;
+                    DestroySprite(&gSprites[gCursorSpriteId]);
+                }
+            }
+            if (JOY_NEW(B_BUTTON))
+            {
+                if(!gInSelector && !gInEditor)
+                {
+                    PlaySE(242);
+                    DestroySprite(&gSprites[gCursorSpriteId]);
+                    BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+                    for(u8 i = 0; i < gPlayerPartyCount; i++)
+                    {
+                        CalculateMonStatsNew(&gPlayerParty[i]);
+                        u8 max = GetMonData(&gPlayerParty[i], MON_DATA_MAX_HP, NULL);
+                        u8 curr = GetMonData(&gPlayerParty[i], MON_DATA_HP, NULL);
+                        if(curr > max)
+                        {
+                            SetMonData(&gPlayerParty[i], MON_DATA_HP, &max);
+                        }
+                    }
+                    gState++;
+                }
+                else if (gInEditor)
+                {
+                    PlaySE(5);
+                    gInEditor = FALSE;
+                    gInSelector = TRUE;
+                    CreateSandboxCursor();
+                }
+                else
+                {
+                    PlaySE(5);
+                    gInSelector = FALSE;
+                    DestroySprite(&gSprites[gCursorSpriteId]);
+                }
+            }
+            if (!gInSelector && !gInEditor)
+            {
+                if (JOY_REPT(DPAD_DOWN) && gPlayerPartyCount > 1)
+                {
+                    if (gCurrentMon == (gPlayerPartyCount - 1))
+                        gCurrentMon = 0;
+                    else
+                        gCurrentMon++;
+                    HidePokemonPic2(gSpriteTaskId);
+                    ShowSprite(&gPlayerParty[gCurrentMon]);
+                    EvIvPrintText(&gPlayerParty[gCurrentMon]);
+                }
+                if (JOY_REPT(DPAD_UP) && gPlayerPartyCount > 1)
+                {
+                    if (gCurrentMon == 0)
+                        gCurrentMon = (gPlayerPartyCount - 1);
+                    else
+                        gCurrentMon--;
+                    HidePokemonPic2(gSpriteTaskId);
+                    ShowSprite(&gPlayerParty[gCurrentMon]);
+                    EvIvPrintText(&gPlayerParty[gCurrentMon]);
+                }
+            }
+            else if(gInSelector)
+            {
+                if (JOY_REPT(DPAD_DOWN))
+                {
+                    if(gSelectedStat == EDITOR_STAT_SPD)
+                        gSelectedStat = EDITOR_STAT_HP;
+                    else
+                        gSelectedStat++;
+                    UpdateCursorSpritePos(gCursorSpriteId, gSelectedStat, FALSE);
+                }
+                if (JOY_REPT(DPAD_UP))
+                {
+                    if(gSelectedStat == EDITOR_STAT_HP)
+                        gSelectedStat = EDITOR_STAT_SPD;
+                    else
+                        gSelectedStat--;
+                    UpdateCursorSpritePos(gCursorSpriteId, gSelectedStat, TRUE);
+                }
+                if (JOY_REPT(DPAD_LEFT))
+                {
+                    gEvSelect = !gEvSelect;
+                    UpdateCursorSpritePos(gCursorSpriteId, 0xFF, FALSE);
+                }
+                if (JOY_REPT(DPAD_RIGHT))
+                {
+                    gEvSelect = !gEvSelect;
+                    UpdateCursorSpritePos(gCursorSpriteId, 0xFF, TRUE);
+                }
+            }
+            else if(gInEditor)
+            {
+                if (JOY_REPT(DPAD_LEFT))
+                {
+                    ChangeSelectedStat(gSelectedStat, !gEvSelect, FALSE);
+                }
+                if (JOY_REPT(DPAD_RIGHT))
+                {
+                    ChangeSelectedStat(gSelectedStat, !gEvSelect, TRUE);
+                } 
+            }
         }
-        if (JOY_REPT(DPAD_UP) && gPlayerPartyCount > 1)
+        else
         {
-            if (gCurrentMon == 0)
-                gCurrentMon = (gPlayerPartyCount - 1);
-            else
-                gCurrentMon--;
-            HidePokemonPic2(gSpriteTaskId);
-            ShowSprite(&gPlayerParty[gCurrentMon]);
-            EvIvPrintText(&gPlayerParty[gCurrentMon]);
-        }
-        if (JOY_NEW(A_BUTTON) || JOY_NEW(B_BUTTON))
-        {
-#ifdef FIRERED
-//FIRERED
-            PlaySE(242);
-#else
-//EMERALD
-            PlaySE(SE_RG_CARD_FLIP);
-#endif
-            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-            gState++;
+            if (JOY_NEW(A_BUTTON) || JOY_NEW(B_BUTTON))
+            {
+                PlaySE(242);
+                BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+                gState++;
+            }
+            if (JOY_REPT(DPAD_DOWN) && gPlayerPartyCount > 1)
+            {
+                if (gCurrentMon == (gPlayerPartyCount - 1))
+                    gCurrentMon = 0;
+                else
+                    gCurrentMon++;
+                HidePokemonPic2(gSpriteTaskId);
+                ShowSprite(&gPlayerParty[gCurrentMon]);
+                EvIvPrintText(&gPlayerParty[gCurrentMon]);
+            }
+            if (JOY_REPT(DPAD_UP) && gPlayerPartyCount > 1)
+            {
+                if (gCurrentMon == 0)
+                    gCurrentMon = (gPlayerPartyCount - 1);
+                else
+                    gCurrentMon--;
+                HidePokemonPic2(gSpriteTaskId);
+                ShowSprite(&gPlayerParty[gCurrentMon]);
+                EvIvPrintText(&gPlayerParty[gCurrentMon]);
+            }
         }
         break;
     case 2:
@@ -652,6 +949,58 @@ const u8 gText_Steps_to_hatching[]  = _(" steps to hatching!");
 static void PrintWindow0(struct Pokemon *mon);
 static void PrintWindow1(u8 nature, u8 isEgg);
 static void PrintWindow2(u16 species, u8 isEgg, u8 friendship);
+
+static void MiniEvIvPrintText(struct Pokemon *mon, bool8 ev, u8 stat, u8 newValue, u8 stat2)
+{
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
+    u8 nature   = GetNature(mon);
+    u8 isEgg    = GetMonData(mon, MON_DATA_IS_EGG, 0);
+    u8 friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, 0);
+    u8 arrStat;
+    switch(stat)
+    {
+        case MON_DATA_SPATK_EV:
+        case MON_DATA_SPATK_IV:
+            arrStat = STAT_SPATK;
+            break;
+        case MON_DATA_SPDEF_EV:
+        case MON_DATA_SPDEF_IV:
+            arrStat = STAT_SPDEF;
+            break;
+        case MON_DATA_SPEED_EV:
+        case MON_DATA_SPEED_IV:
+            arrStat = STAT_SPEED;
+            break;
+        default:
+            arrStat = STAT_HP + stat2;
+            break;
+    }
+    if(ev)
+    {
+        gTotalStatsEV = 0;
+        gStats_ev[arrStat] = newValue;
+        for (int i = 0; i < NUM_STATS; i++)
+            gTotalStatsEV += gStats_ev[i];
+    }
+    else
+    {
+        gTotalStatsIV = 0;
+        gStats_iv[arrStat] = newValue;
+        for (int i = 0; i < NUM_STATS; i++)
+            gTotalStatsIV += gStats_iv[i];
+    }
+    //FillWindowPixelBuffer(0, 0);
+    FillWindowPixelBuffer(1, 0);
+    FillWindowPixelBuffer(2, 0);
+
+    //PrintWindow0(mon);
+    PrintWindow1(nature, isEgg);
+    PrintWindow2(species, isEgg, friendship);
+
+    //PutWindowTilemap(0);
+    PutWindowTilemap(1);
+    PutWindowTilemap(2);
+}
 
 static void EvIvPrintText(struct Pokemon *mon)
 {

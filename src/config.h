@@ -293,6 +293,7 @@
 #define FLAG_SCALEMONS 0x1200 //Sets every Pokemon's BST to 600.
 #define FLAG_TIME_TURNER 0x1201 //Changes the time to PM when AM,and vice versa
 #define FLAG_HAS_USED_NORMAL_MODE 0x1202 //Displays normal mode on the HOF if normal mode has been used. Discourages cheaters.
+#define FLAG_SANDBOX_MODE 0x1203 //Allows you to edit EVs / IVs in the Stat Scanner.
 
 //Save stuff
 #define VAR_R_BUTTON_MODE 0x5150
