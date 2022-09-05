@@ -39,6 +39,9 @@ if used.
 #include "../include/new/util.h"
 #include "../include/new/util2.h"
 #include "../include/mgba.h"
+#include "../include/wild_encounter.h"
+#include "../include/new/form_change.h"
+#include "../include/random.h"
 
 #define FIRERED
 
@@ -170,7 +173,7 @@ struct EvIv
     u16 monSpriteId;
     u8 inEditor : 1;
     u8 inSelector : 1;
-    u8 evSelect : 1;
+    u8 selectedColumn;
     u8 selectedStat;
     u16 cursorSpriteId;
 };
@@ -190,12 +193,13 @@ extern struct EvIv *gEvIv;
 #define gTotalStatsBS       gEvIv->totalStatsBS
 #define gInEditor           gEvIv->inEditor
 #define gInSelector         gEvIv->inSelector
-#define gEvSelect           gEvIv->evSelect
+#define gSelectedColumn     gEvIv->selectedColumn
 #define gSelectedStat       gEvIv->selectedStat
 #define gCursorSpriteId     gEvIv->cursorSpriteId
 
 #define EVS             0
 #define IVS             1
+#define ABILITY_EDIT    2
 
 #define EDITOR_STAT_HP         0
 #define EDITOR_STAT_ATK        1
@@ -208,6 +212,7 @@ extern struct EvIv *gEvIv;
 
 static void SpriteCB_SandboxCursor(struct Sprite* sprite);
 static void MiniEvIvPrintText(struct Pokemon *mon, bool8 ev, u8 stat, u8 newValue, u8 stat2);
+static void PrintWindow2(u16 species, u8 isEgg, u8 friendship, u8 ability);
 static const struct OamData sCursorOam =
 {
 	.affineMode = ST_OAM_AFFINE_OFF,
@@ -257,8 +262,23 @@ static void CreateSandboxCursor(void)
 {
 	LoadSpriteSheet(&sCursorSpriteSheet);
 	LoadSpritePalette(&sCursorSpritePalette);
-    u8 x = (gEvSelect) ? 138 : 112;
-    u8 y = 28 + (14 * gSelectedStat); 
+    u8 x = 0;
+    u8 y = 0;
+    switch(gSelectedColumn)
+    {
+        case EVS:
+            x = 112;
+            y = 28 + (14 * gSelectedStat); 
+            break;
+        case IVS:
+            x = 138;
+            y = 28 + (14 * gSelectedStat); 
+            break;
+        case ABILITY_EDIT:
+            x = 180;
+            y = 121;
+            break;
+    }
 	gCursorSpriteId = CreateSprite(&sGUICursorTemplate, x, y, 1);
 }
 
@@ -346,21 +366,30 @@ static void Task_EvIvInit(u8 taskId)
     gCallbackStep++;
 }
 
-static void UpdateCursorSpritePos(u16 spriteId, u8 stat, bool8 goingUp)
+static void UpdateCursorSpritePos(u16 spriteId, u8 stat, bool8 goingUp, bool8 resetY)
 {
     struct Sprite * sprite = &gSprites[spriteId];
     u8 newPosX = sprite->pos1.x; 
     u8 newPosY = sprite->pos1.y;
+    u8 ability = GetMonAbility(&gPlayerParty[gCurrentMon]);
+    u16 species = gPlayerParty[gCurrentMon].species;
 
     if(stat == 0xFF)
     {
-        if(!goingUp) //reused, actually goingRight
+        switch(gSelectedColumn)
         {
-            newPosX = 112;
-        }
-        else
-        {
-            newPosX = 138;
+            case EVS:
+                newPosX = 112;
+                break;
+            case IVS:
+                newPosX = 138;
+                break;
+            case ABILITY_EDIT:
+                CopyAbilityName(gStringVar1, ability, species);
+                newPosX = (157 + (GetStringWidth(2, gStringVar1, 0) / 2)) - 5;
+                newPosY = 121;
+                break;
+
         }
     }
     else
@@ -380,9 +409,119 @@ static void UpdateCursorSpritePos(u16 spriteId, u8 stat, bool8 goingUp)
                 newPosY -= 14;
         }
     }
+    if(resetY)
+    {
+        if(goingUp)
+        {
+            newPosX = 112;
+            newPosY = 28;
+        }
+        else
+        {
+            newPosX = 138;
+            newPosY = 28;
+        }
+    }
 
     sprite->pos1.x = newPosX;
     sprite->pos1.y = newPosY;
+}
+
+static void SandboxChangeAbility(bool8 goingRight)
+{
+    struct Pokemon * mon = &gPlayerParty[gCurrentMon];
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    u8 currentAbilNum;
+    u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
+    u8 nature = GetNatureFromPersonality(personality);
+    bool8 isShiny = IsMonShiny(mon);
+    if(GetMonAbility(mon) == GetAbility1(species))
+        currentAbilNum = 0;
+    else if(GetMonAbility(mon) == GetAbility2(species))
+        currentAbilNum = 1;
+    else if(GetMonAbility(mon) == GetHiddenAbility(species))
+        currentAbilNum = 2;
+    if(goingRight)
+    {
+        if(currentAbilNum == 0)
+            GiveMonNatureAndAbility(mon, nature, 1, isShiny, FALSE, FALSE);      
+        else if(currentAbilNum == 1)
+            mon->hiddenAbility = TRUE;
+        else if(currentAbilNum == 2)
+        {
+            mon->hiddenAbility = FALSE;
+            GiveMonNatureAndAbility(mon, nature, 0, isShiny, FALSE, FALSE);      
+        }
+    }
+    else
+    {
+        if(currentAbilNum == 0)
+            mon->hiddenAbility = TRUE;
+        else if(currentAbilNum == 1)
+            GiveMonNatureAndAbility(mon, nature, 0, isShiny, FALSE, FALSE);      
+        else if(currentAbilNum == 2)
+        {
+            mon->hiddenAbility = FALSE;
+            GiveMonNatureAndAbility(mon, nature, 1, isShiny, FALSE, FALSE);      
+        }
+    }
+    //else if(currentAbilNum == 2)
+    //    mon->hiddenAbility = FALSE;
+    /*else
+    {
+        u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
+        u8 abilityNum = (personality & 1) ^ 1; //Flip ability bit
+
+        u32 otId = GetMonData(mon, MON_DATA_OT_ID, NULL);
+        u16 sid = HIHALF(otId);
+        u16 tid = LOHALF(otId);
+        u8 gender = GetGenderFromSpeciesAndPersonality(species, personality);
+        bool8 isShiny = IsMonShiny(mon);
+        u8 letter = GetUnownLetterFromPersonality(personality);
+        u8 nature = GetNatureFromPersonality(personality);
+        bool8 isMinior = IsMinior(species);
+        u16 miniorCore = GetMiniorCoreFromPersonality(personality);
+
+        //Change the ability while keeping other personality values the same
+        do
+        {
+            personality = Random32();
+
+            if (isShiny)
+            {
+                u8 shinyRange = 1;
+                personality = (((shinyRange ^ (sid ^ tid)) ^ LOHALF(personality)) << 16) | LOHALF(personality);
+            }
+
+            personality &= ~(1);
+            personality |= abilityNum; //Either 0 or 1
+
+        } while (GetNatureFromPersonality(personality) != nature
+        || GetGenderFromSpeciesAndPersonality(species, personality) != gender
+        || (!isShiny && IsShinyOtIdPersonality(otId, personality)) //No free shinies
+        || (species == SPECIES_UNOWN && GetUnownLetterFromPersonality(personality) != letter)
+        || (isMinior && GetMiniorCoreFromPersonality(personality) != miniorCore));
+
+        mon->hiddenAbility = FALSE;
+        SetMonData(mon, MON_DATA_PERSONALITY, &personality);
+        CalculateMonStats(mon);
+    }*/
+
+    //FillWindowPixelBuffer(0, 0);
+    //FillWindowPixelBuffer(1, 0);
+    FillWindowPixelBuffer(2, 0);
+
+    //PrintWindow0(mon);
+    //PrintWindow1(nature, isEgg);
+    u8 isEgg    = GetMonData(mon, MON_DATA_IS_EGG, 0);
+    u8 friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, 0);
+    u8 ability = GetMonAbility(mon);
+    PrintWindow2(species, isEgg, friendship, ability);
+
+
+    //PutWindowTilemap(0);
+    //PutWindowTilemap(1);
+    PutWindowTilemap(2);
 }
 
 static void ChangeSelectedStat(u8 stat, u8 ev, bool8 increase)
@@ -458,7 +597,7 @@ static void Task_WaitForExit(u8 taskId)
         gState++;
         break;
     case 1:
-        if (FlagGet(FLAG_SANDBOX_MODE))
+        if (!FlagGet(FLAG_SANDBOX_MODE))
         {
             if (JOY_NEW(A_BUTTON))
             {
@@ -501,6 +640,9 @@ static void Task_WaitForExit(u8 taskId)
                     gInEditor = FALSE;
                     gInSelector = TRUE;
                     CreateSandboxCursor();
+                    if(gSelectedColumn == 2)
+                        UpdateCursorSpritePos(gCursorSpriteId, 0xFF, FALSE, FALSE);
+                    
                 }
                 else
                 {
@@ -520,6 +662,9 @@ static void Task_WaitForExit(u8 taskId)
                     HidePokemonPic2(gSpriteTaskId);
                     ShowSprite(&gPlayerParty[gCurrentMon]);
                     EvIvPrintText(&gPlayerParty[gCurrentMon]);
+                    //reset selected column & selected stat
+                    gSelectedColumn = 0;
+                    gSelectedStat = STAT_HP;
                 }
                 if (JOY_REPT(DPAD_UP) && gPlayerPartyCount > 1)
                 {
@@ -530,46 +675,82 @@ static void Task_WaitForExit(u8 taskId)
                     HidePokemonPic2(gSpriteTaskId);
                     ShowSprite(&gPlayerParty[gCurrentMon]);
                     EvIvPrintText(&gPlayerParty[gCurrentMon]);
+                    //reset selected column & selected stat
+                    gSelectedColumn = 0;
+                    gSelectedStat = STAT_HP;
                 }
             }
             else if(gInSelector)
             {
+                u8 resetY = FALSE;
                 if (JOY_REPT(DPAD_DOWN))
                 {
-                    if(gSelectedStat == EDITOR_STAT_SPD)
+                    if(gSelectedColumn == 2)
+                    {
+                        //dont do anything
+                    }
+                    else if(gSelectedStat == EDITOR_STAT_SPD)
                         gSelectedStat = EDITOR_STAT_HP;
                     else
                         gSelectedStat++;
-                    UpdateCursorSpritePos(gCursorSpriteId, gSelectedStat, FALSE);
+                    if(gSelectedColumn != 2)
+                        UpdateCursorSpritePos(gCursorSpriteId, gSelectedStat, FALSE, FALSE);
                 }
                 if (JOY_REPT(DPAD_UP))
                 {
-                    if(gSelectedStat == EDITOR_STAT_HP)
+                    if(gSelectedColumn == 2)
+                    {
+                        //dont do anything
+                    }
+                    else if(gSelectedStat == EDITOR_STAT_HP)
                         gSelectedStat = EDITOR_STAT_SPD;
                     else
                         gSelectedStat--;
-                    UpdateCursorSpritePos(gCursorSpriteId, gSelectedStat, TRUE);
+                    if(gSelectedColumn != 2)
+                        UpdateCursorSpritePos(gCursorSpriteId, gSelectedStat, TRUE, FALSE);
                 }
                 if (JOY_REPT(DPAD_LEFT))
                 {
-                    gEvSelect = !gEvSelect;
-                    UpdateCursorSpritePos(gCursorSpriteId, 0xFF, FALSE);
+                    if(gSelectedColumn == 0)
+                        gSelectedColumn = 2;
+                    else if(gSelectedColumn == 2)
+                    {
+                        gSelectedColumn = 1;
+                        resetY = TRUE;
+                        gSelectedStat = STAT_HP;
+                    }
+                    else
+                        gSelectedColumn--;
+                    UpdateCursorSpritePos(gCursorSpriteId, 0xFF, FALSE, resetY);
                 }
                 if (JOY_REPT(DPAD_RIGHT))
                 {
-                    gEvSelect = !gEvSelect;
-                    UpdateCursorSpritePos(gCursorSpriteId, 0xFF, TRUE);
+                    if(gSelectedColumn == 2)
+                    {
+                        gSelectedColumn = 0;
+                        resetY = TRUE;
+                        gSelectedStat = STAT_HP;
+                    }
+                    else
+                        gSelectedColumn++;
+                    UpdateCursorSpritePos(gCursorSpriteId, 0xFF, TRUE, resetY);
                 }
             }
             else if(gInEditor)
             {
                 if (JOY_REPT(DPAD_LEFT))
                 {
-                    ChangeSelectedStat(gSelectedStat, !gEvSelect, FALSE);
+                    if(gSelectedColumn == 2)
+                        SandboxChangeAbility(FALSE);
+                    else
+                        ChangeSelectedStat(gSelectedStat, gSelectedColumn == 0, FALSE);
                 }
                 if (JOY_REPT(DPAD_RIGHT))
                 {
-                    ChangeSelectedStat(gSelectedStat, !gEvSelect, TRUE);
+                    if(gSelectedColumn == 2)
+                        SandboxChangeAbility(TRUE);
+                    else
+                        ChangeSelectedStat(gSelectedStat, gSelectedColumn == 0, TRUE);
                 } 
             }
         }
@@ -889,6 +1070,9 @@ static void Task_ScriptShowMonPic(u8 taskId)
 #define SPDEF_Y     SPATK_Y + 14
 #define SPEED_Y     SPDEF_Y + 14
 
+#define ABILITY_X        IV_X + 30
+#define ABILITY_Y        SPEED_Y
+
 
 
 //                                     resaltado                fuente                  sombra
@@ -948,7 +1132,6 @@ const u8 gText_Steps_to_hatching[]  = _(" steps to hatching!");
 
 static void PrintWindow0(struct Pokemon *mon);
 static void PrintWindow1(u8 nature, u8 isEgg);
-static void PrintWindow2(u16 species, u8 isEgg, u8 friendship);
 
 static void MiniEvIvPrintText(struct Pokemon *mon, bool8 ev, u8 stat, u8 newValue, u8 stat2)
 {
@@ -956,6 +1139,7 @@ static void MiniEvIvPrintText(struct Pokemon *mon, bool8 ev, u8 stat, u8 newValu
     u8 nature   = GetNature(mon);
     u8 isEgg    = GetMonData(mon, MON_DATA_IS_EGG, 0);
     u8 friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, 0);
+    u8 ability = GetMonAbility(mon);
     u8 arrStat;
     switch(stat)
     {
@@ -995,7 +1179,7 @@ static void MiniEvIvPrintText(struct Pokemon *mon, bool8 ev, u8 stat, u8 newValu
 
     //PrintWindow0(mon);
     PrintWindow1(nature, isEgg);
-    PrintWindow2(species, isEgg, friendship);
+    PrintWindow2(species, isEgg, friendship, ability);
 
     //PutWindowTilemap(0);
     PutWindowTilemap(1);
@@ -1008,6 +1192,7 @@ static void EvIvPrintText(struct Pokemon *mon)
     u8 nature   = GetNature(mon);
     u8 isEgg    = GetMonData(mon, MON_DATA_IS_EGG, 0);
     u8 friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, 0);
+    u8 ability = GetMonAbility(mon);
 
     //reinicia los totales.
     //reset the totals.
@@ -1058,7 +1243,7 @@ static void EvIvPrintText(struct Pokemon *mon)
 
     PrintWindow0(mon);
     PrintWindow1(nature, isEgg);
-    PrintWindow2(species, isEgg, friendship);
+    PrintWindow2(species, isEgg, friendship, ability);
 
     PutWindowTilemap(0);
     PutWindowTilemap(1);
@@ -1155,7 +1340,7 @@ static void PrintStat(u8 nature, u8 stat)
     }
 }
 
-static void PrintWindow2(u16 species, u8 isEgg, u8 friendship)
+static void PrintWindow2(u16 species, u8 isEgg, u8 friendship, u8 ability)
 {
     u16 temp = 0;
 
@@ -1188,6 +1373,9 @@ static void PrintWindow2(u16 species, u8 isEgg, u8 friendship)
         
         StringAppend(gStringVar4, gText_Happy);
         AddTextPrinterParameterized3(WIN_BOTTOM_BOX, 2, 12, 18, gBlackTextColor, 0, gStringVar4);
+
+        CopyAbilityName(gStringVar1, ability, species);
+        AddTextPrinterParameterized3(WIN_BOTTOM_BOX, 2, ABILITY_X, 4, gBlackTextColor, 0, gStringVar1);
         
     }else
     {
