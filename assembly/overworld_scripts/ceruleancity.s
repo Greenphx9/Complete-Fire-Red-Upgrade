@@ -428,7 +428,6 @@ EventScript_PowerItemEVFadescreen2:
 EventScript_PowerItemLevelUp:
 	lock
 	faceplayer
-	additem 0x2E1 1
 	compare 0x5105 6
 	goto_if_eq EventScript_AlreadyLevel6PowerItem
 	copyvar 0x8004 0x5105
