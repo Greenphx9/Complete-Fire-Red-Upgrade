@@ -2236,3 +2236,7 @@ ListMenuChangeSelection = 0x810799C | 1;
 sMessageBoxType = 0x203709C;
 
 Task_ScriptShowMonPic = 0x809D288 | 1;
+
+sGenderColors = 0x83E2428;
+gText_MaleSymbol = 0x841621F;
+gText_FemaleSymbol = 0x8416221;

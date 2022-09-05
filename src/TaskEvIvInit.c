@@ -4,7 +4,8 @@ CUSTOM FILE!
 THIS IS A CUSTOM FILE THAT ISN'T NORMALLY IN THE CFRU.
 
 Give Credits to:
-- Acimut
+- Acimut - Actual EV Screen
+- Greenphx - Sandbox / Stat Editor functionality
 if used.
 
 \********/
@@ -78,6 +79,8 @@ static void EvIvPrintText(struct Pokemon *mon);
 static void ShowPokemonPic2(u16 species, u32 otId, u32 personality, u8 x, u8 y);
 static void Task_ScriptShowMonPic(u8 taskId);
 static void HidePokemonPic2(u8 taskId);
+static void PrintGenderText(struct Pokemon *mon);
+static void SandboxChangeGender();
 
 static void PrintStat(u8 nature, u8 stat);
 static u8 GetDigits(u16 num);
@@ -116,7 +119,7 @@ static const struct BgTemplate bg_Templates[] = {
 
 //window 0 = pokémon name
 #define WINDOW0_WIDTH   29
-#define WINDOW0_HEIGTH  2
+#define WINDOW0_HEIGTH  4
 
 //window 1 = stats
 #define WINDOW1_WIDTH   17
@@ -200,6 +203,7 @@ extern struct EvIv *gEvIv;
 #define EVS             0
 #define IVS             1
 #define ABILITY_EDIT    2
+#define GENDER          3
 
 #define EDITOR_STAT_HP         0
 #define EDITOR_STAT_ATK        1
@@ -212,6 +216,7 @@ extern struct EvIv *gEvIv;
 
 static void SpriteCB_SandboxCursor(struct Sprite* sprite);
 static void MiniEvIvPrintText(struct Pokemon *mon, bool8 ev, u8 stat, u8 newValue, u8 stat2);
+static void PrintWindow0(struct Pokemon *mon);
 static void PrintWindow2(u16 species, u8 isEgg, u8 friendship, u8 ability);
 static const struct OamData sCursorOam =
 {
@@ -278,6 +283,10 @@ static void CreateSandboxCursor(void)
             x = 180;
             y = 121;
             break;
+        case GENDER:
+            x = 164;
+            y = 24;
+            break;
     }
 	gCursorSpriteId = CreateSprite(&sGUICursorTemplate, x, y, 1);
 }
@@ -343,6 +352,7 @@ static void Task_EvIvInit(u8 taskId)
     case 5:
         ShowSprite(&gPlayerParty[gCurrentMon]);
         EvIvPrintText(&gPlayerParty[gCurrentMon]);
+        PrintGenderText(&gPlayerParty[gCurrentMon]);
         break;
     case 6:
         CopyBgTilemapBufferToVram(0);
@@ -353,7 +363,7 @@ static void Task_EvIvInit(u8 taskId)
         break;
     case 8:
         SetVBlankCallback(VCBC_EvIvOam);
-        //if(!FlagGet(FLAG_SANDBOX_MODE))
+        //if(FlagGet(FLAG_SANDBOX_MODE))
         //    CreateSandboxCursor();
         break;
     default:
@@ -389,7 +399,10 @@ static void UpdateCursorSpritePos(u16 spriteId, u8 stat, bool8 goingUp, bool8 re
                 newPosX = (157 + (GetStringWidth(2, gStringVar1, 0) / 2)) - 5;
                 newPosY = 121;
                 break;
-
+            case GENDER:
+                newPosX = 164;
+                newPosY = 24;
+                break;
         }
     }
     else
@@ -444,13 +457,13 @@ static void SandboxChangeAbility(bool8 goingRight)
     if(goingRight)
     {
         if(currentAbilNum == 0)
-            GiveMonNatureAndAbility(mon, nature, 1, isShiny, FALSE, FALSE);      
+            GiveMonNatureAndAbility(mon, nature, 1, isShiny, TRUE, FALSE);      
         else if(currentAbilNum == 1)
             mon->hiddenAbility = TRUE;
         else if(currentAbilNum == 2)
         {
             mon->hiddenAbility = FALSE;
-            GiveMonNatureAndAbility(mon, nature, 0, isShiny, FALSE, FALSE);      
+            GiveMonNatureAndAbility(mon, nature, 0, isShiny, TRUE, FALSE);      
         }
     }
     else
@@ -458,69 +471,21 @@ static void SandboxChangeAbility(bool8 goingRight)
         if(currentAbilNum == 0)
             mon->hiddenAbility = TRUE;
         else if(currentAbilNum == 1)
-            GiveMonNatureAndAbility(mon, nature, 0, isShiny, FALSE, FALSE);      
+            GiveMonNatureAndAbility(mon, nature, 0, isShiny, TRUE, FALSE);      
         else if(currentAbilNum == 2)
         {
             mon->hiddenAbility = FALSE;
-            GiveMonNatureAndAbility(mon, nature, 1, isShiny, FALSE, FALSE);      
+            GiveMonNatureAndAbility(mon, nature, 1, isShiny, TRUE, FALSE);      
         }
     }
-    //else if(currentAbilNum == 2)
-    //    mon->hiddenAbility = FALSE;
-    /*else
-    {
-        u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
-        u8 abilityNum = (personality & 1) ^ 1; //Flip ability bit
 
-        u32 otId = GetMonData(mon, MON_DATA_OT_ID, NULL);
-        u16 sid = HIHALF(otId);
-        u16 tid = LOHALF(otId);
-        u8 gender = GetGenderFromSpeciesAndPersonality(species, personality);
-        bool8 isShiny = IsMonShiny(mon);
-        u8 letter = GetUnownLetterFromPersonality(personality);
-        u8 nature = GetNatureFromPersonality(personality);
-        bool8 isMinior = IsMinior(species);
-        u16 miniorCore = GetMiniorCoreFromPersonality(personality);
-
-        //Change the ability while keeping other personality values the same
-        do
-        {
-            personality = Random32();
-
-            if (isShiny)
-            {
-                u8 shinyRange = 1;
-                personality = (((shinyRange ^ (sid ^ tid)) ^ LOHALF(personality)) << 16) | LOHALF(personality);
-            }
-
-            personality &= ~(1);
-            personality |= abilityNum; //Either 0 or 1
-
-        } while (GetNatureFromPersonality(personality) != nature
-        || GetGenderFromSpeciesAndPersonality(species, personality) != gender
-        || (!isShiny && IsShinyOtIdPersonality(otId, personality)) //No free shinies
-        || (species == SPECIES_UNOWN && GetUnownLetterFromPersonality(personality) != letter)
-        || (isMinior && GetMiniorCoreFromPersonality(personality) != miniorCore));
-
-        mon->hiddenAbility = FALSE;
-        SetMonData(mon, MON_DATA_PERSONALITY, &personality);
-        CalculateMonStats(mon);
-    }*/
-
-    //FillWindowPixelBuffer(0, 0);
-    //FillWindowPixelBuffer(1, 0);
     FillWindowPixelBuffer(2, 0);
 
-    //PrintWindow0(mon);
-    //PrintWindow1(nature, isEgg);
     u8 isEgg    = GetMonData(mon, MON_DATA_IS_EGG, 0);
     u8 friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, 0);
     u8 ability = GetMonAbility(mon);
     PrintWindow2(species, isEgg, friendship, ability);
 
-
-    //PutWindowTilemap(0);
-    //PutWindowTilemap(1);
     PutWindowTilemap(2);
 }
 
@@ -597,7 +562,7 @@ static void Task_WaitForExit(u8 taskId)
         gState++;
         break;
     case 1:
-        if (!FlagGet(FLAG_SANDBOX_MODE))
+        if (FlagGet(FLAG_SANDBOX_MODE))
         {
             if (JOY_NEW(A_BUTTON))
             {
@@ -662,6 +627,7 @@ static void Task_WaitForExit(u8 taskId)
                     HidePokemonPic2(gSpriteTaskId);
                     ShowSprite(&gPlayerParty[gCurrentMon]);
                     EvIvPrintText(&gPlayerParty[gCurrentMon]);
+                    PrintGenderText(&gPlayerParty[gCurrentMon]);
                     //reset selected column & selected stat
                     gSelectedColumn = 0;
                     gSelectedStat = STAT_HP;
@@ -675,6 +641,7 @@ static void Task_WaitForExit(u8 taskId)
                     HidePokemonPic2(gSpriteTaskId);
                     ShowSprite(&gPlayerParty[gCurrentMon]);
                     EvIvPrintText(&gPlayerParty[gCurrentMon]);
+                    PrintGenderText(&gPlayerParty[gCurrentMon]);
                     //reset selected column & selected stat
                     gSelectedColumn = 0;
                     gSelectedStat = STAT_HP;
@@ -685,7 +652,7 @@ static void Task_WaitForExit(u8 taskId)
                 u8 resetY = FALSE;
                 if (JOY_REPT(DPAD_DOWN))
                 {
-                    if(gSelectedColumn == 2)
+                    if(gSelectedColumn == 2 || gSelectedColumn == 3)
                     {
                         //dont do anything
                     }
@@ -693,12 +660,12 @@ static void Task_WaitForExit(u8 taskId)
                         gSelectedStat = EDITOR_STAT_HP;
                     else
                         gSelectedStat++;
-                    if(gSelectedColumn != 2)
+                    if(gSelectedColumn != 2 && gSelectedColumn != 3)
                         UpdateCursorSpritePos(gCursorSpriteId, gSelectedStat, FALSE, FALSE);
                 }
                 if (JOY_REPT(DPAD_UP))
                 {
-                    if(gSelectedColumn == 2)
+                    if(gSelectedColumn == 2 || gSelectedColumn == 3)
                     {
                         //dont do anything
                     }
@@ -706,13 +673,13 @@ static void Task_WaitForExit(u8 taskId)
                         gSelectedStat = EDITOR_STAT_SPD;
                     else
                         gSelectedStat--;
-                    if(gSelectedColumn != 2)
+                    if(gSelectedColumn != 2 && gSelectedColumn != 3)
                         UpdateCursorSpritePos(gCursorSpriteId, gSelectedStat, TRUE, FALSE);
                 }
                 if (JOY_REPT(DPAD_LEFT))
                 {
                     if(gSelectedColumn == 0)
-                        gSelectedColumn = 2;
+                        gSelectedColumn = (GetGenderFromSpeciesAndPersonality(gPlayerParty[gCurrentMon].species, gPlayerParty[gCurrentMon].personality) != MON_GENDERLESS) ? 3 : 2;
                     else if(gSelectedColumn == 2)
                     {
                         gSelectedColumn = 1;
@@ -725,7 +692,13 @@ static void Task_WaitForExit(u8 taskId)
                 }
                 if (JOY_REPT(DPAD_RIGHT))
                 {
-                    if(gSelectedColumn == 2)
+                    if(GetGenderFromSpeciesAndPersonality(gPlayerParty[gCurrentMon].species, gPlayerParty[gCurrentMon].personality) == MON_GENDERLESS && gSelectedColumn == 2)
+                    {
+                        gSelectedColumn = 0;
+                        resetY = TRUE;
+                        gSelectedStat = STAT_HP;
+                    }
+                    else if(gSelectedColumn == 3)
                     {
                         gSelectedColumn = 0;
                         resetY = TRUE;
@@ -742,6 +715,8 @@ static void Task_WaitForExit(u8 taskId)
                 {
                     if(gSelectedColumn == 2)
                         SandboxChangeAbility(FALSE);
+                    else if(gSelectedColumn == 3)
+                        SandboxChangeGender();
                     else
                         ChangeSelectedStat(gSelectedStat, gSelectedColumn == 0, FALSE);
                 }
@@ -749,6 +724,8 @@ static void Task_WaitForExit(u8 taskId)
                 {
                     if(gSelectedColumn == 2)
                         SandboxChangeAbility(TRUE);
+                    else if(gSelectedColumn == 3)
+                        SandboxChangeGender();
                     else
                         ChangeSelectedStat(gSelectedStat, gSelectedColumn == 0, TRUE);
                 } 
@@ -771,6 +748,7 @@ static void Task_WaitForExit(u8 taskId)
                 HidePokemonPic2(gSpriteTaskId);
                 ShowSprite(&gPlayerParty[gCurrentMon]);
                 EvIvPrintText(&gPlayerParty[gCurrentMon]);
+                PrintGenderText(&gPlayerParty[gCurrentMon]);
             }
             if (JOY_REPT(DPAD_UP) && gPlayerPartyCount > 1)
             {
@@ -781,6 +759,7 @@ static void Task_WaitForExit(u8 taskId)
                 HidePokemonPic2(gSpriteTaskId);
                 ShowSprite(&gPlayerParty[gCurrentMon]);
                 EvIvPrintText(&gPlayerParty[gCurrentMon]);
+                PrintGenderText(&gPlayerParty[gCurrentMon]);
             }
         }
         break;
@@ -1130,8 +1109,81 @@ const u8 gText_Less_Than[]  = _(" Less than ");
 const u8 gText_Steps_to_hatching[]  = _(" steps to hatching!");
 #endif
 
-static void PrintWindow0(struct Pokemon *mon);
 static void PrintWindow1(u8 nature, u8 isEgg);
+
+extern const u8 sGenderColors[2][3];
+extern const u8 gText_MaleSymbol[];
+extern const u8 gText_FemaleSymbol[];
+
+static void PrintGenderText(struct Pokemon *mon)
+{
+    u8 genderSymbol[2];
+
+    StringCopy(genderSymbol, gText_MaleSymbol);
+    u8 gender = GetGenderFromSpeciesAndPersonality(mon->species, mon->personality);
+
+    if (gender != MON_GENDERLESS)
+    {
+        if (gender == MON_FEMALE)
+        {
+            StringCopy(genderSymbol, gText_FemaleSymbol);
+            gender = FEMALE;
+        }
+        AddTextPrinterParameterized3(WIN_POKEMON_NAME, 2, 0x94, 13, sGenderColors[gender], 0, genderSymbol);
+    }
+}
+
+static void SandboxChangeGender(void)
+{
+    struct Pokemon *mon = &gPlayerParty[gCurrentMon];
+	u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+	u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
+	u8 abilityNum = (personality & 1); //Flip ability bit
+
+	u32 otId = GetMonData(mon, MON_DATA_OT_ID, NULL);
+	u16 sid = HIHALF(otId);
+	u16 tid = LOHALF(otId);
+
+	u8 gender = GetGenderFromSpeciesAndPersonality(species, personality);
+	bool8 isShiny = IsMonShiny(mon);
+    u8 letter = GetUnownLetterFromPersonality(personality);
+	u8 nature = GetNatureFromPersonality(personality);
+	bool8 isMinior = IsMinior(species);
+	u16 miniorCore = GetMiniorCoreFromPersonality(personality);
+
+	//Change the ability while keeping other personality values the same
+	do
+	{
+		personality = Random32();
+
+		if (isShiny)
+		{
+			u8 shinyRange = 1;
+			personality = (((shinyRange ^ (sid ^ tid)) ^ LOHALF(personality)) << 16) | LOHALF(personality);
+		}
+
+		personality &= ~(1);
+		personality |= abilityNum; //Either 0 or 1
+
+	} while (GetNatureFromPersonality(personality) != nature
+	|| GetGenderFromSpeciesAndPersonality(species, personality) == gender
+	|| (!isShiny && IsShinyOtIdPersonality(otId, personality)) //No free shinies
+	|| (species == SPECIES_UNOWN && GetUnownLetterFromPersonality(personality) != letter)
+	|| (isMinior && GetMiniorCoreFromPersonality(personality) != miniorCore));
+
+	SetMonData(mon, MON_DATA_PERSONALITY, &personality);
+	CalculateMonStats(mon);
+    FillWindowPixelBuffer(0, 0);
+    PrintWindow0(mon);
+    StringCopy(gStringVar1, gText_Bs);
+    StringCopy(gStringVar2, gText_Ev);
+    StringCopy(gStringVar3, gText_Iv);
+    AddTextPrinterParameterized3(WIN_POKEMON_NAME, 2, BS_X + 8, 4, gBlackTextColor, 0, gStringVar1);
+    AddTextPrinterParameterized3(WIN_POKEMON_NAME, 2, EV_X + 8, 4, gBlackTextColor, 0, gStringVar2);
+    AddTextPrinterParameterized3(WIN_POKEMON_NAME, 2, IV_X + 2, 4, gBlackTextColor, 0, gStringVar3);
+    PutWindowTilemap(0);
+    PrintGenderText(mon);
+}
 
 static void MiniEvIvPrintText(struct Pokemon *mon, bool8 ev, u8 stat, u8 newValue, u8 stat2)
 {
