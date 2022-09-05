@@ -294,6 +294,7 @@
 #define FLAG_TIME_TURNER 0x1201 //Changes the time to PM when AM,and vice versa
 #define FLAG_HAS_USED_NORMAL_MODE 0x1202 //Displays normal mode on the HOF if normal mode has been used. Discourages cheaters.
 #define FLAG_SANDBOX_MODE 0x1203 //Allows you to edit EVs / IVs in the Stat Scanner.
+#define FLAG_USED_SANDBOX_STAT_SCANNER 0x1204 //Shows message
 
 //Save stuff
 #define VAR_R_BUTTON_MODE 0x5150

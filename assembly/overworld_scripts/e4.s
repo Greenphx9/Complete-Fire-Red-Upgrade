@@ -61,12 +61,26 @@ EventScript_Chansey:
 
 .global EventScript_EVIVMenu
 EventScript_EVIVMenu:
+	call_if_set 0x1203 EventScript_SandboxScanner
 	callasm Call_EvIv
 	end
 
+EventScript_SandboxScanner:
+	call_if_unset 0x1204 EventScript_SandboxScannerMessage
+	return
 
+EventScript_SandboxScannerMessage:
+	msgbox gText_HaventUsedScannerTutorial MSG_YESNO
+	compare LASTRESULT 0x1
+	call_if_eq EventScript_SandboxScannerShowMessage
+	return
 
-
+EventScript_SandboxScannerShowMessage:
+	msgbox gText_ScannerTutorial MSG_YESNO
+	compare LASTRESULT 0x1
+	call_if_eq EventScript_SandboxScannerShowMessage
+	setflag 0x1204
+	return
 
 
 

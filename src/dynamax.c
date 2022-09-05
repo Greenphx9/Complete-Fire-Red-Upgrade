@@ -1481,7 +1481,7 @@ void CreateSummaryScreenGigantamaxIcon(void)
 	//Base the position of the icon off of where the Poke Ball sprite is
 	struct Sprite* ballSprite = &gSprites[sMonSummaryScreen->ballIconSpriteId];
 
-	if (sMonSummaryScreen->currentMon.gigantamax)
+	/*if (sMonSummaryScreen->currentMon.gigantamax)
 	{
 		LoadCompressedSpriteSheetUsingHeap(&sSummaryScreenGigantamaxIconSpriteSheet);
 		LoadPalette(sSummaryScreenGigantamaxIconSpritePalette.data, (15 * 16) + 0x100, 32); //Load into last sprite palette slot
@@ -1489,7 +1489,7 @@ void CreateSummaryScreenGigantamaxIcon(void)
 		if (ballSprite->data[0] < MAX_SPRITES)
 			gSprites[ballSprite->data[0]].oam.paletteNum = 15; //Make sure it points to the right palette num
 	}
-	else
+	else*/
 		ballSprite->data[0] = MAX_SPRITES; //No icon
 
 	#ifdef FRIENDSHIP_HEART_ON_SUMMARY_SCREEN
@@ -1535,12 +1535,12 @@ void CreateSummaryScreenGigantamaxIcon(void)
 void SummaryScreen_ChangeCaughtBallSpriteVisibility(u8 invisible)
 {
 	u8 ballSpriteId = sMonSummaryScreen->ballIconSpriteId;
-	u8 gigantamaxIconSpriteId = gSprites[sMonSummaryScreen->ballIconSpriteId].data[0];
+	//u8 gigantamaxIconSpriteId = gSprites[sMonSummaryScreen->ballIconSpriteId].data[0];
 	unusedArg u8 maxFriendshipIconSpriteId = gSprites[sMonSummaryScreen->ballIconSpriteId].data[1];
 
 	gSprites[ballSpriteId].invisible = invisible;
-	if (gigantamaxIconSpriteId != MAX_SPRITES)
-		gSprites[gigantamaxIconSpriteId].invisible = invisible;
+	//if (gigantamaxIconSpriteId != MAX_SPRITES)
+	//	gSprites[gigantamaxIconSpriteId].invisible = invisible;
 
 	#ifdef FRIENDSHIP_HEART_ON_SUMMARY_SCREEN
 	if (maxFriendshipIconSpriteId != MAX_SPRITES)
@@ -1551,12 +1551,12 @@ void SummaryScreen_ChangeCaughtBallSpriteVisibility(u8 invisible)
 void SummaryScreen_DestroyCaughtBallSprite(void)
 {
 	u8 ballSpriteId = sMonSummaryScreen->ballIconSpriteId;
-	u8 gigantamaxIconSpriteId = gSprites[sMonSummaryScreen->ballIconSpriteId].data[0];
+	//u8 gigantamaxIconSpriteId = gSprites[sMonSummaryScreen->ballIconSpriteId].data[0];
 	unusedArg u8 maxFriendshipIconSpriteId = gSprites[sMonSummaryScreen->ballIconSpriteId].data[1];
 
 	DestroySpriteAndFreeResources(&gSprites[ballSpriteId]);
-	if (gigantamaxIconSpriteId != MAX_SPRITES)
-		DestroySpriteAndFreeResources(&gSprites[gigantamaxIconSpriteId]);
+	//if (gigantamaxIconSpriteId != MAX_SPRITES)
+	//	DestroySpriteAndFreeResources(&gSprites[gigantamaxIconSpriteId]);
 
 	#ifdef FRIENDSHIP_HEART_ON_SUMMARY_SCREEN
 	if (maxFriendshipIconSpriteId != MAX_SPRITES)

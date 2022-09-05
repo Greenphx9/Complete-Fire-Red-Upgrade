@@ -24,3 +24,9 @@ Test
 
 #org @gText_BlackAugurite
 Black Augurite
+
+#org @gText_HaventUsedScannerTutorial
+It seems you are using Sandbox\nMode, or have the Stat Editor mode\lfor the Stat Scanner, and you have\lnot used it yet.\pWould like a quick tutorial?
+
+#org @gText_ScannerTutorial
+From now on, the "Sandbox Stat\nScanner\" will be referred to as the\lStat Editor.\pThere are 3 modes in the Stat\nEditor, "Default\", "Selector\", and\l"Editor\".\pIn Default Mode, Press [A_BUTTON] to change\nto Selector Mode, [B_BUTTON] to exit the\lStat Editor, and [DPAD_UP] or [DPAD_DOWN] to change\lPok\emon.\pIn Selector Mode, Press [A_BUTTON] to\nchange to Editor Mode, Press [B_BUTTON] to\lchange to Default Mode, and use [DPAD_UP]\l[DPAD_DOWN][DPAD_LEFT] or [DPAD_RIGHT] to change what you are\lhovering over.\pIn Editor Mode, Press [DPAD_LEFT] or [DPAD_RIGHT] to\nchange the currently selected thing\l(IV, EV, ability, or gender) and\lpress [B_BUTTON] to change to Selector\lMode.\pIn all 3 modes, press [L_BUTTON] or [R_BUTTON] to\nchange natures.\pWould you like to read the\nexplanation again?

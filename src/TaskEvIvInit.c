@@ -217,6 +217,7 @@ extern struct EvIv *gEvIv;
 static void SpriteCB_SandboxCursor(struct Sprite* sprite);
 static void MiniEvIvPrintText(struct Pokemon *mon, bool8 ev, u8 stat, u8 newValue, u8 stat2);
 static void PrintWindow0(struct Pokemon *mon);
+static void PrintWindow1(u8 nature, u8 isEgg);
 static void PrintWindow2(u16 species, u8 isEgg, u8 friendship, u8 ability);
 static const struct OamData sCursorOam =
 {
@@ -554,6 +555,171 @@ static void ChangeSelectedStat(u8 stat, u8 ev, bool8 increase)
     MiniEvIvPrintText(mon, ev, statToEdit, newValue, stat);
 }
 
+static void SandboxChangeNature(bool8 goingRight)
+{
+    struct Pokemon *mon = &gPlayerParty[gCurrentMon];
+    u8 currNature = GetNature(mon);
+    u8 newNature = 0;
+    if(goingRight)
+    {
+        switch(currNature)
+        {
+            case NATURE_HARDY:
+                newNature = NATURE_LONELY;
+                break;
+            case NATURE_LONELY:
+                newNature = NATURE_ADAMANT;
+                break;
+            case NATURE_ADAMANT:
+                newNature = NATURE_NAUGHTY;
+                break;
+            case NATURE_NAUGHTY:
+                newNature = NATURE_BRAVE;
+                break;
+            case NATURE_BRAVE:
+                newNature = NATURE_BOLD;
+                break;
+            case NATURE_BOLD:
+            case NATURE_DOCILE:
+                newNature = NATURE_IMPISH;
+                break;
+            case NATURE_IMPISH:
+                newNature = NATURE_LAX;
+                break;
+            case NATURE_LAX:
+                newNature = NATURE_RELAXED;
+                break;
+            case NATURE_RELAXED:
+                newNature = NATURE_MODEST;
+                break;
+            case NATURE_MODEST:
+                newNature = NATURE_MILD;
+                break;
+            case NATURE_MILD:
+            case NATURE_BASHFUL:
+                newNature = NATURE_RASH;
+                break;
+            case NATURE_RASH:
+                newNature = NATURE_QUIET;
+                break;
+            case NATURE_QUIET:
+                newNature = NATURE_CALM;
+                break;
+            case NATURE_CALM:
+                newNature = NATURE_GENTLE;
+                break;
+            case NATURE_GENTLE:
+                newNature = NATURE_CAREFUL;
+                break;
+            case NATURE_CAREFUL:
+            case NATURE_QUIRKY:
+                newNature = NATURE_SASSY;
+                break;
+            case NATURE_SASSY:
+                newNature = NATURE_TIMID;
+                break;
+            case NATURE_TIMID:
+                newNature = NATURE_HASTY;
+                break;
+            case NATURE_HASTY:
+                newNature = NATURE_JOLLY;
+                break;
+            case NATURE_JOLLY:
+                newNature = NATURE_NAIVE;
+                break;
+            case NATURE_NAIVE:
+            case NATURE_SERIOUS:
+                newNature = NATURE_ADAMANT;
+                break;
+        }
+    }
+    else
+    {
+        switch(currNature)
+        {
+            case NATURE_SERIOUS:
+            case NATURE_NAIVE:
+                newNature = NATURE_JOLLY;
+                break;
+            case NATURE_JOLLY:
+                newNature = NATURE_HASTY;
+                break;
+            case NATURE_HASTY:
+                newNature = NATURE_TIMID;
+                break;
+            case NATURE_TIMID:
+                newNature = NATURE_SASSY;
+                break;
+            case NATURE_SASSY:
+            case NATURE_QUIRKY:
+                newNature = NATURE_CAREFUL;
+                break;
+            case NATURE_CAREFUL:
+                newNature = NATURE_GENTLE;
+                break;
+            case NATURE_GENTLE:
+                newNature = NATURE_CALM;
+                break;
+            case NATURE_CALM:
+                newNature = NATURE_QUIET;
+                break;
+            case NATURE_QUIET:
+                newNature = NATURE_RASH;
+                break;
+            case NATURE_RASH:
+            case NATURE_BASHFUL:
+                newNature = NATURE_MILD;
+                break;
+            case NATURE_MILD:
+                newNature = NATURE_MODEST;
+                break;
+            case NATURE_MODEST:
+                newNature = NATURE_RELAXED;
+                break;
+            case NATURE_RELAXED:
+                newNature = NATURE_LAX;
+                break;
+            case NATURE_LAX:
+                newNature = NATURE_IMPISH;
+                break;
+            case NATURE_IMPISH:
+            case NATURE_DOCILE:
+                newNature = NATURE_BOLD;
+                break;
+            case NATURE_BOLD:
+                newNature = NATURE_BRAVE;
+                break;
+            case NATURE_BRAVE: 
+                newNature = NATURE_NAUGHTY;
+                break;
+            case NATURE_NAUGHTY:
+                newNature = NATURE_ADAMANT;
+                break;
+            case NATURE_ADAMANT:
+                newNature = NATURE_LONELY;
+                break;
+            case NATURE_LONELY:
+            case NATURE_HARDY:
+                newNature = NATURE_NAIVE;
+                break;
+        }
+    }
+    GiveMonNatureAndAbility(mon, newNature, GetMonData(mon, MON_DATA_PERSONALITY, NULL) & 1, IsMonShiny(mon), TRUE, FALSE);
+    //MiniEvIvPrintText(mon, ev, statToEdit, newValue, stat);
+    //FillWindowPixelBuffer(0, 0);
+    FillWindowPixelBuffer(1, 0);
+    //FillWindowPixelBuffer(2, 0);
+
+    //PrintWindow0(mon);
+    PrintWindow1(newNature, FALSE);
+    //PrintWindow2(species, isEgg, friendship, ability);
+
+    //PutWindowTilemap(0);
+    PutWindowTilemap(1);
+    //PutWindowTilemap(2);
+    MgbaPrintf(MGBA_LOG_INFO, "The code is running.");
+}
+
 static void Task_WaitForExit(u8 taskId)
 {
     switch (gState)
@@ -615,6 +781,14 @@ static void Task_WaitForExit(u8 taskId)
                     gInSelector = FALSE;
                     DestroySprite(&gSprites[gCursorSpriteId]);
                 }
+            }
+            if(JOY_NEW(R_BUTTON))
+            {
+                SandboxChangeNature(TRUE);
+            }
+            if(JOY_NEW(L_BUTTON))
+            {
+                SandboxChangeNature(FALSE);
             }
             if (!gInSelector && !gInEditor)
             {
@@ -1108,8 +1282,6 @@ const u8 gText_Happy[]  = _("% happy.");
 const u8 gText_Less_Than[]  = _(" Less than ");
 const u8 gText_Steps_to_hatching[]  = _(" steps to hatching!");
 #endif
-
-static void PrintWindow1(u8 nature, u8 isEgg);
 
 extern const u8 sGenderColors[2][3];
 extern const u8 gText_MaleSymbol[];
