@@ -1412,6 +1412,18 @@ u32 CalcStealthRockDamagePartyMon(struct Pokemon* mon)
 	return MathMax(1, GetMonData(mon, MON_DATA_MAX_HP, NULL) / divisor);
 }
 
+u32 CalcMonStealthRockDamage(struct Pokemon* mon)
+{
+	u8 flags;
+	u8 divisor = 8;
+	gBattleMoveDamage = 40;
+
+	TypeDamageModificationPartyMon(0, mon, MOVE_STEALTHROCK, TYPE_ROCK, &flags);
+	divisor = GetStealthRockDivisor();
+
+	return MathMax(1, GetMonData(mon, MON_DATA_MAX_HP, NULL) / divisor);
+}
+
 u32 CalcSteelsurgeDamage(u8 bank)
 {
 	u8 flags;

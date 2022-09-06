@@ -19,6 +19,7 @@ u32 CalcSpikesDamage(u8 bank);
 u32 CalcSpikesDamagePartyMon(struct Pokemon* mon, u8 side);
 u32 CalcStealthRockDamage(u8 bank);
 u32 CalcStealthRockDamagePartyMon(struct Pokemon* mon);
+u32 CalcMonStealthRockDamage(struct Pokemon* mon);
 u32 CalcSteelsurgeDamage(u8 bank);
 u32 CalcSteelsurgeDamagePartyMon(struct Pokemon* mon);
 u32 GetMonEntryHazardDamage(struct Pokemon* mon, u8 side);
