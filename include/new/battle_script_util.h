@@ -121,6 +121,7 @@ void FinishTurn(void);
 void ClearPlayerRechargeMultipleTurns(void);
 void IncrementBattleTurnCounter(void);
 void TryFailLifeDew(void);
+bool8 ShouldJungleHealingFail(u8 bankAtk);
 void TryFailJungleHealing(void);
 void SetStickyWebActive(void);
 void ClearStickyWebActive(void);

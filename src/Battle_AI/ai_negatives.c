@@ -32,6 +32,7 @@ ai_negatives.c
 */
 
 #define GOOD_AI (AI_THINKING_STRUCT->aiFlags > AI_SCRIPT_CHECK_BAD_MOVE)
+
 #define TARGETING_PARTNER (bankDef == bankAtkPartner)
 #define PARTNER_MOVE_EFFECT_IS_SAME (IS_DOUBLE_BATTLE \
                                     && gBattleMoves[move].effect == gBattleMoves[partnerMove].effect \
@@ -119,13 +120,6 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 	const struct SpecialMoveFlags* specialMoveFlags = &gSpecialMoveFlags[move];
 	bool8 decreased;
 
-	if(gDisableStructs[bankAtk].disabledMove == move)
-    {
-        DECREASE_VIABILITY(100); //Should never use a disabled move
-        return viability;
-    }
-
-
 	//Affects User Check
 	if (moveTarget & MOVE_TARGET_USER)
 		goto SKIP_CHECK_TARGET;
@@ -198,12 +192,6 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 	{
 		DECREASE_VIABILITY(10);
 		return viability; //Move Fails
-	}
-
-	//Don't use poltergeist if target has no item
-	if (data->defItem == ITEM_NONE && move == MOVE_POLTERGEIST) {
-		DECREASE_VIABILITY(20);
-		return viability;
 	}
 
 	//Target Ability Checks
@@ -291,7 +279,7 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 					if (!TARGETING_PARTNER //Don't decrement if the partner is the target (handled later)
 					&& AI_STAT_CAN_RISE(bankDef, STAT_SPEED) //Ability can activate
 					&& !MoveKnocksOutXHits(move, bankAtk, bankDef, 1) //This attack won't KO yet
-					&& SpeedCalc(bankAtk) > SpeedCalc(bankDef)) //The attacker is currently faster
+					&& data->atkSpeed > data->defSpeed) //The attacker is currently faster
 					{
 						if (MoveKnocksOutXHits(move, bankAtk, bankDef, 2))
 							DECREASE_VIABILITY(1); //Risk it, but not best choice because foe might outspeed and strike back harder
@@ -308,7 +296,7 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 					if (!TARGETING_PARTNER //Don't decrement if the partner is the target (handled later)
 					&& AI_STAT_CAN_RISE(bankDef, STAT_SPEED) //Ability can activate
 					&& !MoveKnocksOutXHits(move, bankAtk, bankDef, 1) //This attack won't KO yet
-					&& SpeedCalc(bankAtk) > SpeedCalc(bankDef)) //The attacker is currently faster
+					&& data->atkSpeed > data->defSpeed) //The attacker is currently faster
 					{
 						if (MoveKnocksOutXHits(move, bankAtk, bankDef, 2))
 							DECREASE_VIABILITY(5); //Not best choice because foe might outspeed and strike back harder
@@ -398,7 +386,12 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				break;
 
 			case ABILITY_CLEARBODY:
-			//case ABILITY_FULLMETALBODY:
+			#ifdef ABILITY_FULLMETALBODY
+			case ABILITY_FULLMETALBODY:
+			#endif
+			#ifdef ABILITY_WHITESMOKE
+			case ABILITY_WHITESMOKE:
+			#endif
 				if (CheckTableForMovesEffect(move, gStatLoweringMoveEffects)
 				|| move == MOVE_PARTINGSHOT)
 				{
@@ -483,7 +476,7 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 
 			case ABILITY_LEAFGUARD:
 				if (gBattleWeather & WEATHER_SUN_ANY
-				&& data->defItemEffect != ITEM_EFFECT_UTILITY_UMBRELLA
+				&& !ItemEffectIgnoresSunAndRain(data->defItemEffect)
 				&& CheckTableForMovesEffect(move, gSetStatusMoveEffects)
 				&& WEATHER_HAS_EFFECT)
 				{
@@ -499,7 +492,9 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 			//Target Partner Ability Check
 			switch (data->defPartnerAbility) {
 				case ABILITY_LIGHTNINGROD:
-					if (moveType == TYPE_ELECTRIC && !IsMoveRedirectionPrevented(move, data->atkAbility))
+					if (moveType == TYPE_ELECTRIC
+					&& !(moveTarget & MOVE_TARGET_USER)
+					&& !IsMoveRedirectionPrevented(move, data->atkAbility))
 					{
 						DECREASE_VIABILITY(20);
 						return viability;
@@ -507,7 +502,9 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 					break;
 
 				case ABILITY_STORMDRAIN:
-					if (moveType == TYPE_WATER && !IsMoveRedirectionPrevented(move, data->atkAbility))
+					if (moveType == TYPE_WATER
+					&& !(moveTarget & MOVE_TARGET_USER)
+					&& !IsMoveRedirectionPrevented(move, data->atkAbility))
 					{
 						DECREASE_VIABILITY(20);
 						return viability;
@@ -562,7 +559,9 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				//Make sure partner isn't going to steal move
 				switch (data->atkPartnerAbility) {
 					case ABILITY_LIGHTNINGROD:
-						if (moveType == TYPE_ELECTRIC && !IsMoveRedirectionPrevented(move, data->atkAbility))
+						if (moveType == TYPE_ELECTRIC
+						&& !(moveTarget & MOVE_TARGET_USER)
+						&& !IsMoveRedirectionPrevented(move, data->atkAbility))
 						{
 							DECREASE_VIABILITY(10); //Only 10 because wouldn't be so bad to hit partner
 							return viability;
@@ -570,7 +569,9 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 						break;
 
 					case ABILITY_STORMDRAIN:
-						if (moveType == TYPE_WATER && !IsMoveRedirectionPrevented(move, data->atkAbility))
+						if (moveType == TYPE_WATER
+						&& !(moveTarget & MOVE_TARGET_USER)
+						&& !IsMoveRedirectionPrevented(move, data->atkAbility))
 						{
 							DECREASE_VIABILITY(10);
 							return viability;
@@ -948,8 +949,6 @@ SKIP_CHECK_TARGET:
 			|| GOOD_AI_MOVE_LOCKED
 			|| (IsTrickRoomActive() && !IsTrickRoomOnLastTurn())) //Trick Room not about to end
 				DECREASE_VIABILITY(10);
-			else if(IsTrickRoomActive())
-				DECREASE_VIABILITY(10);
 			break;
 
 		case EFFECT_SPECIAL_ATTACK_UP:
@@ -1063,6 +1062,57 @@ SKIP_CHECK_TARGET:
 			}
 			break;
 
+		case EFFECT_DEF_SPD_UP: //Shelter
+			if (data->atkAbility == ABILITY_CONTRARY || GOOD_AI_MOVE_LOCKED)
+				DECREASE_VIABILITY(10);
+			else if (!AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_DEF) && !AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_SPEED))
+				DECREASE_VIABILITY(10);
+			break;
+
+		case EFFECT_COSMIC_POWER:
+			if (data->atkAbility == ABILITY_CONTRARY || GOOD_AI_MOVE_LOCKED)
+				DECREASE_VIABILITY(10);
+			else
+			{
+				if (move == MOVE_MAGNETICFLUX)
+				{
+					if (TARGETING_PARTNER)
+						break;
+
+					if (!IsPlusMinusAbility(data->atkAbility))
+					{
+						DECREASE_VIABILITY(10);
+						break;
+					}
+				}
+
+				AI_COSMIC_POWER:
+				if (!AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_DEF) && !AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_SPDEF))
+					DECREASE_VIABILITY(10);
+			}
+			break;
+
+		case EFFECT_BULK_UP:
+			if (data->atkAbility == ABILITY_CONTRARY || GOOD_AI_MOVE_LOCKED)
+				DECREASE_VIABILITY(10);
+			else
+			{
+				switch (move) {
+					case MOVE_COIL:
+						if (!AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_ACC)
+						&& (!AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_ATK) || !RealPhysicalMoveInMoveset(bankAtk))
+						&&  !AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_DEF))
+							DECREASE_VIABILITY(10);
+						break;
+
+					default:
+						if ((!AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_ATK) || !RealPhysicalMoveInMoveset(bankAtk))
+						&&  !AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_DEF))
+							DECREASE_VIABILITY(10);
+				}
+			}
+			break;
+
 		case EFFECT_CALM_MIND:
 			if (data->atkAbility == ABILITY_CONTRARY || GOOD_AI_MOVE_LOCKED)
 				DECREASE_VIABILITY(10);
@@ -1082,7 +1132,12 @@ SKIP_CHECK_TARGET:
 					default:
 						if ((!AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_SPATK) || !SpecialMoveInMoveset(bankAtk))
 						&&  !AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_SPDEF))
+						{
+							if (move == MOVE_TAKEHEART && data->atkStatus1 != 0)
+								break; //Can heal status condition
+
 							DECREASE_VIABILITY(10);
+						}
 				}
 			}
 			break;
@@ -1116,6 +1171,25 @@ SKIP_CHECK_TARGET:
 								DECREASE_VIABILITY(10);
 						}
 				}
+			}
+			break;
+
+		case EFFECT_EXTREME_EVOBOOST:
+			if (MainStatsMaxed(bankAtk) || GOOD_AI_MOVE_LOCKED)
+			{
+				DECREASE_VIABILITY(10);
+				break;
+			}
+
+			switch (move) {
+				case MOVE_NORETREAT:
+					if (gNewBS->trappedByNoRetreat & gBitTable[bankAtk])
+						DECREASE_VIABILITY(10);
+					break;
+				case MOVE_CLANGOROUSSOUL:
+					if (gBattleMons[bankAtk].hp <= gBattleMons[bankAtk].maxHP / 3)
+						DECREASE_VIABILITY(10);
+					break;	
 			}
 			break;
 
@@ -1370,14 +1444,24 @@ SKIP_CHECK_TARGET:
 						break;
 					}
 					else if (bankDef == bankAtkPartner)
-						break; //Always heal your ally
+						break; //Always can heal your ally (actual possibility checked in ai_partner.c)
 					else if (GetHealthPercentage(bankAtk) == 100)
 						DECREASE_VIABILITY(10);
 					else if (GetHealthPercentage(bankAtk) >= 90)
 						DECREASE_VIABILITY(8); //No point in healing, but should at least do it if nothing better
 					break;
 
+				case MOVE_JUNGLEHEALING:
+					if (!ShouldJungleHealingFail(bankAtk))
+						break; //If it'll work, no point in not using it
+					goto DEFAULT_RECOVERY; //Even if it'll fail due to full HP, there may be logic to use it preemptively
+
+				case MOVE_LUNARBLESSING:
+						break; //If it'll work, no point in not using it
+					goto DEFAULT_RECOVERY; //Even if it'll fail due to full HP, there may be logic to use it preemptively
+
 				default:
+					DEFAULT_RECOVERY:
 					if (AI_THINKING_STRUCT->aiFlags & AI_SCRIPT_CHECK_GOOD_MOVE) //Very smart AI
 					{
 						if (IS_SINGLE_BATTLE && IsTakingSecondaryDamage(bankDef, TRUE))
@@ -1421,7 +1505,7 @@ SKIP_CHECK_TARGET:
 			break;
 
 		case EFFECT_LIGHT_SCREEN:
-			if (gSideStatuses[SIDE(bankAtk)] & SIDE_STATUS_LIGHTSCREEN || (MoveInMoveset(MOVE_BRICKBREAK, bankDef) || (MoveInMoveset(MOVE_DEFOG, bankDef) )))
+			if (gSideStatuses[SIDE(bankAtk)] & SIDE_STATUS_LIGHTSCREEN)
 				DECREASE_VIABILITY(10);
 			else if (AI_THINKING_STRUCT->aiFlags > AI_SCRIPT_SEMI_SMART //Only smart AI
 				&& !IsBankIncapacitated(bankDef) //Enemy can attack
@@ -1468,7 +1552,7 @@ SKIP_CHECK_TARGET:
 				recoilDmg = MathMax(1, recoilDmg / 3);
 			else if (specialMoveFlags->gPercent50RecoilMoves)
 				recoilDmg = MathMax(1, recoilDmg / 2);
-			else if (move == MOVE_MINDBLOWN || move == MOVE_STEELBEAM)
+			else if (specialMoveFlags->gHalfMaxHealthRecoilMoves) //Mind Blown, Steel Beam
 			{
 				if (MoveBlockedBySubstitute(move, bankAtk, bankDef))
 				{
@@ -1514,15 +1598,13 @@ SKIP_CHECK_TARGET:
 					if (gNewBS->AuroraVeilTimers[SIDE(bankAtk)]
 					|| !(gBattleWeather & WEATHER_HAIL_ANY)
 					|| PARTNER_MOVE_EFFECT_IS_SAME_NO_TARGET
-					|| PARTNER_MOVE_IS_MAX_MOVE_WITH_EFFECT(MAX_EFFECT_AURORA_VEIL)
-					|| (MoveInMoveset(MOVE_BRICKBREAK, bankDef) || (MoveInMoveset(MOVE_DEFOG, bankDef))))
+					|| PARTNER_MOVE_IS_MAX_MOVE_WITH_EFFECT(MAX_EFFECT_AURORA_VEIL))
 						DECREASE_VIABILITY(10);
 					break;
 
 				default:
 					if (gSideStatuses[SIDE(bankAtk)] & SIDE_STATUS_REFLECT
-					|| PARTNER_MOVE_EFFECT_IS_SAME_NO_TARGET
-					|| (MoveInMoveset(MOVE_BRICKBREAK, bankDef) || (MoveInMoveset(MOVE_DEFOG, bankDef)))) 
+					|| PARTNER_MOVE_EFFECT_IS_SAME_NO_TARGET)
 						DECREASE_VIABILITY(10);
 					else if (AI_THINKING_STRUCT->aiFlags > AI_SCRIPT_SEMI_SMART //Only smart AI
 					&& !IsBankIncapacitated(bankDef) //Enemy can attack
@@ -1597,10 +1679,8 @@ SKIP_CHECK_TARGET:
 
 		case EFFECT_LEECH_SEED:
 			if (IsOfType(bankDef, TYPE_GRASS)
-			|| data->defStatus2 & STATUS2_SUBSTITUTE
 			|| data->defStatus3 & STATUS3_LEECHSEED
 			|| data->defAbility == ABILITY_LIQUIDOOZE
-			|| data->defAbility == ABILITY_MAGICGUARD
 			|| PARTNER_MOVE_EFFECT_IS_SAME)
 				DECREASE_VIABILITY(10);
 			else
@@ -1833,32 +1913,12 @@ SKIP_CHECK_TARGET:
 				break;
 			}
 
-			if (ABILITY(bankDef) == ABILITY_UNSEENFIST) //Don't protect if move goes through protect
-			{ 
-				DECREASE_VIABILITY(10);
-				break;
-			}
-
 			if (gBattleMoves[gLastResultingMoves[bankAtk]].effect == EFFECT_PROTECT
 			&&  move != MOVE_QUICKGUARD
 			&&  move != MOVE_WIDEGUARD
 			&&  move != MOVE_CRAFTYSHIELD) //These moves have infinite usage
 			{
-				if (WillFaintFromSecondaryDamage(bankAtk)
-				&&  data->defAbility != ABILITY_MOXIE
-				#ifdef ABILITY_GRIMNEIGH
-				&&  data->defAbility != ABILITY_GRIMNEIGH
-				#endif
-				#ifdef ABILITY_CHILLINGNEIGH
-				&&  data->defAbility != ABILITY_CHILLINGNEIGH
-				#endif
-				#ifdef ABILITY_ASONE_GRIM
-				&&  data->defAbility != ABILITY_ASONE_GRIM
-				#endif
-				#ifdef ABILITY_ASONE_CHILLING
-				&&  data->defAbility != ABILITY_ASONE_CHILLING
-				#endif
-				&&  data->defAbility != ABILITY_BEASTBOOST)
+				if (WillFaintFromSecondaryDamage(bankAtk) && !IsMoxieAbility(data->defAbility))
 				{
 					DECREASE_VIABILITY(10); //Don't protect if you're going to faint after protecting
 				}
@@ -1908,9 +1968,7 @@ SKIP_CHECK_TARGET:
 			}
 			else
 			{
-				if (ViableMonCountFromBank(bankDef) <= 3
-				|| MoveInMoveset(MOVE_DEFOG, bankDef)
-				|| MoveInMoveset(MOVE_RAPIDSPIN, bankDef))
+				if (ViableMonCountFromBank(bankDef) <= 1)
 				{
 					DECREASE_VIABILITY(10);
 					break;
@@ -2122,13 +2180,6 @@ SKIP_CHECK_TARGET:
 
 				goto AI_LOWER_EVASION;
 			}
-			else if (move == MOVE_RAPIDSPIN && (IsOfType(bankDef, TYPE_GHOST))) //Don't use rapid spin if opponent is a ghost type
-			{
-				DECREASE_VIABILITY(10);
-				break; 
-			}
-			else if ((data->atkStatus2 & STATUS2_WRAPPED) || (data->atkStatus3 & STATUS3_LEECHSEED))
-				goto AI_STANDARD_DAMAGE;
 
 			goto AI_STANDARD_DAMAGE; //Rapid Spin
 
@@ -2177,7 +2228,7 @@ SKIP_CHECK_TARGET:
 			goto TWO_TURN_ATTACK_CHECK;
 
 		case EFFECT_SOLARBEAM:
-			if (gBattleWeather & WEATHER_SUN_ANY && data->atkItemEffect != ITEM_EFFECT_UTILITY_UMBRELLA && WEATHER_HAS_EFFECT)
+			if (gBattleWeather & WEATHER_SUN_ANY && !ItemEffectIgnoresSunAndRain(data->atkItemEffect) && WEATHER_HAS_EFFECT)
 				goto AI_STANDARD_DAMAGE;
 			//Fallthrough
 
@@ -2193,7 +2244,11 @@ SKIP_CHECK_TARGET:
 
 			if (GOOD_AI) //Semi-Smart or SMart AI
 			{
-				if (!(data->defStatus1 & (STATUS1_PARALYSIS | STATUS1_FREEZE)) //Target won't randomly not be able to attack
+				if (!(data->defStatus1 & (STATUS1_PARALYSIS
+				#ifndef FROSTBITE
+				                        | STATUS1_FREEZE
+				#endif
+				                         )) //Target won't randomly not be able to attack
 				&& (data->defStatus2 & STATUS2_CONFUSION) < 3 //Foe wouldn't be confused when the attack would hit
 				&& !(data->defStatus2 & STATUS2_INFATUATION) //Foe wouldn't miss the attack since they'll never be immobilized by love
 				&& !TARGET_ASLEEP) //Target is awake (not that they could wake up and protect for the second turn but that's fair and not AI abuse)
@@ -2590,76 +2645,6 @@ SKIP_CHECK_TARGET:
 			if (IsMudSportActive()
 			|| PARTNER_MOVE_EFFECT_IS_SAME_NO_TARGET)
 				DECREASE_VIABILITY(10);
-			break;
-
-		case EFFECT_DEF_SPD_UP: //Shelter
-			if (data->atkAbility == ABILITY_CONTRARY || GOOD_AI_MOVE_LOCKED)
-				DECREASE_VIABILITY(10);
-			else if (!AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_DEF) && !AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_SPEED))
-				DECREASE_VIABILITY(10);
-			break;
-
-		case EFFECT_COSMIC_POWER:
-			if (data->atkAbility == ABILITY_CONTRARY || GOOD_AI_MOVE_LOCKED)
-				DECREASE_VIABILITY(10);
-			else
-			{
-				if (move == MOVE_MAGNETICFLUX)
-				{
-					if (TARGETING_PARTNER)
-						break;
-
-					if (!IsPlusMinusAbility(data->atkAbility))
-					{
-						DECREASE_VIABILITY(10);
-						break;
-					}
-				}
-
-				AI_COSMIC_POWER:
-				if (!AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_DEF) && !AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_SPDEF))
-					DECREASE_VIABILITY(10);
-			}
-			break;
-
-		case EFFECT_EXTREME_EVOBOOST:
-			if (MainStatsMaxed(bankAtk) || GOOD_AI_MOVE_LOCKED)
-			{
-				DECREASE_VIABILITY(10);
-				break;
-			}
-
-			switch (move) {
-				case MOVE_NORETREAT:
-					if (gNewBS->trappedByNoRetreat & gBitTable[bankAtk])
-						DECREASE_VIABILITY(10);
-					break;
-				case MOVE_CLANGOROUSSOUL:
-					if (gBattleMons[bankAtk].hp <= gBattleMons[bankAtk].maxHP / 3)
-						DECREASE_VIABILITY(10);
-					break;	
-			}
-			break;
-
-		case EFFECT_BULK_UP:
-			if (data->atkAbility == ABILITY_CONTRARY || GOOD_AI_MOVE_LOCKED)
-				DECREASE_VIABILITY(10);
-			else
-			{
-				switch (move) {
-					case MOVE_COIL:
-						if (!AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_ACC)
-						&& (!AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_ATK) || !RealPhysicalMoveInMoveset(bankAtk))
-						&&  !AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_DEF))
-							DECREASE_VIABILITY(10);
-						break;
-
-					default:
-						if ((!AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_ATK) || !RealPhysicalMoveInMoveset(bankAtk))
-						&&  !AI_STAT_CAN_RISE(bankAtk, STAT_STAGE_DEF))
-							DECREASE_VIABILITY(10);
-				}
-			}
 			break;
 
 		case EFFECT_WATER_SPORT:
@@ -3104,6 +3089,7 @@ SKIP_CHECK_TARGET:
 					||  IsDynamaxed(bankDef)
 					||  gSpecialMoveFlags[instructedMove].gInstructBannedMoves
 					||  gSpecialMoveFlags[instructedMove].gMovesThatCallOtherMoves
+					||  gBattleMoves[instructedMove].effect == EFFECT_RECHARGE
 					|| (IsZMove(instructedMove))
 					|| (gLockedMoves[bankDef] != 0 && gLockedMoves[bankDef] != 0xFFFF)
 					||  gBattleMons[bankDef].status2 & STATUS2_MULTIPLETURNS
@@ -3122,9 +3108,9 @@ SKIP_CHECK_TARGET:
 																		| MOVE_TARGET_BOTH
 																		| MOVE_TARGET_ALL
 																		| MOVE_TARGET_OPPONENTS_FIELD)
-						&& instructedMove != MOVE_MINDBLOWN && instructedMove != MOVE_STEELBEAM)
+						&& !gSpecialMoveFlags[instructedMove].gHalfMaxHealthRecoilMoves)
 							DECREASE_VIABILITY(10); //Don't force the enemy to attack you again unless it can kill itself with Mind Blown
-						else if (instructedMove != MOVE_MINDBLOWN)
+						else if (!gSpecialMoveFlags[instructedMove].gHalfMaxHealthRecoilMoves)
 							DECREASE_VIABILITY(5); //Do something better
 					}
 					break;
@@ -3222,7 +3208,7 @@ SKIP_CHECK_TARGET:
 			break;
 
 		default:
-		AI_STANDARD_DAMAGE: ;
+		AI_STANDARD_DAMAGE:
 			if (moveSplit != SPLIT_STATUS && !TARGETING_PARTNER)
 			{
 				if (AI_SpecialTypeCalc(move, bankAtk, bankDef) & (MOVE_RESULT_NO_EFFECT | MOVE_RESULT_MISSED))
