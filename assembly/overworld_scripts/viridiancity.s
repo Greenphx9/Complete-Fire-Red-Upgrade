@@ -462,3 +462,52 @@ EventScript_GiveTM26:
 	msgbox 0x818F695 MSG_KEEPOPEN
 	release
 	end
+
+ViridianCity_School_EventScript_Blackboard:
+	lockall
+	msgbox 0x818ff4b MSG_KEEPOPEN
+	goto ViridianCity_School_EventScript_ChooseBlackboardTopic
+	end
+
+ViridianCity_School_EventScript_ChooseBlackboardTopic:
+	message 0x818ff88
+	waitmessage
+	multichoicegrid 7 1 15 3 FALSE
+	switch LASTRESULT
+	case 0, ViridianCity_School_EventScript_ReadSleep
+	case 1, ViridianCity_School_EventScript_ReadPoison
+	case 2, ViridianCity_School_EventScript_ReadParalysis
+	case 3, ViridianCity_School_EventScript_ReadBurn
+	case 4, ViridianCity_School_EventScript_ReadFrostbite
+	case 5, ViridianCity_School_EventScript_ExitBlackboard
+	case 127, ViridianCity_School_EventScript_ExitBlackboard
+	end
+
+ViridianCity_School_EventScript_ReadSleep:
+	msgbox 0x818ffa9 MSG_KEEPOPEN
+	goto ViridianCity_School_EventScript_ChooseBlackboardTopic
+	end
+
+ViridianCity_School_EventScript_ReadBurn:
+	msgbox 0x8190025 MSG_KEEPOPEN
+	goto ViridianCity_School_EventScript_ChooseBlackboardTopic
+	end
+
+ViridianCity_School_EventScript_ReadPoison:
+	msgbox 0x819009f MSG_KEEPOPEN
+	goto ViridianCity_School_EventScript_ChooseBlackboardTopic
+	end
+
+ViridianCity_School_EventScript_ReadFrostbite:
+	msgbox ViridianCity_School_Text_ExplainFreeze MSG_KEEPOPEN
+	goto ViridianCity_School_EventScript_ChooseBlackboardTopic
+	end
+
+ViridianCity_School_EventScript_ReadParalysis:
+	msgbox 0x8190199 MSG_KEEPOPEN
+	goto ViridianCity_School_EventScript_ChooseBlackboardTopic
+	end
+
+ViridianCity_School_EventScript_ExitBlackboard:
+	releaseall
+	end

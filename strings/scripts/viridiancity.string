@@ -111,3 +111,9 @@ As proof, here is the EarthBadge!
 
 #org @gText_GiveEarthBadge
 [BLACK][PLAYER] received the\nEarthBadge from Giovanni!
+
+#org @ViridianCity_School_Text_ExplainFreeze
+A frostbite reduces Special Attacking\npower. It also causes ongoing HP\lloss\pA frostbite remains after a battle.\nUse Ice Heal to cure a burn.
+
+#org @gText_Frb
+Frb

@@ -31,6 +31,8 @@ tile 28 0 0 EventScript_CheckBadgeAndRematch
 npc 3 41 1 EventScript_TM54
 npc 3 1 0 EventScript_GiveDreamEaterTM
 npc 5 1 7 EventScript_Giovanni
+sign 5 2 1 ViridianCity_School_EventScript_Blackboard
+sign 5 2 2 ViridianCity_School_EventScript_Blackboard
 
 ## Viridian Forest
 sign 43 0 0 EventScript_ButterfreeEnc

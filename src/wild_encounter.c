@@ -501,9 +501,7 @@ static void ClearDailyEventFlags(void)
 		FlagClear(i);
 	#endif
 
-	#ifdef UNBOUND
 	ClearAllRaidBattleFlags();
-	#endif
 }
 #endif
 

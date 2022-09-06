@@ -25,11 +25,11 @@ EventScript_BeginARaidBattle:
     special SPECIAL_IS_RAID_BATTLE_AVAILABLE
     compare LASTRESULT 0x1
     if equal _goto RaidScript_DoStuff
-    setvar 0x8000 VAR_DAILY_EVENT
-	setvar 0x8001 0x0
-	special2 LASTRESULT SP_DAILY_EVENT
-	compare LASTRESULT 0x0
-	if notequal _goto EventScript_ClearRaidFlag
+    @@setvar 0x8000 VAR_DAILY_EVENT
+	@@setvar 0x8001 0x0
+	@@special2 LASTRESULT SP_DAILY_EVENT
+	@@compare LASTRESULT 0x0
+	@@if notequal _goto EventScript_ClearRaidFlag
     goto RaidScript_NoBattle
     @@special SPECIAL_IS_RAID_BATTLE_AVAILABLE
     @@compare LASTRESULT 0x0
@@ -95,10 +95,10 @@ RaidScript_End2:
     end
 
 RaidScript_NoBattle:
-    setvar 0x8000 VAR_DAILY_EVENT
-    setvar 0x8001 0x1 
-    special2 LASTRESULT SP_GET_TIME_DIFFERENCE
-    buffernumber 0x1 LASTRESULT
+    @@setvar 0x8000 VAR_DAILY_EVENT
+    @@setvar 0x8001 0x1 
+    @@special2 LASTRESULT SP_GET_TIME_DIFFERENCE
+    @@buffernumber 0x1 LASTRESULT
     msgbox gText_DenEmpty MSG_NORMAL
     release
     end
