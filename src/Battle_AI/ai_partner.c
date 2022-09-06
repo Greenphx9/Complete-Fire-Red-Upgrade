@@ -337,6 +337,7 @@ u8 AIScript_Partner(const u8 bankAtk, const u8 bankAtkPartner, const u16 origina
 					}
 					break;
 				case MOVE_LIFEDEW:
+				case MOVE_JUNGLEHEALING:
 					if (!partnerProtects)
 						IncreaseHealPartnerViability(&viability, class, bankAtkPartner);
 					break;
@@ -386,7 +387,7 @@ u8 AIScript_Partner(const u8 bankAtk, const u8 bankAtkPartner, const u16 origina
 			break;
 
 		case EFFECT_RAIN_DANCE:
-			if (atkPartnerItemEffect != ITEM_EFFECT_UTILITY_UMBRELLA
+			if (!ItemEffectIgnoresSunAndRain(atkPartnerItemEffect)
 			&& (MoveEffectInMoveset(EFFECT_THUNDER, bankAtkPartner)
 			 || MoveInMoveset(MOVE_WEATHERBALL, bankAtkPartner)
 			 || atkPartnerItemEffect == ITEM_EFFECT_DAMP_ROCK
@@ -407,7 +408,7 @@ u8 AIScript_Partner(const u8 bankAtk, const u8 bankAtkPartner, const u16 origina
 			break;
 
 		case EFFECT_SUNNY_DAY:
-			if (atkPartnerItemEffect != ITEM_EFFECT_UTILITY_UMBRELLA
+			if (!ItemEffectIgnoresSunAndRain(atkPartnerItemEffect)
 			&& (atkPartnerAbility == ABILITY_CHLOROPHYLL
 			 || atkPartnerAbility == ABILITY_FLOWERGIFT
 			 || atkPartnerAbility == ABILITY_FORECAST
