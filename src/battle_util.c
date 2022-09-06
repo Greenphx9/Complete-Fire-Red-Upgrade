@@ -1883,6 +1883,21 @@ bool8 ItemEffectIgnoresSunAndRain(u8 itemEffect)
 	return itemEffect == ITEM_EFFECT_UTILITY_UMBRELLA;
 }
 
+bool8 IgnoresSunAndRain(u8 bank)
+{
+	return ItemEffectIgnoresSunAndRain(ITEM_EFFECT(bank));
+}
+
+bool8 AffectedBySun(u8 bank)
+{
+	return !IgnoresSunAndRain(bank);
+}
+
+bool8 AffectedByRain(u8 bank)
+{
+	return !IgnoresSunAndRain(bank);
+}
+
 
 bool8 IsChoiceAbility(u8 ability)
 {

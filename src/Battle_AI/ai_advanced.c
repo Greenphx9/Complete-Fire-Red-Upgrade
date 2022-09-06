@@ -489,6 +489,7 @@ u8 PredictFightingStyle(const u16* const moves, const u8 ability, const u8 itemE
 				case EFFECT_EVASION_UP:
 				case EFFECT_ATK_SPATK_UP:
 				case EFFECT_ATK_ACC_UP:
+				case EFFECT_DEF_SPD_UP:
 				case EFFECT_ATTACK_UP_2:
 				case EFFECT_DEFENSE_UP_2:
 				case EFFECT_SPEED_UP_2:
@@ -500,7 +501,6 @@ u8 PredictFightingStyle(const u16* const moves, const u8 ability, const u8 itemE
 				case EFFECT_DRAGON_DANCE:
 				case EFFECT_CALM_MIND:
 				case EFFECT_BULK_UP:
-				case EFFECT_DEF_SPD_UP:
 					boostingMove = TRUE;
 					break;
 
@@ -564,7 +564,7 @@ u8 PredictFightingStyle(const u16* const moves, const u8 ability, const u8 itemE
 			else if (attackMoveNum >= 2 && (boostingMove || statusMoveNum > 0 || phazingMove))
 			{
 				//A class should always be assigned here because of the conditions to enter this scope
-				if (boostingMove && statusMoveNum == 0)
+				if (boostingMove)
 					class = FIGHT_CLASS_SWEEPER_SETUP_STATS;
 				else if (statusMoveNum > 0 || phazingMove)
 					class = FIGHT_CLASS_SWEEPER_SETUP_STATUS;
@@ -865,29 +865,39 @@ u16 GetAmountToRecoverBy(u8 bankAtk, u8 bankDef, u16 move)
 	u16 amountToRecover = 0;
 	u16 curHp = GetBaseCurrentHP(bankAtk);
 	u16 maxHp = GetBaseMaxHP(bankAtk);
-	u8 itemEffect = ITEM_EFFECT(bankAtk);
 
 	switch (gBattleMoves[move].effect) {
 		case EFFECT_RESTORE_HP:
-			if (move == MOVE_LIFEDEW)
+			if (move == MOVE_LIFEDEW || move == MOVE_JUNGLEHEALING)
 				amountToRecover = MathMax(1, maxHp / 4);
 			else
 				amountToRecover = MathMax(1, maxHp / 2);
 			break;
 
 		case EFFECT_MORNING_SUN:
+			if (gBattleWeather == 0 || gBattleWeather & WEATHER_AIR_CURRENT_PRIMAL || !WEATHER_HAS_EFFECT)
+			{
+				amountToRecover = MathMax(1, maxHp / 2);
+				break;
+			}
+
 			switch (move) {
 				case MOVE_SHOREUP:
-					if (gBattleWeather & WEATHER_SANDSTORM_ANY && WEATHER_HAS_EFFECT)
+					if (gBattleWeather & WEATHER_SANDSTORM_ANY)
 						amountToRecover = maxHp;
 					else
 						amountToRecover = MathMax(1, maxHp / 2);
 					break;
 
 				default:
-					if (gBattleWeather & WEATHER_SUN_ANY && WEATHER_HAS_EFFECT && itemEffect != ITEM_EFFECT_UTILITY_UMBRELLA)
-						amountToRecover = maxHp;
-					else if (gBattleWeather && WEATHER_HAS_EFFECT && itemEffect != ITEM_EFFECT_UTILITY_UMBRELLA) //Not sunny
+					if (gBattleWeather & WEATHER_SUN_ANY)
+					{
+						if (AffectedBySun(bankAtk))
+							amountToRecover = maxHp;
+						else
+							amountToRecover = MathMax(1, maxHp / 2);
+					}
+					else if (gBattleWeather != 0) //Weather other than sunny
 						amountToRecover = MathMax(1, maxHp / 4);
 					else
 						amountToRecover = MathMax(1, maxHp / 2);
@@ -984,7 +994,7 @@ u16 GetAmountToRecoverBy(u8 bankAtk, u8 bankDef, u16 move)
 				amountToRecover += MathMax(1, maxHp / 2);
 			}
 
-			if (gBattleWeather & WEATHER_RAIN_ANY && WEATHER_HAS_EFFECT && itemEffect != ITEM_EFFECT_UTILITY_UMBRELLA)
+			if (gBattleWeather & WEATHER_RAIN_ANY && WEATHER_HAS_EFFECT && AffectedByRain(bankAtk))
 			{
 				if (ability == ABILITY_RAINDISH)
 					amountToRecover += MathMax(1, maxHp / 16);
@@ -1019,18 +1029,6 @@ u16 GetAmountToRecoverBy(u8 bankAtk, u8 bankDef, u16 move)
 bool8 ShouldRecover(u8 bankAtk, u8 bankDef, u16 move)
 {
 	u32 healAmount = GetAmountToRecoverBy(bankAtk, bankDef, move);
-
-	if (gBattleMoves[move].effect == EFFECT_ABSORB)
-		return TRUE; //Always use absorbing move, even if above 80%.
-
-	if (GetHealthPercentage(bankAtk) >= 80) //If we're above 80% pointless to heal most of the time
-		return FALSE;
-
-	if ((gBattleMons[bankAtk].status1 & STATUS_TOXIC_POISON) && (ABILITY(bankAtk) != ABILITY_POISONHEAL && ABILITY(bankAtk) != ABILITY_MAGICGUARD && 
-	ABILITY(bankAtk) != ABILITY_TOXICBOOST)) 
-	{
-		return FALSE; //Don't recover if you're toxic poisoned 
-	}
 
 	//if (IS_SINGLE_BATTLE)
 	//{
@@ -1121,30 +1119,11 @@ enum ProtectQueries ShouldProtect(u8 bankAtk, u8 bankDef, u16 move)
 	u8 defAbility = ABILITY(bankDef);
 	bool8 isAtkDynamaxed = IsDynamaxed(bankAtk);
 
-	if (WillFaintFromSecondaryDamage(bankAtk)
-	&&  defAbility != ABILITY_MOXIE
-	#ifdef ABILITY_GRIMNEIGH
-	&&  defAbility != ABILITY_GRIMNEIGH
-	#endif
-	#ifdef ABILITY_ASONE_GRIM
-	&&  defAbility != ABILITY_ASONE_GRIM
-	#endif
-	#ifdef ABILITY_CHILLINGNEIGH
-	&&  defAbility != ABILITY_CHILLINGNEIGH
-	#endif
-	#ifdef ABILITY_ASONE_CHILLING
-	&&  defAbility != ABILITY_ASONE_CHILLING
-	#endif
-	&&  defAbility != ABILITY_BEASTBOOST)
+	if (WillFaintFromSecondaryDamage(bankAtk) && !IsMoxieAbility(defAbility))
 		return FALSE; //Don't protect if you're going to faint after protecting and foe can't get boosts from your KO
 
 	if (IsBankIncapacitated(bankDef))
 		return FALSE; //Don't Protect against an opponent that isn't going to do anything
-
-	if ((gBattleMons[bankAtk].status1 & STATUS_TOXIC_POISON) && (ABILITY(bankAtk) != ABILITY_POISONHEAL && ABILITY(bankAtk) != ABILITY_MAGICGUARD && 
-	ABILITY(bankAtk) != ABILITY_TOXICBOOST))  {
-		return FALSE; //Don't protect if you're toxiced
-	}
 
 	if ((!isAtkDynamaxed && BankHoldingUsefulItemToProtectFor(bankAtk))
 	||  (!isAtkDynamaxed && BankHasAbilityUsefulToProtectFor(bankAtk, bankDef))
@@ -1761,7 +1740,7 @@ void IncreaseStatusViability(s16* originalViability, u8 class, u8 boost, u8 bank
 
 		case FIGHT_CLASS_SWEEPER_SETUP_STATS:
 			if (!Can2HKO(bankDef, bankAtk))
-				INCREASE_VIABILITY(3 + boost);
+				INCREASE_VIABILITY(3);
 			break;
 
 		case FIGHT_CLASS_SWEEPER_SETUP_STATUS:
@@ -1842,20 +1821,6 @@ static bool8 ShouldTryToSetUpStat(u8 bankAtk, u8 bankDef, u16 move, u8 stat, u8 
 	else if (stat == 0xFE) //All stats
 		return TRUE;
 
-	if ((gBattleMons[bankAtk].status1 & STATUS_TOXIC_POISON) && (ABILITY(bankAtk) != ABILITY_POISONHEAL && ABILITY(bankAtk) != ABILITY_MAGICGUARD && 
-		ABILITY(bankAtk) != ABILITY_TOXICBOOST) && GetHealthPercentage(bankAtk) <= 75  ) {
-		return FALSE; //Don't set up if you're toxic poisoned with less than 75% health
-	}
-
-	if(MoveEffectInMoveset(EFFECT_ROAR, bankDef)
-	|| MoveEffectInMoveset(EFFECT_HAZE, bankDef)
-	|| MoveEffectInMoveset(EFFECT_PSYCH_UP, bankDef
-	|| MoveInMoveset(MOVE_TOPSYTURVY, bankDef)))
-		return FALSE; //Don't try to set up if they cancel your setup, copy it, etc
-
-	if ((IsBankHoldingFocusSash(bankDef) || ABILITY(bankDef) == ABILITY_STURDY) && BATTLER_MAX_HP(bankDef))
-		return FALSE; //Don't set up break sash/sturdy first 
-
 	if (IS_SINGLE_BATTLE)
 	{
 		if (MoveWouldHitFirst(move, bankAtk, bankDef)) //Setup move would go first
@@ -1922,12 +1887,12 @@ static bool8 ShouldTryToSetUpStat(u8 bankAtk, u8 bankDef, u16 move, u8 stat, u8 
 		{
 			if (MoveWouldHitFirst(move, bankAtk, foe1)) //Attacker goes first
 			{
-				if (CanKnockOut(foe1, bankAtk) || STAT_STAGE(bankAtk, stat) >= 9)
+				if (CanKnockOut(foe1, bankAtk) || STAT_STAGE(bankAtk, stat) >= statLimit)
 					return FALSE;
 			}
 			else //Opponent Goes First
 			{
-				if (Can2HKO(foe1, bankAtk) || STAT_STAGE(bankAtk, stat) >= 9)
+				if (Can2HKO(foe1, bankAtk) || STAT_STAGE(bankAtk, stat) >= statLimit)
 					return FALSE;
 			}
 		}
@@ -1936,12 +1901,12 @@ static bool8 ShouldTryToSetUpStat(u8 bankAtk, u8 bankDef, u16 move, u8 stat, u8 
 		{
 			if (MoveWouldHitFirst(move, bankAtk, foe2)) //Attacker goes first
 			{
-				if (CanKnockOut(foe2, bankAtk) || STAT_STAGE(bankAtk, stat) >= 9)
+				if (CanKnockOut(foe2, bankAtk) || STAT_STAGE(bankAtk, stat) >= statLimit)
 					return FALSE;
 			}
 			else //Opponent Goes First
 			{
-				if (Can2HKO(foe2, bankAtk) || STAT_STAGE(bankAtk, stat) >= 9)
+				if (Can2HKO(foe2, bankAtk) || STAT_STAGE(bankAtk, stat) >= statLimit)
 					return FALSE;
 			}
 		}
