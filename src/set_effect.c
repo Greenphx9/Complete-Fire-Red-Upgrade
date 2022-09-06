@@ -971,7 +971,7 @@ bool8 SetMoveEffect2(void)
 
 					gBattleStruct->choicedMove[gEffectBank] = 0;
 				}
-				if(!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) && ITEM(gBankAttacker) != ITEM_NONE)
+				else if(!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) && ITEM(gBankAttacker) != ITEM_NONE)
 				{
 					gNewBS->knockedOffWildItem = gLastUsedItem;
 				}
