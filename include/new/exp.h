@@ -20,3 +20,4 @@ u32 GetSpeciesExpToLevel(u16 species, u8 toLevel);
 u8 GetCurrentLevelCap(void);
 void atk23_getexp(void);
 void PlayerHandleExpBarUpdate(void);
+u8 GetBadgeCount();

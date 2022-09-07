@@ -43,6 +43,7 @@ if used.
 #include "../include/wild_encounter.h"
 #include "../include/new/form_change.h"
 #include "../include/random.h"
+#include "../include/new/exp.h"
 
 #define FIRERED
 
@@ -490,6 +491,28 @@ static void SandboxChangeAbility(bool8 goingRight)
     PutWindowTilemap(2);
 }
 
+static u16 GetCurrentEVCap()
+{
+    u8 badges = GetBadgeCount();
+    u16 cap = 510;
+    switch(badges)
+    {
+        case 0: //no badges, 32 cap
+            cap = 32;
+            break;
+        case 1: //1 badges, 100 cap
+            cap = 100;
+            break;
+        case 2: //2 badges, 252 cap
+            cap = 252;
+            break;
+        default: 
+            cap = 510; //not sure if needed, just in case
+            break;
+    }
+    return cap;
+}
+
 static void ChangeSelectedStat(u8 stat, u8 ev, bool8 increase)
 {
     u8 newValue;
@@ -534,6 +557,7 @@ static void ChangeSelectedStat(u8 stat, u8 ev, bool8 increase)
     }
     if(ev)
     {
+        u16 cap = GetCurrentEVCap();
         total += mon->hpEv;
         total += mon->atkEv;
         total += mon->defEv;
@@ -546,8 +570,8 @@ static void ChangeSelectedStat(u8 stat, u8 ev, bool8 increase)
         newTotal += (statToEdit == MON_DATA_SPATK_EV) ? newValue : mon->spAtkEv;
         newTotal += (statToEdit == MON_DATA_SPDEF_EV) ? newValue : mon->spDefEv;
         newTotal += (statToEdit == MON_DATA_SPEED_EV) ? newValue : mon->spdEv;
-        if(newTotal > 510)
-            newValue = 510 - total;
+        if(newTotal > cap)
+            newValue = cap - total;
         if(!(newValue % 2 == 0))
             newValue -= 1;
     }
