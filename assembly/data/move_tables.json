@@ -1089,7 +1089,7 @@
 		"MOVE_JUNGLEHEALING"
 	],
 
-	"gBeakRelatedMoves": [
+	"gStrongBeakBoostedMoves": [
 		"MOVE_DRILLPECK",
 		"MOVE_PECK",
 		"MOVE_PLUCK",
