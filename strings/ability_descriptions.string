@@ -45,7 +45,7 @@ Heals upon switching out.
 Status moves hit first.
 
 #org @DESC_ADAPTABILITY
-Boosts same type attacks.
+Powers up moves of the same type.
 
 #org @DESC_BIGPECKS
 Prevents Defense reduction.
@@ -54,10 +54,10 @@ Prevents Defense reduction.
 Reflects status moves.
 
 #org @DESC_RECKLESS
-Boosts moves with recoil.
+Powers up moves that have recoil\ndamage.
 
 #org @DESC_SHEERFORCE
-Trades added effects for power.
+Removes added effects to increase\nmove damage.
 
 #org @DESC_IRONFIST
 Boosts punching moves.
@@ -75,7 +75,7 @@ Trades HP for power in sunshine.
 Heat protection.
 
 #org @DESC_DRYSKIN
-Prefers the rain to heat.
+Reduces HP if it is hot. Water\nrestores HP.
 
 #org @DESC_TINTEDLENS
 Boosts "not very effective\" moves.
@@ -93,7 +93,7 @@ Passes through barriers.
 #endif
 
 #org @DESC_DOWNLOAD
-Adjusts power from foe's stats.
+Adjusts power according to a\nfoe's defenses.
 
 #org @DESC_POISONHEAL
 Restores HP if poisoned.
@@ -111,10 +111,10 @@ Prevents stat reduction.
 Ups one stat and downs another.
 
 #org @DESC_HYDRATION
-Heals status problems in rain.
+Heals status problems if it\nis raining.
 
 #org @DESC_HEALER
-May heal ally's status problems.
+Sometimes heals an ally's\nstatus condition.
 
 #org @DESC_SNOWCLOAK
 Ups evasion in hail.
@@ -126,7 +126,7 @@ Ups evasion if confused.
 Summons a hailstorm in battle.
 
 #org @DESC_QUICKFEET
-Ups Speed if suffering.
+Boosts Speed if there is a\nstatus problem.
 
 #org @DESC_SAPSIPPER
 Boosts Attack if hit by Grass.
@@ -138,7 +138,7 @@ Immune to weather and powder.
 Only damaged by attacks.
 
 #org @DESC_BULLETPROOF
-Avoids ball and bomb moves.
+Protects itself from some ball\nand bomb moves.
 
 #org @DESC_GALEWINGS
 Flying moves hit first.
@@ -148,19 +148,19 @@ Flying moves hit first.
 Knockouts boost Attack.
 
 #org @DESC_AFTERMATH
-Fainting damages the foe.
+Damages the attacker landing the\nfinishing hit.
 
 #org @DESC_CURSEDBODY
 May disable a foe's move.
 
 #org @DESC_GOOEY
-Lowers the foe's Speed if hit.
+Contact lowers the attacker's\nSpeed stat.
 
 #org @DESC_UNSEENFIST
-Contact moves break protection.
+Direct contact moves go through\nProtect.
 
 #org @DESC_MUMMY
-Spreads with contact.
+Contact with this Pok\emon spreads\nthis Ability.
 
 #org @DESC_GRIMNEIGH
 Knockouts boost Sp.Attack.
@@ -169,25 +169,25 @@ Knockouts boost Sp.Attack.
 Raises Speed in a sandstorm.
 
 #org @DESC_ANALYTIC
-Moving last boosts power.
+Boosts move power when the\nPok\emon moves last.
 
 #org @DESC_NOGUARD
-Ensures that all moves land.
+Ensures attacks by or against the\nPok\emon land.
 
 #org @DESC_MEGALAUNCHER
 Boosts aura and pulse moves.
 
 #org @DESC_TOUGHCLAWS
-Boosts moves that make contact.
+Powers up moves that make direct\ncontact.
 
 #org @DESC_STRONGJAW
 Boosts biting moves.
 
 #org @DESC_VICTORYSTAR
-Raises own and ally's accuracy.
+Boosts the accuracy of its allies\nand itself.
 
 #org @DESC_STORMDRAIN
-Draws in Water-type moves.
+Draws in all Water-type moves to\nup Sp. Attack.
 
 #org @DESC_DARKAURA
 Powers up Dark-type moves.
@@ -229,7 +229,7 @@ Sp. Atk rises when stats fall.
 Gives up at half HP.
 
 #org @DESC_SLOWSTART
-Takes a while to get going.
+For three turns, halves Attack\nand Speed stats.
 
 #org @DESC_TOXICBOOST
 Attack rises when poisoned.
@@ -241,11 +241,11 @@ Sp. Atk rises when burned.
 Halves physical damage.
 
 #org @DESC_WONDERSKIN
-Ups status move evasion.
+Makes status moves more likely to\nmiss.
 
 #org @DESC_PROTEAN
 #org @DESC_LIBERO
-Changes type to match move.
+Changes type to the type of the\nmove it's using.
 
 #org @DESC_PARENTALBOND
 Moves get a weaker second hit.
@@ -307,7 +307,7 @@ Boosts speed in Hail.
 Knockouts boost Sp. Atk.
 
 #org @DESC_STAMINA
-Taking a hit raises Defense.
+Boosts the Defense stat when hit\nby an attack.
 
 #org @DESC_STEELWORKER
 Powers up Steel-type moves.
@@ -382,7 +382,7 @@ Transforms upon entering battle.
 Dark-type hits raise Attack.
 
 #org @DESC_RATTLED
-Scary move types raise Speed.
+Dark-, Ghost-, and Bug-type\nmoves boost Speed.
 
 #org @DESC_MERCILESS
 Critically hits poisoned foes.
@@ -535,7 +535,7 @@ Halves special damage.
 Doubles Berry effects.
 
 #org @DESC_ICEFACE
-Free physical hit. Hail renews.
+Free physical hit. Hail renews\nthe head.
 
 #org @DESC_POWERSPOT
 Powers up ally moves.
@@ -556,7 +556,7 @@ Gives a perish count on contact.
 Trades Abilities on contact.
 
 #org @DESC_GORILLATACTICS
-Ups Attack, but allows one move.
+Ups Attack, but only allows the\nuse of one move.
 
 #org @DESC_NEUTRALIZINGGAS
 All Abilities are nullified.
