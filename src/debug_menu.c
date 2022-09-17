@@ -41,15 +41,12 @@ void DebugMenu_ProcessSetFlag(void)
 			//FlagClear(0x15AC);
 			//RemoveBagItem(ITEM_DYNAMAX_BAND, 1);
 			//ScriptGiveMon(SPECIES_MEWTWO, 100, ITEM_LIFE_ORB, 0, 0, 0);
-			FlagClear(FLAG_BADGE01_GET);
-			FlagClear(FLAG_BADGE02_GET);
-			FlagClear(FLAG_BADGE03_GET);
-			FlagClear(FLAG_BADGE04_GET);
-			FlagClear(FLAG_BADGE05_GET);
-			FlagClear(FLAG_BADGE06_GET);
-			FlagClear(FLAG_BADGE07_GET);
-			FlagClear(FLAG_BADGE08_GET);
-			FlagClear(FLAG_SYS_GAME_CLEAR);
+			for(i = 0; i < NATIONAL_DEX_COUNT + 1; i++)
+			{
+				GetSetPokedexFlag(i, FLAG_SET_SEEN );
+				GetSetPokedexFlag(i, FLAG_SET_CAUGHT);
+			}
+			FlagSet(FLAG_SANDBOX_MODE);
 			break;
 	}
 }

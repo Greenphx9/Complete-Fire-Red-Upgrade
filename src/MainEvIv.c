@@ -15,6 +15,8 @@ if used.
 #include "../include/main.h"
 #include "../include/script.h"
 #include "../include/sprite.h"
+#include "../include/event_data.h"
+#include "../include/constants/flags.h"
 
 extern void CB2_ShowEvIv(void);
 

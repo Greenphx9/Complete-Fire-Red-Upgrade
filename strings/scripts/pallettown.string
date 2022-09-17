@@ -25,6 +25,12 @@ What region do you want your\n[RED]starter[BLACK] to be from?
 #org @gText_GalarSelected
 [RED]Galar[BLACK] selected.\nYour rival still has a [RED]kanto starter[BLACK].
 
+#org @gText_AskSandboxMode
+Would you like to enable Sandbox\nMode?\pThis unlocks the Stat Editor Mode\nfor the Stat Checker as soon as\lyou get your starter.\pThis also locks the difficulty to\nHard.\pThere is also a EV Cap for the first\n3 gyms.
+
+#org @gText_AskSandboxYes
+Sandbox Mode enabled.
+
 #org @gText_AskNoGrindingIV
 Would you like to enable No IV \nGrinding Mode? Every Pokemon will \lhave 31 IVs.
 
@@ -174,7 +180,7 @@ Mom: [PLAYER]!\nI heard the news! You beat all\leight gyms!\pThe Professor told 
 Before you go, what's up?\nWhy'd you return home?\p[.][PAUSE][20]\nOh, you need to permission to\lchallenge the Pok\emon League?\lSure! Of course I give you\lpermission, you've come so far!\pGood luck, and stay safe honey!
 
 #org @gText_IRV
-Inflamed Red v1.0
+Inflamed Red v1.1.0
 
 #org @gText_HardModeOn
 Hard Mode
@@ -208,3 +214,18 @@ A trainer was found! Starting battle\nagainst Trainer [BUFFER1].
 
 #org @gText_BattleAgain
 Would you like to battle again?
+
+#org @gText_HelloStatScannerUpgrade
+Hi [PLAYER]!\nI'm one of Prof. Oak's Aides.\pIf your Pokedex has complete data\non 650 species, I'm supposed to\lupgrade your [GREEN]Stat Scanner[BLUE].\pSo, [PLAYER], let me ask you.\nHave you gathered data on at least\l650 kinds of Pok\emon?
+
+#org @gText_HaventCaughtEnoughMonsForStatScanner
+Let's see[.]\nUh-oh! You have caught only\l[BUFFER3] kinds of Pok\emon!\pYou need [BUFFER1] kinds\nif you want the [GREEN]Stat Scanner[BLUE]\lupgrade.
+
+#org @gText_GreatHereYouGo
+Great! You have caught or owned\n[BUFFER3] kinds of Pok\emon!\pCongratulations!\nI'll need your [GREEN]Stat Scanner[BLUE] for a\lsec.
+
+#org @gText_UpgradedStatScanner
+[PAUSE][20].[PAUSE][20].[PAUSE][20].\pHere you go!\nI've upgraded your [GREEN]Stat Scanner[BLUE] to\la [GREEN]Stat Editor[BLUE]!\pI've included a guide on how to use\nit.\pGoodbye, [PLAYER]!
+
+#org @gText_CanBeUsedEdit
+The [GREEN]Stat Editor[BLUE] can be used to edit\nEVs, IVs, Nature, Ability, and\lGender!\pIsn't that cool?

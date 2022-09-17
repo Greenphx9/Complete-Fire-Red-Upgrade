@@ -81,56 +81,93 @@ EventScript_PalletTown_Kanto:
 	msgbox gText_KantoSelected MSG_KEEPOPEN
 	closeonkeypress
 	setflag 0x945
-	goto EventScript_PalletTown_AskNoGrindingIV
+	goto EventScript_PalletTown_AskHardMode
 
 EventScript_PalletTown_Johto:
 	sound 0x2
 	msgbox gText_JohtoSelected MSG_KEEPOPEN
 	closeonkeypress
 	setflag 0x946
-	goto EventScript_PalletTown_AskNoGrindingIV
+	goto EventScript_PalletTown_AskHardMode
 
 EventScript_PalletTown_Hoenn:
 	sound 0x2
 	msgbox gText_HoennSelected MSG_KEEPOPEN
 	closeonkeypress
 	setflag 0x947
-	goto EventScript_PalletTown_AskNoGrindingIV
+	goto EventScript_PalletTown_AskHardMode
 
 EventScript_PalletTown_Sinnoh:
 	sound 0x2
 	msgbox gText_SinnohSelected MSG_KEEPOPEN
 	closeonkeypress
 	setflag 0x948
-	goto EventScript_PalletTown_AskNoGrindingIV
+	goto EventScript_PalletTown_AskHardMode
 
 EventScript_PalletTown_Unova:
 	sound 0x2
 	msgbox gText_UnovaSelected MSG_KEEPOPEN
 	closeonkeypress
 	setflag 0x949
-	goto EventScript_PalletTown_AskNoGrindingIV
+	goto EventScript_PalletTown_AskHardMode
 
 EventScript_PalletTown_Kalos:
 	sound 0x2
 	msgbox gText_KalosSelected MSG_KEEPOPEN
 	closeonkeypress
 	setflag 0x94A
-	goto EventScript_PalletTown_AskNoGrindingIV
+	goto EventScript_PalletTown_AskHardMode
 
 EventScript_PalletTown_Alola:
 	sound 0x2
 	msgbox gText_AlolaSelected MSG_KEEPOPEN
 	closeonkeypress
 	setflag 0x94B
-	goto EventScript_PalletTown_AskNoGrindingIV
+	goto EventScript_PalletTown_AskHardMode
 
 EventScript_PalletTown_Galar:
 	sound 0x2
 	msgbox gText_GalarSelected MSG_KEEPOPEN
 	closeonkeypress
 	setflag 0x94C
+	goto EventScript_PalletTown_AskHardMode
+
+
+EventScript_PalletTown_AskHardMode:
+	msgbox gText_AskHardMode MSG_YESNO
+	compare LASTRESULT 0x1
+	if 0x1 _goto EventScript_PalletTown_EnableHardMode
+	sound 0x3
+	setflag 0x1202
 	goto EventScript_PalletTown_AskNoGrindingIV
+	release
+	end
+
+EventScript_PalletTown_EnableHardMode:
+	sound 0x2
+	msgbox gText_HardModeEnabled MSG_KEEPOPEN
+	closeonkeypress
+	setflag FLAG_HARD_MODE
+	goto EventScript_PalletTown_AskSandboxMode
+	release
+	end
+
+EventScript_PalletTown_AskSandboxMode:
+	msgbox gText_AskSandboxMode MSG_YESNO
+	compare LASTRESULT 0x1
+	if 0x1 _goto EventScript_PalletTown_EnableSandboxMode
+	sound 0x3
+	goto EventScript_PalletTown_AskNoGrindingIV
+	release
+	end
+
+EventScript_PalletTown_EnableSandboxMode:
+	sound 0x2
+	msgbox gText_AskSandboxYes MSG_KEEPOPEN
+	closeonkeypress
+	setflag 0x1203
+	setflag 0x1205
+	goto EventScript_PalletTown_AskDynamax
 
 EventScript_PalletTown_AskNoGrindingIV:
 	msgbox gText_AskNoGrindingIV MSG_YESNO
@@ -151,7 +188,7 @@ EventScript_PalletTown_AskNoGrindingEV:
 	compare LASTRESULT 0x1
 	if 0x1 _goto EventScript_PalletTown_NoGrindingEVYes
 	sound 0x3
-	goto EventScript_PalletTown_AskHardMode
+	goto EventScript_PalletTown_AskDynamax
 	release
 	end
 
@@ -160,25 +197,6 @@ EventScript_PalletTown_NoGrindingEVYes:
 	msgbox gText_AskNoGrindingEVYes MSG_KEEPOPEN
 	closeonkeypress
 	setvar 0x5105 6
-	goto EventScript_PalletTown_AskHardMode
-	release
-	end
-
-EventScript_PalletTown_AskHardMode:
-	msgbox gText_AskHardMode MSG_YESNO
-	compare LASTRESULT 0x1
-	if 0x1 _goto EventScript_PalletTown_EnableHardMode
-	sound 0x3
-	setflag 0x1202
-	goto EventScript_PalletTown_AskDynamax
-	release
-	end
-
-EventScript_PalletTown_EnableHardMode:
-	sound 0x2
-	msgbox gText_HardModeEnabled MSG_KEEPOPEN
-	closeonkeypress
-	setflag FLAG_HARD_MODE
 	goto EventScript_PalletTown_AskDynamax
 	release
 	end
@@ -1199,5 +1217,54 @@ EventScript_HealInBed:
 	waitfanfare
 	msgbox gText_PlayerFellAsleep MSG_KEEPOPEN
 	fadescreen 0x0
+	release
+	end
+
+.global EventScript_ProfOakStatScannerAide
+EventScript_ProfOakStatScannerAide:
+	lock
+	faceplayer
+	checkflag 0x82C
+	if 0x1 _goto EventScript_ProfOakStatScannerAidePostgame
+	msgbox 0x818EBE6 MSG_KEEPOPEN
+	release
+	end
+
+EventScript_ProfOakStatScannerAidePostgame:
+	goto_if_set 0x1203 EventScript_AlreadyUpgradedStatScanner
+	msgbox gText_HelloStatScannerUpgrade MSG_YESNO
+	compare LASTRESULT 0x1
+	goto_if_eq EventScript_CheckDex650
+	release
+	end
+
+EventScript_CheckDex650:
+	setvar 0x8004 1
+	special2 LASTRESULT 0xD4
+	buffernumber 2 0x8006
+	call EventScript_GetAideRequestInfo650
+	compare 0x8006 650
+	goto_if_lt EventScript_HaventCaughtEnough650
+	msgbox gText_GreatHereYouGo MSG_KEEPOPEN
+	closeonkeypress
+	msgbox gText_UpgradedStatScanner MSG_KEEPOPEN
+	closeonkeypress
+	setflag 0x1203
+	release
+	end
+
+EventScript_GetAideRequestInfo650:
+	buffernumber 0 650
+	return
+
+EventScript_HaventCaughtEnough650:
+	msgbox gText_HaventCaughtEnoughMonsForStatScanner MSG_KEEPOPEN
+	closeonkeypress
+	release
+	end
+
+EventScript_AlreadyUpgradedStatScanner:
+	msgbox gText_CanBeUsedEdit MSG_KEEPOPEN
+	closeonkeypress
 	release
 	end

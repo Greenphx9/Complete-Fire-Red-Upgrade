@@ -61,6 +61,8 @@ EventScript_Chansey:
 
 .global EventScript_EVIVMenu
 EventScript_EVIVMenu:
+	givepokemon SPECIES_SHEDINJA 100 0x0 0x0 0x0
+	goto_if_unset 0x828 EventScript_CantUseStatChecker
 	call_if_set 0x1203 EventScript_SandboxScanner
 	callasm Call_EvIv
 	end
@@ -73,6 +75,7 @@ EventScript_SandboxScannerMessage:
 	msgbox gText_HaventUsedScannerTutorial MSG_YESNO
 	compare LASTRESULT 0x1
 	call_if_eq EventScript_SandboxScannerShowMessage
+	setflag 0x1204
 	return
 
 EventScript_SandboxScannerShowMessage:
@@ -82,7 +85,13 @@ EventScript_SandboxScannerShowMessage:
 	setflag 0x1204
 	return
 
-
+.global EventScript_CantUseStatChecker
+EventScript_CantUseStatChecker:
+	lock
+	msgbox gText_CantUseStatChecker MSG_KEEPOPEN
+	closeonkeypress
+	release
+	end
 
 
 

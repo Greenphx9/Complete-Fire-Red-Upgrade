@@ -751,7 +751,7 @@ static void Task_WaitForExit(u8 taskId)
         gState++;
         break;
     case 1:
-        if (FlagGet(FLAG_SANDBOX_MODE))
+        if (FlagGet(FLAG_STAT_EDITOR_UNLOCKED))
         {
             if (JOY_NEW(A_BUTTON))
             {

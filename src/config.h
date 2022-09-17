@@ -293,8 +293,9 @@
 #define FLAG_SCALEMONS 0x1200 //Sets every Pokemon's BST to 600.
 #define FLAG_TIME_TURNER 0x1201 //Changes the time to PM when AM,and vice versa
 #define FLAG_HAS_USED_NORMAL_MODE 0x1202 //Displays normal mode on the HOF if normal mode has been used. Discourages cheaters.
-#define FLAG_SANDBOX_MODE 0x1203 //Allows you to edit EVs / IVs in the Stat Scanner.
+#define FLAG_STAT_EDITOR_UNLOCKED 0x1203 //Allows you to edit EVs / IVs in the Stat Scanner.
 #define FLAG_USED_SANDBOX_STAT_SCANNER 0x1204 //Shows message
+#define FLAG_SANDBOX_MODE 0x1205 //Sets FLAG_STAT_EDITOR_UNLOCKED, locks difficulty to hard.
 
 //Save stuff
 #define VAR_R_BUTTON_MODE 0x5150
@@ -423,7 +424,7 @@ enum //These vars need to be one after the other (hence the enum)
 
 /*===== General Number Options =====*/
 #define KANTO_DEX_COUNT 151
-#define NATIONAL_DEX_COUNT 898
+#define NATIONAL_DEX_COUNT 906
 
 #define MAX_LEVEL 100 //Also change this in the file "asm_defines.asm" found in the root
 #define NUM_TRAINER_CLASSES 107 //Vanilla FR has 107

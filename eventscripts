@@ -10,6 +10,7 @@ sign 4 3 6 EventScript_RotomFormChanger
 sign 4 1 3 EventScript_ShowdownPC
 npc 4 0 0 EventScript_Mum
 sign 4 1 4 EventScript_HealOrDarkrai
+npc 4 3 0 EventScript_ProfOakStatScannerAide
 
 ## Viridian City
 npc 5 4 0 EventScript_pokecentre_0X16A2CF

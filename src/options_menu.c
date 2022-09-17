@@ -331,9 +331,18 @@ void Task_OptionMenu(u8 taskId)
             OptionMenu_PickSwitchCancel();
             break;
         case 7:
-            BufferOptionMenuString(sOptionMenuPtr->cursorPos);
-            if(FlagGet(FLAG_HARD_MODE) == FALSE)
-                FlagSet(FLAG_HARD_MODE);
+            if(!FlagGet(FLAG_SANDBOX_MODE))
+            {
+                BufferOptionMenuString(sOptionMenuPtr->cursorPos);
+                if(FlagGet(FLAG_HARD_MODE) == FALSE)
+                    FlagSet(FLAG_HARD_MODE);
+                if(!FlagGet(FLAG_HAS_USED_NORMAL_MODE))
+                    FlagSet(FLAG_HAS_USED_NORMAL_MODE);
+            }
+            else
+            {
+                PlaySE(SE_ERROR);
+            }
             break;
         }
         break;
