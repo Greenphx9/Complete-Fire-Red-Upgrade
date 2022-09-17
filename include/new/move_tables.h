@@ -62,7 +62,7 @@ struct SpecialMoveFlags
 	bool8 gAromaVeilProtectedMoves : 1;
 	bool8 gMovesThatLiftProtectTable : 1;
 	bool8 gRandomizerBanTable : 1;
-	bool8 gBeakRelatedMoves : 1;
+	bool8 gStrongBeakBoostedMoves : 1;
 };
 
 extern const struct SpecialMoveFlags gSpecialMoveFlags[];

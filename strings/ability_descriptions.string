@@ -507,32 +507,32 @@ Ups Defense on entry.
 Fetches first failed Pok\e Ball.
 
 #org @DESC_COTTONDOWN
-Lowers everyone's Speed when hit.
+Lowers the Speed stat of everyone\nelse when hit.
 
 #org @DESC_MIRRORARMOR
 Bounces back stat decreases.
 
 #org @DESC_GULPMISSILE
-Spits prey if hit after a swim.
+Comes back with prey after using\nSurf or Dive.
 
 #org @DESC_STALWART
 #org @DESC_PROPELLERTAIL
-Moves ignore redirection.
+Ignores Abilities and moves that\ndraw in moves.
 
 #org @DESC_STEAMENGINE
 Fire and Water hits boost Speed.
 
 #org @DESC_PUNKROCK
-Ups and resists sound moves.
+Boosts and resists sound-based\nmoves.
 
 #org @DESC_SANDSPIT
-Creates a sandstorm when hit.
+Creates a sandstorm when hit by\nan attack.
 
 #org @DESC_ICESCALES
-Halves special damage.
+Halves the damage taken from\nspecial moves.
 
 #org @DESC_RIPEN
-Doubles Berry effects.
+Ripens Berries and doubles their\neffect.
 
 #org @DESC_ICEFACE
 Free physical hit. Hail renews\nthe head.
@@ -541,7 +541,7 @@ Free physical hit. Hail renews\nthe head.
 Powers up ally moves.
 
 #org @DESC_MIMICRY
-Changes type with terrain.
+Changes type depending on the\nterrain.
 
 #org @DESC_SCREENCLEANER
 Screens are removed on entry.
@@ -553,7 +553,7 @@ Boosts own and ally Steel moves.
 Gives a perish count on contact.
 
 #org @DESC_WANDERINGSPIRIT
-Trades Abilities on contact.
+Exchanges Abilities when hit with\na contact move.
 
 #org @DESC_GORILLATACTICS
 Ups Attack, but only allows the\nuse of one move.

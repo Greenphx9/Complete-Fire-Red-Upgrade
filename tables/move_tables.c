@@ -162,7 +162,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 		.gSleepTalkBannedMoves = TRUE,
 		.gRaidBattleBannedRaidMonMoves = TRUE,
 		.gBallBombMoves = TRUE,
-		.gBeakRelatedMoves = TRUE,
+		.gStrongBeakBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_COUNTER
@@ -1398,7 +1398,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	[MOVE_PLUCK] =
 	{
 		.gRaidBattleBannedMoves = TRUE,
-		.gBeakRelatedMoves = TRUE,
+		.gStrongBeakBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_SUPERFANG
@@ -2860,7 +2860,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	[MOVE_DRILLPECK] =
 	{
 		.gDrillMoves = TRUE,
-		.gBeakRelatedMoves = TRUE,
+		.gStrongBeakBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_HORNDRILL
@@ -3339,6 +3339,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	[MOVE_FURYATTACK] =
 	{
 		.gTwoToFiveStrikesMoves = TRUE,
+		.gStrongBeakBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_FURYSWIPES
@@ -3453,7 +3454,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	[MOVE_BRAVEBIRD] =
 	{
 		.gPercent33RecoilMoves = TRUE,
-		.gBeakRelatedMoves = TRUE,
+		.gStrongBeakBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_WOODHAMMER
@@ -3525,13 +3526,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 #ifdef MOVE_PECK
 	[MOVE_PECK] =
 	{
-		.gBeakRelatedMoves = TRUE,
-	},
-#endif
-#ifdef MOVE_FlOATYFALL
-	[MOVE_FlOATYFALL] =
-	{
-		.gBeakRelatedMoves = TRUE,
+		.gStrongBeakBoostedMoves = TRUE,
 	},
 #endif
 };

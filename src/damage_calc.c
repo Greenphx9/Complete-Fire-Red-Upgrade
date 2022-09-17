@@ -3985,7 +3985,7 @@ static u16 AdjustBasePower(struct DamageCalc* data, u16 power)
 		//1.2x Boost
 			if (SpeciesHasStrongBeak(data->atkSpecies))
 			{
-				if (gSpecialMoveFlags[move].gBeakRelatedMoves)
+				if (gSpecialMoveFlags[move].gStrongBeakBoostedMoves)
 					power = (power * 12) / 10;
 			}
 			else
