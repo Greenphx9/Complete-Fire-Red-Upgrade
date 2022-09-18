@@ -27,7 +27,7 @@ bool8 IsMoxieAbility(u8 ability);
 bool8 SpeciesHasTurboblaze(u16 species);
 bool8 SpeciesHasTeravolt(u16 species);
 bool8 SpeciesHasStrongBeak(u16 species);
-bool8 SpeciesHasEarthilate(u16 species);
+bool8 SpeciesHasTectonate(u16 species);
 
 bool8 AbilityIncreasesWildItemChance(u8 ability);
 bool8 IsChoiceAbility(u8 ability);
@@ -54,7 +54,7 @@ struct SpecialReplaceAbilityFlags
 	bool8 hasTurboblaze : 1;
     bool8 hasTeravolt : 1;
     bool8 hasStrongBeak : 1;
-    bool8 hasEarthilate : 1;
+    bool8 hasTectonate : 1;
 };
 
 extern const struct SpecialReplaceAbilityFlags gSpecialReplaceAbilityFlags[];

@@ -10171,7 +10171,7 @@ const struct BaseStats gBaseStats2[] =
 		.ability1 = ABILITY_LEVITATE,
 		.ability2 = ABILITY_LEVITATE,
 		.safariZoneFleeRate = 0,
-		.hiddenAbility = ABILITY_REFRIGERATE,
+		.hiddenAbility = ABILITY_TRANSISTOR,
 		.noFlip = TRUE,
 	},
 
@@ -10204,7 +10204,7 @@ const struct BaseStats gBaseStats2[] =
 		.ability1 = ABILITY_LEVITATE,
 		.ability2 = ABILITY_LEVITATE,
 		.safariZoneFleeRate = 0,
-		.hiddenAbility = ABILITY_REFRIGERATE,
+		.hiddenAbility = ABILITY_TRANSISTOR,
 		.noFlip = TRUE,
 	},
 

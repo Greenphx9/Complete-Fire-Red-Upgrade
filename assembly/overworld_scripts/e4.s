@@ -61,7 +61,6 @@ EventScript_Chansey:
 
 .global EventScript_EVIVMenu
 EventScript_EVIVMenu:
-	givepokemon SPECIES_SHEDINJA 100 0x0 0x0 0x0
 	goto_if_unset 0x828 EventScript_CantUseStatChecker
 	call_if_set 0x1203 EventScript_SandboxScanner
 	callasm Call_EvIv

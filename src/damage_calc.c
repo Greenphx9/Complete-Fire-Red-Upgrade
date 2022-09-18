@@ -1676,10 +1676,7 @@ u8 GetMoveTypeSpecialPostAbility(u16 move, u16 species, u8 atkAbility, bool8 zMo
 		{
 			switch (atkAbility) {
 				case ABILITY_REFRIGERATE:
-					if(SpeciesHasEarthilate(species))
-						return TYPE_GROUND;
-					else
-						return TYPE_ICE;
+					return TYPE_ICE;
 				case ABILITY_PIXILATE:
 					return TYPE_FAIRY;
 				case ABILITY_AERILATE:
@@ -2722,10 +2719,21 @@ static s32 CalculateBaseDamage(struct DamageCalc* data)
 			break;
 		case ABILITY_TRANSISTOR:
 			//1.5x Boost
-			if (data->moveType == TYPE_ELECTRIC)
+			if(SpeciesHasTectonate(data->atkSpecies))
 			{
-				attack = (attack * 15) / 10;
-				spAttack = (spAttack * 15) / 10;
+				if(data->moveType == TYPE_GROUND)
+				{
+					attack = (attack * 15) / 10;
+					spAttack = (spAttack * 15) / 10;
+				}
+			}
+			else
+			{
+				if (data->moveType == TYPE_ELECTRIC)
+				{
+					attack = (attack * 15) / 10;
+					spAttack = (spAttack * 15) / 10;
+				}
 			}
 			break;
 

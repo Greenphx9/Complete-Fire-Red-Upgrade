@@ -24,11 +24,11 @@ extern const u8 NAME_SOLID_STEEL[];
 extern const u8 NAME_TURBOBLAZE[];
 extern const u8 NAME_TERAVOLT[];
 extern const u8 NAME_STRONG_BEAK[];
-extern const u8 NAME_EARTHILATE[];
+extern const u8 NAME_TECTONATE[];
 
 //Ability descs
 extern const u8 DESC_STRONG_BEAK[];
-extern const u8 DESC_EARTHILATE[];
+extern const u8 DESC_TECTONATE[];
 
 static struct ReplaceAbility sReplaceAbilities[] =
 {
@@ -303,14 +303,14 @@ static struct ReplaceAbility sReplaceAbilities[] =
     },
     {
         .species = SPECIES_VIBRAVA,
-        .currAbility = ABILITY_REFRIGERATE,
-        .replaceAbilityString = NAME_EARTHILATE,
-        .replaceDescString = DESC_EARTHILATE,
+        .currAbility = ABILITY_TRANSISTOR,
+        .replaceAbilityString = NAME_TECTONATE,
+        .replaceDescString = DESC_TECTONATE,
     },
     {
         .species = SPECIES_FLYGON,
-        .currAbility = ABILITY_REFRIGERATE,
-        .replaceAbilityString = NAME_EARTHILATE,
-        .replaceDescString = DESC_EARTHILATE,
+        .currAbility = ABILITY_TRANSISTOR,
+        .replaceAbilityString = NAME_TECTONATE,
+        .replaceDescString = DESC_TECTONATE,
     },
 };

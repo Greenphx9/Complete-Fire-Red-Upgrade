@@ -55,13 +55,13 @@ const struct SpecialReplaceAbilityFlags gSpecialReplaceAbilityFlags[NUM_SPECIES]
 #ifdef SPECIES_VIBRAVA
 	[SPECIES_VIBRAVA] =
 	{
-		.hasEarthilate = TRUE,
+		.hasTectonate = TRUE,
 	},
 #endif
 #ifdef SPECIES_FLYGON
 	[SPECIES_FLYGON] =
 	{
-		.hasEarthilate = TRUE,
+		.hasTectonate = TRUE,
 	},
 #endif
 };
