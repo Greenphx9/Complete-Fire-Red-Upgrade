@@ -106,6 +106,12 @@ u8 BattleSetup_GetTerrainId(void)
 					break;
 				}
 
+				if (currRegionMapSecId == MAPSEC_NAVEL_ROCK)
+				{
+					terrain = BATTLE_TERRAIN_NAVEL_ROCK;
+					break;
+				}
+
 				#ifdef UNBOUND
 					terrain = BATTLE_TERRAIN_CAVE;
 				#else

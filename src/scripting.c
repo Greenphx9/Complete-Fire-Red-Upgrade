@@ -25,6 +25,7 @@
 #include "../include/string_util.h"
 #include "../include/task.h"
 #include "../include/text.h"
+#include "../include/tm_case.h"
 #include "../include/wild_encounter.h"
 #include "../include/window.h"
 #include "../include/event_data.h"
@@ -39,6 +40,7 @@
 #include "../include/new/build_pokemon.h"
 #include "../include/new/catching.h"
 #include "../include/new/damage_calc.h"
+#include "../include/new/daycare.h"
 #include "../include/new/dns.h"
 #include "../include/new/util2.h"
 #include "../include/new/item.h"
@@ -58,6 +60,8 @@
 #include "../include/base_stats.h"
 #include "../include/decompress.h"
 #include "../include/text_window.h"
+
+#include "defines_battle.h"
 /*
 scripting.c
 	handles all scripting specials or other functions associated with scripts
@@ -4471,4 +4475,95 @@ s32 ListMenu_ProcessInput(u8 listTaskId)
             return LIST_NOTHING_CHOSEN;
         }
     }
+}
+
+void GiveCustomEgg(void)
+{
+    u16 species = Var8005;
+	u16 customEggIndex = Var8006;
+    struct Pokemon *mon = AllocZeroed(sizeof(struct Pokemon));
+    bool8 isEgg;
+    bool8 sentToPc;
+
+    CreateEgg(mon, species);
+    isEgg = TRUE;
+    SetMonData(mon, MON_DATA_IS_EGG, &isEgg);
+	switch(customEggIndex)
+	{
+		case 0:
+			SetMonMoveSlot(mon, MOVE_TACKLE, 0);
+			SetMonMoveSlot(mon, MOVE_HARDEN, 1);
+			SetMonMoveSlot(mon, MOVE_METEORMASH, 2);
+			SetMonMoveSlot(mon, MOVE_EARTHQUAKE, 3);
+			break;
+		case 1:
+			SetMonMoveSlot(mon, MOVE_TACKLE, 0);
+			SetMonMoveSlot(mon, MOVE_RAGE, 1);
+			SetMonMoveSlot(mon, MOVE_REVENGE, 2);
+			SetMonMoveSlot(mon, MOVE_SPECTRALTHIEF, 3);
+			break;
+		case 2:
+			SetMonMoveSlot(mon, MOVE_ASTONISH, 0);
+			SetMonMoveSlot(mon, MOVE_SMOG, 1);
+			SetMonMoveSlot(mon, MOVE_MOONGEISTBEAM, 2);
+			SetMonMoveSlot(mon, MOVE_BLUEFLARE, 3);
+			GiveMonNatureAndAbility(mon, NATURE_ADAMANT, 1, IsMonShiny(mon), TRUE, FALSE);
+			mon->hiddenAbility = FALSE;
+			break;
+	}
+
+    sentToPc = GiveMonToPlayer(mon);
+    Free(mon);
+}
+
+void ShowEggPicNoCry(void)
+{
+    ScriptMenu_ShowPokemonPic(SPECIES_EGG, 0xA, 0x3);
+}
+
+
+extern const u8 gText_AboutToStart[];
+extern const u8 gText_BattleInProgressBuffer1Winning[];
+extern const u8 gText_BattleInProgressBuffer2Winning[];
+extern const u8 gText_BattleNoOneWinning[];
+extern const u8 gText_BattleEndedBuffer1Won[];
+extern const u8 gText_BattleEndedBuffer2Won[];
+void BufferTwoOpponentsPWT(void)
+{
+	u16 trainers[] = { 414, 415, 416, 417, 418, 419, 420, 350 };
+	u16 trainerNum1 = 0;
+	u16 trainerNum2 = 0;
+	do
+	{
+		 trainerNum1 = trainers[Random() % ARRAY_COUNT(trainers)];
+		 trainerNum2 = trainers[Random() % ARRAY_COUNT(trainers)];
+	}while(trainerNum1 == trainerNum2);
+	StringCopy(gStringVar1, gTrainers[trainerNum1].trainerName);
+	StringCopy(gStringVar2, gTrainers[trainerNum2].trainerName);
+	StringCopy(gStringVar8, gTrainerClassNames[gTrainers[trainerNum1].trainerClass]);
+	StringCopy(gStringVar9, gTrainerClassNames[gTrainers[trainerNum2].trainerClass]);
+	switch(Random() % 6)
+	{
+		case 0:
+			gLoadPointer = gText_AboutToStart;
+			break;
+		case 1:
+			gLoadPointer = gText_BattleInProgressBuffer1Winning;
+			break;
+		case 2:
+			gLoadPointer = gText_BattleInProgressBuffer2Winning;
+			break;
+		case 3:
+			gLoadPointer = gText_BattleNoOneWinning;
+			break;
+		case 4:
+			gLoadPointer = gText_BattleEndedBuffer1Won;
+			break;
+		case 5:
+			gLoadPointer = gText_BattleEndedBuffer2Won;
+			break;
+		default:
+			gLoadPointer = gText_AboutToStart;
+			break;
+	}
 }

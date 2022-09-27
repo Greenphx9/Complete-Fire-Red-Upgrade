@@ -167,6 +167,7 @@ EventScript_PalletTown_EnableSandboxMode:
 	closeonkeypress
 	setflag 0x1203
 	setflag 0x1205
+	setflag 0x1206
 	goto EventScript_PalletTown_AskDynamax
 
 EventScript_PalletTown_AskNoGrindingIV:
@@ -1089,8 +1090,9 @@ EventScript_ProfOak_0X169238:
 .global EventScript_ShowdownPC
 EventScript_ShowdownPC:
 	lock
-	checkflag 0x82C
-	if NOT_SET _goto EventScript_JustAPC
+	goto EventScript_JustAPC
+	@@checkflag 0x82C
+	@@if NOT_SET _goto EventScript_JustAPC
 	setvar 0x8004 1
 	special 0xD6
 	playse 4

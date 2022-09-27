@@ -329,6 +329,9 @@ Bag_Zygarde_Cube_SpritePal 093C97FC
 Bag_Black_Augurite_SpriteTiles 093C9800
 Bag_Black_Augurite_SpritePal 093C9804
 
+##Class Name
+gText_DocTeamMember 0823E669
+
 
 ##Other
 IVs2Tiles 08900990
@@ -481,6 +484,12 @@ GreenphxPal 8239A54
 
 CynthiaTiles 82395C4
 CynthiaPal 8239A64
+
+LaphicetTiles 82395CC
+LaphicetPal 8239A6C
+
+KeithTiles 82395D4
+KeithPal 8239A74
 
 EventScript_EVIVMenu 8904058
 

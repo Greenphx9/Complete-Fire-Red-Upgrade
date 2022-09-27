@@ -1,0 +1,29 @@
+#org @gText_RecievedMysteriousEgg
+[BLACK][PLAYER] mysteriously received an\negg!
+
+#org @gText_Keith_BeforeBattle
+[BLUE]Welcome to the Gauntlet.\pCould I interest you in a challenge?
+
+#org @gText_Keith_Lose
+No!\nFerrothorn, my precious.
+
+#org @gText_Notekeeper_BeforeBattle
+Can I interest you in a battle for\nnote-taking purposes?
+
+#org @gText_Notekeeper_Lose
+I got some great info from this, so\nno hard feelings.
+
+#org @gText_Laphicet_BeforeBattle
+[RED]What stands before me is a pixelated\ntrainer sprite of [BUFFER1], huh[.]\pYikes.
+
+#org @gText_PlayerRed
+Red
+
+#org @gText_PlayerGreen
+Green
+
+#org @gText_Laphicet_Lose
+EHE I lost[.]\pSo exciting[.]
+
+#org @gText_DocTeamMember
+Doc Team Member

@@ -6579,6 +6579,516 @@ static const struct BattleTowerSpread sHardmodeTeam_Cynthia3[] =
 };
 
 
+
+
+//Doc Team Mod Gauntlet
+static const struct BattleTowerSpread sHardmodeTeam_Keith[] =
+{
+    {
+        .species = SPECIES_FERROTHORN,
+        .item = ITEM_ROCKY_HELMET,
+        .nature = NATURE_BRAVE,
+        .ability = FRONTIER_ABILITY_1, //Iron Barbs
+        .atkEv = 4,
+        .defEv = 252,
+        .spDefEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 0,
+        .moves = 
+        {
+            MOVE_CURSE,
+            MOVE_GYROBALL,
+            MOVE_POWERWHIP,
+            MOVE_LEECHSEED,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+		.level = 85,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+    {
+        .species = SPECIES_JELLICENT,
+        .item = ITEM_ROCKY_HELMET,
+        .nature = NATURE_MODEST,
+        .ability = FRONTIER_ABILITY_2, //Cursed Body
+        .defEv = 252,
+        .spAtkEv = 4,
+        .spDefEv = 252,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_STRENGTHSAP,
+            MOVE_WATERSPOUT,
+            MOVE_WILLOWISP,
+            MOVE_SHADOWBALL,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+		.level = 85,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+    {
+        .species = SPECIES_SWOOBAT,
+        .item = ITEM_LEFTOVERS,
+        .nature = NATURE_MODEST,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Simple
+        .spAtkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_AIRSLASH,
+            MOVE_CALMMIND,
+            MOVE_STOREDPOWER,
+            MOVE_ROOST,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+		.level = 85,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+    {
+        .species = SPECIES_MAWILE,
+        .item = ITEM_MAWILITE,
+        .nature = NATURE_JOLLY,
+        .ability = FRONTIER_ABILITY_2, //Huge Power
+        .atkEv = 252,
+        .defEv = 4,
+        .spDefEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_CRUNCH,
+            MOVE_PLAYROUGH,
+            MOVE_STONEEDGE,
+            MOVE_SWORDSDANCE,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+		.level = 85,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+    {
+        .species = SPECIES_LICKILICKY,
+        .item = ITEM_LEFTOVERS,
+        .nature = NATURE_QUIET,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Cloud Nine
+        .atkEv = 4,
+        .defEv = 252,
+        .spAtkEv = 0,
+        .spDefEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 0,
+        .moves = 
+        {
+            MOVE_EARTHQUAKE,
+            MOVE_GYROBALL,
+            MOVE_POWERWHIP,
+            MOVE_BODYPRESS,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+		.level = 85,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+    {
+        .species = SPECIES_TOXICROAK,
+        .item = ITEM_CHOICE_BAND,
+        .nature = NATURE_ADAMANT,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Poison Touch
+        .hpEv = 4,
+        .atkEv = 252,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_GUNKSHOT,
+            MOVE_KNOCKOFF,
+            MOVE_POWERUPPUNCH,
+            MOVE_CLOSECOMBAT,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+		.level = 85,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+};
+
+static const struct BattleTowerSpread sHardmodeTeam_Notekeeper[] =
+{
+	{
+        .species = SPECIES_CHESNAUGHT,
+        .item = ITEM_ASSAULT_VEST,
+        .nature = NATURE_ADAMANT,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Dauntless Shield
+        .hpEv = 252,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_DRAINPUNCH,
+            MOVE_POISONJAB,
+            MOVE_SEEDBOMB,
+            MOVE_RETURN,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 85,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+    {
+        .species = SPECIES_SLOWBRO_G,
+        .item = ITEM_QUICK_CLAW,
+        .nature = NATURE_ADAMANT,
+        .ability = FRONTIER_ABILITY_1, //Quick Draw
+        .hpEv = 252,
+        .atkEv = 252,
+        .spDefEv = 4,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_DRAINPUNCH,
+            MOVE_POISONJAB,
+            MOVE_ZENHEADBUTT,
+            MOVE_FACADE,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 85,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+    {
+        .species = SPECIES_BASCULEGION,
+        .item = ITEM_LIFE_ORB,
+        .nature = NATURE_JOLLY,
+        .ability = FRONTIER_ABILITY_2, //Adaptability
+        .atkEv = 252,
+        .spDefEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_PHANTOMFORCE,
+            MOVE_SHADOWSNEAK,
+            MOVE_CRUNCH,
+            MOVE_RETURN,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 85,
+        .shiny = TRUE,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+    {
+        .species = SPECIES_URSALUNA,
+        .item = ITEM_FLAME_ORB,
+        .nature = NATURE_ADAMANT,
+        .ability = FRONTIER_ABILITY_1, //Guts
+        .hpEv = 248,
+        .atkEv = 252,
+        .spDefEv = 8,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_FACADE,
+            MOVE_HAMMERARM,
+            MOVE_EARTHQUAKE,
+            MOVE_AERIALACE,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 85,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+    {
+        .species = SPECIES_SKARMORY,
+        .item = ITEM_HEAVY_DUTY_BOOTS,
+        .nature = NATURE_IMPISH,
+        .ability = FRONTIER_ABILITY_2, //Sturdy
+        .hpEv = 252,
+        .defEv = 232,
+        .spdEv = 24,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_STEALTHROCK,
+            MOVE_SPIKES,
+            MOVE_WHIRLWIND,
+            MOVE_DRILLPECK,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 85,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+    {
+        .species = SPECIES_COALOSSAL,
+        .item = ITEM_COALOSSITE,
+        .nature = NATURE_QUIET,
+        .ability = FRONTIER_ABILITY_2, //Flame Body
+        .hpEv = 248,
+        .spAtkEv = 252,
+        .spDefEv = 8,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_FLAMETHROWER,
+            MOVE_METEORBEAM,
+            MOVE_SCALD,
+            MOVE_EARTHPOWER,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 85,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+};
+
+static const struct BattleTowerSpread sHardmodeTeam_Laphicet[] =
+{
+    {
+        .species = SPECIES_KLEFKI,
+        .item = ITEM_LIGHT_CLAY,
+        .nature = NATURE_BOLD,
+        .ability = FRONTIER_ABILITY_1, //Prankster
+        .hpEv = 252,
+        .defEv = 252,
+        .spDefEv = 4,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_REFLECT,
+            MOVE_LIGHTSCREEN,
+            MOVE_SPIKES,
+            MOVE_FOULPLAY,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 85,
+        .shiny = TRUE,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+    {
+        .species = SPECIES_ZACIAN_CROWNED,
+        .item = ITEM_RUSTED_SWORD,
+        .nature = NATURE_ADAMANT,
+        .ability = FRONTIER_ABILITY_1, //Intrepid Sword
+        .hpEv = 4,
+        .atkEv = 252,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_BEHEMOTHBLADE,
+            MOVE_WILDCHARGE,
+            MOVE_CLOSECOMBAT,
+            MOVE_PLAYROUGH,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 85,
+        .shiny = TRUE,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+    {
+        .species = SPECIES_CHANDELURE,
+        .item = ITEM_CHOICE_SCARF,
+        .nature = NATURE_TIMID,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Shadow Tag
+        .defEv = 4,
+        .spAtkEv = 252,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_MOONGEISTBEAM,
+            MOVE_BLUEFLARE,
+            MOVE_ENERGYBALL,
+            MOVE_TRICK,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 85,
+        .shiny = TRUE,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+    {
+        .species = SPECIES_FLOETTE_ETERNAL,
+        .item = ITEM_EXPERT_BELT,
+        .nature = NATURE_TIMID,
+        .ability = FRONTIER_ABILITY_1, //Flower Veil
+        .defEv = 4,
+        .spAtkEv = 252,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_LIGHTOFRUIN,
+            MOVE_HEATWAVE,
+            MOVE_DARKPULSE,
+            MOVE_ENERGYBALL,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 85,
+        .shiny = TRUE,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+    {
+        .species = SPECIES_FLYGON,
+        .item = ITEM_LIFE_ORB,
+        .nature = NATURE_JOLLY,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Tectonate
+        .atkEv = 252,
+        .defEv = 4,
+        .spdEv = 252,
+        .hpIv = 31,
+        .atkIv = 31,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_DRAGONDANCE,
+            MOVE_STONEEDGE,
+            MOVE_EARTHQUAKE,
+            MOVE_ATTACKORDER,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 85,
+        .shiny = TRUE,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+    {
+        .species = SPECIES_APPLETUN,
+        .item = ITEM_APPLITE,
+        .nature = NATURE_BOLD,
+        .ability = FRONTIER_ABILITY_HIDDEN, //Thick Fat
+        .hpEv = 252,
+        .defEv = 252,
+        .spDefEv = 4,
+        .hpIv = 31,
+        .atkIv = 0,
+        .defIv = 31,
+        .spAtkIv = 31,
+        .spDefIv = 31,
+        .spdIv = 31,
+        .moves = 
+        {
+            MOVE_APPLEACID,
+            MOVE_BODYPRESS,
+            MOVE_RECOVER,
+            MOVE_TOXIC,
+        },
+        .forSingles = TRUE,
+        .forDoubles = TRUE,
+        .modifyMovesDoubles = FALSE,
+        .level = 85,
+        .shiny = TRUE,
+		.ball = BALL_TYPE_ULTRA_BALL,
+    },
+};
+
+
 extern const u8 sTrainerName_Tasha[];
 
 const struct MultiRaidTrainer gHardmodeTrainers[] =
@@ -7237,6 +7747,54 @@ const struct MultiRaidTrainer gHardmodeTrainers[] =
 		.spreadSizes =
 		{
 			[0] = NELEMS(sHardmodeTeam_Cynthia3),
+		},
+	},
+	{
+		.owNum = EVENT_OBJ_GFX_OAK,
+		.trainerClass = CLASS_PKMN_TRAINER_1,
+		.backSpriteId = 0,
+		.gender = MALE,
+		.otId = 42,
+		.name = sTrainerName_Tasha,
+		.spreads =
+		{
+			[0] = sHardmodeTeam_Keith,
+		},
+		.spreadSizes =
+		{
+			[0] = NELEMS(sHardmodeTeam_Keith),
+		},
+	},
+	{
+		.owNum = EVENT_OBJ_GFX_OAK,
+		.trainerClass = CLASS_PKMN_TRAINER_1,
+		.backSpriteId = 0,
+		.gender = MALE,
+		.otId = 43,
+		.name = sTrainerName_Tasha,
+		.spreads =
+		{
+			[0] = sHardmodeTeam_Notekeeper,
+		},
+		.spreadSizes =
+		{
+			[0] = NELEMS(sHardmodeTeam_Notekeeper),
+		},
+	},
+	{
+		.owNum = EVENT_OBJ_GFX_OAK,
+		.trainerClass = CLASS_PKMN_TRAINER_1,
+		.backSpriteId = 0,
+		.gender = FEMALE,
+		.otId = 44,
+		.name = sTrainerName_Tasha,
+		.spreads =
+		{
+			[0] = sHardmodeTeam_Laphicet,
+		},
+		.spreadSizes =
+		{
+			[0] = NELEMS(sHardmodeTeam_Laphicet),
 		},
 	},
 };

@@ -2856,8 +2856,8 @@ static s32 CalculateBaseDamage(struct DamageCalc* data)
 			//1.5x Boost
 			if (data->atkSpecies == SPECIES_RAICHU)
 			{
-				attack *= 1.5;
-				spAttack *= 1.5;
+				attack = (attack * 15) / 10;
+				spAttack = (spAttack * 15) / 10;
 			}
 			break;
 		#endif

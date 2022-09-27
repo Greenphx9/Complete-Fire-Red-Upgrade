@@ -434,3 +434,5 @@ FodyWeavers.xsd
 *.toml
 
 strings/mystery_gift_passwords.string
+scripts/encrypt_rom.py
+src/encrypt_rom.c

@@ -289,13 +289,19 @@
 
 #define FLAG_GOT_GIBLE 0x1046
 #define FLAG_GIBLE_BALL_SPRITE 0x1047
+#define FLAG_INDIGO_PLATEAU_WORMHOLE_SPRITE 0x1048
+#define FLAG_KEITH_BEAT 0x1049
+#define FLAG_NOTEKEEPER_BEAT 0x104A
+#define FLAG_LAPHICET_BEAT 0x104B
 
 #define FLAG_SCALEMONS 0x1200 //Sets every Pokemon's BST to 600.
 #define FLAG_TIME_TURNER 0x1201 //Changes the time to PM when AM,and vice versa
 #define FLAG_HAS_USED_NORMAL_MODE 0x1202 //Displays normal mode on the HOF if normal mode has been used. Discourages cheaters.
 #define FLAG_STAT_EDITOR_UNLOCKED 0x1203 //Allows you to edit EVs / IVs in the Stat Scanner.
 #define FLAG_USED_SANDBOX_STAT_SCANNER 0x1204 //Shows message
-#define FLAG_SANDBOX_MODE 0x1205 //Sets FLAG_STAT_EDITOR_UNLOCKED, locks difficulty to hard.
+#define FLAG_SANDBOX_MODE 0x1205 //Sets FLAG_STAT_EDITOR_UNLOCKED
+#define FLAG_CANT_USE_NORMAL_MODE 0x1206 //Locks difficulty to hard.
+#define VAR_BATTLE_POINTS 0x5156
 
 //Save stuff
 #define VAR_R_BUTTON_MODE 0x5150

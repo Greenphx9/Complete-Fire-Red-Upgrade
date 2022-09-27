@@ -54,3 +54,6 @@ Normal
 
 #org @gText_HardDiff
 Hard
+
+#org @gText_HardDiffLocked
+[RED]Hard

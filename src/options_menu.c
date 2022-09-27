@@ -331,7 +331,7 @@ void Task_OptionMenu(u8 taskId)
             OptionMenu_PickSwitchCancel();
             break;
         case 7:
-            if(!FlagGet(FLAG_SANDBOX_MODE))
+            if(!FlagGet(FLAG_CANT_USE_NORMAL_MODE))
             {
                 BufferOptionMenuString(sOptionMenuPtr->cursorPos);
                 if(FlagGet(FLAG_HARD_MODE) == FALSE)

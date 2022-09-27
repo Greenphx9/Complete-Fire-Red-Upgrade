@@ -71,7 +71,7 @@ EventScript_DoCynthiaStuff:
     playbgm 360 0
     msgbox gText_CynthiaAfterBattle MSG_KEEPOPEN
     closeonkeypress
-    givepokemoncustom SPECIES_GIBLE 1 ITEM_NONE MOVE_OUTRAGE MOVE_SANDTOMB MOVE_BODYSLAM MOVE_IRONHEAD NATURE_JOLLY 1 31 31 31 31 31 31 21
+    givepokemoncustom SPECIES_GIBLE 1 ITEM_NONE MOVE_OUTRAGE MOVE_SANDTOMB MOVE_BODYSLAM MOVE_IRONHEAD NATURE_JOLLY 1 31 31 31 31 31 31 31
     fanfare 0x101
     msgbox gText_PlayerReceievedShinyGible MSG_NORMAL
     waitfanfare

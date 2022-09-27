@@ -291,7 +291,7 @@ const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Laphicet =
     .inanimate = FALSE,
     .disableReflectionPaletteLoad = FALSE,
     .tracks = TRACKS_FOOT, //Can also be TRACKS_TIRE
-    .gender = MALE, //Can also be FEMALE
+    .gender = FEMALE, //Can also be FEMALE
     .oam = gEventObjectBaseOam_16x32,
     .subspriteTables = gEventObjectSpriteOamTables_16x32,
     .anims = gEventObjectImageAnimTable_Standard,
@@ -1013,5 +1013,40 @@ const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Rayquaza =
     .subspriteTables = gEventObjectSpriteOamTables_64x64,
     .anims = gEventObjectImageAnimTable_Standard,
     .images = gEventObjectPicTable_Rayquaza,
+    .affineAnims = gDummySpriteAffineAnimTable,
+};
+
+extern const u8 gEventObjectPic_UltraWormholeTiles[];
+
+static const struct SpriteFrameImage gEventObjectPicTable_UltraWormhole[] =
+{
+    overworld_frame(gEventObjectPic_UltraWormholeTiles, 8, 8, 0),
+    overworld_frame(gEventObjectPic_UltraWormholeTiles, 8, 8, 1),
+    overworld_frame(gEventObjectPic_UltraWormholeTiles, 8, 8, 2),
+    overworld_frame(gEventObjectPic_UltraWormholeTiles, 8, 8, 1),
+    overworld_frame(gEventObjectPic_UltraWormholeTiles, 8, 8, 2),
+    overworld_frame(gEventObjectPic_UltraWormholeTiles, 8, 8, 1),
+    overworld_frame(gEventObjectPic_UltraWormholeTiles, 8, 8, 1),
+    overworld_frame(gEventObjectPic_UltraWormholeTiles, 8, 8, 2),
+    overworld_frame(gEventObjectPic_UltraWormholeTiles, 8, 8, 2),
+};
+
+const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_UltraWormhole =
+{
+    .tileTag = 0xFFFF,
+    .paletteTag1 = 0x121E,
+    .paletteTag2 = EVENT_OBJ_PAL_TAG_NONE,
+    .size = (64 * 64) / 2,
+    .width = 64,
+    .height = 64,
+    .shadowSize = SHADOW_SIZE_L, //Can also be SHADOW_SIZE_S, SHADOW_SIZE_L, or SHADOW_SIZE_XL
+    .inanimate = FALSE,
+    .disableReflectionPaletteLoad = FALSE,
+    .tracks = TRACKS_FOOT, //Can also be TRACKS_TIRE
+    .gender = MALE, //Can also be FEMALE
+    .oam = gEventObjectBaseOam_64x64,
+    .subspriteTables = gEventObjectSpriteOamTables_64x64,
+    .anims = gEventObjectImageAnimTable_Standard,
+    .images = gEventObjectPicTable_UltraWormhole,
     .affineAnims = gDummySpriteAffineAnimTable,
 };

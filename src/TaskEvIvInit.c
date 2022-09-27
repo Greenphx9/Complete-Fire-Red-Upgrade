@@ -44,6 +44,7 @@ if used.
 #include "../include/new/form_change.h"
 #include "../include/random.h"
 #include "../include/new/exp.h"
+#include "../include/constants/songs.h"
 
 #define FIRERED
 
@@ -220,6 +221,7 @@ static void MiniEvIvPrintText(struct Pokemon *mon, bool8 ev, u8 stat, u8 newValu
 static void PrintWindow0(struct Pokemon *mon);
 static void PrintWindow1(u8 nature, u8 isEgg);
 static void PrintWindow2(u16 species, u8 isEgg, u8 friendship, u8 ability);
+static void ClearAndPrintAbilityText(u8 ability, u16 species);
 static const struct OamData sCursorOam =
 {
 	.affineMode = ST_OAM_AFFINE_OFF,
@@ -456,9 +458,16 @@ static void SandboxChangeAbility(bool8 goingRight)
         currentAbilNum = 1;
     else if(GetMonAbility(mon) == GetHiddenAbility(species))
         currentAbilNum = 2;
+    if(GetAbility2(species) == ABILITY_NONE && GetHiddenAbility(species) == ABILITY_NONE)
+    {
+        PlaySE(SE_ERROR);
+        return;
+    }
     if(goingRight)
     {
-        if(currentAbilNum == 0)
+        if(currentAbilNum == 0 && GetAbility2(species) == ABILITY_NONE)
+            mon->hiddenAbility = TRUE;
+        else if(currentAbilNum == 0)
             GiveMonNatureAndAbility(mon, nature, 1, isShiny, TRUE, FALSE);      
         else if(currentAbilNum == 1)
             mon->hiddenAbility = TRUE;
@@ -470,7 +479,9 @@ static void SandboxChangeAbility(bool8 goingRight)
     }
     else
     {
-        if(currentAbilNum == 0)
+        if(currentAbilNum == 0 && GetAbility2(species) == ABILITY_NONE)
+            mon->hiddenAbility = TRUE;
+        else if(currentAbilNum == 0)
             mon->hiddenAbility = TRUE;
         else if(currentAbilNum == 1)
             GiveMonNatureAndAbility(mon, nature, 0, isShiny, TRUE, FALSE);      
@@ -481,12 +492,14 @@ static void SandboxChangeAbility(bool8 goingRight)
         }
     }
 
-    FillWindowPixelBuffer(2, 0);
-
-    u8 isEgg    = GetMonData(mon, MON_DATA_IS_EGG, 0);
-    u8 friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, 0);
     u8 ability = GetMonAbility(mon);
-    PrintWindow2(species, isEgg, friendship, ability);
+    ClearAndPrintAbilityText(ability, species);
+
+    /*u8 isEgg    = GetMonData(mon, MON_DATA_IS_EGG, 0);
+    u8 friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, 0);
+    
+    PrintWindow2(species, isEgg, friendship, ability);*/
+
 
     PutWindowTilemap(2);
 }
@@ -1368,25 +1381,13 @@ static void SandboxChangeGender(void)
 
 	SetMonData(mon, MON_DATA_PERSONALITY, &personality);
 	CalculateMonStats(mon);
-    FillWindowPixelBuffer(0, 0);
-    PrintWindow0(mon);
-    StringCopy(gStringVar1, gText_Bs);
-    StringCopy(gStringVar2, gText_Ev);
-    StringCopy(gStringVar3, gText_Iv);
-    AddTextPrinterParameterized3(WIN_POKEMON_NAME, 2, BS_X + 8, 4, gBlackTextColor, 0, gStringVar1);
-    AddTextPrinterParameterized3(WIN_POKEMON_NAME, 2, EV_X + 8, 4, gBlackTextColor, 0, gStringVar2);
-    AddTextPrinterParameterized3(WIN_POKEMON_NAME, 2, IV_X + 2, 4, gBlackTextColor, 0, gStringVar3);
-    PutWindowTilemap(0);
+    FillWindowPixelRect(WIN_POKEMON_NAME, PIXEL_FILL(0), 0x94, 15, 6, 10);
     PrintGenderText(mon);
 }
 
 static void MiniEvIvPrintText(struct Pokemon *mon, bool8 ev, u8 stat, u8 newValue, u8 stat2)
 {
-    u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
     u8 nature   = GetNature(mon);
-    u8 isEgg    = GetMonData(mon, MON_DATA_IS_EGG, 0);
-    u8 friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, 0);
-    u8 ability = GetMonAbility(mon);
     u8 arrStat;
     switch(stat)
     {
@@ -1421,12 +1422,54 @@ static void MiniEvIvPrintText(struct Pokemon *mon, bool8 ev, u8 stat, u8 newValu
             gTotalStatsIV += gStats_iv[i];
     }
     //FillWindowPixelBuffer(0, 0);
-    FillWindowPixelBuffer(1, 0);
+    /*FillWindowPixelBuffer(1, 0);
     FillWindowPixelBuffer(2, 0);
 
     //PrintWindow0(mon);
     PrintWindow1(nature, isEgg);
-    PrintWindow2(species, isEgg, friendship, ability);
+    PrintWindow2(species, isEgg, friendship, ability);*/
+    ConvertIntToDecimalStringN(gStringVar2, gStats_ev[arrStat], STR_CONV_MODE_RIGHT_ALIGN, 3);
+    ConvertIntToDecimalStringN(gStringVar3, gStats_iv[arrStat], STR_CONV_MODE_RIGHT_ALIGN, 2);
+    u8 color = GetColorByNature(nature, arrStat);
+    switch(arrStat)
+    {
+        case STAT_HP:
+            FillWindowPixelRect(WIN_STATS, PIXEL_FILL(0), (ev) ? EV_X : IV_X, HP_Y, 22, 12);
+            AddTextPrinterParameterized3(WIN_STATS, 2, (ev) ? EV_X : IV_X, HP_Y, gTextColorByNature[color], 0, (ev) ? gStringVar2 : gStringVar3);
+            break;
+        case STAT_ATK:
+            FillWindowPixelRect(WIN_STATS, PIXEL_FILL(0), (ev) ? EV_X : IV_X, ATK_Y, 22, 12);
+            AddTextPrinterParameterized3(WIN_STATS, 2, (ev) ? EV_X : IV_X, ATK_Y, gTextColorByNature[color], 0, (ev) ? gStringVar2 : gStringVar3);
+            break;
+        case STAT_DEF:
+            FillWindowPixelRect(WIN_STATS, PIXEL_FILL(0), (ev) ? EV_X : IV_X, DEF_Y, 22, 12);
+            AddTextPrinterParameterized3(WIN_STATS, 2, (ev) ? EV_X : IV_X, DEF_Y, gTextColorByNature[color], 0, (ev) ? gStringVar2 : gStringVar3);
+            break;
+        case STAT_SPATK:
+            FillWindowPixelRect(WIN_STATS, PIXEL_FILL(0), (ev) ? EV_X : IV_X, SPATK_Y, 22, 12);
+            AddTextPrinterParameterized3(WIN_STATS, 2, (ev) ? EV_X : IV_X, SPATK_Y, gTextColorByNature[color], 0, (ev) ? gStringVar2 : gStringVar3);
+            break;
+        case STAT_SPDEF:
+            FillWindowPixelRect(WIN_STATS, PIXEL_FILL(0), (ev) ? EV_X : IV_X, SPDEF_Y, 22, 12);
+            AddTextPrinterParameterized3(WIN_STATS, 2, (ev) ? EV_X : IV_X, SPDEF_Y, gTextColorByNature[color], 0, (ev) ? gStringVar2 : gStringVar3);
+            break;
+        case STAT_SPEED:
+            FillWindowPixelRect(WIN_STATS, PIXEL_FILL(0), (ev) ? EV_X : IV_X, SPEED_Y, 22, 12);
+            AddTextPrinterParameterized3(WIN_STATS, 2, (ev) ? EV_X : IV_X, SPEED_Y, gTextColorByNature[color], 0, (ev) ? gStringVar2 : gStringVar3);
+            break;
+    }
+
+    ConvertIntToDecimalStringN(gStringVar2, gTotalStatsEV, STR_CONV_MODE_RIGHT_ALIGN, 3);
+    ConvertIntToDecimalStringN(gStringVar3, gTotalStatsIV, STR_CONV_MODE_RIGHT_ALIGN, 3);
+    FillWindowPixelRect(WIN_BOTTOM_BOX, PIXEL_FILL(0), (ev) ? EV_X + 8 : IV_X + 2, 4, 18, 13);
+    if(ev)
+    {
+        AddTextPrinterParameterized3(WIN_BOTTOM_BOX, 2, EV_X + 8, 4, gBlackTextColor, 0, gStringVar2);
+    }
+    else
+    {
+        AddTextPrinterParameterized3(WIN_BOTTOM_BOX, 2, IV_X + 2, 4, gBlackTextColor, 0, gStringVar3);    
+    }
 
     //PutWindowTilemap(0);
     PutWindowTilemap(1);
@@ -1633,6 +1676,13 @@ static void PrintWindow2(u16 species, u8 isEgg, u8 friendship, u8 ability)
         StringAppend(gStringVar4, gText_Steps_to_hatching);
         AddTextPrinterParameterized3(WIN_BOTTOM_BOX, 2, 2, 18, gBlackTextColor, 0, gStringVar4);
     }
+}
+
+static void ClearAndPrintAbilityText(u8 ability, u16 species)
+{
+    FillWindowPixelRect(WIN_BOTTOM_BOX, PIXEL_FILL(0), ABILITY_X, 4, 91, 15);
+    CopyAbilityName(gStringVar1, ability, species);
+    AddTextPrinterParameterized3(WIN_BOTTOM_BOX, 2, ABILITY_X, 4, gBlackTextColor, 0, gStringVar1);
 }
 
 /**

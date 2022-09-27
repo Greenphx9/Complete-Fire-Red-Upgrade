@@ -1184,15 +1184,15 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 				switch(spread->ability) {
 					case Ability_Hidden:
 					TRAINER_WITH_EV_GIVE_HIDDEN_ABILITY:
-						GiveMonNatureAndAbility(mon, spread->nature, 0xFF, FALSE, TRUE, FALSE); //Give Hidden Ability
+						GiveMonNatureAndAbility(mon, spread->nature, 0xFF, spread->shiny, TRUE, FALSE); //Give Hidden Ability
 						break;
 					case Ability_1:
 					case Ability_2:
-						GiveMonNatureAndAbility(mon, spread->nature, MathMin(1, spread->ability - 1), FALSE, TRUE, FALSE);
+						GiveMonNatureAndAbility(mon, spread->nature, MathMin(1, spread->ability - 1), spread->shiny, TRUE, FALSE);
 						break;
 					case Ability_Random_1_2:
 					TRAINER_WITH_EV_GIVE_RANDOM_ABILITY:
-						GiveMonNatureAndAbility(mon, spread->nature, 0xFF, FALSE, TRUE, FALSE);
+						GiveMonNatureAndAbility(mon, spread->nature, 0xFF, spread->shiny, TRUE, FALSE);
 						mon->hiddenAbility = FALSE; //Set by setting abilityNum to 0xFF (which is done to save time since Ability doesn't matter)
 						break;
 					case Ability_RandomAll: ;
@@ -5566,4 +5566,22 @@ bool8 HasAllFiveRegisInParty(void)
 	}
 	gSpecialVar_LastResult = FALSE;
 	return FALSE;
+}
+
+void GetRandomBuyableMon(void)
+{
+	u16 species = SPECIES_NONE;
+	do
+	{
+		species = Random() % NUM_SPECIES;
+	}
+	while(gSpecialSpeciesFlags[species].smogonNationalDexOUBan 
+	|| CanSpeciesEvolve(species) == TRUE
+	|| gSpecialSpeciesFlags[species].randomizerBan
+	|| gSpecialSpeciesFlags[species].smartWild
+	|| gSpecialSpeciesFlags[species].setPerfectXIVs
+	|| species == SPECIES_MELTAN
+	|| species == SPECIES_MELMETAL
+	|| species == SPECIES_LUGIA_S);
+	Var8005 = species;
 }

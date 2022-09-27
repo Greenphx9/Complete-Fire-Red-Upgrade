@@ -255,6 +255,14 @@ const struct TerrainTableStruct gTerrainTable[] =
 			.naturePowerMove = MOVE_ICEBEAM,
 			.burmyForm = SPECIES_BURMY_SANDY,
 		},
+	[BATTLE_TERRAIN_NAVEL_ROCK + 4] =
+		{
+			.camouflageType = TYPE_ROCK,
+			.secretPowerEffect = MOVE_EFFECT_ACC_MINUS_1,
+			.secretPowerAnim = MOVE_POWERGEM,
+			.naturePowerMove = MOVE_POWERGEM,
+			.burmyForm = SPECIES_BURMY_SANDY,
+		},
 
 	//ADD NEW ENTRIES HERE
 	#endif

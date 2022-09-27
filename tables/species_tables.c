@@ -5894,4 +5894,208 @@ const struct SpecialSpeciesFlags gSpecialSpeciesFlags[NUM_SPECIES] =
 		.randomizerBan = TRUE,
 	},
 #endif
+#ifdef SPECIES_VENUSAUR_GIGA
+	[SPECIES_VENUSAUR_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_CHARIZARD_GIGA
+	[SPECIES_CHARIZARD_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_BLASTOISE_GIGA
+	[SPECIES_BLASTOISE_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_BUTTERFREE_GIGA
+	[SPECIES_BUTTERFREE_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_PIKACHU_GIGA
+	[SPECIES_PIKACHU_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_MEOWTH_GIGA
+	[SPECIES_MEOWTH_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_MACHAMP_GIGA
+	[SPECIES_MACHAMP_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_GENGAR_GIGA
+	[SPECIES_GENGAR_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_KINGLER_GIGA
+	[SPECIES_KINGLER_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_LAPRAS_GIGA
+	[SPECIES_LAPRAS_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_EEVEE_GIGA
+	[SPECIES_EEVEE_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_SNORLAX_GIGA
+	[SPECIES_SNORLAX_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_GARBODOR_GIGA
+	[SPECIES_GARBODOR_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_MELMETAL_GIGA
+	[SPECIES_MELMETAL_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_RILLABOOM_GIGA
+	[SPECIES_RILLABOOM_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_CINDERACE_GIGA
+	[SPECIES_CINDERACE_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_INTELEON_GIGA
+	[SPECIES_INTELEON_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_CORVIKNIGHT_GIGA
+	[SPECIES_CORVIKNIGHT_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_ORBEETLE_GIGA
+	[SPECIES_ORBEETLE_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_DREDNAW_GIGA
+	[SPECIES_DREDNAW_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_COALOSSAL_GIGA
+	[SPECIES_COALOSSAL_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_FLAPPLE_GIGA
+	[SPECIES_FLAPPLE_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_APPLETUN_GIGA
+	[SPECIES_APPLETUN_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_SANDACONDA_GIGA
+	[SPECIES_SANDACONDA_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_TOXTRICITY_GIGA
+	[SPECIES_TOXTRICITY_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_TOXTRICITY_LOW_KEY_GIGA
+	[SPECIES_TOXTRICITY_LOW_KEY_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_CENTISKORCH_GIGA
+	[SPECIES_CENTISKORCH_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_HATTERENE_GIGA
+	[SPECIES_HATTERENE_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_GRIMMSNARL_GIGA
+	[SPECIES_GRIMMSNARL_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_ALRECMIE_GIGA
+	[SPECIES_ALRECMIE_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_COPPERAJAH_GIGA
+	[SPECIES_COPPERAJAH_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_DURALUDON_GIGA
+	[SPECIES_DURALUDON_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_URSHIFU_SINGLE_GIGA
+	[SPECIES_URSHIFU_SINGLE_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
+#ifdef SPECIES_URSHIFU_RAPID_GIGA
+	[SPECIES_URSHIFU_RAPID_GIGA] =
+	{
+		.randomizerBan = TRUE,
+	},
+#endif
 };

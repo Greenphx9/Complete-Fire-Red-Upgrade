@@ -39,6 +39,10 @@ void CB2_DoHallOfFameScreen(void)
 		#else
 		gTasks[taskId].tDontSaveData = FALSE;
 		#endif
+		if(FlagGet(FLAG_CANT_USE_NORMAL_MODE))
+		{
+			FlagClear(FLAG_CANT_USE_NORMAL_MODE);
+		}
 		sHofMonPtr = Calloc(sizeof(*sHofMonPtr));
 	}
 }
@@ -430,6 +434,7 @@ extern const u8 gText_HardModeHOF[];
 extern const u8 gText_NoIVGrinding[];
 extern const u8 gText_Scalemons[];
 extern const u8 gText_ShrinkTextHOF[];
+extern const u8 gText_SandboxMode[];
 
 extern const struct TextColor sHOFTextColors[];
 void HallOfFame_PrintWelcomeText(void)
@@ -444,6 +449,10 @@ void HallOfFame_PrintWelcomeText(void)
 	if(FlagGet(FLAG_NO_GRINDING_IV) || FlagGet(FLAG_NO_GRINDING_EV))
 	{
 		StringAppend(gStringVar1, gText_NoIVGrinding);
+	}
+	else if(FlagGet(FLAG_SANDBOX_MODE))
+	{
+		StringAppend(gStringVar1, gText_SandboxMode);
 	}
 	if(FlagGet(FLAG_HAS_USED_NORMAL_MODE))
 	{

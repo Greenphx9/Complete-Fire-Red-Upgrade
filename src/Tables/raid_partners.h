@@ -7044,7 +7044,7 @@ const struct MultiRaidTrainer gRaidPartners[] =
 		},
 	},
 	{
-		.owNum = EVENT_OBJ_GFX_FERROTHORN,
+		.owNum = EVENT_OBJ_GFX_KEITH,
 		.trainerClass = CLASS_FERRO_LEADER,
 		.backSpriteId = TRAINER_BACK_PIC_KEITH,
 		.gender = MALE,

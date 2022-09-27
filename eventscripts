@@ -364,13 +364,22 @@ npc 3 27 15 EventScript_TM33
 ## Elite 4
 ##map 13 0 EventScript_IndigoPlateauMapScript
 npc 13 0 3 EventScript_GirlBlockingDoor
-npc 13 0 8 EventScript_MegaSeller
+npc 13 0 7 EventScript_MegaSeller
 npc 13 0 1 EventScript_pokecentre_0X16A2CF
-npc 13 0 9 EventScript_AIOMan_0X8037C3
+npc 13 0 8 EventScript_AIOMan_0X8037C3
 npc 1 75 1 EventScript_Chansey
 npc 1 76 1 EventScript_Chansey
 npc 1 77 1 EventScript_Chansey
 npc 1 78 1 EventScript_Chansey
+map 3 9 IndigoPlateau_Exterior_MapScripts
+npc 3 9 2 IndigoPlateau_Exterior_EventScript_Wormhole
+npc 13 0 5 EventScript_BlockPWTDoor
+npc 43 26 6 EventScript_TradingShelmetNPC
+npc 43 26 5 EventScript_TradingKarrablastNPC
+npc 43 26 2 EventScript_RandomPokemonSeller
+npc 43 26 8 EventScript_BattlesBroadcasted
+sign 43 26 0 EventScript_PWTTV
+sign 43 26 1 EventScript_PWTTV
 
 ## Guards
 tile 19 0 0 EventScript_guard_1
@@ -539,7 +548,11 @@ sign 3 3 3 EventScript_LAEvolve
 ## Cynthia
 map 27 0 EventScript_CynthiaHouseMapScript
 
-
+## Doc Team Mod Gauntlet
+npc 43 25 0 EventScript_KeithBattle
+npc 43 25 1 EventScript_NotekeeperBattle
+npc 43 25 2 EventScript_LaphicetBattle
+npc 43 25 11 EventScript_ChanseyDTMG
 
 
 ##Hms

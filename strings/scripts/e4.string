@@ -19,7 +19,35 @@ Also, here's two items that'll help\nZacian and Zamazenta in battle.
 #org @gText_testTest
 Test
 
+#org @gText_GauntletWormhole1
+You can see a mountain-like structure\non the other side of the wormhole.\p[RED]Once you enter the wormhole, you\ncannot leave until you beat every\ltrainer on the other side.[BLACK]\pAre you sure you want to enter?
 
+#org @gText_NotFinishedPWT
+The [GREEN]Pok\emon World Tournament Centre[BLUE]\nis not yet finished.\pPlease come back later.
+
+#org @gText_ImTradingBuffer
+I'm trading a [GREEN][BUFFER1][BLUE] for a\n[GREEN][BUFFER2][BLUE] with my brother!\pWe read that they will evolve when\nwe trade them!
+
+#org @gText_SellingRandomMon
+Hey champ!\pI'm selling random Pok\emon for [GREEN]30\nBP[BLUE]!\pWould you like to buy one?\nYou currently have [GREEN][BUFFER1] BP[BLUE].
+
+#org @gText_NotEnoughBPRandomMon
+You don't have enough [GREEN]BP[BLUE] champ,\nsorry buddy!
+
+#org @gText_GiveMeASecond
+Alright, give me a few seconds[PAUSE][15].[PAUSE][15].[PAUSE][15].
+
+#org @gText_CBLaterRandom
+Come back later if you want another\nrandom Pok\emon!
+
+#org @gText_NotEnoughSpace
+There's not enough space in your\nparty!
+
+#org @gText_PlayerRecievedBuffer1Copy
+[BLACK][PLAYER] received a\n[BUFFER1]!
+
+#org @gText_BroadcastedAroundTheWorld
+[GREEN]Pok\emon World Tournament[RED] battles are\nrecorded and played on TVs all\laround the world, like this one\lbehind me!\pIsn't that cool? Free battles for\neveryone to watch!
 
 
 #org @gText_BlackAugurite
@@ -33,3 +61,21 @@ From now on, the "Sandbox Stat\nScanner\" will be referred to as the\lStat Edito
 
 #org @gText_CantUseStatChecker
 The Stat Checker can not be used\nright now.
+
+#org @gText_AboutToStart
+A battle between [BUFFER][08]\n[BUFFER1] and [BUFFER][09] [BUFFER2] is\labout to start!
+
+#org @gText_BattleInProgressBuffer1Winning
+A battle between [BUFFER][08]\n[BUFFER1] and [BUFFER][09] [BUFFER2] has\lstarted!\p[BUFFER][08] [BUFFER1] is winning!
+
+#org @gText_BattleInProgressBuffer2Winning
+A battle between [BUFFER][08]\n[BUFFER1] and [BUFFER][09] [BUFFER2] has\lstarted!\p[BUFFER][09] [BUFFER2] is winning!
+
+#org @gText_BattleNoOneWinning
+A battle between [BUFFER][08]\n[BUFFER1] and [BUFFER][09] [BUFFER2] has\lstarted!\pThis ones a close one!
+
+#org @gText_BattleEndedBuffer1Won
+A battle between [BUFFER][08]\n[BUFFER1] and [BUFFER][09] [BUFFER2] just\lfinished.\p[BUFFER][08] [BUFFER1] won!
+
+#org @gText_BattleEndedBuffer2Won
+A battle between [BUFFER][08]\n[BUFFER1] and [BUFFER][09] [BUFFER2] just\lfinished.\p[BUFFER][09] [BUFFER2] won!
