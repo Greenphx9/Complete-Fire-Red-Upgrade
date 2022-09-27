@@ -27,7 +27,7 @@ enum {
 };
 
 u8* __attribute__((long_call)) StringCopy(u8* dest, const u8 *src);
-u8* __attribute__((long_call)) StringCopy10(u8 *dest, const u8 *src);
+u8* __attribute__((long_call)) StringCopy_Nickname(u8 *dest, const u8 *src);
 u8* __attribute__((long_call)) StringCopyN(u8 *dest, const u8 *src, u8 n);
 u8* __attribute__((long_call)) StringAppend(u8 *dest, const u8 *src);
 u16 __attribute__((long_call)) StringLength(const u8 *str);
