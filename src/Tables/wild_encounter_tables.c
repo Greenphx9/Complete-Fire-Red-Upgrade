@@ -1783,7 +1783,7 @@ const struct WildPokemon gVictoryRoad3_LandMonsNight[] =
 
 const struct WildPokemonInfo gVictoryRoad3_LandMonsNightInfo = { 5, gVictoryRoad3_LandMonsNight };
 
-const struct WildPokemon gFlowerField_LandMons_Day[] =
+const struct WildPokemon gFlowerField_LandMonsDay[] =
 {
 	{20, 20, SPECIES_ORICORIO},
 	{20, 20, SPECIES_ORICORIO_Y},
@@ -1799,9 +1799,9 @@ const struct WildPokemon gFlowerField_LandMons_Day[] =
 	{20, 20, SPECIES_COMFEY},
 };
 
-const struct WildPokemonInfo gFlowerField_LandMonsInfo_Day = { 22, gFlowerField_LandMons_Day };
+const struct WildPokemonInfo gFlowerField_LandMonsInfoDay = { 22, gFlowerField_LandMonsDay };
 
-const struct WildPokemon gFlowerField_LandMons_Night[] =
+const struct WildPokemon gFlowerField_LandMonsNight[] =
 {
 	{20, 20, SPECIES_ORICORIO},
 	{20, 20, SPECIES_ORICORIO_Y},
@@ -1817,7 +1817,7 @@ const struct WildPokemon gFlowerField_LandMons_Night[] =
 	{20, 20, SPECIES_COMFEY},
 };
 
-const struct WildPokemonInfo gFlowerField_LandMonsInfo_Night = { 22, gFlowerField_LandMons_Night };
+const struct WildPokemonInfo gFlowerField_LandMonsInfoNight = { 22, gFlowerField_LandMonsNight };
 
 //Region Water
 const struct WildPokemon gPalletTown_FishingMons [] =
@@ -2396,7 +2396,7 @@ const struct WildPokemonHeader gWildMonMorningHeaders[] =
 	{
 		.mapGroup = 43,
 		.mapNum = 17,
-		.landMonsInfo = &gFlowerField_LandMonsInfo_Day,
+		.landMonsInfo = &gFlowerField_LandMonsInfoDay,
 		.waterMonsInfo = NULL,
 		.rockSmashMonsInfo = NULL,
 		.fishingMonsInfo = NULL,
@@ -2921,7 +2921,7 @@ const struct WildPokemonHeader gWildMonEveningHeaders[] =
 	{
 		.mapGroup = 43,
 		.mapNum = 17,
-		.landMonsInfo = &gFlowerField_LandMonsInfo_Night,
+		.landMonsInfo = &gFlowerField_LandMonsInfoNight,
 		.waterMonsInfo = NULL,
 		.rockSmashMonsInfo = NULL,
 		.fishingMonsInfo = NULL,

@@ -151,25 +151,39 @@
 #define MUS_FANFA1 0x101
 #define MUS_FANFA2 0x10D
 
-#define MUS_RS_VS_GYM_LEADER      265 // MUS_BATTLE32
-#define MUS_RS_VS_TRAINER         266 // MUS_BATTLE20
-#define MUS_RS_VS_WILD            348 
-#define MUS_RS_VS_E4              349 
-#define MUS_RS_VS_CHAMP           350 
-#define MUS_RS_VS_RIVAL           351 
-#define MUS_RS_POKE_CENTER        352
-#define MUS_DP_VS_DIALGA_PALKIA   353
-#define MUS_PL_VS_GIRATINA        354
-#define MUS_DP_VS_ARCEUS          355
-#define MUS_DP_HALL_OF_ORIGIN     356
-#define MUS_DP_ETERNA_FOREST      357
-#define MUS_DP_OLD_CHATEU         358
-#define MUS_DP_VS_LEGEND          359
-#define MUS_DP_ENCOUNTER_CHAMPION 360
-#define MUS_DP_VS_CHAMPION        361
-#define MUS_DP_VS_RIVAL           362
-#define MUS_RS_VS_LEGEND          363
-#define MUS_POKE_CENTER           303 // MUS_RG_POKECEN
+#define MUS_RS_VS_GYM_LEADER            265 // MUS_BATTLE32
+#define MUS_RS_VS_TRAINER               266 // MUS_BATTLE20
+#define MUS_RS_VS_WILD                  348 
+#define MUS_RS_VS_E4                    349 
+#define MUS_RS_VS_CHAMP                 350 
+#define MUS_RS_VS_RIVAL                 351 
+#define MUS_RS_POKE_CENTER              352
+#define MUS_DP_VS_DIALGA_PALKIA         353
+#define MUS_PL_VS_GIRATINA              354
+#define MUS_DP_VS_ARCEUS                355
+#define MUS_DP_HALL_OF_ORIGIN           356
+#define MUS_DP_ETERNA_FOREST            357
+#define MUS_DP_OLD_CHATEU               358
+#define MUS_DP_VS_LEGEND                359
+#define MUS_DP_ENCOUNTER_CHAMPION       360
+#define MUS_DP_VS_CHAMPION              361
+#define MUS_DP_VS_RIVAL                 362
+#define MUS_RS_VS_LEGEND                363
+#define MUS_DP_SPEAR_PILLAR             364
+#define MUS_DP_VS_WILD                  365
+#define MUS_HGSS_VS_WILD_KANTO          366
+#define MUS_DP_VS_TRAINER               367
+#define MUS_HGSS_VS_TRAINER_KANTO       368
+#define MUS_DP_VS_TRAINER               367
+#define MUS_HGSS_VS_TRAINER_KANTO       368
+#define MUS_DP_VS_GYM_LEADER            369
+#define MUS_HGSS_VS_GYM_LEADER_KANTO    370
+#define MUS_DP_VS_E4                    371
+#define MUS_HGSS_VS_CHAMPION            372
+#define MUS_HGSS_VS_RIVAL               373
+
+
+#define MUS_POKE_CENTER                 303 // MUS_RG_POKECEN
 
 #define BGM_BATTLE_REGI_TRIO 347
 

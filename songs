@@ -1,3 +1,12 @@
 ##Footstep Noises
 250 sand_footstep
 251 grass_footstep
+365 mus_dp_vs_wild
+366 mus_hg_vs_wild_kanto
+367 mus_dp_vs_trainer
+368 mus_hg_vs_trainer_kanto
+369 mus_dp_vs_gym_leader
+370 mus_hg_vs_gym_leader_kanto
+371 mus_dp_vs_elite_four
+372 mus_hg_vs_champion
+373 mus_hg_vs_rival

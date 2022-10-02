@@ -49,6 +49,35 @@ There's not enough space in your\nparty!
 #org @gText_BroadcastedAroundTheWorld
 [GREEN]Pok\emon World Tournament[RED] battles are\nrecorded and played on TVs all\laround the world, like this one\lbehind me!\pIsn't that cool? Free battles for\neveryone to watch!
 
+#org @gText_WelcomeToExchangeService
+Welcome to the Exchange Service\nCorner!\pWould you like to trade in your [GREEN]BP[BLUE]\nfor some prizes?
+
+#org @gText_SaveSomeBP
+Please save some [GREEN]BP[BLUE] and come see us\nagain.
+
+#org @gText_WhichPrize
+Which prize would you like?\nYou currently have [GREEN][BUFFER1] BP[BLUE].
+
+#org @gText_NotEnoughBP
+I'm sorry.\nYou don't have enough [GREEN]BP[BLUE].
+
+#org @gText_Recieved1Buffer
+[BLACK][PLAYER] recieved 1\n[BUFFER1]!
+
+#org @gText_GivePWTTour
+[RED]Oh, [PLAYER]!\pWelcome to the [GREEN]Pok\emon World\nTournament Centre[RED]!\pSince this is your first time here,\nI'll give you a tour.\pFollow me.
+
+#org @gText_TheLounge
+[RED]Over here is what we call the\n[GREEN]Lounge[RED].\pFeel free to sit here and talk with\nothers, or plan a battle strategy!
+
+#org @gText_TheShops
+[RED]Over here are the [GREEN]Shops[RED].\p[RED]You can buy stuff here with the\n[GREEN]Battle Points[RED] you earn!
+
+#org @gText_ExtentedLounge
+[RED]Over here is another part of the\n[GREEN]Lounge[RED].
+
+#org @gText_Battlegrounds
+[RED]And over here is the entrance to\nthe [GREEN]Pok\emon World Tournament\lBattle Room[RED].\pIn there is where all the battles\nhappen!\pYou must speak with me if you wish\nto enter a battle.\pAnd that's it for the tour! I hope\nyou have a great time here!
 
 #org @gText_BlackAugurite
 Black Augurite
@@ -58,6 +87,30 @@ It seems you are using Sandbox\nMode, or have the Stat Editor mode\lfor the Stat
 
 #org @gText_ScannerTutorial
 From now on, the "Sandbox Stat\nScanner\" will be referred to as the\lStat Editor.\pThere are 3 modes in the Stat\nEditor, "Default\", "Selector\", and\l"Editor\".\pIn Default Mode, Press [A_BUTTON] to change\nto Selector Mode, [B_BUTTON] to exit the\lStat Editor, and [DPAD_UP] or [DPAD_DOWN] to change\lPok\emon.\pIn Selector Mode, Press [A_BUTTON] to\nchange to Editor Mode, Press [B_BUTTON] to\lchange to Default Mode, and use [DPAD_UP]\l[DPAD_DOWN][DPAD_LEFT] or [DPAD_RIGHT] to change what you are\lhovering over.\pIn Editor Mode, Press [DPAD_LEFT] or [DPAD_RIGHT] to\nchange the currently selected thing\l(IV, EV, ability, or gender) and\lpress [B_BUTTON] to change to Selector\lMode.\pIn all 3 modes, press [L_BUTTON] or [R_BUTTON] to\nchange natures.\pWould you like to read the\nexplanation again?
+
+#org @gText_GoodBufferStartPWT
+Hello [PLAYER]!\pWould you like to enter a [GREEN]Pok\emon\nWorld Tournament[RED]?\pOnce you enter, you may quit at any\ntime.
+
+#org @gText_PleaseFollowMe
+Please follow me.
+
+#org @gText_321Battle
+[RED]3[.][PAUSE][20]2[.][PAUSE][20]1[.][PAUSE][20]Battle!
+
+#org @gText_PlayerGainedBP
+[BLACK][PLAYER] gained [BUFFER1] BP!
+
+#org @gText_PokemonRestored
+[RED]Your Pok\emon have been restored to\nfull health.\pWould you like to continue the\ntournament?
+
+#org @gText_BattleAgain2
+[RED]Would you like to the battle the\nnext trainer?
+
+#org @gText_BeatAllTrainers
+[RED]Congratulations [PLAYER]!\pYou've beat every trainer!
+
+#org @gText_WonTheTournament
+[RED]You won the tournament!
 
 #org @gText_CantUseStatChecker
 The Stat Checker can not be used\nright now.

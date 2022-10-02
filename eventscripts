@@ -116,6 +116,7 @@ npc 3 3 13 EventScript_TM87
 npc 7 9 0 EventScript_MySonOldAmber
 npc 7 7 3 EventScript_PowerItemLevelUp
 npc 7 7 4 EventScript_PowerItemEVModifier
+npc 7 8 1 CeruleanCity_EventScript_Mindy
 
 ## Route 5
 tile 3 23 0 EventScript_R5May
@@ -380,6 +381,11 @@ npc 43 26 2 EventScript_RandomPokemonSeller
 npc 43 26 8 EventScript_BattlesBroadcasted
 sign 43 26 0 EventScript_PWTTV
 sign 43 26 1 EventScript_PWTTV
+npc 43 26 10 EventScript_WeavileTrade
+npc 43 26 1 EventScript_ExchangeServiceCorner
+map 43 26 EventScript_PWTMapScript
+npc 43 26 11 EventScript_NursePWT
+map 43 27 EventScript_PWTBR_MapScripts
 
 ## Guards
 tile 19 0 0 EventScript_guard_1

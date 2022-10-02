@@ -4205,3 +4205,6 @@
 .equ NPC_TEXT_COLOR_MON,       2 @@ Black, for Pokémon
 .equ NPC_TEXT_COLOR_NEUTRAL,   3 @@ Black, for inanimate objects and messages from the game
 .equ NPC_TEXT_COLOR_DEFAULT, 255 @@ If an NPC is selected, use the color specified by GetColorFromTextColorTable, otherwise use Neutral.
+
+.equ B_OUTCOME_WON, 1
+.equ B_OUTCOME_LOST, 2

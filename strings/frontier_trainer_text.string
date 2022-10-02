@@ -1498,3 +1498,30 @@ You won the battle!
 
 #org @gText_GenericLoseMessage
 You lost the battle...
+
+#org @sFrontierText_Brock_PreBattle
+I'm Brock!\nI'm an expert on Rock-type\lPok\emon.\pNo attack, big or small, will weaken\nmy rock-hard resolve!
+
+#org @sFrontierText_Brock_PlayerLose
+The best offense is a good\ndefense!\pThat's my way of doing things!
+
+#org @sFrontierText_Brock_PlayerWin
+Your Pok\emon's powerful attacks\novercame my rock-hard\lresistance[.]\pYou're stronger than I\nexpected, Champion!
+
+#org @sFrontierText_Misty_PreBattle
+I'm Misty!\pI'm a user of Water-type\nPok\emon!\pAre you good enough to beat\nme?
+
+#org @sFrontierText_Misty_PlayerLose
+See! This is the Water-type\ntoughness I was talking about!
+
+#org @sFrontierText_Misty_PlayerWin
+You really are good[.]\pYou've grown even stronger since the\nlast time we battled!
+
+#org @sFrontierText_Surge_PreBattle
+The name's Lt. Surge!\pIt's gonna be shock and\n"aw[.]\" for your Pok\emon!
+
+#org @sFrontierText_Surge_PlayerLose
+Oh yeah!\pI'm strong!
+
+#org @sFrontierText_Surge_PlayerWin
+Arrrgh!\pYou are strong!

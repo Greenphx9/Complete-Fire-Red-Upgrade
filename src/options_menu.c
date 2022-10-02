@@ -169,6 +169,8 @@ extern const u8 gText_RButtonPokemon[];
 extern const u8 gText_RButtonItems[];
 extern const u8 gText_FRLG[];
 extern const u8 gText_RSE[];
+extern const u8 gText_DPPT[];
+extern const u8 gText_HGSS[];
 extern const u8 gText_OnOption[];
 extern const u8 gText_OffOption[];
 extern const u8 gText_ByName[];
@@ -219,7 +221,9 @@ static const u8 *const sRButtonModeOptions[] =
 static const u8 *const sBattleMusicOptions[] =
 {
     gText_FRLG,
-	gText_RSE
+	gText_RSE,
+    gText_DPPT,
+    gText_HGSS
 };
 
 static const u8 *const sWildScalingOptions[] =
@@ -243,7 +247,7 @@ static const u8 *const sDifficultyOptions[] =
 };
 
 static const u16 sOptionMenuItemCounts[MENUITEM_COUNT] = {3, 2, 2, 2, 3, 10, 0};
-static const u16 sOptionMenuItemCounts_SecondPage[MENUITEM_PAGE2_COUNT] = {3, 2, 2, 4, 2, 0};
+static const u16 sOptionMenuItemCounts_SecondPage[MENUITEM_PAGE2_COUNT] = {3, 4, 2, 4, 2, 0};
 
 void CB2_OptionsMenuFromStartMenu(void)
 {
@@ -687,3 +691,4 @@ void OptionMenu_PickSwitchCancel(void)
         CopyWindowToVram(2, COPYWIN_BOTH);
     }
 }
+

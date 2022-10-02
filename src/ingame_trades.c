@@ -17,31 +17,35 @@
 
 extern struct TradeAnimationResources * sTradeData;
 
-extern u8 gText_InGameTrade_Mimien[];
+extern u8 gText_InGameTrade_Gyliph[];
 extern u8 gText_InGameTrade_Reyley[];
 extern u8 gText_InGameTrade_Zynx[];
 extern u8 gText_InGameTrade_Dontae[];
-extern u8 gText_InGameTrade_MsNido[];
+extern u8 gText_InGameTrade_Blaster[];
 extern u8 gText_InGameTrade_Saige[];
 extern u8 gText_InGameTrade_Chding[];
 extern u8 gText_InGameTrade_Elyssa[];
-extern u8 gText_InGameTrade_Nina[];
+extern u8 gText_InGameTrade_Muscle[];
 extern u8 gText_InGameTrade_Turner[];
-extern u8 gText_InGameTrade_Marc[];
+extern u8 gText_InGameTrade_Rocky[];
 extern u8 gText_InGameTrade_Haden[];
-extern u8 gText_InGameTrade_Esphere[];
+extern u8 gText_InGameTrade_Pierce[];
 extern u8 gText_InGameTrade_Clifton[];
-extern u8 gText_InGameTrade_Tangeny[];
+extern u8 gText_InGameTrade_Talo[];
 extern u8 gText_InGameTrade_Norma[];
-extern u8 gText_InGameTrade_Seelor[];
+extern u8 gText_InGameTrade_Toxic[];
 extern u8 gText_InGameTrade_Garett[];
+extern u8 gText_InGameTrade_Gaspar[];
+extern u8 gText_InGameTrade_Mindy[];
+extern u8 gText_InGameTrade_Weave[];
+extern u8 gText_InGameTrade_Damien[];
 
 static const struct InGameTrade sInGameTrades[] = {
-    [INGAME_TRADE_MR_MIME] = 
+    [INGAME_TRADE_SIGILYPH] = 
     {
-        .nickname = gText_InGameTrade_Mimien,
-        .species = SPECIES_MR_MIME,
-        .ivs = {20, 15, 17, 24, 23, 22},
+        .nickname = gText_InGameTrade_Gyliph,
+        .species = SPECIES_SIGILYPH,
+        .ivs = {29, 13, 30, 31, 30, 26},
         .abilityNum = 0,
         .otId = 1985,
         .conditions = {5, 5, 5, 30, 5},
@@ -51,7 +55,7 @@ static const struct InGameTrade sInGameTrades[] = {
         .otName = gText_InGameTrade_Reyley,
         .otGender = MALE,
         .nature = NATURE_TIMID,
-        .requestedSpecies = SPECIES_ABRA
+        .requestedSpecies = SPECIES_KADABRA
     }, 
     [INGAME_TRADE_JYNX] = 
     {
@@ -69,26 +73,26 @@ static const struct InGameTrade sInGameTrades[] = {
         .nature = NATURE_MILD,
         .requestedSpecies = SPECIES_POLIWHIRL
     }, 
-    [INGAME_TRADE_NIDORAN] = 
+    [INGAME_TRADE_KARRABLAST] = 
     {
-        .nickname = gText_InGameTrade_MsNido,
-        .species = SPECIES_NIDORAN_F,
-        .ivs = {22, 18, 25, 19, 15, 22},
+        .nickname = gText_InGameTrade_Blaster,
+        .species = SPECIES_KARRABLAST,
+        .ivs = {15, 30, 27, 30, 12, 31},
         .abilityNum = 0,
         .otId = 63184,
         .conditions = {5, 5, 5, 5, 30},
         .personality = 0x4c970b89,
-        .heldItem = ITEM_TINY_MUSHROOM,
+        .heldItem = ITEM_STEEL_GEM,
         .mailNum = 255,
         .otName = gText_InGameTrade_Saige,
         .otGender = FEMALE,
-        .nature = NATURE_BOLD,
-        .requestedSpecies = SPECIES_NIDORAN_M
+        .nature = NATURE_HARDY,
+        .requestedSpecies = SPECIES_SHELMET
     }, 
     [INGAME_TRADE_FARFETCHD] = 
     {
         .nickname = gText_InGameTrade_Chding,
-        .species = SPECIES_FARFETCHD,
+        .species = SPECIES_FARFETCHD_G,
         .ivs = {20, 25, 21, 24, 15, 20},
         .abilityNum = 0,
         .otId = 8810,
@@ -101,11 +105,11 @@ static const struct InGameTrade sInGameTrades[] = {
         .nature = NATURE_ADAMANT,
         .requestedSpecies = SPECIES_SPEAROW
     }, 
-    [INGAME_TRADE_NIDORINOA] = 
+    [INGAME_TRADE_HERACROSS] = 
     {
-        .nickname = gText_InGameTrade_Nina,
-        .species = SPECIES_NIDORINA,
-        .ivs = {22, 25, 18, 19, 22, 15},
+        .nickname = gText_InGameTrade_Muscle,
+        .species = SPECIES_HERACROSS,
+        .ivs = {22, 29, 31, 5, 29, 30},
         .abilityNum = 0,
         .otId = 13637,
         .conditions = {5, 5, 30, 5, 5},
@@ -114,46 +118,46 @@ static const struct InGameTrade sInGameTrades[] = {
         .mailNum = 255,
         .otName = gText_InGameTrade_Turner,
         .otGender = MALE,
-        .nature = NATURE_LONELY,
-        .requestedSpecies = SPECIES_NIDORINO
+        .nature = NATURE_ADAMANT,
+        .requestedSpecies = SPECIES_PINSIR
     }, 
-    [INGAME_TRADE_LICKITUNG] = 
+    [INGAME_TRADE_BOLDORE] = 
     {
-        .nickname = gText_InGameTrade_Marc,
-        .species = SPECIES_LICKITUNG,
-        .ivs = {24, 19, 21, 15, 23, 21},
+        .nickname = gText_InGameTrade_Rocky,
+        .species = SPECIES_BOLDORE,
+        .ivs = {30, 27, 14, 31, 14, 11},
         .abilityNum = 0,
         .otId = 1239,
         .conditions = {5, 5, 5, 5, 30},
         .personality = 0x451308ab,
-        .heldItem = ITEM_NONE,
+        .heldItem = ITEM_HARD_STONE,
         .mailNum = 255,
         .otName = gText_InGameTrade_Haden,
         .otGender = MALE,
-        .nature = NATURE_BOLD,
-        .requestedSpecies = SPECIES_GOLDUCK
+        .nature = NATURE_IMPISH,
+        .requestedSpecies = SPECIES_EMOLGA
     }, 
-    [INGAME_TRADE_ELECTRODE] = 
+    [INGAME_TRADE_BISHARP] = 
     {
-        .nickname = gText_InGameTrade_Esphere,
-        .species = SPECIES_ELECTRODE,
-        .ivs = {19, 16, 18, 25, 25, 19},
+        .nickname = gText_InGameTrade_Pierce,
+        .species = SPECIES_BISHARP,
+        .ivs = {19, 31, 19, 31, 21, 23},
         .abilityNum = 1,
         .otId = 50298,
         .conditions = {30, 5, 5, 5, 5},
         .personality = 0x06341016,
-        .heldItem = ITEM_NONE,
+        .heldItem = ITEM_BLACK_GLASSES,
         .mailNum = 255,
         .otName = gText_InGameTrade_Clifton,
         .otGender = MALE,
-        .nature = NATURE_HASTY,
-        .requestedSpecies = SPECIES_RAICHU
+        .nature = NATURE_TIMID,
+        .requestedSpecies = SPECIES_ORANGURU
     }, 
-    [INGAME_TRADE_TANGELA] = 
+    [INGAME_TRADE_TALONFLAME] = 
     {
-        .nickname = gText_InGameTrade_Tangeny,
-        .species = SPECIES_TANGELA,
-        .ivs = {22, 17, 25, 16, 23, 20},
+        .nickname = gText_InGameTrade_Talo,
+        .species = SPECIES_TALONFLAME,
+        .ivs = {8, 14, 9, 31, 31, 30},
         .abilityNum = 0,
         .otId = 60042,
         .conditions = {5, 5, 30, 5, 5},
@@ -162,24 +166,56 @@ static const struct InGameTrade sInGameTrades[] = {
         .mailNum = 255,
         .otName = gText_InGameTrade_Norma,
         .otGender = FEMALE,
-        .nature = NATURE_HASTY,
-        .requestedSpecies = SPECIES_VENONAT
+        .nature = NATURE_JOLLY,
+        .requestedSpecies = SPECIES_GRAVELER
     },
-    [INGAME_TRADE_SEEL] = 
+    [INGAME_TRADE_TOXAPEX] = 
     {
-        .nickname = gText_InGameTrade_Seelor,
-        .species = SPECIES_SEEL,
-        .ivs = {24, 15, 22, 16, 23, 22},
+        .nickname = gText_InGameTrade_Toxic,
+        .species = SPECIES_TOXAPEX,
+        .ivs = {29, 17, 31, 8, 21, 19},
         .abilityNum = 0,
         .otId = 9853,
         .conditions = {5, 5, 5, 5, 30},
         .personality = 0x482cac89,
-        .heldItem = ITEM_NONE,
+        .heldItem = ITEM_BLACK_SLUDGE,
         .mailNum = 255,
         .otName = gText_InGameTrade_Garett,
         .otGender = MALE,
         .nature = NATURE_BOLD,
-        .requestedSpecies = SPECIES_PONYTA
+        .requestedSpecies = SPECIES_RAPIDASH
+    },
+    [INGAME_TRADE_HAUNTER] = 
+    {
+        .nickname = gText_InGameTrade_Gaspar,
+        .species = SPECIES_HAUNTER,
+        .ivs = {24, 0, 17, 0, 0, 14},
+        .abilityNum = 0,
+        .otId = 19248,
+        .conditions = {5, 5, 5, 5, 30},
+        .personality = 0x482cac89,
+        .heldItem = ITEM_EVERSTONE,
+        .mailNum = 255,
+        .otName = gText_InGameTrade_Mindy,
+        .otGender = FEMALE,
+        .nature = NATURE_IMPISH,
+        .requestedSpecies = SPECIES_VOLTORB
+    },
+    [INGAME_TRADE_WEAVILE] = 
+    {
+        .nickname = gText_InGameTrade_Weave,
+        .species = SPECIES_WEAVILE,
+        .ivs = {31, 31, 31, 31, 9, 31},
+        .abilityNum = 0,
+        .otId = 17244,
+        .conditions = {5, 5, 5, 5, 30},
+        .personality = 0x482cac89,
+        .heldItem = ITEM_LIFE_ORB,
+        .mailNum = 255,
+        .otName = gText_InGameTrade_Damien,
+        .otGender = MALE,
+        .nature = NATURE_JOLLY,
+        .requestedSpecies = SPECIES_SNEASLER
     }
 };
 
@@ -248,11 +284,12 @@ void BufferInGameTradeMonName(void)
 void CreateInGameTradePokemonInternal(u8 playerSlot, u8 inGameTradeIdx)
 {
     const struct InGameTrade * inGameTrade = &sInGameTrades[inGameTradeIdx];
-    u8 level = GetMonData(&gPlayerParty[playerSlot], MON_DATA_LEVEL, 0);
+    u8 level = (inGameTradeIdx == INGAME_TRADE_HAUNTER) ? 27 : GetMonData(&gPlayerParty[playerSlot], MON_DATA_LEVEL, 0);
     struct MailStructDaycare mail;
     u8 metLocation = METLOC_IN_GAME_TRADE;
     struct Pokemon * tradeMon = &gEnemyParty[0];
     u8 mailNum;
+    u8 hauntHP = 67;
     CreateMon(tradeMon, inGameTrade->species, level, 32, TRUE, inGameTrade->personality, TRUE, inGameTrade->otId);
     SetMonData(tradeMon, MON_DATA_HP_IV, &inGameTrade->ivs[0]);
     SetMonData(tradeMon, MON_DATA_ATK_IV, &inGameTrade->ivs[1]);
@@ -269,6 +306,8 @@ void CreateInGameTradePokemonInternal(u8 playerSlot, u8 inGameTradeIdx)
     SetMonData(tradeMon, MON_DATA_SMART, &inGameTrade->conditions[3]);
     SetMonData(tradeMon, MON_DATA_TOUGH, &inGameTrade->conditions[4]);
     SetMonData(tradeMon, MON_DATA_MET_LOCATION, &metLocation);
+    if(inGameTradeIdx == INGAME_TRADE_HAUNTER)
+        SetMonData(tradeMon, MON_DATA_HP, &hauntHP);
     GiveMonNatureAndAbility(tradeMon, inGameTrade->nature, inGameTrade->abilityNum, IsMonShiny(tradeMon), TRUE, TRUE);
     mailNum = 0;
     if (inGameTrade->heldItem != ITEM_NONE)

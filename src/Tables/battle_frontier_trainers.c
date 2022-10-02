@@ -3,6 +3,7 @@
 #include "../../include/new/frontier.h"
 #include "../../include/new/text.h"
 #include "../../include/constants/event_objects.h"
+#include "../../include/constants/abilities.h"
 #include "../../include/constants/trainer_classes.h"
 #include "../../include/constants/trainers.h"
 #include "../../include/constants/songs.h"
@@ -2535,10 +2536,20 @@ extern const u8 gText_GenericWinMessage[];
 extern const u8 gText_GenericLoseMessage[];
 extern const u8 sTrainerName_Brock[];
 extern const u8 sTrainerName_Misty[];
+extern const u8 sTrainerName_LtSurge[];
+extern const u8 sFrontierText_Brock_PreBattle[];
+extern const u8 sFrontierText_Brock_PlayerLose[];
+extern const u8 sFrontierText_Brock_PlayerWin[];
+extern const u8 sFrontierText_Misty_PreBattle[];
+extern const u8 sFrontierText_Misty_PlayerLose[];
+extern const u8 sFrontierText_Misty_PlayerWin[];
+extern const u8 sFrontierText_Surge_PreBattle[];
+extern const u8 sFrontierText_Surge_PlayerLose[];
+extern const u8 sFrontierText_Surge_PlayerWin[];
 
 const struct SpecialBattleFrontierTrainer gSpecialTowerTrainers[] =
 {
-	{
+	/*{
 		.owNum = 			235,
 		.trainerClass = 	CLASS_CHAMPION_DP,
 		.trainerSprite = 	9,
@@ -2550,17 +2561,20 @@ const struct SpecialBattleFrontierTrainer gSpecialTowerTrainers[] =
 		.regSpreadSize = 	NELEMS(gSpecialTowerSpread_Cynthia),
 		.songId = 			361,
 		.isMonotype = 		FALSE,
-	},
+	},*/
 	{
 		.owNum = 			EVENT_OBJ_GFX_BROCK,
 		.trainerClass = 	CLASS_LEADER,
 		.trainerSprite = 	116,
 		.gender = 			BATTLE_FACILITY_MALE,
 		.name =				sTrainerName_Brock,
-		.playerWinText = 	gText_GenericWinMessage,
-		.playerLoseText = 	gText_GenericLoseMessage,
+		.preBattleText =    sFrontierText_Brock_PreBattle,
+		.playerWinText = 	sFrontierText_Brock_PlayerWin,
+		.playerLoseText = 	sFrontierText_Brock_PlayerLose,
 		.regularSpreads =	gSpecialTowerSpread_Brock,
 		.regSpreadSize = 	NELEMS(gSpecialTowerSpread_Brock),
+		.legendarySpreads =	gSpecialTowerSpread_Brock,
+		.legSpreadSize = 	NELEMS(gSpecialTowerSpread_Brock),
 		.songId = 			296,
 		.isMonotype = 		TRUE,
 	},
@@ -2568,12 +2582,31 @@ const struct SpecialBattleFrontierTrainer gSpecialTowerTrainers[] =
 		.owNum = 			EVENT_OBJ_GFX_MISTY,
 		.trainerClass = 	CLASS_LEADER,
 		.trainerSprite = 	117,
-		.gender = 			BATTLE_FACILITY_MALE,
+		.gender = 			BATTLE_FACILITY_FEMALE,
 		.name =				sTrainerName_Misty,
-		.playerWinText = 	gText_GenericWinMessage,
-		.playerLoseText = 	gText_GenericLoseMessage,
+		.preBattleText =    sFrontierText_Misty_PreBattle,
+		.playerWinText = 	sFrontierText_Misty_PlayerWin,
+		.playerLoseText = 	sFrontierText_Misty_PlayerLose,
 		.regularSpreads =	gSpecialTowerSpread_Misty,
 		.regSpreadSize = 	NELEMS(gSpecialTowerSpread_Misty),
+		.legendarySpreads =	gSpecialTowerSpread_Misty,
+		.legSpreadSize = 	NELEMS(gSpecialTowerSpread_Misty),
+		.songId = 			296,
+		.isMonotype = 		TRUE,
+	},
+	{
+		.owNum = 			EVENT_OBJ_GFX_LT_SURGE,
+		.trainerClass = 	CLASS_LEADER,
+		.trainerSprite = 	118,
+		.gender = 			BATTLE_FACILITY_MALE,
+		.name =				sTrainerName_LtSurge,
+		.preBattleText =    sFrontierText_Surge_PreBattle,
+		.playerWinText = 	sFrontierText_Surge_PlayerWin,
+		.playerLoseText = 	sFrontierText_Surge_PlayerLose,
+		.regularSpreads =	gSpecialTowerSpread_Misty,
+		.regSpreadSize = 	NELEMS(gSpecialTowerSpread_Misty),
+		.legendarySpreads =	gSpecialTowerSpread_Misty,
+		.legSpreadSize = 	NELEMS(gSpecialTowerSpread_Misty),
 		.songId = 			296,
 		.isMonotype = 		TRUE,
 	},

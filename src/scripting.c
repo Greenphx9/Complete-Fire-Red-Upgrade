@@ -3518,6 +3518,51 @@ extern const u8 NAME_LONG_DRAGON_DANCE[];
 extern const u8 NAME_LONG_AGILITY[];
 extern const u8 NAME_LONG_NASTY_PLOT[];
 
+extern const u8 sHPUp[];
+extern const u8 sProtein[];
+extern const u8 sIron[];
+extern const u8 sCalcium[];
+extern const u8 sCarbos[];
+extern const u8 sPPUp[];
+extern const u8 sPPMax[];
+extern const u8 sChoiceBand[];
+extern const u8 sChoiceSpecs[];
+extern const u8 sChoiceScarf[];
+extern const u8 sPowerWeight[];
+extern const u8 sPowerBracer[];
+extern const u8 sPowerBelt[];
+extern const u8 sPowerLens[];
+extern const u8 sPowerBand[];
+extern const u8 sPowerAnklet[];
+extern const u8 sMachoBrace[];
+extern const u8 sAmuletCoin[];
+extern const u8 sLuckyEgg[];
+extern const u8 sRareCandy[];
+
+static const u8* sBPItemShop1[] =
+{
+	sHPUp,
+	sProtein,
+	sIron,
+	sCalcium,
+	sCarbos,
+	sPPUp,
+	sPPMax,
+	sChoiceBand,
+	sChoiceSpecs,
+	sChoiceScarf,
+	sPowerWeight,
+	sPowerBracer,
+	sPowerBelt,
+	sPowerLens,
+	sPowerBand,
+	sPowerAnklet,
+	sMachoBrace,
+	sAmuletCoin,
+	sLuckyEgg,
+	sRareCandy,
+};
+
 static const u8* sSaffronTutor2[] = {
 	NAME_LONG_AIR_SLASH,
 	NAME_LONG_BUG_BUZZ,
@@ -3954,6 +3999,7 @@ const struct ScrollingMulti gScrollingSets[] =
 	{sUtilityTutor, ARRAY_COUNT(sUtilityTutor)},
 	{sCinnabarTutor, ARRAY_COUNT(sCinnabarTutor)},
 	{sSaffronTutor2, ARRAY_COUNT(sSaffronTutor2)},
+	{sBPItemShop1, ARRAY_COUNT(sBPItemShop1)},
 };
 
 //Link number of opts shown at once to the box height
@@ -4566,4 +4612,116 @@ void BufferTwoOpponentsPWT(void)
 			gLoadPointer = gText_AboutToStart;
 			break;
 	}
+}
+
+void GetBPShopPrice1(void)
+{
+	u8 itemId = Var8005;
+	switch(itemId)
+	{
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+			Var8007 = 2;
+			break;
+		case 6:
+			Var8007 = 5;
+			break;
+		case 7:
+		case 8:
+		case 9:
+		case 19:
+			Var8007 = 15;
+			break;
+		case 10:
+		case 11:
+		case 12:
+		case 13:
+		case 14:
+		case 15:
+			Var8007 = 4;
+			break;
+		case 16:
+			Var8007 = 3;
+			break;
+		case 17:
+		case 18:
+			Var8007 = 10;
+			break;
+		default:
+			Var8007 = 2;
+	}
+}
+
+void GetBPShopItem1(void)
+{
+	u8 itemId = Var8005;
+	u16 i = 0; //item
+	switch(itemId)
+	{
+		case 0:
+			i = ITEM_HP_UP;
+			break;
+		case 1:
+			i = ITEM_PROTEIN;
+			break;
+		case 2:
+			i = ITEM_IRON;
+			break;
+		case 3:
+			i = ITEM_CALCIUM;
+			break;
+		case 4:
+			i = ITEM_CARBOS;
+			break;
+		case 5:
+			i = ITEM_PP_UP;
+			break;
+		case 6:
+			i = ITEM_PP_MAX;
+			break;
+		case 7:
+			i = ITEM_CHOICE_BAND;
+			break;
+		case 8:
+			i = ITEM_CHOICE_SPECS;
+			break;
+		case 9:
+			i = ITEM_CHOICE_SCARF;
+			break;
+		case 10:
+			i = ITEM_POWER_WEIGHT;
+			break;
+		case 11:
+			i = ITEM_POWER_BRACER;
+			break;
+		case 12:
+			i = ITEM_POWER_BELT;
+			break;
+		case 13:
+			i = ITEM_POWER_LENS;
+			break;
+		case 14:
+			i = ITEM_POWER_BAND;
+			break;
+		case 15:
+			i = ITEM_POWER_ANKLET;
+			break;
+		case 16:
+			i = ITEM_MACHO_BRACE;
+			break;
+		case 17:
+			i = ITEM_AMULET_COIN;
+			break;
+		case 18:
+			i = ITEM_LUCKY_EGG;
+			break;
+		case 19:
+			i = ITEM_RARE_CANDY;
+			break;
+	}
+	Var8004 = i;
 }

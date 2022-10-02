@@ -129,37 +129,37 @@ EventScript_SelectLegendMove:
 	end
 
 EventScript_SecretSword:
-	setvar 0x8005 149
+	setvar 0x8005 160
 	goto EventScript_TeachMoveLegend
 	release
 	end
 
 EventScript_RelicSong:
-	setvar 0x8005 150
+	setvar 0x8005 161
 	goto EventScript_TeachMoveLegend
 	release
 	end
 
 EventScript_DragonAscent:
-	setvar 0x8005 152
+	setvar 0x8005 163
 	goto EventScript_TeachMoveLegend
 	release
 	end
 
 EventScript_1000Arrows:
-	setvar 0x8005 153
+	setvar 0x8005 164
 	goto EventScript_TeachMoveLegend
 	release
 	end
 
 EventScript_1000Waves:
-	setvar 0x8005 154
+	setvar 0x8005 165
 	goto EventScript_TeachMoveLegend
 	release
 	end
 
 EventScript_CoreEnforcer:
-	setvar 0x8005 155
+	setvar 0x8005 166
 	goto EventScript_TeachMoveLegend
 	release
 	end

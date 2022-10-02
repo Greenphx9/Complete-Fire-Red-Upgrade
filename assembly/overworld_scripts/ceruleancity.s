@@ -510,6 +510,51 @@ EventScript_DoesntHaveRequiredItems:
 	end
 
 
+.equ INGAME_TRADE_HAUNTER, 9
+.equ FLAG_DID_GASPAR_TRADE, 0x104C
+.global CeruleanCity_EventScript_Mindy
+CeruleanCity_EventScript_Mindy:
+	lock
+	faceplayer
+	setvar 0x8008 INGAME_TRADE_HAUNTER
+	call 0x81A8CAD
+	checkflag FLAG_DID_GASPAR_TRADE
+	if 0x1 _goto CeruleanCity_EventScript_AlreadyTraded
+	msgbox gText_HaveVoltorbNormal MSG_YESNO
+	compare LASTRESULT 0x0
+	if 0x1 _goto CeruleanCity_EventScript_DeclineTrade
+	call 0x81A8CBD
+	compare 0x8004 0x6
+	if 0x4 _goto CeruleanCity_EventScript_DeclineTrade
+	call 0x81A8CC9
+	comparevars LASTRESULT 0x8009
+	if 0x5 _goto CeruleanCity_EventScript_NotRequestedMon
+	call 0x81A8CD9
+	msgbox gText_HahaDidntEvolve MSG_KEEPOPEN
+	setflag FLAG_DID_GASPAR_TRADE
+	release
+	end
+
+CeruleanCity_EventScript_DeclineTrade:
+	msgbox gText_DeclineGasparTrade MSG_KEEPOPEN
+	closeonkeypress
+	release
+	end
+
+CeruleanCity_EventScript_NotRequestedMon:
+	bufferpokemon 0 0x8009
+	msgbox gText_AskedForBuffer1 MSG_KEEPOPEN
+	closeonkeypress
+	release
+	end
+	
+CeruleanCity_EventScript_AlreadyTraded:
+	msgbox gText_WeBecomeFriendsPokemon MSG_KEEPOPEN
+	closeonkeypress
+	release
+	end
+
+
 
 .align 1
 EventScript_CeruleanPowerItemsShop:

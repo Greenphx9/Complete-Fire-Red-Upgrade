@@ -265,7 +265,7 @@ static bool8 IsItemKeystone(u16 item)
 
 static item_t FindTrainerKeystone(u16 trainerId)
 {
-	if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK) || IsFrontierTrainerId(trainerId))
+	if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK) || IsFrontierTrainerId(trainerId) || FlagGet(FLAG_BATTLE_FACILITY))
 		return ITEM_MEGA_RING;
 
 	for (u8 i = 0; i < TRAINER_ITEM_COUNT; ++i)

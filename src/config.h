@@ -293,6 +293,11 @@
 #define FLAG_KEITH_BEAT 0x1049
 #define FLAG_NOTEKEEPER_BEAT 0x104A
 #define FLAG_LAPHICET_BEAT 0x104B
+#define FLAG_DID_GASPAR_TRADE 0x104C
+#define FLAG_DID_WEAVILE_TRADE 0x104D
+#define FLAG_DONE_TOUR 0x104E
+#define FLAG_TEMP_NURSE_JOY 0x104F
+#define VAR_SHOULD_PLAYER_JOY_MOVE 0x5159
 
 #define FLAG_SCALEMONS 0x1200 //Sets every Pokemon's BST to 600.
 #define FLAG_TIME_TURNER 0x1201 //Changes the time to PM when AM,and vice versa
@@ -302,6 +307,8 @@
 #define FLAG_SANDBOX_MODE 0x1205 //Sets FLAG_STAT_EDITOR_UNLOCKED
 #define FLAG_CANT_USE_NORMAL_MODE 0x1206 //Locks difficulty to hard.
 #define VAR_BATTLE_POINTS 0x5156
+#define VAR_DONE_PWT_TOUR 0x5158
+#define VAR_CURRENTLY_BATTLING_PWT_TRAINER 0x515A
 
 //Save stuff
 #define VAR_R_BUTTON_MODE 0x5150
@@ -416,8 +423,8 @@ enum //These vars need to be one after the other (hence the enum)
 #define EXPANDED_MOVE_TUTORS //Comment this out if you want to keep 16 move tutors and the ultimate elemental moves being exclusive to Kantonian starters
 #define NUM_TMS 120	//keep this defined even if EXPANDED_TMSHMS is not!!
 #define NUM_HMS 8	//keep this defined even if EXPANDED_TMSHMS is not!!
-#define NUM_MOVE_TUTORS 148 //keep this defined even if EXPANDED_MOVE_TUTORS is not!! If using DPE, set to 128.
-#define LAST_TOTAL_TUTOR_NUM 156 //Should be equal to (NUM_MOVE_TUTORS - 1) + 9. Must be set to an actual integer or the compilation will not work.
+#define NUM_MOVE_TUTORS 159 //keep this defined even if EXPANDED_MOVE_TUTORS is not!! If using DPE, set to 128.
+#define LAST_TOTAL_TUTOR_NUM 167 //Should be equal to (NUM_MOVE_TUTORS - 1) + 9. Must be set to an actual integer or the compilation will not work.
 //#define TMS_BEFORE_HMS  //Uncomment this if you want the HMs to appear after the TMs in your bag
 #define DELETABLE_HMS //Uncomment this if you want HMs to be deletable without the Move Deleter
 #define REUSABLE_TMS	//if defined, don't forget to give all TMs a Mystery byte of 1!
@@ -512,7 +519,7 @@ enum //These vars need to be one after the other (hence the enum)
 #define BRIDGE_FIX //If this remains uncommented, the water battle background will only be loaded if the player's surfing sprite is shown
 #define MEGA_EVOLUTION_FEATURE //Comment this line to remove Mega Evolutions
 #define DYNAMAX_FEATURE //Comment this line to remove Dynamax and Raid Battles
-//#define TUTORIAL_BATTLES //Comment this line to remove Oak's Tutorial
+#define TUTORIAL_BATTLES //Comment this line to remove Oak's Tutorial
 #define TANOBY_RUINS_ENABLED //The Tanoby Ruins will be the only location Unown can be encountered
 #define ALTERING_CAVE_ENABLED //The Altering Cave from FR will work as intended provided the proper var is set
 #define SWEET_SCENT_ONLY_IN_CLEAR_WEATHER //Sweet Scent won't attract any wild Pokemon if the weather is not clear

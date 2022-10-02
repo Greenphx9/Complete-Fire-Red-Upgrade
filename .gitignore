@@ -436,3 +436,4 @@ FodyWeavers.xsd
 strings/mystery_gift_passwords.string
 scripts/encrypt_rom.py
 src/encrypt_rom.c
+audio/sounds/mus_*

@@ -726,12 +726,12 @@
 map \map
 .endm
 
-@ unknown
-.macro hideobject index:req, map:req
-.byte 0x59
-.2byte \index
-map \map
-.endm
+	@ Sets the specified object's invisibility to TRUE.
+	.macro hideobjectat localId:req, map:req
+	.byte 0x59
+	.2byte \localId
+	map \map
+	.endm
 
 @ If the script was called by an Object, then that Object will turn to face toward the metatile that the player is standing on.
 .macro faceplayer
@@ -974,9 +974,14 @@ map \map
 .2byte \y
 .endm
 
-.macro setobjectxyperm localId:req, x:req, y:req
-	setobjectxyperm \localId, \x, \y
-.endm
+	@ Sets the coordinates of an object's template, so that if the sprite goes off screen
+	@ it'll still be there when it comes back on screen.
+	.macro setobjectxyperm localId:req, x:req, y:req
+	.byte 0x63
+	.2byte \localId
+	.2byte \x
+	.2byte \y
+	.endm
 
 @ Sets the specified Object's position to somewhere off the screen
 .macro moveoffscreen localId:req

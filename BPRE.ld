@@ -2253,3 +2253,6 @@ sNatureStatTable = 0x8252B48;
 sInGameTradeMailMessages = 0x826d1a8;
 ItemIsMail = 0x80980f8 | 1;
 gLinkPartnerMail = 0x2031CCC;
+
+voicegroup000 = 0x8489c8c;
+sBeatenPWTTrainers = 0x203F900;

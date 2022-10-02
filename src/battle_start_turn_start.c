@@ -1698,6 +1698,7 @@ static u16 GetRandomBattleBGM(void)
 u16 GetMUS_ForBattle(void)
 {
 	u16 song;
+	u8 musGen = VarGet(VAR_BATTLE_MUSIC);
 
 	if (gBattleTypeFlags & BATTLE_TYPE_LINK)
 	{
@@ -1765,16 +1766,73 @@ u16 GetMUS_ForBattle(void)
 			
 
 			if (trainerClass == CLASS_LEADER)
-				return VarGet(VAR_BATTLE_MUSIC) == 0 ? BGM_BATTLE_GYM_LEADER : MUS_RS_VS_GYM_LEADER;
+			{
+				switch(musGen)
+				{
+					case 0:
+						return BGM_BATTLE_GYM_LEADER;
+					case 1:
+						return MUS_RS_VS_GYM_LEADER;
+					case 2:
+						return MUS_DP_VS_GYM_LEADER;
+					case 3:
+						return MUS_HGSS_VS_GYM_LEADER_KANTO;
+					default:
+						return BGM_BATTLE_GYM_LEADER;
+				}
+			}
 
 			if(trainerClass == CLASS_ELITE_FOUR)
-				return VarGet(VAR_BATTLE_MUSIC) == 0 ? BGM_BATTLE_GYM_LEADER : MUS_RS_VS_E4;
+			{
+				switch(musGen)
+				{
+					case 0:
+						return BGM_BATTLE_GYM_LEADER;
+					case 1:
+						return MUS_RS_VS_E4;
+					case 2:
+						return MUS_DP_VS_E4;
+					case 3:
+						return MUS_HGSS_VS_GYM_LEADER_KANTO;
+					default:
+						return BGM_BATTLE_GYM_LEADER;
+				}
+			}
 
 			if(trainerClass == CLASS_CHAMPION || trainerClass == CLASS_CHAMPION_RS)
-				return VarGet(VAR_BATTLE_MUSIC) == 0 ? BGM_BATTLE_CHAMPION : MUS_RS_VS_CHAMP;
+			{
+				switch(musGen)
+				{
+					case 0:
+						return BGM_BATTLE_CHAMPION;
+					case 1:
+						return MUS_RS_VS_CHAMP;
+					case 2:
+						return MUS_DP_VS_CHAMPION;
+					case 3:
+						return MUS_HGSS_VS_CHAMPION;
+					default:
+						return BGM_BATTLE_CHAMPION;
+				}
+			}
+			
 
 			if(trainerClass == CLASS_RIVAL || trainerClass == CLASS_RIVAL_2)
-				return VarGet(VAR_BATTLE_MUSIC) == 0 ? BGM_BATTLE_TRAINER : MUS_RS_VS_RIVAL;
+			{
+				switch(musGen)
+				{
+					case 0:
+						return BGM_BATTLE_TRAINER;
+					case 1:
+						return MUS_RS_VS_RIVAL;
+					case 2:
+						return MUS_DP_VS_RIVAL;
+					case 3:
+						return MUS_HGSS_VS_RIVAL;
+					default:
+						return BGM_BATTLE_TRAINER;
+				}
+			}	
 
 			if (gClassBasedBattleBGM[trainerClass])
 				return gClassBasedBattleBGM[trainerClass];
@@ -1801,7 +1859,19 @@ u16 GetMUS_ForBattle(void)
 #ifdef UNBOUND
 		return BGM_BATTLE_BORRIUS_TRAINER;
 #else
-		return VarGet(VAR_BATTLE_MUSIC) == 0 ? BGM_BATTLE_TRAINER : MUS_RS_VS_TRAINER;
+		switch(musGen)
+		{
+			case 0:
+				return BGM_BATTLE_TRAINER;
+			case 1:
+				return MUS_RS_VS_TRAINER;
+			case 2:
+				return MUS_DP_VS_TRAINER;
+			case 3:
+				return MUS_HGSS_VS_TRAINER_KANTO;
+			default:
+				return BGM_BATTLE_TRAINER;
+		}
 #endif
 	}
 
@@ -1840,7 +1910,19 @@ u16 GetMUS_ForBattle(void)
 		return song;
 #endif
 
-	return VarGet(VAR_BATTLE_MUSIC) == 0 ? BGM_BATTLE_WILD : MUS_RS_VS_WILD;
+	switch(musGen)
+	{
+		case 0:
+			return BGM_BATTLE_WILD;
+		case 1:
+			return MUS_RS_VS_WILD;
+		case 2:
+			return MUS_DP_VS_WILD;
+		case 3:
+			return MUS_HGSS_VS_WILD_KANTO;
+		default:
+			return BGM_BATTLE_WILD;
+	}
 #endif
 }
 

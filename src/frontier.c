@@ -762,10 +762,37 @@ bool8 IsMoveBannedInRingChallengeByMon(u16 move, struct Pokemon* mon)
 //				 2 = Frontier Brain
 //		Var8002: If Var8001 == Frontier Brain: Frontier Brain Id
 //@Returns: To given var OW sprite num of generated trainer.
+#define spTowerTrainers 2
+extern bool8 sBeatenPWTTrainers[spTowerTrainers];
+void ResetPWTTrainerStatus(void)
+{
+	for(u16 i = 0; i < NELEMS(sBeatenPWTTrainers); i++)
+	{
+		sBeatenPWTTrainers[i] = FALSE;
+	}
+}
+void SetPWTTrainerBeaten(void)
+{
+	sBeatenPWTTrainers[VarGet(VAR_CURRENTLY_BATTLING_PWT_TRAINER)] = TRUE;
+}
+bool8 HasBeatenAllPwtTrainers(void)
+{
+	for(u16 i = 0; i < NELEMS(sBeatenPWTTrainers); i++)
+	{
+		if(sBeatenPWTTrainers[i] == FALSE)
+		{
+			gSpecialVar_LastResult = FALSE;
+			return FALSE;
+		}
+	}
+	gSpecialVar_LastResult = TRUE;
+	return TRUE;
+}
 u16 sp052_GenerateFacilityTrainer(void)
 {
 	u8 battler = Var8000;
 	u16 id = Random();
+	bool8 hasOneUnbeaten = TRUE;
 
 	if (Var8001 == 0)
 	{
@@ -794,14 +821,32 @@ u16 sp052_GenerateFacilityTrainer(void)
 	{
 		u8 tier = VarGet(VAR_BATTLE_FACILITY_TIER);
 
-		do
+		for(u8 i = 0; i < NELEMS(sBeatenPWTTrainers); i++)
 		{
-			id = Random();
-			id %= NUM_SPECIAL_TOWER_TRAINERS;
-		}	while (tier == BATTLE_FACILITY_MONOTYPE && !gSpecialTowerTrainers[id].isMonotype);
+			if(sBeatenPWTTrainers[i] == FALSE)
+			{
+				hasOneUnbeaten = TRUE;
+				break;
+			}
+		}
+
+		if(hasOneUnbeaten)
+		{
+			do
+			{
+				id = Random();
+				id %= NUM_SPECIAL_TOWER_TRAINERS;
+			}	while ((tier == BATTLE_FACILITY_MONOTYPE && !gSpecialTowerTrainers[id].isMonotype)
+			|| sBeatenPWTTrainers[id] == TRUE);
+		}
+		else
+		{
+			return 0xFFFE;
+		}
 
 		VarSet(VAR_FACILITY_TRAINER_ID + battler, id);
 		StringCopy(gStringVar1, GetFrontierTrainerName(BATTLE_TOWER_SPECIAL_TID, battler));
+		VarSet(VAR_CURRENTLY_BATTLING_PWT_TRAINER, id);
 		return gSpecialTowerTrainers[id].owNum;
 	}
 	else
@@ -1664,14 +1709,29 @@ void sp073_ModifyTeamForBattleTower(void)
 	level = MathMax(1, MathMin(level, MAX_LEVEL));
 	struct Pokemon* enteredMons = Calloc(sizeof(struct Pokemon) * PARTY_SIZE);
 
-	for (int i = 0; i < PARTY_SIZE && gSelectedOrderFromParty[i] != 0; ++i) //Copy mons entered
+	if(Var8002 == 0)
 	{
-		Memcpy(&enteredMons[i], &gPlayerParty[gSelectedOrderFromParty[i] - 1], sizeof(struct Pokemon));
+		for (int i = 0; i < PARTY_SIZE && gSelectedOrderFromParty[i] != 0; ++i) //Copy mons entered
+		{
+			Memcpy(&enteredMons[i], &gPlayerParty[gSelectedOrderFromParty[i] - 1], sizeof(struct Pokemon));
 
-		u16 species = enteredMons[i].species;
-		SetMonData(&enteredMons[i], MON_DATA_EXP, &gExperienceTables[gBaseStats2[species].growthRate][level]);
-		CalculateMonStats(&enteredMons[i]);
-		HealMon(&enteredMons[i]);
+			u16 species = enteredMons[i].species;
+			SetMonData(&enteredMons[i], MON_DATA_EXP, &gExperienceTables[gBaseStats2[species].growthRate][level]);
+			CalculateMonStats(&enteredMons[i]);
+			HealMon(&enteredMons[i]);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < PARTY_SIZE; ++i) //Copy mons entered
+		{
+			Memcpy(&enteredMons[i], &gPlayerParty[i], sizeof(struct Pokemon));
+
+			u16 species = enteredMons[i].species;
+			SetMonData(&enteredMons[i], MON_DATA_EXP, &gExperienceTables[gBaseStats2[species].growthRate][level]);
+			CalculateMonStats(&enteredMons[i]);
+			HealMon(&enteredMons[i]);
+		}
 	}
 
 	Memcpy(gPlayerParty, enteredMons, sizeof(struct Pokemon) * PARTY_SIZE); //Overwrite old team

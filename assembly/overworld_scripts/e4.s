@@ -197,7 +197,6 @@ EventScript_RandomPokemonSeller:
 	msgbox gText_SellingRandomMon MSG_YESNO
 	compare LASTRESULT 1
 	goto_if_eq EventScript_CheckBPRandomMon
-	addvar VAR_BATTLE_POINTS 39
 	release
 	end
 
@@ -254,7 +253,484 @@ EventScript_PWTTV:
 	closemessage
 	release
 	end
+	
+.equ INGAME_TRADE_WEAVILE, 10
+.equ FLAG_DID_WEAVILE_TRADE, 0x104D
+EventScript_WeavileTrade:
+	lock
+	faceplayer
+	setvar 0x8008 INGAME_TRADE_WEAVILE
+	call 0x81A8CAD
+	checkflag FLAG_DID_WEAVILE_TRADE
+	if 0x1 _goto 0x816E473
+	msgbox 0x81A597B MSG_YESNO
+	compare LASTRESULT 0x0
+	if 0x1 _goto 0x816E45B
+	call 0x81A8CBD
+	compare 0x8004 0x6
+	if 0x4 _goto 0x816E45B
+	call 0x81A8CC9
+	comparevars LASTRESULT 0x8009
+	if 0x5 _goto 0x816E465
+	call 0x81A8CD9
+	msgbox 0x81A59DA MSG_KEEPOPEN
+	setflag FLAG_DID_WEAVILE_TRADE
+	release
+	end
 
+EventScript_ExchangeServiceCorner:
+	lock
+	msgbox gText_WelcomeToExchangeService MSG_YESNO
+	compare LASTRESULT 0
+	goto_if_eq EventScript_SaveSomeBP
+EventScript_ShowBPShop1:
+	buffernumber 0 VAR_BATTLE_POINTS
+	preparemsg gText_WhichPrize
+	waitmsg
+	setvar 0x8004 0x0
+	setvar 0x8000 0x1A
+	setvar 0x0001 0x6
+	special 0x158
+	waitstate 
+	compare LASTRESULT 20
+	goto_if_ge EventScript_SaveSomeBP
+	copyvar 0x8005 LASTRESULT
+	callasm GetBPShopPrice1
+	copyvar 0x4001 0x8007
+	buffernumber 0 0x4001
+	copyvar 0x4002 VAR_BATTLE_POINTS
+	buffernumber 1 0x4002
+	comparevars VAR_BATTLE_POINTS 0x8007
+	goto_if_ge EventScript_BuyItemAndRemoveBP
+	msgbox gText_NotEnoughBP MSG_FACE
+	goto EventScript_ShowBPShop1
+	release
+	end
+
+EventScript_BuyItemAndRemoveBP:
+	callasm GetBPShopItem1
+	copyvar 0x4001 0x8004
+	copyvar 0x4002 0x8007
+	bufferitem 0 0x4001
+	giveitem_msg gText_Recieved1Buffer 0x4001
+	subvar VAR_BATTLE_POINTS 0x4002
+	goto EventScript_ShowBPShop1
+	release
+	end
+
+EventScript_SaveSomeBP:
+	msgbox gText_SaveSomeBP MSG_FACE
+	release
+	end
+
+.equ FLAG_DONE_TOUR, 0x104E
+.equ TOUR_GUIDE_ID, 12
+.equ VAR_DONE_PWT_TOUR, 0x5158
+.equ VAR_SHOULD_PLAYER_JOY_MOVE, 0x5159
+.global EventScript_PWTMapScript
+EventScript_PWTMapScript:
+	mapscript MAP_SCRIPT_ON_FRAME_TABLE EventScript_PWTTour_OnFrame
+	mapscript MAP_SCRIPT_ON_TRANSITION EventScript_PWTTour_OnTransition
+	.byte MAP_SCRIPT_TERMIN
+
+EventScript_PWTTour_OnTransition:
+	goto_if_set FLAG_DONE_TOUR EventScript_MoveTourNurse
+	end
+
+EventScript_MoveTourNurse:
+	setobjectxyperm TOUR_GUIDE_ID 0xB 0x2
+	end
+
+EventScript_PWTTour_OnFrame:
+	levelscript VAR_DONE_PWT_TOUR, 0, EventScript_DoPWTTour
+	levelscript VAR_SHOULD_PLAYER_JOY_MOVE, 1, EventScript_DoAfterPWTStuff
+	.2byte LEVEL_SCRIPT_TERMIN
+
+EventScript_DoPWTTour:
+	lockall
+	pause 0x20
+	applymovement TOUR_GUIDE_ID MovementScript_ExclamationMark
+	sound 0x15
+	waitmovement 0x0
+	applymovement TOUR_GUIDE_ID MovementScript_WalkDown
+	waitmovement 0x0
+	msgbox gText_GivePWTTour MSG_KEEPOPEN
+	closeonkeypress
+	playbgm 272 0
+	applymovement 0xFF MovementScript_TourPre_Player
+	waitmovement 0x0
+	applymovement TOUR_GUIDE_ID MovementScript_TourPart1_Joy
+	applymovement 0xFF MovementScript_TourPart1_Player
+	waitmovement 0x0
+	msgbox gText_TheLounge MSG_KEEPOPEN
+	closeonkeypress
+	applymovement 0xFF MovementScript_TourPart1Point5_Player
+	waitmovement 0x0
+	applymovement TOUR_GUIDE_ID MovementScript_TourPart2_Joy
+	applymovement 0xFF MovementScript_TourPart2_Player
+	waitmovement 0x0
+	msgbox gText_TheShops MSG_KEEPOPEN
+	closeonkeypress
+	applymovement TOUR_GUIDE_ID MovementScript_TourPart3_Joy
+	applymovement 0xFF MovementScript_TourPart3_Player
+	waitmovement 0x0
+	msgbox gText_ExtentedLounge MSG_KEEPOPEN
+	closeonkeypress
+	applymovement TOUR_GUIDE_ID MovementScript_TourPart4_Joy
+	applymovement 0xFF MovementScript_TourPart4_Player
+	waitmovement 0x0
+	msgbox gText_Battlegrounds MSG_KEEPOPEN
+	closeonkeypress
+	fadedefaultbgm
+	setflag FLAG_DONE_TOUR
+	setvar VAR_DONE_PWT_TOUR 1
+	setobjectxyperm TOUR_GUIDE_ID 0xB 0x2
+	releaseall
+	end
+
+MovementScript_ExclamationMark:
+	.byte exclaim
+	.byte end_m
+
+MovementScript_WalkDown:
+	.byte walk_down
+	.byte end_m
+
+MovementScript_TourPre_Player:
+	.byte walk_up
+	.byte end_m
+
+MovementScript_TourPart1_Joy:
+	.byte walk_up
+	.byte walk_up
+	.byte walk_right
+	.byte end_m
+
+MovementScript_TourPart1_Player:
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte look_right
+	.byte end_m
+
+MovementScript_TourPart1Point5_Player:
+	.byte walk_down
+	.byte look_up
+	.byte end_m
+
+MovementScript_TourPart2_Joy:
+	.byte walk_left
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_left
+	.byte walk_left
+	.byte walk_left
+	.byte end_m
+
+MovementScript_TourPart2_Player:
+	.byte pause_long
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_left
+	.byte walk_left
+	.byte end_m
+
+MovementScript_TourPart3_Joy:
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_right
+	.byte walk_right
+	.byte walk_right
+	.byte walk_right
+	.byte end_m
+
+MovementScript_TourPart3_Player:
+	.byte walk_left
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_right
+	.byte walk_right
+	.byte walk_right
+	.byte end_m
+
+MovementScript_TourPart4_Joy:
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_left
+	.byte walk_left
+	.byte walk_up
+	.byte pause_short
+	.byte look_down
+	.byte end_m
+
+MovementScript_TourPart4_Player:
+	.byte walk_right
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_left
+	.byte walk_left
+	.byte pause_short
+	.byte look_up
+	.byte end_m
+
+EventScript_DoAfterPWTStuff:
+	applymovement 0xFF MovementScript_LookUp
+	waitmovement 0x0
+	setvar VAR_SHOULD_PLAYER_JOY_MOVE 0
+	release
+	end
+
+
+
+.equ FLAG_TEMP_NURSE_JOY, 0x104F
+EventScript_NursePWT:
+	lock
+	msgbox gText_GoodBufferStartPWT MSG_YESNO
+	compare LASTRESULT 1
+	goto_if_eq EventScript_FollowMePWT
+	release
+	end
+
+EventScript_FollowMePWT:
+    setvar 0x5015 6
+    setvar 0x5016 100
+    setvar 0x5017 0
+    setvar 0x5018 0
+	special 0x27
+	special 0x28
+	call 0x81A4EAF
+	compare LASTRESULT 0
+	goto_if_eq EventScript_End
+	setvar 0x8002 1
+	special 0x73
+	msgbox gText_PleaseFollowMe MSG_KEEPOPEN
+	closeonkeypress
+	applymovement TOUR_GUIDE_ID EventScript_NurseMovementIntoBR
+	waitmovement 0x0
+	sound 9
+	hidesprite TOUR_GUIDE_ID
+	setflag FLAG_TEMP_NURSE_JOY
+	compare PLAYERFACING LEFT
+	call_if_eq EventScript_MovePlayerLeft
+	compare PLAYERFACING RIGHT
+	call_if_eq EventScript_MovePlayerRight
+	compare PLAYERFACING UP
+	call_if_eq EventScript_MovePlayerUp
+	sound 9
+	setvar VAR_SHOULD_PLAYER_JOY_MOVE 2
+	warpmuted 43 27 0xFF 0x9 0x12
+	clearflag FLAG_TEMP_NURSE_JOY
+	release
+	end
+
+EventScript_End:
+	release
+	end
+
+EventScript_MovePlayerLeft:
+	applymovement 0xFF EventScript_PlayerBRLeft
+	waitmovement 0x0
+	return
+
+EventScript_MovePlayerRight:
+	applymovement 0xFF EventScript_PlayerBRRight
+	waitmovement 0x0
+	return
+
+EventScript_MovePlayerUp:
+	applymovement 0xFF EventScript_PlayerBRUp
+	waitmovement 0x0
+	return
+
+EventScript_NurseMovementIntoBR:
+	.byte walk_up
+	.byte end_m
+
+EventScript_PlayerBRUp:
+	.byte walk_up
+	.byte walk_up
+	.byte end_m
+
+EventScript_PlayerBRLeft:
+	.byte walk_right
+	.byte walk_up
+	.byte end_m
+
+EventScript_PlayerBRRight:
+	.byte walk_left
+	.byte walk_up
+	.byte end_m
+
+MovementScript_LookUp:
+	.byte look_up
+	.byte end_m
+
+MovementScript_JoyWalkUp:
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_left
+	.byte walk_left
+	.byte walk_left
+	.byte walk_left
+	.byte look_right
+	.byte end_m
+
+MovementScript_PlayerWalkUp:
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte walk_up
+	.byte pause_long
+	.byte pause_long
+	.byte pause_long
+	.byte pause_long
+	.byte end_m
+
+.global EventScript_PWTBR_MapScripts
+EventScript_PWTBR_MapScripts:
+	mapscript MAP_SCRIPT_ON_FRAME_TABLE EventScript_PWTBR_OnFrame
+	.byte MAP_SCRIPT_TERMIN
+
+EventScript_PWTBR_OnFrame:
+	levelscript VAR_SHOULD_PLAYER_JOY_MOVE, 2, EventScript_MovePlayerJoyPWTBR
+	.2byte LEVEL_SCRIPT_TERMIN
+
+EventScript_MovePlayerJoyPWTBR:
+	lockall
+	setflag 0x930
+	setvar 0x8000 0
+	setvar 0x8001 1
+	special2 0x5028 + 1 0x52
+	applymovement 5 MovementScript_JoyWalkUp
+	applymovement 0xFF MovementScript_PlayerWalkUp
+	waitmovement 0x0
+	setvar 0x8000 0
+	setvar 0x8001 1
+	special 0x53
+	callstd MSG_NORMAL
+	setvar 0x8000 0xFEFE
+	trainerbattle9 0x9 0x398 0x0 0x0 0x0
+	setvar 0x8000 0x0
+	switch LASTRESULT
+	case 0, EventScript_BattleAgainPWT
+	case 1, EventScript_TeleportBackAndLoseStreak
+	releaseall
+	end
+
+EventScript_BattleAgainPWT:
+	callasm SetPWTTrainerBeaten
+	callasm HasBeatenAllPwtTrainers
+	compare LASTRESULT TRUE
+	goto_if_eq EventScript_BeatAllPWTTrainers
+	fadescreen FADEOUT_BLACK
+	hidesprite 6
+	special 0x0
+	fadescreen FADEIN_BLACK
+	fanfare 0x101
+	buffernumber 0 4
+	addvar VAR_BATTLE_POINTS 4
+	msgbox gText_PlayerGainedBP MSG_KEEPOPEN
+	waitfanfare
+	closemessage
+	msgbox gText_PokemonRestored MSG_YESNO
+	compare LASTRESULT 0
+	goto_if_eq EventScript_TeleportBackAndLoseStreak
+	goto EventScript_DoBattleAgainPWT
+	release
+	end
+
+EventScript_BeatAllPWTTrainers:
+	fadescreen FADEOUT_BLACK
+	hidesprite 6
+	fadescreen FADEIN_BLACK
+	fanfare 0x101
+	buffernumber 0 30
+	addvar VAR_BATTLE_POINTS 30
+	msgbox gText_PlayerGainedBP MSG_KEEPOPEN
+	waitfanfare
+	closemessage
+	fadescreen FADEOUT_BLACK
+	setobjectxyperm 5 0x9 0xA 
+	movesprite 5 0x9 0xA
+	applymovement 5 MovementScript_FaceDown
+	waitmovement 0x0
+	fadescreen FADEIN_BLACK
+	msgbox gText_BeatAllTrainers MSG_FACE
+	fanfare 260
+	msgbox gText_WonTheTournament MSG_KEEPOPEN
+	waitfanfare
+	closemessage
+	goto EventScript_TeleportBackAndLoseStreak
+	release
+	end
+
+MovementScript_FaceDown:
+	.byte look_down
+	.byte end_m
+
+EventScript_DoBattleAgainPWT:
+	fadescreen FADEOUT_BLACK
+	setflag 0x930
+    setvar 0x5015 6
+    setvar 0x5016 100
+    setvar 0x5017 0
+    setvar 0x5018 0
+	setvar 0x8000 0
+	setvar 0x8001 1
+	special2 0x5028 + 1 0x52
+	hidesprite 6
+	showsprite 6
+	fadescreen FADEIN_BLACK
+	setvar 0x8000 0
+	setvar 0x8001 1
+	special 0x53
+	callstd MSG_NORMAL
+	setvar 0x8000 0xFEFE
+	trainerbattle9 0x9 0x398 0x0 0x0 0x0
+	setvar 0x8000 0x0
+	switch LASTRESULT
+	case 0, EventScript_BattleAgainPWT
+	case 1, EventScript_TeleportBackAndLoseStreak
+	release
+	end
+
+EventScript_TeleportBackAndLoseStreak:
+	clearflag 0x930
+	setvar 0x5028 + 1 0
+	callasm ResetPWTTrainerStatus
+	special 0x28
+	setvar VAR_SHOULD_PLAYER_JOY_MOVE 1
+	warpmuted 43 26 0xFF 0xB 0x3
+	release
+	end
 
 .global EventScript_EVIVMenu
 EventScript_EVIVMenu:

@@ -150,3 +150,18 @@ If you didn't know already, you can\nuse the machine on the right to\lchange the
 
 #org @gText_AlreadyLevel6
 Hello there.\nYou're Power Items are already\llevel 6.\pI can't upgrade them any further.
+
+#org @gText_HaveVoltorbNormal
+[RED]By any chance, would you have a\nPok\emon called [BUFFER1]?\pA normal one, not a [GREEN]Hisuian[RED] one.\pIf you do, would you like to trade\nyour [BUFFER1] for my [BUFFER2]?
+
+#org @gText_DeclineGasparTrade
+[RED]It's OK if you don't want to.\pBut if you change your mind, let's\ntrade Pok\emon.
+
+#org @gText_AskedForBuffer1
+[RED]What I asked for was a [BUFFER1][.]?
+
+#org @gText_HahaDidntEvolve
+[RED]Haha! Did my [BUFFER2] turn into\nsomething else? Just kidding!\pI made it hold something that\nprevents it from evolving.\pPlease treat my [BUFFER2] nicely!\nI'll be good to your Voltorb, too!
+
+#org @gText_WeBecomeFriendsPokemon
+[RED]Thanks to Pok\emon, we got to be\nfriends, didn't we?

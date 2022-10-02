@@ -165,6 +165,9 @@ SpecialBuffers = {
     "EMOJI_BIGANGER": ["F9", "FE"],
 
     "SE_BALL_BOUNCE_1": ["31"],
+
+    "PLAY_SE": ["FC", "10"],
+    "MUS_OBTAIN_BADGE": ["04", "01"], 
 }
 
 BrailleMapping = {
