@@ -659,6 +659,14 @@ npc 1 2 9 EventScript_RockSmash
 npc 1 2 10 EventScript_RockSmash
 npc 14 2 10 EventScript_RockSmash
 npc 43 0 7 EventScript_RockSmash
+npc 43 4 2 EventScript_RockSmash
+npc 43 4 3 EventScript_RockSmash
+npc 43 4 4 EventScript_RockSmash
+npc 43 4 5 EventScript_RockSmash
+npc 43 4 6 EventScript_RockSmash
+npc 43 4 7 EventScript_RockSmash
+npc 43 4 8 EventScript_RockSmash
+npc 43 4 9 EventScript_RockSmash
 npc 43 11 0 EventScript_Strength
 npc 43 11 1 EventScript_Strength
 npc 43 11 2 EventScript_Strength
@@ -691,6 +699,18 @@ npc 1 41 6 EventScript_Strength
 npc 1 41 7 EventScript_Strength
 npc 1 41 8 EventScript_Strength
 npc 1 41 9 EventScript_Strength
+npc 43 5 2 EventScript_Strength
+npc 43 5 3 EventScript_Strength
+npc 43 5 4 EventScript_Strength
+npc 43 5 5 EventScript_Strength
+npc 43 5 6 EventScript_Strength
+npc 43 5 7 EventScript_Strength
+npc 43 5 8 EventScript_Strength
+npc 43 5 9 EventScript_Strength
+npc 43 5 10 EventScript_Strength
+npc 43 5 11 EventScript_Strength
+npc 43 5 12 EventScript_Strength
+npc 43 5 13 EventScript_Strength
 
 
 ## Slot Machines

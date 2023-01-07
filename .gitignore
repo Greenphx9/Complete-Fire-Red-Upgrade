@@ -437,3 +437,4 @@ strings/mystery_gift_passwords.string
 scripts/encrypt_rom.py
 src/encrypt_rom.c
 audio/sounds/mus_*
+uc files/

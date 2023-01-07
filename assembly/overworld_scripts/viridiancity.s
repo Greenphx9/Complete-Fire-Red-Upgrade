@@ -188,7 +188,7 @@ EventScript_UltraWormholeWarp:
 	end
 
 EvetnScript_UB1Warp:
-	warp 43 3 0xFF 0xC 0x5
+	warp 43 3 0xFF 3 22
 	setvar 0x8000 VAR_DAILY_EVENT
 	setvar 0x8001 0x1
 	special2 LASTRESULT SP_DAILY_EVENT
@@ -196,7 +196,7 @@ EvetnScript_UB1Warp:
 	end
 
 EvetnScript_UB2Warp:
-	warp 43 4 0xFF 0x3 0xE
+	warp 43 4 0xFF 13 18
 	setvar 0x8000 VAR_DAILY_EVENT
 	setvar 0x8001 0x1
 	special2 LASTRESULT SP_DAILY_EVENT
@@ -204,7 +204,7 @@ EvetnScript_UB2Warp:
 	end
 
 EvetnScript_UB3Warp:
-	warp 43 5 0xFF 0x3 0x4
+	warp 43 5 0xFF 13 19
 	setvar 0x8000 VAR_DAILY_EVENT
 	setvar 0x8001 0x1
 	special2 LASTRESULT SP_DAILY_EVENT
@@ -212,7 +212,7 @@ EvetnScript_UB3Warp:
 	end
 
 EvetnScript_UB4Warp:
-	warp 43 6 0xFF 0x3 0x14
+	warp 43 6 0xFF 11 24
 	setvar 0x8000 VAR_DAILY_EVENT
 	setvar 0x8001 0x1
 	special2 LASTRESULT SP_DAILY_EVENT

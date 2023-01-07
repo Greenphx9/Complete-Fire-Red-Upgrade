@@ -206,7 +206,7 @@ static void BuildFrontierMultiParty(u8 multiId);
 static void BuildRaidMultiParty(void);
 static void CreateFrontierMon(struct Pokemon* mon, const u8 level, const struct BattleTowerSpread* spread, const u16 trainerId, const u8 trainerNum, const u8 trainerGender, const bool8 forPlayer);
 static void TryFixMiniorForm(struct Pokemon* mon);
-static u8 ConvertFrontierAbilityNumToAbility(const u8 abilityNum, const u16 species);
+static u8 ConvertFrontierAbilityNumToAbility(const u8 abilityNum, const u16 species, const struct BattleTowerSpread *spread);
 static bool8 BaseStatsTotalGEAlreadyOnTeam(const u16 toCheck, const u8 partySize, u16* speciesArray);
 static bool8 SpeciesAlreadyOnTeam(const u16 species, const u8 partySize, const species_t* const speciesArray);
 static bool8 ItemAlreadyOnTeam(const u16 item, const u8 partySize, const item_t* const itemArray);
@@ -1124,7 +1124,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon* const party, const u16 trainerId
 
 			//Give EVs
 #ifdef TRAINERS_WITH_EVS
-			u8 spreadNum = trainer->party.NoItemCustomMoves[i].iv;
+			u16 spreadNum = trainer->party.NoItemCustomMoves[i].iv;
 
 			#ifdef UNBOUND
 			if ((gTrainers[trainerId].trainerClass == CLASS_RIVAL && gameDifficulty >= OPTIONS_HARD_DIFFICULTY)
@@ -2110,7 +2110,7 @@ static u8 BuildFrontierParty(struct Pokemon* const party, const u16 trainerId, c
 			dexNum = SpeciesToNationalPokedexNum(species);
 			item = spread->item;
 			ability = (gMain.inBattle && gBattleTypeFlags & BATTLE_TYPE_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_ABILITY_SUPPRESSION) ? 0
-					: ConvertFrontierAbilityNumToAbility(spread->ability, species);
+					: ConvertFrontierAbilityNumToAbility(spread->ability, species, spread);
 			itemEffect = (ability == ABILITY_KLUTZ
 					  || (gMain.inBattle && gBattleTypeFlags & BATTLE_TYPE_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_MAGIC_ROOM)) ? 0 : ItemId_GetHoldEffect(item);
 
@@ -2412,15 +2412,28 @@ static void CreateFrontierMon(struct Pokemon* mon, const u8 level, const struct 
 	SET_IVS(spread);
 	SET_EVS(spread);
 
-	if (spread->ability > FRONTIER_ABILITY_HIDDEN)
+	if(spread->useAbilityDefine)
 	{
-		GiveMonNatureAndAbility(mon, spread->nature, spread->ability - 1, spread->shiny, FALSE, FALSE);
+		if(spread->abilityDefine == GetAbility1(species))
+			GiveMonNatureAndAbility(mon, spread->nature, 0, spread->shiny, FALSE, FALSE);
+		else if(spread->abilityDefine == GetAbility2(species))
+			GiveMonNatureAndAbility(mon, spread->nature, 1, spread->shiny, FALSE, FALSE);
+		else if(spread->abilityDefine == GetHiddenAbility(species))
+			GiveMonNatureAndAbility(mon, spread->nature, 0xFF, spread->shiny, FALSE, FALSE);
+		else
+			GiveMonNatureAndAbility(mon, spread->nature, 0, spread->shiny, FALSE, FALSE); //Ability 1, should never be met.
 	}
-	else //Hidden Ability
+	else
 	{
-		GiveMonNatureAndAbility(mon, spread->nature, 0xFF, spread->shiny, FALSE, FALSE);
+		if (spread->ability > FRONTIER_ABILITY_HIDDEN)
+		{
+			GiveMonNatureAndAbility(mon, spread->nature, spread->ability - 1, spread->shiny, FALSE, FALSE);
+		}
+		else //Hidden Ability
+		{
+			GiveMonNatureAndAbility(mon, spread->nature, 0xFF, spread->shiny, FALSE, FALSE);
+		}
 	}
-
 	for (j = 0; j < MAX_MON_MOVES; j++)
 	{
 		mon->moves[j] = spread->moves[j];
@@ -2578,9 +2591,12 @@ void GiveMonXPerfectIVs(struct Pokemon* mon, u8 totalPerfectStats)
 	}
 }
 
-static u8 ConvertFrontierAbilityNumToAbility(const u8 abilityNum, const u16 species)
+static u8 ConvertFrontierAbilityNumToAbility(const u8 abilityNum, const u16 species, const struct BattleTowerSpread *spread)
 {
 	u8 ability = ABILITY_NONE;
+
+	if(spread->useAbilityDefine)
+		return spread->abilityDefine;
 
 	switch (abilityNum) {
 		case FRONTIER_ABILITY_1:
@@ -3248,7 +3264,7 @@ static bool8 TeamDoesntHaveSynergy(const struct BattleTowerSpread* const spread,
 	int i;
 
 	u8 ability = (gMain.inBattle && gBattleTypeFlags & BATTLE_TYPE_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_ABILITY_SUPPRESSION) ? 0
-		: ConvertFrontierAbilityNumToAbility(spread->ability, spread->species);
+		: ConvertFrontierAbilityNumToAbility(spread->ability, spread->species, spread);
 	u8 itemEffect = (ability == ABILITY_KLUTZ
 				 || (gMain.inBattle && gBattleTypeFlags & BATTLE_TYPE_BATTLE_CIRCUS && gBattleCircusFlags & BATTLE_CIRCUS_MAGIC_ROOM)) ? 0 : ItemId_GetHoldEffect(spread->item);
 	u8 battleType = builder->battleType;
@@ -4053,7 +4069,7 @@ static void PostProcessTeam(struct Pokemon* party, struct TeamBuilder* builder)
 			}
 		}
 
-		switch (ConvertFrontierAbilityNumToAbility(builder->spreads[i]->ability, builder->spreads[i]->species)) {
+		switch (ConvertFrontierAbilityNumToAbility(builder->spreads[i]->ability, builder->spreads[i]->species, builder->spreads[i])) {
 			case ABILITY_DRIZZLE:
 			case ABILITY_DROUGHT:
 			case ABILITY_SANDSTREAM:

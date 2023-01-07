@@ -1521,6 +1521,16 @@ const struct TrainersWithEvs gTrainersWithEvsSpreads[] =
 		.ball = TRAINER_EV_CLASS_BALL,
 		.shiny = TRUE,
 	},
+
+
+
+
+	[400] = {
+		.nature = NATURE_HARDY,
+		.ivs = 10,
+		.ability = Ability_Hidden,
+		.ball = TRAINER_EV_CLASS_BALL,
+	},
 };
 //#endif
 

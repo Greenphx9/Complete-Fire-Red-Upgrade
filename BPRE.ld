@@ -2256,3 +2256,12 @@ gLinkPartnerMail = 0x2031CCC;
 
 voicegroup000 = 0x8489c8c;
 sBeatenPWTTrainers = 0x203F900;
+
+sSaveStatsWindowId = 0x2037104;
+sTextColor_LocationHeader = 0x83a73dc;
+sTextColor_StatName = 0x83a73d4;
+sTextColor_StatValue = 0x83a73d8;
+gSaveStatName_Player = 0x841617a;
+gSaveStatName_Badges = 0x8416181;
+gSaveStatName_Pokedex = 0x8416188;
+gSaveStatName_Time = 0x8416190;

@@ -4124,6 +4124,12 @@ static u16 AdjustBasePower(struct DamageCalc* data, u16 power)
 				power = (power * 15) / 10;
 			break;
 		#endif
+
+		case ABILITY_ILLUSION:
+			//1.2x Boost
+			if (data->moveType == TYPE_DARK)
+				power = (power * 12) / 10;
+			break;
 	}
 
 	//Check attacker partner ability boost

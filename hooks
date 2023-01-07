@@ -806,3 +806,5 @@ TradeBufferOTnameAndNicknames 8050E24 0
 GetInGameTradeSpeciesInfo 8053A9C 0
 BufferInGameTradeMonName 8053AE4 0
 CreateInGameTradePokemonInternal 8053B48 2
+
+PrintSaveStats 806FCF4 0

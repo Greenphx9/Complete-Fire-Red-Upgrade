@@ -48,3 +48,9 @@ Err
 
 #org @gText_StartMenu_Normal
 [BLACK]
+
+#org @gText_IRVersion
+Version
+
+#org @gText_CurrVersion
+v1.1.0
