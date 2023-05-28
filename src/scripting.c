@@ -14,6 +14,7 @@
 #include "../include/m4a.h"
 #include "../include/naming_screen.h"
 #include "../include/overworld.h"
+#include "../include/pokedex.h"
 #include "../include/pokemon_storage_system.h"
 #include "../include/random.h"
 #include "../include/region_map.h"
@@ -4725,3 +4726,41 @@ void GetBPShopItem1(void)
 	}
 	Var8004 = i;
 }
+
+//breaks pokedex when hooked, even if no modifications are made ¯\_(ツ)_/¯
+extern const u8 gText_PokedexNo[];
+
+void DexScreen_PrintMonDexNo(u8 windowId, u8 fontId, u16 species, u8 x, u8 y)
+{
+    u16 dexNum = SpeciesToNationalPokedexNum(species);
+	/*switch(species)
+	{
+		case SPECIES_ANNIHILAPE:
+			dexNum = 979;
+			break;
+		case SPECIES_FARIGIRAF:
+			dexNum = 981;
+			break;
+		case SPECIES_DUDUNSPARCE:
+			dexNum = 982;
+			break;
+		case SPECIES_KINGAMBIT:
+			dexNum = 983;
+			break;
+		default:
+			break;
+	}*/
+	DexScreen_AddTextPrinterParameterized(windowId, fontId, gText_PokedexNo, x, y, 0);
+	DexScreen_PrintNum3LeadingZeroes(windowId, fontId, dexNum, x + 9, y, 0);
+}
+
+extern const u8 gText_PikachuPage1[];
+extern const u8 gText_PikachuPage2[];
+extern const u8 gText_PikachuPage3[];
+
+const u8 *const gPikachuIntro_Strings[3] =
+{
+    [0] = gText_PikachuPage1,
+    [1] = gText_PikachuPage2,
+    [2] = gText_PikachuPage3
+};

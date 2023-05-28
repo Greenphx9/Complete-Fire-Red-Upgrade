@@ -25,10 +25,19 @@ extern const u8 NAME_TURBOBLAZE[];
 extern const u8 NAME_TERAVOLT[];
 extern const u8 NAME_STRONG_BEAK[];
 extern const u8 NAME_TECTONATE[];
+extern const u8 NAME_SUPREME_OVERLORD[];
+extern const u8 NAME_ARMOR_TAIL[];
+extern const u8 NAME_SHARPNESS[];
+extern const u8 NAME_PASTEL_VEIL[];
+extern const u8 NAME_MYCELIUM_MIGHT[];
 
 //Ability descs
 extern const u8 DESC_STRONG_BEAK[];
 extern const u8 DESC_TECTONATE[];
+extern const u8 DESC_SUPREME_OVERLORD[];
+extern const u8 DESC_SHARPNESS[];
+extern const u8 DESC_PASTEL_VEIL[];
+extern const u8 DESC_MYCELIUM_MIGHT[];
 
 static struct ReplaceAbility sReplaceAbilities[] =
 {
@@ -238,6 +247,16 @@ static struct ReplaceAbility sReplaceAbilities[] =
         .replaceAbilityString = NAME_BRAIN_BOND,
     },
     {
+        .species = SPECIES_FARIGIRAF,
+        .currAbility = ABILITY_PARENTALBOND,
+        .replaceAbilityString = NAME_BRAIN_BOND,
+    },
+    {
+        .species = SPECIES_FARIGIRAF,
+        .currAbility = ABILITY_QUEENLYMAJESTY,
+        .replaceAbilityString = NAME_ARMOR_TAIL,
+    },
+    {
         .species = SPECIES_SIZZLIPEDE,
         .currAbility = ABILITY_PARENTALBOND,
         .replaceAbilityString = NAME_HUNDRED_LEGS,
@@ -312,5 +331,59 @@ static struct ReplaceAbility sReplaceAbilities[] =
         .currAbility = ABILITY_TRANSISTOR,
         .replaceAbilityString = NAME_TECTONATE,
         .replaceDescString = DESC_TECTONATE,
+    },
+    {
+        .species = SPECIES_KINGAMBIT,
+        .currAbility = ABILITY_HUGEPOWER,
+        .replaceAbilityString = NAME_SUPREME_OVERLORD,
+        .replaceDescString = DESC_SUPREME_OVERLORD,
+    },
+    {
+        .species = SPECIES_GALLADE,
+        .currAbility = ABILITY_IRONKICK,
+        .replaceAbilityString = NAME_SHARPNESS,
+        .replaceDescString = DESC_SHARPNESS,
+    },
+    {
+        .species = SPECIES_GALLADE_MEGA,
+        .currAbility = ABILITY_IRONKICK,
+        .replaceAbilityString = NAME_SHARPNESS,
+        .replaceDescString = DESC_SHARPNESS,
+    },
+    {
+        .species = SPECIES_SAMUROTT_H,
+        .currAbility = ABILITY_IRONKICK,
+        .replaceAbilityString = NAME_SHARPNESS,
+        .replaceDescString = DESC_SHARPNESS,
+    },
+    {
+        .species = SPECIES_KLEAVOR,
+        .currAbility = ABILITY_IRONKICK,
+        .replaceAbilityString = NAME_SHARPNESS,
+        .replaceDescString = DESC_SHARPNESS,
+    },
+    {
+        .species = SPECIES_PONYTA_G,
+        .currAbility = ABILITY_SWEETVEIL,
+        .replaceAbilityString = NAME_PASTEL_VEIL,
+        .replaceDescString = DESC_PASTEL_VEIL,
+    },
+    {
+        .species = SPECIES_RAPIDASH_G,
+        .currAbility = ABILITY_SWEETVEIL,
+        .replaceAbilityString = NAME_PASTEL_VEIL,
+        .replaceDescString = DESC_PASTEL_VEIL,
+    },
+    {
+        .species = SPECIES_TOEDSCOOL,
+        .currAbility = ABILITY_STALL,
+        .replaceAbilityString = NAME_MYCELIUM_MIGHT,
+        .replaceDescString = DESC_MYCELIUM_MIGHT,
+    },
+    {
+        .species = SPECIES_TOEDSCRUEL,
+        .currAbility = ABILITY_STALL,
+        .replaceAbilityString = NAME_MYCELIUM_MIGHT,
+        .replaceDescString = DESC_MYCELIUM_MIGHT,
     },
 };

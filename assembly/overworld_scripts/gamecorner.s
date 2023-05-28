@@ -192,7 +192,7 @@ EventScript_SelectPseudoOtherBuy:
 	special 0x158
 	waitstate
 	closeonkeypress
-	compare LASTRESULT 0x2B
+	compare LASTRESULT 0x2A
 	if greaterorequal _goto EventScript_GCBye
 	copyvar 0x8005 LASTRESULT
 	callasm SetPseudoOtherSpeciesToBuy

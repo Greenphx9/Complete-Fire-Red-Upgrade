@@ -1,7 +1,13 @@
 /*This file ONLY exists because util.c is being weird.*/
 
 #include "defines.h"
+#include "../include/event_data.h"
+#include "../include/gpu_regs.h"
+#include "../include/pokemon_icon.h"
+#include "../include/menu_helpers.h"
 #include "../include/random.h"
+#include "../include/string_util.h"
+#include "../include/tm_case.h"
 #include "../include/constants/abilities.h"
 
 #include "../include/new/build_pokemon.h"
@@ -16,6 +22,7 @@
 #include "../include/constants/moves.h"
 #include "../include/base_stats.h"
 #include "../include/new/util.h"
+#include "../include/new/ability_util.h"
 
 /*
 util2.c
@@ -477,8 +484,11 @@ bool8 CanPartyMonBePutToSleep(struct Pokemon* mon)
 	switch (GetMonAbility(mon)) {
 	case ABILITY_INSOMNIA:
 	case ABILITY_VITALSPIRIT:
-	case ABILITY_SWEETVEIL:
 		return FALSE;
+	case ABILITY_SWEETVEIL:
+		if (!SpeciesHasPastelVeil(mon->species))
+			return FALSE;
+		break;
 	}
 
 	return TRUE;
@@ -494,8 +504,10 @@ bool8 CanPartyMonBePoisoned(struct Pokemon* mon)
 
 	switch (GetMonAbility(mon)) {
 	case ABILITY_IMMUNITY:
-	case ABILITY_PASTELVEIL:
 		return FALSE;
+	case ABILITY_SWEETVEIL:
+		if(SpeciesHasPastelVeil(mon->species))
+			return FALSE;
 	}
 
 	if (type1 == TYPE_POISON
@@ -1059,4 +1071,167 @@ void GiveMonHiddenAbility(void) {
 	else {
 		mon->hiddenAbility = TRUE;
 	}
+}
+
+void SetStarterRegion(void)
+{
+	u8 reg = Var8005;
+	if(reg > 7) 
+		reg = 0;
+	FlagSet(FLAG_KANTO + reg);
+}
+
+extern const u8 sKanto[];
+extern const u8 sJohto[];
+extern const u8 sHoenn[];
+extern const u8 sSinnoh[];
+extern const u8 sUnova[];
+extern const u8 sKalos[];
+extern const u8 sAlola[];
+extern const u8 sGalar[];
+void StarterRegionGetMon(void)
+{
+	u8 reg = Var8005;
+	u8 ran = Random() % 3;
+	u8 ind[3] = {0, 3, 6}; 
+	const u8 *const str[8] = {sKanto, sJohto, sHoenn, sSinnoh, sUnova, sKalos, sAlola, sGalar};
+	if(reg > 7) 
+		reg = 0;
+	switch(reg)
+	{
+		case 0:
+			Var8006 = SPECIES_BULBASAUR + ind[ran];
+			break;
+		case 1:
+			Var8006 = SPECIES_CHIKORITA + ind[ran];
+			break;
+		case 2:
+			Var8006 = SPECIES_TREECKO + ind[ran];
+			break;
+		case 3:
+			Var8006 = SPECIES_TURTWIG + ind[ran];
+			break;
+		case 4:
+			Var8006 = SPECIES_SNIVY + ind[ran];
+			break;
+		case 5:
+			Var8006 = SPECIES_CHESPIN + ind[ran];
+			break;
+		case 6:
+			Var8006 = SPECIES_ROWLET + ind[ran];
+			break;
+		case 7:
+			Var8006 = SPECIES_GROOKEY + ind[ran];
+			break;
+		default:
+			Var8006 = SPECIES_BULBASAUR; //Default, should never reach this, but just in case
+	}
+	StringCopy(gStringVar1, str[reg]);
+}
+
+void SetGrindlessFlags(void)
+{
+	u8 opt = Var8005;
+	
+	switch(opt)
+	{
+		case 0:
+			break;
+		case 1:
+			FlagSet(FLAG_NO_GRINDING_IV);
+			break;
+		case 2:
+			VarSet(VAR_POWER_ITEM_LEVEL, 6);
+			break;
+		case 3:
+			FlagSet(FLAG_NO_GRINDING_IV);
+			VarSet(VAR_POWER_ITEM_LEVEL, 6);
+			break;
+		case 4:
+			FlagSet(FLAG_STAT_EDITOR_UNLOCKED);
+			FlagSet(FLAG_SANDBOX_MODE);
+			FlagSet(FLAG_CANT_USE_NORMAL_MODE);
+			break;
+	}
+}
+
+
+
+
+
+#define gMonIconPalettes ((u16 *)(0x083d3740))
+
+u16 coords_menu[][2] = {
+    {40,      16+58+32},
+    {40+32,   16+58+32},
+    {40+32*2, 16+58+32},
+    {40+32*3, 16+58+32},
+    {40+32*4, 16+58+32},
+    {40+32*5, 16+58+32},
+};
+
+void PrintMonIcons(void)
+{
+    //LoadMonIconGfx();
+    //PrintPokemonIconsOnCard();
+
+    // object approach instead
+    LoadMonIconPalettes();
+    //ResetSpriteData();
+
+    SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_OBJWIN_ON);
+    SetGpuRegBits(REG_OFFSET_WINOUT, WINOUT_WINOBJ_OBJ);
+    SetGpuRegBits(REG_OFFSET_WININ, WININ_WIN0_OBJ);
+
+
+    // two loops is fine tbh
+    for (int i = 0; i < 6; i++)
+    {
+        void *mon = &gPlayerParty[i];
+        u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
+        u16 pid = GetMonData(mon, MON_DATA_PERSONALITY, 0);
+
+        if (species != 0)
+        {
+            u8 spriteId;
+            spriteId = CreateMonIcon(species, SpriteCB_MonIcon, 96+16, 40+16, 0, pid, 0);
+            gSprites[spriteId].oam.priority = 0;
+            gSprites[spriteId].invisible = 0;
+            gSprites[spriteId].pos1.x = 0;
+            gSprites[spriteId].pos1.y = 0;
+            gSprites[spriteId].pos2.x = coords_menu[i][0];
+            gSprites[spriteId].pos2.y = coords_menu[i][1];
+            //gSprites[spriteId].oam.objMode = ST_OAM_OBJ_WINDOW;
+        }
+    }
+
+    for (int i = 0; i < 6; i++)
+    {
+        void *mon = &gPlayerParty[i];
+        u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
+        u16 pid = GetMonData(mon, MON_DATA_PERSONALITY, 0);
+
+        if (species != 0)
+        {
+            u8 spriteId;
+            spriteId = CreateMonIcon(species, SpriteCB_MonIcon, 96+16, 40+16, 0, pid, 0);
+            gSprites[spriteId].oam.priority = 0;
+            gSprites[spriteId].invisible = 0;
+            gSprites[spriteId].pos1.x = 0;
+            gSprites[spriteId].pos1.y = 0;
+            gSprites[spriteId].pos2.x = coords_menu[i][0];
+            gSprites[spriteId].pos2.y = coords_menu[i][1];
+            gSprites[spriteId].oam.objMode = ST_OAM_OBJ_WINDOW;
+        }
+    }
+}
+
+
+void Task_WaitFadeAndPrintMainMenuText(u8 taskId)
+{
+    if (!gPaletteFade->active)
+    {
+        Task_PrintMainMenuText(taskId);
+        PrintMonIcons();
+    }
 }

@@ -788,6 +788,7 @@ struct NewBattleStruct
 	u8 quickClawRandomNumber[MAX_BATTLERS_COUNT];
 	u8 quickDrawRandomNumber[MAX_BATTLERS_COUNT];
 	u16 tookAbilityFrom[MAX_BATTLERS_COUNT]; //Helps display the correct Ability when one has been passed around
+	u8 rageFistCounter[MAX_BATTLERS_COUNT];
 
 	//Bit Fields for Banks
 	u8 MicleBerryBits;

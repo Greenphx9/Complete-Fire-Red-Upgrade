@@ -70,9 +70,9 @@ SystemScript_ObtainItemMessage 081A66AC
 SystemScript_PickedUpHiddenItem 081A685E
 
 #Remove Link Trading
-##EventScript_CableClub_WirelessTrade 81BB47D
-##EventScript_CableClub_WirelessTrade 81BBC01
-##EventScript_CableClub_WirelessTrade 81BBC43
+EventScript_CableClub_WirelessTrade 81BB47D
+EventScript_CableClub_WirelessTrade 81BBC01
+EventScript_CableClub_WirelessTrade 81BBC43
 
 ##Wild -> The Wild
 gText_TheWild 080D7B78
@@ -582,3 +582,7 @@ CableClub_EventScript_HideOrShowMysteryGiftMan 081BB1B5
 gText_BlackAugurite 093C7E80
 
 gText_Frb 083DFE38
+
+gPikachuIntro_Strings 08462EF0
+gPikachuIntro_Strings 0812F49C
+gPikachuIntro_Strings 0812F624

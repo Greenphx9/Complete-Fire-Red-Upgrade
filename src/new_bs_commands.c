@@ -1417,13 +1417,13 @@ void atkFF29_trysetsleep(void)
 		gBattlescriptCurrInstr = BattleScript_TeamProtectedByFlowerVeil;
 		return;
 	}
-	else if (ABILITY(bank) == ABILITY_SWEETVEIL)
+	else if (ABILITY(bank) == ABILITY_SWEETVEIL && !SpeciesHasPastelVeil(SPECIES(bank)))
 	{
 		gBattleScripting.bank = bank;
 		gBattlescriptCurrInstr = BattleScript_TeamProtectedBySweetVeil;
 		return;
 	}
-	else if (IS_DOUBLE_BATTLE && ABILITY(PARTNER(bank)) == ABILITY_SWEETVEIL)
+	else if (IS_DOUBLE_BATTLE && ABILITY(PARTNER(bank)) == ABILITY_SWEETVEIL && !SpeciesHasPastelVeil(SPECIES(bank)))
 	{
 		gBattleScripting.bank = PARTNER(bank);
 		gBattlescriptCurrInstr = BattleScript_TeamProtectedBySweetVeil;
@@ -1526,13 +1526,13 @@ void atkD7_setyawn(void)
 		gBattlescriptCurrInstr = BattleScript_TeamProtectedByFlowerVeil;
 		return;
 	}
-	else if (ABILITY(bank) == ABILITY_SWEETVEIL)
+	else if (ABILITY(bank) == ABILITY_SWEETVEIL && !SpeciesHasPastelVeil(SPECIES(bank)))
 	{
 		gBattleScripting.bank = bank;
 		gBattlescriptCurrInstr = BattleScript_TeamProtectedBySweetVeil;
 		return;
 	}
-	else if (IS_DOUBLE_BATTLE && ABILITY(PARTNER(bank)) == ABILITY_SWEETVEIL)
+	else if (IS_DOUBLE_BATTLE && ABILITY(PARTNER(bank)) == ABILITY_SWEETVEIL && !SpeciesHasPastelVeil(SPECIES(bank)))
 	{
 		gBattleScripting.bank = PARTNER(bank);
 		gBattlescriptCurrInstr = BattleScript_TeamProtectedBySweetVeil;
@@ -1843,7 +1843,7 @@ void atkFF2C_trysetpoison(void)
 		gBattlescriptCurrInstr = BattleScript_TeamProtectedByFlowerVeil;
 		return;
 	}
-	else if (ABILITY(bank) == ABILITY_PASTELVEIL)
+	else if (ABILITY(bank) == ABILITY_SWEETVEIL && SpeciesHasPastelVeil(SPECIES(bank)))
 	{
 		gBattleScripting.bank = bank;
 		gBattlescriptCurrInstr = BattleScript_ProtectedByAbility; //Official SwSh string and not "protected by Pastel Veil"
@@ -1855,7 +1855,7 @@ void atkFF2C_trysetpoison(void)
 		gBattlescriptCurrInstr = BattleScript_TeamProtectedByFlowerVeil;
 		return;
 	}
-	else if (IS_DOUBLE_BATTLE && ABILITY(PARTNER(bank)) == ABILITY_PASTELVEIL)
+	else if (IS_DOUBLE_BATTLE && ABILITY(PARTNER(bank)) == ABILITY_SWEETVEIL && SpeciesHasPastelVeil(SPECIES(PARTNER(bank))))
 	{
 		gBattleScripting.bank = PARTNER(bank);
 		gBattlescriptCurrInstr = BattleScript_TeamProtectedByPastelVeil;

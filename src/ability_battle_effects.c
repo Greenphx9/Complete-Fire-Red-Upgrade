@@ -316,7 +316,7 @@ const s8 gAbilityRatings[ABILITIES_COUNT] =
 	[ABILITY_SCREENCLEANER] = 3,
 	[ABILITY_NEUTRALIZINGGAS] = 5,
 	[ABILITY_HUNGERSWITCH] = 2,
-	[ABILITY_PASTELVEIL] = 4,
+	[ABILITY_PROTOSYNTHESIS] = 4,
 	[ABILITY_STEELYSPIRIT] = 2,
 	[ABILITY_PERISHBODY] = -1,
 	[ABILITY_WANDERINGSPIRIT] = 2,
@@ -972,14 +972,17 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 			effect = ImmunityAbilityCheck(bank, STATUS1_PSN_ANY, gStatusConditionString_Poison);
 			break;
 
-		case ABILITY_PASTELVEIL:
-			if (gBattleMons[bank].status1 & STATUS1_PSN_ANY
-			|| (IS_DOUBLE_BATTLE && BATTLER_ALIVE(PARTNER(bank)) && gBattleMons[PARTNER(bank)].status1 & STATUS1_PSN_ANY))
+		case ABILITY_SWEETVEIL:
+			if (SpeciesHasPastelVeil(SPECIES(bank)))
 			{
-				StringCopy(gBattleTextBuff1, gStatusConditionString_Poison);
-				gBattleScripting.bank = bank;
-				BattleScriptPushCursorAndCallback(BattleScript_PastelVeil);
-				effect++;
+				if (gBattleMons[bank].status1 & STATUS1_PSN_ANY
+				|| (IS_DOUBLE_BATTLE && BATTLER_ALIVE(PARTNER(bank)) && gBattleMons[PARTNER(bank)].status1 & STATUS1_PSN_ANY))
+				{
+					StringCopy(gBattleTextBuff1, gStatusConditionString_Poison);
+					gBattleScripting.bank = bank;
+					BattleScriptPushCursorAndCallback(BattleScript_PastelVeil);
+					effect++;
+				}
 			}
 			break;
 
@@ -1691,6 +1694,24 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 				break;
 
 			gBattleScripting.bank = bank;
+
+			if((SPECIES(bank) == SPECIES_PRIMEAPE || SPECIES(bank) == SPECIES_ANNIHILAPE) &&
+			MoveInMoveset(MOVE_RAGEFIST, bank))
+			{
+				if (MOVE_HAD_EFFECT
+				&& TOOK_DAMAGE(bank)
+				&& BATTLER_ALIVE(bank)
+				&& gBankAttacker != bank
+				&& SPLIT(move) == SPLIT_PHYSICAL
+				&& gNewBS->rageFistCounter[bank] <= 6)
+				{
+					if(gNewBS->rageFistCounter[bank] == 0)
+						gNewBS->rageFistCounter[bank] = 1;
+					gNewBS->rageFistCounter[bank]++;
+					effect++;
+				}
+				break;
+			}
 
 			switch (gLastUsedAbility)
 			{

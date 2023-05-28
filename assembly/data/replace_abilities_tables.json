@@ -19,5 +19,22 @@
     "hasTectonate": [
         "SPECIES_VIBRAVA",
         "SPECIES_FLYGON"
+    ],
+    "hasSupremeOverlord": [
+        "SPECIES_KINGAMBIT"
+    ],
+    "hasSharpness": [
+        "SPECIES_GALLADE",
+        "SPECIES_GALLADE_MEGA",
+        "SPECIES_SAMUROTT_H",
+        "SPECIES_KLEAVOR"
+    ],
+    "hasPastelVeil": [
+        "SPECIES_PONYTA_G",
+        "SPECIES_RAPIDASH_G"
+    ],
+    "hasMyceliumMight": [
+        "SPECIES_TOEDSCOOL",
+        "SPECIES_TOEDSCRUEL"  
     ]
 }

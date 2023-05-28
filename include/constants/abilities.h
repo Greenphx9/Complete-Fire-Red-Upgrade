@@ -254,9 +254,9 @@
 #define ABILITY_POWERSPOT 0xFB
 #define ABILITY_MIMICRY 0xFC
 #define ABILITY_SCREENCLEANER 0xFD
-#define ABILITY_PASTELVEIL 0xFE
+#define ABILITY_PROTOSYNTHESIS 0xFE
 
-#define ABILITIES_COUNT (ABILITY_PASTELVEIL + 1)
+#define ABILITIES_COUNT (ABILITY_PROTOSYNTHESIS + 1)
 
 //There isn't enough space for the following abilities, so if you want to use any,
 //you'll need to replace old ones (replacing clone abilities like Air Lock & Cloud Nine

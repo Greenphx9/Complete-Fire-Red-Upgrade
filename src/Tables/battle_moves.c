@@ -15138,6 +15138,66 @@ const struct BattleMove gBattleMoves[] =
 		.split = SPLIT_STATUS,
 		.z_move_effect = Z_EFFECT_RECOVER_HP
 	},
+	[MOVE_RAGEFIST] =
+	{
+		.effect = EFFECT_HIT,
+		.power = 50,
+		.type = TYPE_GHOST,
+		.accuracy = 100,
+		.pp = 10,
+		.secondaryEffectChance = 0,
+		.target = MOVE_TARGET_SELECTED,
+		.priority = 0,
+		.flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+		.z_move_power = 120,
+		.split = SPLIT_PHYSICAL,
+		.z_move_effect = 0
+	},
+	[MOVE_TWINBEAM] =
+	{
+		.effect = EFFECT_HIT,
+		.power = 40,
+		.type = TYPE_PSYCHIC,
+		.accuracy = 100,
+		.pp = 10,
+		.secondaryEffectChance = 0,
+		.target = MOVE_TARGET_SELECTED,
+		.priority = 0,
+		.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+		.z_move_power = 130,
+		.split = SPLIT_SPECIAL,
+		.z_move_effect = 0
+	},
+	[MOVE_HYPERDRILL] =
+	{
+		.effect = EFFECT_HIT,
+		.power = 100,
+		.type = TYPE_NORMAL,
+		.accuracy = 100,
+		.pp = 5,
+		.secondaryEffectChance = 0,
+		.target = MOVE_TARGET_SELECTED,
+		.priority = 0,
+		.flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+		.z_move_power = 160,
+		.split = SPLIT_PHYSICAL,
+		.z_move_effect = 0
+	},
+	[MOVE_KOWTOWCLEAVE] =
+	{
+		.effect = EFFECT_HIT,
+		.power = 85,
+		.type = TYPE_DARK,
+		.accuracy = 0,
+		.pp = 10,
+		.secondaryEffectChance = 0,
+		.target = MOVE_TARGET_SELECTED,
+		.priority = 0,
+		.flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+		.z_move_power = 150,
+		.split = SPLIT_PHYSICAL,
+		.z_move_effect = 0
+	},
 #endif
 };
 
@@ -15669,5 +15729,9 @@ const u8 gDynamaxMovePowers[MOVES_COUNT] =
 	[MOVE_WILDBOLTSTORM] = 130,
 	[MOVE_SANDSEARSTORM] = 130,
 	[MOVE_SPRINGTIDESTORM] = 130,
+	[MOVE_RAGEFIST] = 130,
+	[MOVE_TWINBEAM] = 140,
+	[MOVE_HYPERDRILL] = 140,
+	[MOVE_KOWTOWCLEAVE] = 140,
 };
 #endif

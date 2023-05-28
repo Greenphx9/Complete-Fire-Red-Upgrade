@@ -1,6 +1,6 @@
 #org @gText_SelectRegion
 What region do you want your\n[RED]starter[BLACK] to be from?
-\e
+
 #org @gText_KantoSelected
 [RED]Kanto[BLACK] selected.\nYour rival still has a [RED]kanto starter[BLACK].
 
@@ -229,3 +229,81 @@ Great! You have caught or owned\n[BUFFER3] kinds of Pok\emon!\pCongratulations!\
 
 #org @gText_CanBeUsedEdit
 The [GREEN]Stat Editor[BLUE] can be used to edit\nEVs, IVs, Nature, Ability, and\lGender!\pIsn't that cool?
+
+#org @gText_TestBuffer
+[BUFFER1]
+
+#org @gText_PikachuPage1
+Welcome to Pok\emon Inflamed Red.\nThis is a ROM Hack uses the CFRU\nand DPE and aims to improve the\ngame with difficulty increases, QOL\nfeatures, and many more other\nmiscellaneous features.\n\nWhile this hack may considered as a
+
+#org @gText_PikachuPage2
+-difficulty hack, the hardest\ndifficulty is not very hard. I\nrecommend you play other\ndifficulty hacks if you are looking\nfor a challenge.\n\nIf you need any help, cannot find a\nPok\emon, or are wondering about
+
+#org @gText_PikachuPage3
+-balance changes, join the Discord.\nhttps://discord.gg/hrbsUVwWes\nI hope you enjoy the hack!\n\n-Greenphx
+
+#org @gText_CustomizableBefore
+Before you start the game, there a\nfew things you can [RED]customize[BLACK].\pFirst, which region do you want\nyour [RED]starter[BLACK] to be from?
+
+#org @gText_PalletTown_USure
+Are you sure you would like to\nchoose [RED][BUFFER1][BLACK]?\pYou cannot change your starter after\nthis. You will be able to buy the\lother starters later in the game,\lhowever.
+
+#org @gText_PalletTown_StarterChosen
+[RED][BUFFER1][BLACK] chosen.
+
+#org @gText_PalletTown_WhichDiff
+Which difficulty would you like to\nplay on?
+
+#org @gText_PalletTown_Easy
+Easy
+
+#org @gText_PalletTown_NormalDiffcult
+Difficult
+
+#org @gText_PalletTown_ChooseEasy
+Are you sure you would like to play\non [RED]Easy[BLACK] mode?\pIn this mode, trainers have 0 [RED]EVs[BLACK],\nbasic, but competent teams, and\ltrainers tend to use less [RED]legendary[BLACK]\lPok\emon.\pThis difficulty is designed\nfor newer players, or players\lcoming from easy modes on\lother hacks.
+
+#org @gText_PalletTown_ChooseHard
+Are you sure you would like to play\non [RED]Difficult[BLACK] mode?\pIn this mode, trainers gain [RED]EVs[BLACK] as\nyou play through the game, and\limportant trainers have teams\ldesigned to be difficult.\pThis difficulty is recommended for\nexperienced players or players\lcoming from difficult/hard mode\lfrom other hacks.
+
+#org @gText_Option_None
+None
+
+#org @gText_Option_NoIV
+IV
+
+#org @gText_Option_NoEV
+EV
+
+#org @gText_Option_Both
+Both
+
+#org @gText_Option_Sandbox
+Sandbox
+
+#org @gText_PalletTown_WhichGrindless
+Which [RED]grindless[BLACK] settings would you\nlike to enable?
+
+#org @gText_Buffer1Msg
+[BUFFER1]\pAre you sure you would like to\nchoose this mode?
+
+#org @gText_PalletTown_NoGrindless
+This mode has no changes to [RED]IVs[BLACK] or\n[RED]EVs[BLACK].\pAre you sure you would like to\nchoose this mode?
+
+#org @gText_PalletTown_IVGrind
+This mode makes every Pok\emon (wild,\ntrainer, and yours) have 31 [RED]IVs[BLACK].\pIt has no [RED]EV[BLACK] changes.\pAre you sure you would like to\nchoose this mode?
+
+#org @gText_PalletTown_EVGrind
+This mode automatically unlocks the\n[RED]6th level[BLACK] of all power items, which\lcan be found in Cerulean City.\pThere are no changes to [RED]IVs[BLACK].\pAre you sure you would like to\nchoose this mode?
+
+#org @gText_PalletTown_BothGrind
+This mode makes every Pok\emon (wild,\ntrainer, and yours) have 31 [RED]IVs[BLACK].\pThis mode also automatically unlocks\nthe [RED]6th level[BLACK] of all power items,\lwhich can be found in Cerulean\lCity.\pAre you sure you would like to\nchoose this mode?
+
+#org @gText_PalletTown_Sandbox
+This mode unlocks the [RED]Stat Editor[BLACK]\nmode of the Stat Checker.\pWith the [RED]stat editor[BLACK], you can edit\nthings about your Pok\emon,\lincluding [RED]EVs[BLACK], [RED]IVs[BLACK], [RED]abilities[BLACK], and\lmore.\pAre you sure you would like to\nchoose this mode?
+
+#org @gText_PalletTown_EnableDyna
+Would you like to enable\n[RED]Dynamaxing[BLACK] in gym battles?\pYou will still be able to [RED]Dynamax[BLACK] in\nraids, even if this is disabled.
+
+#org @gText_PalletTown_EnableScalemons
+Would you like to enable\n[RED]Scalemons[BLACK]?\pThis increases or decreases every\nfully evolved Pok\emon's [RED]BST[BLACK] to\l600.\pThis mode is not recommended on the\nfirst play through.

@@ -1817,6 +1817,9 @@ bool8 MoveWillHit(u16 move, u8 bankAtk, u8 bankDef)
 	if (MoveCantHitTarget(move, bankDef))
 		return FALSE;
 
+	if (ABILITY(bankAtk) == ABILITY_STALL && SpeciesHasMyceliumMight(SPECIES(bankAtk)) && SPLIT(move) == SPLIT_STATUS)
+		return TRUE;
+
 	return MoveAlwaysHitsTarget(move, bankDef)
 		|| (move == MOVE_TOXIC && IsOfType(bankAtk, TYPE_POISON));
 }
@@ -1828,6 +1831,9 @@ bool8 MonMoveWillHit(u16 move, struct Pokemon* monAtk, u8 bankDef)
 
 	if (MoveCantHitTarget(move, bankDef))
 		return FALSE;
+
+	if (GetMonAbility(monAtk) == ABILITY_STALL && SpeciesHasMyceliumMight(monAtk->species) && SPLIT(move) == SPLIT_STATUS)
+		return TRUE;
 
 	return MoveAlwaysHitsTarget(move, bankDef)
 		|| (move == MOVE_TOXIC && IsMonOfType(monAtk, TYPE_POISON));

@@ -423,12 +423,6 @@ const struct SpecialAbilityFlags gSpecialAbilityFlags[ABILITIES_COUNT] =
 		.gNeutralizingGasBannedAbilities = TRUE,
 	},
 #endif
-#ifdef ABILITY_PASTELVEIL
-	[ABILITY_PASTELVEIL] =
-	{
-		.gMoldBreakerIgnoredAbilities = TRUE,
-	},
-#endif
 #ifdef ABILITY_NONE
 	[ABILITY_NONE] =
 	{

@@ -2618,13 +2618,13 @@ void atk81_trysetrest(void)
 		gBattlescriptCurrInstr = BattleScript_TeamProtectedByFlowerVeil;
 		fail = TRUE;
 	}
-	else if (ABILITY(gActiveBattler) == ABILITY_SWEETVEIL)
+	else if (ABILITY(gActiveBattler) == ABILITY_SWEETVEIL && !SpeciesHasPastelVeil(SPECIES(gActiveBattler)))
 	{
 		gBattleScripting.bank = gActiveBattler;
 		gBattlescriptCurrInstr = BattleScript_TeamProtectedBySweetVeil;
 		fail = TRUE;
 	}
-	else if (IS_DOUBLE_BATTLE && ABILITY(PARTNER(gActiveBattler)) == ABILITY_SWEETVEIL)
+	else if (IS_DOUBLE_BATTLE && ABILITY(PARTNER(gActiveBattler)) == ABILITY_SWEETVEIL && !SpeciesHasPastelVeil(SPECIES(PARTNER(gActiveBattler))))
 	{
 		gBattleScripting.bank = PARTNER(gActiveBattler);
 		gBattlescriptCurrInstr = BattleScript_TeamProtectedBySweetVeil;
@@ -2717,7 +2717,7 @@ void atk84_jumpifcantmakeasleep(void)
 	{
 		gBattlescriptCurrInstr = jump_loc;
 	}
-	else if (defAbility == ABILITY_INSOMNIA || defAbility == ABILITY_VITALSPIRIT || defAbility == ABILITY_COMATOSE || defAbility == ABILITY_SWEETVEIL
+	else if (defAbility == ABILITY_INSOMNIA || defAbility == ABILITY_VITALSPIRIT || defAbility == ABILITY_COMATOSE || (defAbility == ABILITY_SWEETVEIL && !SpeciesHasPastelVeil(SPECIES(bankDef)))
 	|| (defAbility == ABILITY_LEAFGUARD && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY)
 	|| (defAbility == ABILITY_FLOWERVEIL && IsOfType(bankDef, TYPE_GRASS) && gCurrentMove != MOVE_REST))
 	{
@@ -2726,7 +2726,7 @@ void atk84_jumpifcantmakeasleep(void)
 		gBattlescriptCurrInstr = jump_loc;
 		RecordAbilityBattle(bankDef, gLastUsedAbility);
 	}
-	else if (defPartnerAbility == ABILITY_SWEETVEIL
+	else if ((defPartnerAbility == ABILITY_SWEETVEIL && !SpeciesHasPastelVeil(SPECIES(defPartner)))
 	|| (defPartnerAbility == ABILITY_FLOWERVEIL && IsOfType(bankDef, TYPE_GRASS) && gCurrentMove != MOVE_REST))
 	{
 		gLastUsedAbility = defPartnerAbility;

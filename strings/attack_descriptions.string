@@ -1368,6 +1368,18 @@ The user heals its\nown statuses and\nrestores HP. It also\nraises evasiveness.
 #org @DESC_TAKE_HEART
 The user heals its\nown statuses and\nraises its Sp. Atk\nand Sp. Def.
 
+#org @DESC_RAGE_FIST
+The user converts its\nrage into energy to\nattack.
+
+#org @DESC_TWIN_BEAM
+The user shoots\nbeams from its eyes\nto inflict damage.\nThe target is hit\ntwice in a row. 
+
+#org @DESC_HYPER_DRILL
+The user spins the\npointed part of its\nbody at high speed\nto pierce the target.
+
+#org @DESC_KOWTOW_CLEAVE
+The user slashes at\nthe target after\nkowtowing to make\nthe target let\ndown its guard.
+
 #org @DESC_MAX_GUARD
 Enables the user to\nevade all attacks.\nIt may fail if used\nin succession.
 

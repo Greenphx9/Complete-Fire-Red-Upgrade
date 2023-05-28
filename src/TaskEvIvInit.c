@@ -217,7 +217,7 @@ extern struct EvIv *gEvIv;
 #define SELECTION_CURSOR_TAG 0x200
 
 static void SpriteCB_SandboxCursor(struct Sprite* sprite);
-static void MiniEvIvPrintText(struct Pokemon *mon, bool8 ev, u8 stat, u8 newValue, u8 stat2);
+static void MiniEvIvPrintText(struct Pokemon *mon, bool8 ev, u8 stat, u8 newValue, u8 stat2, bool8 fixev);
 static void PrintWindow0(struct Pokemon *mon);
 static void PrintWindow1(u8 nature, u8 isEgg);
 static void PrintWindow2(u16 species, u8 isEgg, u8 friendship, u8 ability);
@@ -526,11 +526,31 @@ static u16 GetCurrentEVCap()
     return cap;
 }
 
+static void FixOddEVs(void)
+{
+    struct Pokemon * mon = &gPlayerParty[gCurrentMon];
+    for(int i = MON_DATA_HP_EV; i < MON_DATA_SPDEF_EV + 1; i++)
+    {
+        u16 ev = GetMonData(mon, i, 0);
+        u16 newEv;
+        if(ev % 2 && ev != 0)
+        {
+            newEv = ev - 1;
+            SetMonData(mon, i, &newEv);
+            MiniEvIvPrintText(mon, TRUE, i, newEv, i - MON_DATA_HP_EV, FALSE);
+        }
+            
+
+    }
+
+}
+
+
 static void ChangeSelectedStat(u8 stat, u8 ev, bool8 increase)
 {
     u8 newValue;
     u8 statToEdit;
-    u8 increaseBy;
+    u8 increaseBy = (ev) ? 2 : 1;
     u16 total = 0;
     u16 newTotal = 0;
     switch(stat)
@@ -552,21 +572,57 @@ static void ChangeSelectedStat(u8 stat, u8 ev, bool8 increase)
     struct Pokemon * mon = &gPlayerParty[gCurrentMon];
     u8 currValue = GetMonData(mon, statToEdit, NULL);
     u8 maxValue = (ev) ? 252 : 31;
+    if(!ev)
+    {
+        if (currValue > 30 && increase)
+            newValue = 0;
+        else if (currValue == 0 && !increase)
+            newValue = 31;
+        else if (increase)
+            newValue = currValue + increaseBy;
+        else
+            newValue = currValue - increaseBy;
+    }
+    if(ev)
+    {
+        if(currValue > 250 && increase)
+            newValue = 0;
+        else if (currValue < 2 && !increase)
+            newValue = 252;
+        else if (increase)
+            newValue = currValue + increaseBy;
+        else if (!increase)
+            newValue = currValue - increaseBy;
+        u16 cap = GetCurrentEVCap();
+        total += mon->hpEv;
+        total += mon->atkEv;
+        total += mon->defEv;
+        total += mon->spAtkEv;
+        total += mon->spDefEv;
+        total += mon->spdEv;
+        newTotal += (statToEdit == MON_DATA_HP_EV) ? newValue : mon->hpEv;
+        newTotal += (statToEdit == MON_DATA_ATK_EV) ? newValue : mon->atkEv;
+        newTotal += (statToEdit == MON_DATA_DEF_EV) ? newValue : mon->defEv;
+        newTotal += (statToEdit == MON_DATA_SPATK_EV) ? newValue : mon->spAtkEv;
+        newTotal += (statToEdit == MON_DATA_SPDEF_EV) ? newValue : mon->spDefEv;
+        newTotal += (statToEdit == MON_DATA_SPEED_EV) ? newValue : mon->spdEv;
+        if(newTotal > cap)
+            newValue = cap - total;
+    }
+    /*u8 maxValue = (ev) ? 252 : 31;
 
     increaseBy = (ev) ? 2 : 1;
-    if(increase)
+    if(increase && currValue != 251 && currValue != 252)
          newValue = currValue + increaseBy;
-    else if(!increase)
-        newValue = currValue - increaseBy;
-    if(increase)
+    else if (currValue == 252)
     {
-        if(currValue == maxValue)
-            newValue = 0;
+        newValue = 0;
     }
-    else
+    else if(!increase && currValue != 0 && currValue != 1)
+        newValue = currValue - increaseBy;
+    else if(currValue == 0)
     {
-        if (currValue == 0)
-            newValue = maxValue;
+        newValue = GetCurrentEVCap();
     }
     if(ev)
     {
@@ -583,13 +639,13 @@ static void ChangeSelectedStat(u8 stat, u8 ev, bool8 increase)
         newTotal += (statToEdit == MON_DATA_SPATK_EV) ? newValue : mon->spAtkEv;
         newTotal += (statToEdit == MON_DATA_SPDEF_EV) ? newValue : mon->spDefEv;
         newTotal += (statToEdit == MON_DATA_SPEED_EV) ? newValue : mon->spdEv;
-        if(newTotal > cap)
+        if(newTotal >= cap)
             newValue = cap - total;
         if(!(newValue % 2 == 0))
             newValue -= 1;
-    }
+    }*/
     SetMonData(mon, statToEdit, &newValue);
-    MiniEvIvPrintText(mon, ev, statToEdit, newValue, stat);
+    MiniEvIvPrintText(mon, ev, statToEdit, newValue, stat, FALSE);
 }
 
 static void SandboxChangeNature(bool8 goingRight)
@@ -764,7 +820,7 @@ static void Task_WaitForExit(u8 taskId)
         gState++;
         break;
     case 1:
-        if (!FlagGet(FLAG_STAT_EDITOR_UNLOCKED))
+        if (FlagGet(FLAG_STAT_EDITOR_UNLOCKED))
         {
             if (JOY_NEW(A_BUTTON))
             {
@@ -860,6 +916,10 @@ static void Task_WaitForExit(u8 taskId)
             else if(gInSelector)
             {
                 u8 resetY = FALSE;
+                if (JOY_NEW(START_BUTTON))
+                {
+                    FixOddEVs();
+                }
                 if (JOY_REPT(DPAD_DOWN))
                 {
                     if(gSelectedColumn == 2 || gSelectedColumn == 3)
@@ -1385,27 +1445,34 @@ static void SandboxChangeGender(void)
     PrintGenderText(mon);
 }
 
-static void MiniEvIvPrintText(struct Pokemon *mon, bool8 ev, u8 stat, u8 newValue, u8 stat2)
+static void MiniEvIvPrintText(struct Pokemon *mon, bool8 ev, u8 stat, u8 newValue, u8 stat2, bool8 fixev)
 {
     u8 nature   = GetNature(mon);
     u8 arrStat;
-    switch(stat)
+    if(!fixev)
     {
-        case MON_DATA_SPATK_EV:
-        case MON_DATA_SPATK_IV:
-            arrStat = STAT_SPATK;
-            break;
-        case MON_DATA_SPDEF_EV:
-        case MON_DATA_SPDEF_IV:
-            arrStat = STAT_SPDEF;
-            break;
-        case MON_DATA_SPEED_EV:
-        case MON_DATA_SPEED_IV:
-            arrStat = STAT_SPEED;
-            break;
-        default:
-            arrStat = STAT_HP + stat2;
-            break;
+        switch(stat)
+        {
+            case MON_DATA_SPATK_EV:
+            case MON_DATA_SPATK_IV:
+                arrStat = STAT_SPATK;
+                break;
+            case MON_DATA_SPDEF_EV:
+            case MON_DATA_SPDEF_IV:
+                arrStat = STAT_SPDEF;
+                break;
+            case MON_DATA_SPEED_EV:
+            case MON_DATA_SPEED_IV:
+                arrStat = STAT_SPEED;
+                break;
+            default:
+                arrStat = STAT_HP + stat2;
+                break;
+        }
+    }
+    else
+    {
+
     }
     if(ev)
     {

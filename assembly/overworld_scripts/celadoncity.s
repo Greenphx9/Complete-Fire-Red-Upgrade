@@ -30,6 +30,7 @@ EventScript_MiscPokeballsMart:
 .global EventScript_EvoItemsMart
 EventScript_EvoItemsMart:
 	lock
+	givepokemon SPECIES_BISHARP 100 0x0 0x0
 	msgbox gText_MartHi MSG_FACE
 	pokemart EventScript_EvoItems
 	msgbox gText_MartBye MSG_FACE
@@ -751,4 +752,5 @@ EventScript_EvoItems:
 	.hword ITEM_FLOWER_SWEET
 	.hword ITEM_STAR_SWEET
 	.hword ITEM_RIBBON_SWEET
+	.hword ITEM_LEADERS_CREST
 	.hword 0x0

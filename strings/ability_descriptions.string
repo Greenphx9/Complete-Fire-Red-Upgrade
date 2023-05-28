@@ -575,3 +575,12 @@ Boosts beak-related moves.
 
 #org @DESC_TECTONATE
 Powers up Ground-type moves.
+
+#org @DESC_SUPREME_OVERLORD
+Attack stats are boosted by\namount of dead allies.
+
+#org @DESC_SHARPNESS
+Powers up slicing moves. 
+
+#org @DESC_MYCELIUM_MIGHT
+Status moves go last, but\nnever miss.

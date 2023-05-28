@@ -11,13 +11,13 @@
 .equ FLAG_GOT_DARKRAI, 0x1016
 .equ FLAG_GOT_CRESSELIA, 0x101F
 
-.global EventScript_PalletTown_MapScript
+.global EventScript_PalletTown_MapScript2
 
 gMapScripts_PalletTown_SecondFloor:
     mapscript MAP_SCRIPT_ON_TRANSITION, EventScript_PalletTown_MapScript
     .byte MAP_SCRIPT_TERMIN
 
-EventScript_PalletTown_MapScript:
+EventScript_PalletTown_MapScript2:
 	checkitem ITEM_EXP_SHARE 0x1
 	if 0x0 _call EventScript_PalletTown_GiveStartItems
 	compare 0x4056 0x0
@@ -44,6 +44,198 @@ EventScript_PalletTown_MapScriptPt2:
 	sethealingplace 0x1
 	return
 
+.global EventScript_PalletTown_MapScript
+EventScript_PalletTown_MapScript:
+	mapscript MAP_SCRIPT_ON_TRANSITION, EventScript_PalletTown_MapScript
+	mapscript MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, 0x8168CBE
+    mapscript MAP_SCRIPT_ON_FRAME_TABLE, EventScript_PalletTown_LevelScripts
+    .byte MAP_SCRIPT_TERMIN
+
+EventScript_PalletTown_LevelScripts:
+    levelscript 0x4011, 0, EventScript_PalletTown_Options_Rewrite
+    .hword LEVEL_SCRIPT_TERMIN
+
+.global EventScript_PalletTown_Options_Rewrite
+EventScript_PalletTown_Options_Rewrite:
+	fadescreen FADE_TO_BLACK
+	fadeoutbgm 0x0
+EventScript_PalletTown_StarterChoiceLoop:
+	hidepokepic
+	preparemsg gText_CustomizableBefore
+	waitmsg
+	setvar 0x4011 0x1
+	setvar 0x8000 0x2
+	setvar 0x8001 0x6
+	setvar 0x8004 0x0
+	special 0x158
+	waitstate
+	closeonkeypress
+	copyvar 0x8005 LASTRESULT
+	callasm StarterRegionGetMon
+	copyvar 0x4001 0x8006
+	showpokepic 0x4001 0xA 0x3
+	msgbox gText_PalletTown_USure MSG_YESNO
+	compare LASTRESULT 0x0
+	goto_if_eq EventScript_PalletTown_StarterChoiceLoop
+	hidepokepic
+	closeonkeypress
+	callasm SetStarterRegion
+	sound 0x2
+	msgbox gText_PalletTown_StarterChosen MSG_KEEPOPEN
+	closeonkeypress	
+	goto EventScript_PalletTown_DifficultyChoice_Rewrite
+	fadescreen FADE_FROM_BLACK
+	release
+	end
+
+EventScript_PalletTown_DifficultyChoice_Rewrite:
+	hidepokepic
+	preparemsg gText_PalletTown_WhichDiff
+	waitmsg
+	multichoiceoption gText_PalletTown_Easy 0
+	multichoiceoption gText_PalletTown_NormalDiffcult 1
+	multichoice 0x0 0x0 TWO_MULTICHOICE_OPTIONS 0x1
+	compare LASTRESULT 0x1
+	goto_if_eq EventScript_PalletTown_AskHardMode_Rewrite
+	showpokepic SPECIES_TEDDIURSA 0xA 0x3
+	msgbox gText_PalletTown_ChooseEasy MSG_YESNO
+	compare LASTRESULT 0x0
+	goto_if_eq EventScript_PalletTown_DifficultyChoice_Rewrite
+	sound 0x2
+	setflag 0x1202
+	hidepokepic
+	goto EventScript_PalletTown_Grindless_Easy
+	fadescreen FADE_FROM_BLACK
+	release
+	end
+
+EventScript_PalletTown_AskHardMode_Rewrite:
+	showpokepic SPECIES_URSARING 0xA 0x3
+	msgbox gText_PalletTown_ChooseHard MSG_YESNO
+	compare LASTRESULT 0x0
+	goto_if_eq EventScript_PalletTown_DifficultyChoice_Rewrite
+	sound 0x2
+	setflag FLAG_HARD_MODE
+	hidepokepic
+	goto EventScript_PalletTown_Grindless_Hard
+	fadescreen FADE_FROM_BLACK
+	release
+	end
+
+EventScript_PalletTown_Grindless_Easy:
+	preparemsg gText_PalletTown_WhichGrindless
+	waitmsg
+	multichoiceoption gText_Option_None 0
+	multichoiceoption gText_Option_NoIV 1
+	multichoiceoption gText_Option_NoEV 2
+	multichoiceoption gText_Option_Both 3
+	multichoice 0x0 0x0 FOUR_MULTICHOICE_OPTIONS 0x1
+	copyvar 0x8005 LASTRESULT
+	switch 0x8005
+	callcase 0, Grindless_None
+	callcase 1, Grindless_NoIV
+	callcase 2, Grindless_NoEV
+	callcase 3, Grindless_Both
+	callstd 5
+	compare LASTRESULT 0x0
+	goto_if_eq EventScript_PalletTown_Grindless_Easy
+	callasm SetGrindlessFlags
+	sound 0x2
+	goto EventScript_PalletTown_Dynamaxing
+	fadescreen FADE_FROM_BLACK
+	release
+	end
+
+Grindless_None:
+	loadword 0 gText_PalletTown_NoGrindless
+	return
+
+Grindless_NoIV:
+	loadword 0 gText_PalletTown_IVGrind
+	return
+
+Grindless_NoEV:
+	loadword 0 gText_PalletTown_EVGrind
+	return
+
+Grindless_Both:
+	loadword 0 gText_PalletTown_BothGrind
+	return
+
+Grindless_Sandbox:
+	loadword 0 gText_PalletTown_Sandbox
+	return
+
+EventScript_PalletTown_Grindless_Hard:
+	preparemsg gText_PalletTown_WhichGrindless
+	waitmsg
+	multichoiceoption gText_Option_None 0
+	multichoiceoption gText_Option_NoIV 1
+	multichoiceoption gText_Option_NoEV 2
+	multichoiceoption gText_Option_Both 3
+	multichoiceoption gText_Option_Sandbox 4
+	multichoice 0x0 0x0 FIVE_MULTICHOICE_OPTIONS 0x1
+	copyvar 0x8005 LASTRESULT
+	switch 0x8005
+	callcase 0, Grindless_None
+	callcase 1, Grindless_NoIV
+	callcase 2, Grindless_NoEV
+	callcase 3, Grindless_Both
+	callcase 4, Grindless_Sandbox
+	callstd 5
+	compare LASTRESULT 0x0
+	goto_if_eq EventScript_PalletTown_Grindless_Hard
+	callasm SetGrindlessFlags
+	sound 0x2
+	goto EventScript_PalletTown_Dynamaxing
+	fadescreen FADE_FROM_BLACK
+	release
+	end
+
+EventScript_PalletTown_Dynamaxing:
+	hidepokepic
+	showpokepic SPECIES_ETERNATUS_ETERNAMAX
+	msgbox gText_PalletTown_EnableDyna MSG_YESNO
+	compare LASTRESULT 0x0
+	goto_if_eq EventScript_PalletTown_DynamaxEnable
+	hidepokepic
+	sound 0x3
+	setflag 0x101C
+	goto EventScript_PalletTown_Scalemons
+	fadescreen FADE_FROM_BLACK
+	release
+	end
+
+EventScript_PalletTown_DynamaxEnable:
+	hidepokepic
+	sound 0x2
+	clearflag 0x101C
+	goto EventScript_PalletTown_Scalemons
+	fadescreen FADE_FROM_BLACK
+	release
+	end
+
+EventScript_PalletTown_Scalemons:
+	hidepokepic
+	showpokepic SPECIES_UNOWN
+	msgbox gText_PalletTown_EnableScalemons MSG_YESNO
+	closeonkeypress
+	compare LASTRESULT 0x0
+	goto_if_eq EventScript_PalletTown_ScaleEnable
+	hidepokepic
+	sound 0x3
+	fadescreen FADE_FROM_BLACK
+	fadeinbgm 0x0
+	end
+
+EventScript_PalletTown_ScaleEnable:
+	hidepokepic
+	sound 0x2
+	setflag 0x1200
+	fadescreen FADE_FROM_BLACK
+	fadeinbgm 0x0
+	end
+
 .global EventScript_PalletTown_Options
 EventScript_PalletTown_Options:
 	lock
@@ -51,7 +243,7 @@ EventScript_PalletTown_Options:
 	msgbox gText_SelectRegion MSG_KEEPOPEN
 	setvar 0x8000 0x2
 	setvar 0x8001 0x6
-	setvar 0x8004 0x0
+	setvar 0x8004 0x1
 	special 0x158
 	waitstate
 	closeonkeypress

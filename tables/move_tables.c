@@ -616,6 +616,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	{
 		.gInstructBannedMoves = TRUE,
 		.gSleepTalkBannedMoves = TRUE,
+		.gSharpnessBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_SNORE
@@ -899,6 +900,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	[MOVE_BEHEMOTHBLADE] =
 	{
 		.gMetronomeBannedMoves = TRUE,
+		.gSharpnessBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_BEHEMOTHBASH
@@ -1457,6 +1459,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	{
 		.gSheerForceBoostedMoves = TRUE,
 		.gFlinchChanceMoves = TRUE,
+		.gSharpnessBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_ANCHORSHOT
@@ -1573,6 +1576,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	{
 		.gSheerForceBoostedMoves = TRUE,
 		.gHighCriticalChanceMoves = TRUE,
+		.gSharpnessBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_CHARGEBEAM
@@ -1605,6 +1609,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	{
 		.gSheerForceBoostedMoves = TRUE,
 		.gHighCriticalChanceMoves = TRUE,
+		.gSharpnessBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_CRUNCH
@@ -2109,6 +2114,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	[MOVE_RAZORSHELL] =
 	{
 		.gSheerForceBoostedMoves = TRUE,
+		.gSharpnessBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_ROCKCLIMB
@@ -2305,6 +2311,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	{
 		.gSheerForceBoostedMoves = TRUE,
 		.gHighCriticalChanceMoves = TRUE,
+		.gSharpnessBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_STRUGGLEBUG
@@ -3104,6 +3111,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	[MOVE_SACREDSWORD] =
 	{
 		.gIgnoreStatChangesMoves = TRUE,
+		.gSharpnessBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_CHIPAWAY
@@ -3128,6 +3136,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	[MOVE_RAZORLEAF] =
 	{
 		.gHighCriticalChanceMoves = TRUE,
+		.gSharpnessBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_CRABHAMMER
@@ -3140,6 +3149,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	[MOVE_SLASH] =
 	{
 		.gHighCriticalChanceMoves = TRUE,
+		.gSharpnessBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_AEROBLAST
@@ -3158,18 +3168,21 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	[MOVE_AIRCUTTER] =
 	{
 		.gHighCriticalChanceMoves = TRUE,
+		.gSharpnessBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_LEAFBLADE
 	[MOVE_LEAFBLADE] =
 	{
 		.gHighCriticalChanceMoves = TRUE,
+		.gSharpnessBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_NIGHTSLASH
 	[MOVE_NIGHTSLASH] =
 	{
 		.gHighCriticalChanceMoves = TRUE,
+		.gSharpnessBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_SHADOWCLAW
@@ -3182,6 +3195,7 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	[MOVE_PSYCHOCUT] =
 	{
 		.gHighCriticalChanceMoves = TRUE,
+		.gSharpnessBoostedMoves = TRUE,
 	},
 #endif
 #ifdef MOVE_STONEEDGE
@@ -3414,6 +3428,12 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 		.gTwoStrikesMoves = TRUE,
 	},
 #endif
+#ifdef MOVE_TWINBEAM
+	[MOVE_TWINBEAM] =
+	{
+		.gTwoStrikesMoves = TRUE,
+	},
+#endif
 #ifdef MOVE_TAKEDOWN
 	[MOVE_TAKEDOWN] =
 	{
@@ -3527,6 +3547,36 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 	[MOVE_PECK] =
 	{
 		.gStrongBeakBoostedMoves = TRUE,
+	},
+#endif
+#ifdef MOVE_AERIALACE
+	[MOVE_AERIALACE] =
+	{
+		.gSharpnessBoostedMoves = TRUE,
+	},
+#endif
+#ifdef MOVE_FURYCUTTER
+	[MOVE_FURYCUTTER] =
+	{
+		.gSharpnessBoostedMoves = TRUE,
+	},
+#endif
+#ifdef MOVE_XSCISSOR
+	[MOVE_XSCISSOR] =
+	{
+		.gSharpnessBoostedMoves = TRUE,
+	},
+#endif
+#ifdef MOVE_CUT
+	[MOVE_CUT] =
+	{
+		.gSharpnessBoostedMoves = TRUE,
+	},
+#endif
+#ifdef MOVE_KOWTOWCLEAVE
+	[MOVE_KOWTOWCLEAVE] =
+	{
+		.gSharpnessBoostedMoves = TRUE,
 	},
 #endif
 };

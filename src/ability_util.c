@@ -188,6 +188,26 @@ bool8 SpeciesHasTectonate(u16 species)
 	return gSpecialReplaceAbilityFlags[species].hasTectonate;
 }
 
+bool8 SpeciesHasSupremeOverlord(u16 species)
+{
+	return gSpecialReplaceAbilityFlags[species].hasSupremeOverlord;
+}
+
+bool8 SpeciesHasSharpness(u16 species)
+{
+	return gSpecialReplaceAbilityFlags[species].hasSharpness;
+}
+
+bool8 SpeciesHasPastelVeil(u16 species)
+{
+	return gSpecialReplaceAbilityFlags[species].hasPastelVeil;
+}
+
+bool8 SpeciesHasMyceliumMight(u16 species)
+{
+	return gSpecialReplaceAbilityFlags[species].hasMyceliumMight;
+}
+
 bool8 AbilityIncreasesWildItemChance(u8 ability)
 {
 	return ability == ABILITY_COMPOUNDEYES || ability == ABILITY_SUPERLUCK;

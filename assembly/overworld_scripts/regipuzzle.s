@@ -108,6 +108,7 @@ PowerPlant_OnLoad:
 .global EventScript_RegisteelSign
 EventScript_RegisteelSign:
 	lockall
+	givepokemon SPECIES_STEELIX 100 0x0
 	checkflag FLAG_SHOW_SC_BASEMENT
 	if SET _goto EventScript_End
 	braillemsgbox 0x876B2E8

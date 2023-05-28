@@ -28,6 +28,10 @@ bool8 SpeciesHasTurboblaze(u16 species);
 bool8 SpeciesHasTeravolt(u16 species);
 bool8 SpeciesHasStrongBeak(u16 species);
 bool8 SpeciesHasTectonate(u16 species);
+bool8 SpeciesHasSupremeOverlord(u16 species);
+bool8 SpeciesHasSharpness(u16 species);
+bool8 SpeciesHasPastelVeil(u16 species);
+bool8 SpeciesHasMyceliumMight(u16 species);
 
 bool8 AbilityIncreasesWildItemChance(u8 ability);
 bool8 IsChoiceAbility(u8 ability);
@@ -55,6 +59,10 @@ struct SpecialReplaceAbilityFlags
     bool8 hasTeravolt : 1;
     bool8 hasStrongBeak : 1;
     bool8 hasTectonate : 1;
+    bool8 hasSupremeOverlord : 1;
+    bool8 hasSharpness : 1;
+    bool8 hasPastelVeil : 1;
+    bool8 hasMyceliumMight : 1;
 };
 
 extern const struct SpecialReplaceAbilityFlags gSpecialReplaceAbilityFlags[];

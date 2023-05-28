@@ -30,3 +30,4 @@ bool8 __attribute__((long_call)) CanWriteMailHere(u16 itemId);
 void __attribute__((long_call)) ResetVramOamAndBgCntRegs(void);
 void __attribute__((long_call)) ClearScheduledBgCopiesToVram(void);
 void __attribute__((long_call)) LoadBGTemplates(void);
+void __attribute__((long_call)) Task_PrintMainMenuText(u8 taskId);

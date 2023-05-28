@@ -93,6 +93,8 @@ struct PokedexScreenData
 extern struct PokedexScreenData* sPokedexScreenData;
 
 void __attribute__((long_call)) DexScreen_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8 *str, u8 x, u8 y, u8 colorldx);
+void __attribute__((long_call)) DexScreen_PrintNum3LeadingZeroes(u8 windowId, u8 fontId, u16 num, u8 x, u8 y, u8 colorIdx);
+
 bool16 __attribute__((long_call)) HasAllMons(void);
 
 /*

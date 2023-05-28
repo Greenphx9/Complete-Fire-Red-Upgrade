@@ -824,6 +824,10 @@ gMoveAnimations:
 .word ANIM_SPRINGTIDE_STORM
 .word ANIM_LUNAR_BLESSING
 .word ANIM_TAKE_HEART
+.word ANIM_RAGE_FIST
+.word ANIM_TWIN_BEAM
+.word ANIM_HYPER_DRILL
+.word ANIM_KOWTOW_CLEAVE
 .word ANIM_BREAKNECK_BLITZ
 .word ANIM_BREAKNECK_BLITZ
 .word ANIM_ALL_OUT_PUMMELING
@@ -3189,11 +3193,6 @@ ANIM_NIGHTSLASH:
 	call UNSET_SCROLLING_BG
 	pokespritefromBG bank_target
 	endanimation
-
-.align 2
-NIGHT_SLASH_LEFT: objtemplate ANIM_TAG_CUT ANIM_TAG_CUT OAM_NORMAL_32x32 0x83E3290 0x0 gSpriteAffineAnimTable_NightSlashLeft SpriteCB_HorizontalSlice
-NIGHT_SLASH_RIGHT: objtemplate ANIM_TAG_CUT ANIM_TAG_CUT OAM_NORMAL_32x32 0x83E3290 0x0 gSpriteAffineAnimTable_NightSlashRight SpriteCB_HorizontalSlice
-
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
 ANIM_OMINOUSWIND:
@@ -19796,6 +19795,148 @@ TAKE_HEART_RING_UP:
 .align 2
 FALLING_HEART: objtemplate ANIM_TAG_RED_HEART ANIM_TAG_RED_HEART OAM_OFF_16x16 gDummySpriteAnimTable 0x0 gDummySpriteAffineAnimTable SpriteCB_FallingObject
 TAKE_HEART_RING: objtemplate ANIM_TAG_GUARD_RING ANIM_TAG_RED_HEART 0x83ACBE0 gDummySpriteAnimTable 0x0 0x83E44D4 SpriteCB_SurroundingRing
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+.pool
+@Credits to Skeli && Greenphx
+ANIM_RAGE_FIST:
+	pokespritetoBG bank_target
+	setblends 0x80c
+	loadBG1 BG_GHOST
+	waitbgfadeout
+	pause 0x20
+	goto 0x81c7ced
+	endanimation
+
+@@@@@@@@@@@@@@@@@@@@@@@@@
+.pool
+@Credits to Matteo
+ANIM_TWIN_BEAM:
+    LoadParticle ANIM_TAG_GUARD_RING
+    LoadParticle ANIM_TAG_PURPLE_RING
+    pokespritetoBG side_attacker
+    setblends 0x808
+    PlaySound2 0x5F 0xC0
+    launchtemplate 0x83E44DC 0x2 0x0 
+    pause 0x4
+    launchtemplate 0x83E44DC 0x2 0x0 
+    waitanimation
+    pause 0x6
+    launchtask AnimTask_move_bank_2 0x2 0x5 bank_attacker 0x2 0x0 0x4 0x1
+    CALL SCREECH_RINGS
+    CALL SCREECH_RINGS
+    CALL SCREECH_RINGS
+    launchtemplate 0x83E3CB8 0x82 0x6 0x0 0xFFFA 0x0 0x0 0x1A 0x0
+    pause 0x1
+    launchtemplate 0x83E3CB8 0x82 0x6 0x0 0xFFFA 0x0 0x0 0x1A 0x0
+    pause 0x1
+    launchtemplate 0x83E3CB8 0x82 0x6 0x0 0xFFFA 0x0 0x0 0x1A 0x0
+    pause 0x1
+    launchtask AnimTask_move_bank 0x2 0x5 bank_target 0x3 0x0 0xF 0x1
+    launchtemplate 0x83E3CB8 0x82 0x6 0x0 0xFFFA 0x0 0x0 0x1A 0x0
+    pause 0x1
+    waitanimation
+    pokespritefromBG side_attacker
+    resetblends
+    endanimation
+
+SCREECH_RINGS:
+    PlaySound2 0xC8 0xC0
+    launchtemplate 0x83E3CB8 0x82 0x6 0x0 0xFFFA 0x0 0x0 0x1A 0x0
+    pause 0x1
+    return
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+.pool
+@Credits to Matteo
+ANIM_HYPER_DRILL:
+	loadparticle ANIM_TAG_IMPACT
+	loadparticle ANIM_TAG_HORN_HIT
+	loadparticle ANIM_TAG_GRAY_SMOKE @smoke
+	setblends 0x80c
+	launchtemplate Template_BowMon 0x2 0x1 0x0
+	playsound2 0x9b SOUND_PAN_ATTACKER
+	waitanimation
+	pause 0x2
+	launchtemplate Template_BowMon 0x2 0x1 0x1
+	launchtemplate Template_HornHit 0x84 0x3 0x0 0x0 0xc
+	waitanimation
+	playsound1 0x14
+	launchtask AnimTask_pal_fade 0xa 0x5 0x4 0x1 0x0 0x8 0x1F
+	launchtask AnimTask_ShakeMonInPlace 0x2 0x5 0x0 0x2 0x0 0x28 0x1
+	launchtask AnimTask_ShakeMonInPlace 0x2 0x5 0x1 0xa 0x0 0x28 0x1
+	launchtemplate Template_FlashingHit 0x83 0x4 0x0 0x0 0x1 0x3
+	playsound2 0x9f SOUND_PAN_TARGET
+	pause 0x4
+	launchtemplate Template_FlashingHit 0x83 0x4 0x0 0x2 0x1 0x3
+	playsound2 0x9f SOUND_PAN_TARGET
+	launchtemplate 0x83E36A8 TEMPLATE_TARGET 0x4 0x8 0x8 0x1 0x0
+	pause 0x4
+	launchtemplate Template_FlashingHit 0x83 0x4 0xfffc 0x3 0x1 0x3
+	playsound2 0x9f SOUND_PAN_TARGET
+	launchtemplate 0x83E36A8 TEMPLATE_TARGET 0x4 0xfff8 0xfff8 0x1 0x0
+	pause 0x4
+	launchtemplate Template_FlashingHit 0x83 0x4 0xfff8 0xfffb 0x1 0x3
+	playsound2 0x9f SOUND_PAN_TARGET
+	launchtemplate 0x83E36A8 TEMPLATE_TARGET 0x4 0x8 0xfff8 0x1 0x0
+	pause 0x4
+	launchtemplate Template_FlashingHit 0x83 0x4 0x4 0xfff4 0x1 0x3
+	playsound2 0x9f SOUND_PAN_TARGET
+	launchtemplate 0x83E36A8 TEMPLATE_TARGET 0x4 0xfff8 0x8 0x1 0x0
+	pause 0x4
+	launchtemplate Template_FlashingHit 0x83 0x4 0x10 0x0 0x1 0x3
+	playsound2 0x9f SOUND_PAN_TARGET
+	launchtemplate 0x83E36A8 TEMPLATE_TARGET 0x4 0x8 0x8 0x1 0x0
+	pause 0x4
+	launchtemplate Template_FlashingHit 0x83 0x4 0x5 0x12 0x1 0x3
+	playsound2 0x9f SOUND_PAN_TARGET
+	launchtemplate 0x83E36A8 TEMPLATE_TARGET 0x4 0xfff8 0xfff8 0x1 0x0
+	pause 0x4
+	launchtemplate Template_FlashingHit 0x83 0x4 0xffef 0xc 0x1 0x2
+	playsound2 0x9f SOUND_PAN_TARGET
+	launchtemplate 0x83E36A8 TEMPLATE_TARGET 0x4 0x8 0xfff8 0x1 0x0
+	pause 0x4
+	launchtemplate Template_FlashingHit 0x83 0x4 0xffeb 0xfff1 0x1 0x2
+	playsound2 0x9f SOUND_PAN_TARGET
+	launchtemplate 0x83E36A8 TEMPLATE_TARGET 0x4 0xfff8 0x8 0x1 0x0
+	pause 0x4
+	launchtemplate Template_FlashingHit 0x83 0x4 0x8 0xffe5 0x1 0x2
+	playsound2 0x9f SOUND_PAN_TARGET
+	launchtemplate 0x83E36A8 TEMPLATE_TARGET 0x4 0x8 0x8 0x1 0x0
+	pause 0x4
+	launchtemplate Template_FlashingHit 0x83 0x4 0x20 0x0 0x1 0x2
+	playsound2 0x9f SOUND_PAN_TARGET
+	pause 0x4
+	launchtask AnimTask_pal_fade 0xa 0x5 0x4 0x1 0x8 0x0 0x1F
+	launchtemplate Template_BowMon 0x2 0x1 0x2
+	waitanimation
+	endanimation
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+.pool
+ANIM_KOWTOW_CLEAVE:
+	loadparticle ANIM_TAG_CUT @Cut
+	launchtask AnimTask_BlendParticle 0x5 0x5 ANIM_TAG_CUT 0x0 0xD 0xD 0x0
+	pokespritetoBG bank_target
+	loadBG1 BG_DARK
+	waitbgfadein
+	playsound2 0x79 SOUND_PAN_TARGET
+	launchtemplate NIGHT_SLASH_LEFT TEMPLATE_TARGET | 2, 0x5, 50, -10, 100, 4 1 @;Move left along bottom
+	pause 0x5
+	launchtask AnimTask_move_bank 0x2 0x5 bank_target 0x0 0x4 0xA 0x1
+	pause 0x15
+	playsound2 0x79 SOUND_PAN_TARGET
+	launchtemplate NIGHT_SLASH_RIGHT TEMPLATE_TARGET | 2, 0x5, -50, 10, 100, 4 0x0 @;Move right along bottom
+	pause 0x5
+	launchtask AnimTask_move_bank 0x2 0x5 bank_target 0x0 0x4 0xA 0x1
+	waitanimation
+	call UNSET_SCROLLING_BG
+	pokespritefromBG bank_target
+	endanimation
+
+.align 2
+NIGHT_SLASH_LEFT: objtemplate ANIM_TAG_CUT ANIM_TAG_CUT OAM_NORMAL_32x32 0x83E3290 0x0 gSpriteAffineAnimTable_NightSlashLeft SpriteCB_HorizontalSlice
+NIGHT_SLASH_RIGHT: objtemplate ANIM_TAG_CUT ANIM_TAG_CUT OAM_NORMAL_32x32 0x83E3290 0x0 gSpriteAffineAnimTable_NightSlashRight SpriteCB_HorizontalSlice
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 

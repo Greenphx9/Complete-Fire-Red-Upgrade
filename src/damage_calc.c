@@ -2621,9 +2621,26 @@ static s32 CalculateBaseDamage(struct DamageCalc* data)
 		case ABILITY_HUGEPOWER:
 //		case ABILITY_PUREPOWER:
 		//2x Boost
+		if(SpeciesHasSupremeOverlord(data->atkSpecies))
+		{
+			int boost = 10;
+			for(int i = 0; i < gPlayerPartyCount; i++)
+			{
+				struct Pokemon mon = gPlayerParty[i];
+				if(mon.hp == 0)
+				{
+					boost++;
+				}
+			}
+			attack *= (attack * boost) / 10;
+			spAttack *= (spAttack * boost) / 10;
+		}
+		else
+		{
 			if (!IsScaleMonsBattle() //Too OP
 			|| !IsSpeciesAffectedByScalemons(data->atkSpecies)) //Doesn't get the Scalemons boost
 				attack *= 2;
+		}
 			break;
 
 		case ABILITY_FLOWERGIFT:
@@ -3078,6 +3095,12 @@ static s32 CalculateBaseDamage(struct DamageCalc* data)
 		case MOVE_BEHEMOTHBASH:
 			if (IsDynamaxed(bankDef))
 				damage *= 2;
+			break;
+
+		case MOVE_RAGEFIST:
+			if(gNewBS->rageFistCounter[bankAtk] == 0)
+				gNewBS->rageFistCounter[bankAtk] = 1;
+			damage *= gNewBS->rageFistCounter[bankAtk];
 			break;
 	}
 
@@ -3995,6 +4018,12 @@ static u16 AdjustBasePower(struct DamageCalc* data, u16 power)
 			{
 				if (gSpecialMoveFlags[move].gStrongBeakBoostedMoves)
 					power = (power * 12) / 10;
+			}
+			if (SpeciesHasSharpness(data->atkSpecies))
+			{
+				//1.5x boost
+				if (gSpecialMoveFlags[move].gSharpnessBoostedMoves)
+					power = (power * 15) / 10;
 			}
 			else
 			{

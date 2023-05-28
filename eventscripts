@@ -1,8 +1,8 @@
 
 
 ## Pallet Town
-map 4 1 gMapScripts_PalletTown_SecondFloor
-tile 4 1 0 EventScript_PalletTown_Options
+map 4 1 EventScript_PalletTown_MapScript
+tile 4 1 0 EventScript_PalletTown_Options_Rewrite
 npc 4 3 3 EventScript_ProfOak_0X169595
 sign 4 3 4 EventScript_RotomFormChanger
 sign 4 3 5 EventScript_RotomFormChanger
@@ -606,6 +606,9 @@ npc 1 0 19 EventScript_Cut
 npc 1 0 20 EventScript_Cut
 npc 3 32 10 EventScript_Cut
 npc 3 32 11 EventScript_Cut
+npc 43 8 2 EventScript_Cut
+npc 43 8 3 EventScript_Cut
+npc 43 8 4 EventScript_Cut
 npc 1 37 3 EventScript_RockSmash
 npc 1 82 11 EventScript_RockSmash
 npc 1 82 12 EventScript_RockSmash

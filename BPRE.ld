@@ -446,6 +446,7 @@ sPartyMenuFontColorTable = 0x8459FFC;
 MonHoverShadowPal = 0x8D11B84;
 MonHoverShadowSprite = 0x8E7BAD4;
 DexScreen_AddTextPrinterParameterized = 0x81047c8 | 1;
+DexScreen_PrintNum3LeadingZeroes = 0x8104880 | 1;
 
 /* Pokemon Function */
 EmitSetMonData = 0x800DFF0 | 1;
@@ -2265,3 +2266,6 @@ gSaveStatName_Player = 0x841617a;
 gSaveStatName_Badges = 0x8416181;
 gSaveStatName_Pokedex = 0x8416188;
 gSaveStatName_Time = 0x8416190;
+gText_PokedexNo = 0x8415fff;
+
+Task_PrintMainMenuText = 0x800C7A0 | 1;

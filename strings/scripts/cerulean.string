@@ -149,7 +149,7 @@ If you didn't know already, you can\nuse the machine on the right to\lchange the
 [BLUE]You will need:\n[GREEN]15 Nuggets\l150 Pretty Wings\l15 Tiny Mushrooms\l10 Big Mushrooms\l10 Rare Bones\l[BLUE]To upgrade your Power Item to\lLevel 6.\pWould you like to upgrade your\nPower Item to level 6?
 
 #org @gText_AlreadyLevel6
-Hello there.\nYou're Power Items are already\llevel 6.\pI can't upgrade them any further.
+Hello there.\nYour Power Items are already\llevel 6.\pI can't upgrade them any further.
 
 #org @gText_HaveVoltorbNormal
 [RED]By any chance, would you have a\nPok\emon called [BUFFER1]?\pA normal one, not a [GREEN]Hisuian[RED] one.\pIf you do, would you like to trade\nyour [BUFFER1] for my [BUFFER2]?

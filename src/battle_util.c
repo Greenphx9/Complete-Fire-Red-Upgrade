@@ -288,6 +288,9 @@ bool8 CanHitSemiInvulnerableTarget(u8 bankAtk, u8 bankDef, u16 move)
 	if (move == MOVE_TOXIC && IsOfType(bankAtk, TYPE_POISON))
 		return TRUE;
 
+	if (ABILITY(bankAtk) == ABILITY_STALL && SpeciesHasMyceliumMight(SPECIES(bankAtk)) && SPLIT(move) == SPLIT_STATUS)
+		return TRUE;
+
 	return gStatuses3[bankDef] & STATUS3_ALWAYS_HITS && gDisableStructs[bankDef].bankWithSureHit == bankAtk;
 }
 
@@ -2083,14 +2086,15 @@ bool8 CanBePutToSleep(u8 bankDef, u8 bankAtk, bool8 checkFlowerVeil)
 			case ABILITY_VITALSPIRIT:
 			#endif
 			case ABILITY_SWEETVEIL:
-				return FALSE;
+				if(!SpeciesHasPastelVeil(SPECIES(bankDef)))
+					return FALSE;
 		}
 	}
 
 	if (gTerrainType == ELECTRIC_TERRAIN && IsAffectedByElectricTerrain(bankDef))
 		return FALSE;
 
-	if (IS_DOUBLE_BATTLE && ABILITY(PARTNER(bankDef)) == ABILITY_SWEETVEIL && !IsTargetAbilityIgnoredNoMove(ABILITY_SWEETVEIL, atkAbility))
+	if (IS_DOUBLE_BATTLE && ABILITY(PARTNER(bankDef)) == ABILITY_SWEETVEIL && !IsTargetAbilityIgnoredNoMove(ABILITY_SWEETVEIL, atkAbility) && !SpeciesHasPastelVeil(SPECIES(PARTNER(bankDef))))
 		return FALSE;
 
 	if (DoesSleepClausePrevent(bankDef))
@@ -2126,6 +2130,9 @@ bool8 CanBeYawned(u8 bankDef, u8 bankAtk)
 			case ABILITY_VITALSPIRIT:
 			#endif
 			case ABILITY_SWEETVEIL:
+				if (!SpeciesHasPastelVeil(SPECIES(bankDef)))
+					return FALSE;
+				break;
 			case ABILITY_COMATOSE:
 				return FALSE;
 			case ABILITY_LEAFGUARD:
@@ -2153,7 +2160,9 @@ bool8 CanBeYawned(u8 bankDef, u8 bankAtk)
 		{
 			switch (defPartnerAbility) {
 				case ABILITY_SWEETVEIL:
-					return TRUE;
+					if (!SpeciesHasPastelVeil(SPECIES(bankDef)))
+						return TRUE;
+					break;
 				case ABILITY_FLOWERVEIL:
 					if (IsOfType(bankDef, TYPE_GRASS) && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD))
 						return TRUE;
@@ -2189,7 +2198,9 @@ bool8 CanRest(u8 bank)
 	{
 		switch (ABILITY(PARTNER(bank))) {
 			case ABILITY_SWEETVEIL:
-				return TRUE;
+				if (!SpeciesHasPastelVeil(SPECIES(bank)))
+					return TRUE;
+				break;
 			case ABILITY_FLOWERVEIL:
 				if (IsOfType(bank, TYPE_GRASS))
 					return TRUE;
@@ -2200,9 +2211,12 @@ bool8 CanRest(u8 bank)
 	switch (ABILITY(bank)) {
 		case ABILITY_INSOMNIA:
 		case ABILITY_VITALSPIRIT:
-		case ABILITY_SWEETVEIL:
 		case ABILITY_COMATOSE:
 			return FALSE;
+		case ABILITY_SWEETVEIL:
+			if (!SpeciesHasPastelVeil(SPECIES(bank)))
+				return FALSE;
+			break;
 		case ABILITY_LEAFGUARD:
 			if (gBattleWeather & WEATHER_SUN_ANY && WEATHER_HAS_EFFECT && ITEM_EFFECT(bank) != ITEM_EFFECT_UTILITY_UMBRELLA)
 				return FALSE;
@@ -2234,12 +2248,14 @@ bool8 CanBePoisoned(u8 bankDef, u8 bankAtk, bool8 checkFlowerVeil)
 	{
 		switch (defAbility) {
 			case ABILITY_IMMUNITY:
-			case ABILITY_PASTELVEIL:
 				return FALSE;
+			case ABILITY_SWEETVEIL:
+				if(SpeciesHasPastelVeil(SPECIES(bankDef)))
+					return FALSE;
 		}
 	}
 
-	if (IS_DOUBLE_BATTLE && ABILITY(PARTNER(bankDef)) == ABILITY_PASTELVEIL && !IsTargetAbilityIgnoredNoMove(ABILITY_PASTELVEIL, atkAbility))
+	if (IS_DOUBLE_BATTLE && ABILITY(PARTNER(bankDef)) == ABILITY_SWEETVEIL && SpeciesHasPastelVeil(SPECIES(PARTNER(bankDef))) && !IsTargetAbilityIgnoredNoMove(ABILITY_SWEETVEIL, atkAbility))
 		return FALSE;
 
 	if (atkAbility != ABILITY_CORROSION)

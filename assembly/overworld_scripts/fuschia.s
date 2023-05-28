@@ -84,7 +84,7 @@ EventScript_DracoMeteorTutor:
 
 EventScript_TeachDraco:
 	msgbox gText_SelectDragon MSG_FACE
-	setvar 0x8005 148
+	setvar 0x8005 159
 	special 0x18D
 	waitstate
 	compare LASTRESULT 0x0

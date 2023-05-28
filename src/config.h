@@ -5,7 +5,8 @@
  * \brief Handles all customizable options.
  */
 
-#define CUSTOM_FILE_SIGNATURE 0x14B66BBC
+#define CUSTOM_FILE_SIGNATURE 0x14B66BBD
+#define CUSTOM_FILE_SIGNATURE_OLD 0x14B66BBC
 
 /*===== Debugging Options =====*/
 //#define DEBUG_QUICK_BATTLES //Battles will end after choosing the first attack
@@ -245,6 +246,7 @@
 #define VAR_POWER_ITEM_LEVEL 0x5105
 #define VAR_TEST_VAR 0x5107 //braille var test
 #define VAR_REGICE_FORCE 0x5102
+#define VAR_REGICE_SCRIPT 0x5113
 #define VAR_POWER_ITEM_EV_VALUE 0x5110
 #define VAR_ROUTE_23_BADGE_GUARDS 0x5112
 

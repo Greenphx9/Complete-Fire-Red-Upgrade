@@ -6,6 +6,7 @@
 #include "../include/gpu_regs.h"
 #include "../include/load_save.h"
 #include "../include/random.h"
+#include "../include/safari_zone.h"
 #include "../include/scanline_effect.h"
 #include "../include/constants/songs.h"
 #include "../include/constants/trainers.h"
@@ -247,6 +248,12 @@ void BattleBeginFirstTurn(void)
 				break;
 
 			case BTSTART_PRIMAL_REVERSION:
+				if (GetSafariZoneFlag())
+				{
+					++*state;
+					*bank = 0;
+					break;
+				}
 				//Primal Reversion
 				if (!(gBattleTypeFlags & (BATTLE_TYPE_OLD_MAN | BATTLE_TYPE_POKE_DUDE))
 				&& !IsMegaZMoveBannedBattle())
@@ -2285,7 +2292,9 @@ s32 BracketCalc(u8 bank, u8 action, u16 move)
 			}
 		}
 
-		if (ability == ABILITY_STALL)
+		if (ability == ABILITY_STALL && !SpeciesHasMyceliumMight(SPECIES(bank)))
+			return -1;
+		else if (ability == ABILITY_STALL && SpeciesHasMyceliumMight(SPECIES(bank)) && SPLIT(move) == SPLIT_STATUS)
 			return -1;
 	}
 

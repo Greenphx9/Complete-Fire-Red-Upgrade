@@ -6806,7 +6806,7 @@ static const struct BattleTowerSpread sHardmodeTeam_Notekeeper[] =
 		.ball = BALL_TYPE_ULTRA_BALL,
     },
     {
-        .species = SPECIES_BASCULEGION,
+        .species = SPECIES_BASCULEGION_M,
         .item = ITEM_LIFE_ORB,
         .nature = NATURE_JOLLY,
         .ability = FRONTIER_ABILITY_2, //Adaptability

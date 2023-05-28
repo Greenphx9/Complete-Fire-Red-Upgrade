@@ -44,8 +44,8 @@ EventScript_DescribeReins:
 
 .global EventScript_MegaSeller
 EventScript_MegaSeller:
-	warp 43 6 0xFF 11 24
 	lock
+	setflag 0x1203
 	msgbox gText_SellMegaStones MSG_FACE
 	pokemart EventScript_MegaMart
 	release

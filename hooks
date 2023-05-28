@@ -808,3 +808,6 @@ BufferInGameTradeMonName 8053AE4 0
 CreateInGameTradePokemonInternal 8053B48 2
 
 PrintSaveStats 806FCF4 0
+##DexScreen_PrintMonDexNo 8104A34 5
+
+Task_WaitFadeAndPrintMainMenuText 0800C780 1

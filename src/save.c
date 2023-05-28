@@ -71,6 +71,9 @@ static bool8 IsValidFileSignature(u32 signature)
 		#ifdef CUSTOM_FILE_SIGNATURE 
 		|| signature == CUSTOM_FILE_SIGNATURE
 		#endif
+		#ifdef CUSTOM_FILE_SIGNATURE_OLD
+		|| signature == CUSTOM_FILE_SIGNATURE_OLD
+		#endif
 		;
 }
 

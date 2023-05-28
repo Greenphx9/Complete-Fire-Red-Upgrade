@@ -341,10 +341,14 @@ u8 AIScript_Negatives(const u8 bankAtk, const u8 bankDef, const u16 originalMove
 				break;
 
 			case ABILITY_SWEETVEIL:
-				if (moveEffect == EFFECT_SLEEP || moveEffect == EFFECT_YAWN)
+				if (SpeciesHasPastelVeil(SPECIES(bankDef)))
 				{
-					DECREASE_VIABILITY(10);
-					return viability;
+					if (moveEffect == EFFECT_SLEEP || moveEffect == EFFECT_YAWN)
+					{
+						DECREASE_VIABILITY(10);
+						return viability;
+					}
+					break;	
 				}
 				break;
 

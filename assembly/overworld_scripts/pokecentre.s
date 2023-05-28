@@ -14,6 +14,8 @@
 .global EventScript_Pokecentre
 EventScript_pokecentre_0X16A2CF:
 	lock
+	givepokemon 1300 100 0x0
+	givepokemon 1301 100 0x0
 	faceplayer
 	call EventScript_pokecentre_0X1A6578
 	release
@@ -21,7 +23,6 @@ EventScript_pokecentre_0X16A2CF:
 
 	@---------------
 EventScript_pokecentre_0X1A6578:
-	@@call GiveAllMons
 	special 0x187
 	compare LASTRESULT 0x2
 	if 0x1 _goto EventScript_pokecentre_0X1A7AE0
@@ -496,3 +497,8 @@ EventScript_ExitOaksPC:
 	msgbox 0x81A5C2E MSG_NORMAL
 	goto EventScript_PCMainMenu
 	end
+
+.equ EventScript_CableClub_AbortLink, 0x81BB82F
+EventScript_CableClub_WirelessTrade:
+    msgbox gText_LinkNurse_NoTradingUseUnboundCloud MSG_FACE
+    goto EventScript_CableClub_AbortLink
