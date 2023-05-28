@@ -23,6 +23,8 @@
 #include "../include/new/set_z_effect.h"
 #include "../include/base_stats.h"
 #include "../include/new/learn_move.h"
+
+#include "Tables/tm_tutor_new.h"
 /*
 item.c
 	handles all item related functions, such as returning hold effects, tm/hm expansion, etc.
@@ -387,7 +389,15 @@ u32 CanMonLearnTMHM(struct Pokemon* mon, u8 tm)
 		return 0;
 	}
 	u16 i;
-
+	if (species > SPECIES_KINGAMBIT) //use new table
+	{
+		for(i = 0; gTMTutorTableNew[species][i] != 0xFFFF; i++)
+		{
+			if(gTMTutorTableNew[species][i] == gTMHMMoves[tm])
+				return TRUE;
+		}
+		return FALSE;
+	}
 	for(i = 0; gLevelUpLearnsets[species][i].level != 0xFF; i++) {
 		if(gLevelUpLearnsets[species][i].move == gTMHMMoves[tm]) {
 			return TRUE;
@@ -475,6 +485,15 @@ bool8 CanMonLearnTutorMove(struct Pokemon* mon, u8 tutorId)
 		if(gLevelUpLearnsets[species][i].move == gTutorMoves[tutorId]) {
 			return TRUE;
 		}
+	}
+	if (species > SPECIES_KINGAMBIT) //use new table
+	{
+		for(i = 0; gTMTutorTableNew[species][i] != 0xFFFF; i++)
+		{
+			if(gTMTutorTableNew[species][i] == gTutorMoves[tutorId])
+				return TRUE;
+		}
+		return FALSE;
 	}
 	if (tutorId < NUM_MOVE_TUTORS)
 	{
@@ -758,10 +777,10 @@ void* LoadTmHmMartDescription(u16 item)
 u8 CanMonLearnTMTutor(struct Pokemon* mon, u16 item, u8 tutor)
 {
 	u16 move;
-
+	u16 i;
+	u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
 	if (GetMonData(mon, MON_DATA_IS_EGG, NULL))
 		return CANNOT_LEARN_MOVE_IS_EGG;
-
 	//if (item >= ITEM_TM01_FOCUS_PUNCH)
 	if (GetPocketByItemId(item) == POCKET_TM_HM)
 	{
@@ -772,6 +791,20 @@ u8 CanMonLearnTMTutor(struct Pokemon* mon, u16 item, u8 tutor)
 			return CANNOT_LEARN_MOVE;
 		//do {} while (0); // :morphon:
 	}
+
+	if (species > SPECIES_KINGAMBIT) //use new tables
+	{
+		if(MonKnowsMove(mon, move) || MonKnowsMove(mon, GetExpandedTutorMove(tutor)))
+			return ALREADY_KNOWS_MOVE;
+		for(i = 0; gTMTutorTableNew[species][i] != 0xFFFF; i++)
+		{
+			if(gTMTutorTableNew[species][i] == move || gTMTutorTableNew[species][i] == GetExpandedTutorMove(tutor))	
+				return CAN_LEARN_MOVE;
+		}
+		return CANNOT_LEARN_MOVE;
+	}
+
+
 #ifdef EXPANDED_MOVE_TUTORS
 	else if (!CanMonLearnTutorMove(mon, tutor))
 	{
