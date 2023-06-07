@@ -972,122 +972,89 @@ const u8 gFieldMoveBadgeRequirements[FIELD_MOVE_COUNT] =
 void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 {
 	u8 i, j, k;
-	#ifdef ONLY_CHECK_ITEM_FOR_HM_USAGE
-	bool8 knowsFly = FALSE;
-	bool8 knowsDig = FALSE;
-	bool8 knowsCut = FALSE;
-	#endif
 
 	sPartyMenuInternal->numActions = 0;
 	AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUMMARY);
-
-	#ifdef FLAG_SANDBOX_MODE
-	if (FlagGet(FLAG_SANDBOX_MODE) && FlagGet(FLAG_SYS_GAME_CLEAR))
-		goto SKIP_FIELD_MOVES;
-	#endif
-
-	#ifdef NO_FIELD_MOVES
-	goto SKIP_FIELD_MOVES;
-	#endif
 
 	//Add field moves to action list
 	for (i = 0, k = 0; i < MAX_MON_MOVES; ++i)
 	{
 		for (j = 0; j < NELEMS(gFieldMoves); ++j)
 		{
-			if (GetMonData(&mons[slotId], MON_DATA_MOVE1 + i, NULL) == gFieldMoves[j])
+			if (GetMonData(&mons[slotId], i + MON_DATA_MOVE1, NULL) == gFieldMoves[j])
 			{
-				#ifdef ONLY_CHECK_ITEM_FOR_HM_USAGE
-				if (gFieldMoves[j] == MOVE_ROCKCLIMB
-				&& !CheckBagHasItem(ITEM_HM08_ROCK_CLIMB, 1))
-					continue; //Don't allow Rock Climbing until the item is obtained
-				#endif
-
 				AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
 				++k;
 
-				#ifdef ONLY_CHECK_ITEM_FOR_HM_USAGE
 				if (gFieldMoves[j] == MOVE_FLY)
-					knowsFly = TRUE; //No point in appending Fly if it is already there
-				else if (gFieldMoves[j] == MOVE_DIG)
-					knowsDig = TRUE;
-				else if (gFieldMoves[j] == MOVE_CUT)
-					knowsCut = TRUE;
-				#endif
+					k = MAX_MON_MOVES; //No point in appending Fly if it is already there
+				break;
 			}
 		}
 	}
 
 	//Try to give the mon fly
-	#ifdef ONLY_CHECK_ITEM_FOR_HM_USAGE
-	u16 species = GetMonData(&mons[slotId], MON_DATA_SPECIES2, NULL);
-	if (species != SPECIES_NONE && species != SPECIES_EGG)
+	if (k < MAX_MON_MOVES) //Doesn't know 4 field moves
 	{
-		#ifdef UNBOUND
-		if (k < MAX_MON_MOVES && !knowsCut) //Doesn't know 4 field moves
+		bool8 hasHM = CheckBagHasItem(ITEM_HM02_FLY, 1) > 0;
+		u16 species = GetMonData(&mons[slotId], MON_DATA_SPECIES2, NULL);
+		
+		if (species != SPECIES_NONE
+		&& species != SPECIES_EGG
+		&& hasHM
+		&& HasBadgeToUseFieldMove(FIELD_MOVE_FLY)
+		&& CanMonLearnTMTutor(&mons[slotId], ITEM_HM02_FLY, 0) == CAN_LEARN_MOVE)
 		{
-			if (GetCurrentRegionMapSectionId() == MAPSEC_GRIM_WOODS
-			&& VarGet(VAR_SQ_WEED_WHACKER) > 0 && VarGet(VAR_SQ_WEED_WHACKER) < 2 //Weed Whacker in progress
-			#ifndef DEBUG_HMS
-			&& HasBadgeToUseFieldMove(FIELD_MOVE_CUT)
-			&& (FlagGet(FLAG_BOUGHT_ADM) || FlagGet(FLAG_SANDBOX_MODE) ||
-			 (CheckBagHasItem(ITEM_HM01_CUT, 1) > 0 && CanMonLearnTMTutor(&mons[slotId], ITEM_HM01_CUT, 0) == CAN_LEARN_MOVE))
-			#endif
-			)
-			{
-				AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_FIELD_MOVES + FIELD_MOVE_CUT);
-				++k;
-			}
-		}
-		#endif
-
-		if (k < MAX_MON_MOVES && !knowsFly) //Doesn't know 4 field moves
-		{
-			if (Overworld_MapTypeAllowsTeleportAndFly(gMapHeader.mapType) //Only add if usable
-			#ifndef DEBUG_HMS
-			&& HasBadgeToUseFieldMove(FIELD_MOVE_FLY)
-			&& (
-			 #ifdef FLAG_BOUGHT_ADM
-			 FlagGet(FLAG_BOUGHT_ADM) ||
-			 #endif
-			 #ifdef FLAG_SANDBOX_MODE
-			 FlagGet(FLAG_SANDBOX_MODE) ||
-			 #endif
-			 (CheckBagHasItem(ITEM_HM02_FLY, 1) > 0 && CanMonLearnTMTutor(&mons[slotId], ITEM_HM02_FLY, 0) == CAN_LEARN_MOVE))
-			#endif
-			)
-			{
-				AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_FIELD_MOVES + FIELD_MOVE_FLY);
-				++k;
-			}
-		}
-
-		if (k < MAX_MON_MOVES && !knowsDig) //Doesn't know 4 field moves
-		{
-			if (CanUseEscapeRopeOnCurrMap() //Only add if usable
-			#ifndef DEBUG_HMS
-			&& HasBadgeToUseFieldMove(FIELD_MOVE_DIG)
-			&& (
-			 #ifdef FLAG_BOUGHT_ADM
-			 FlagGet(FLAG_BOUGHT_ADM) ||
-			 #endif
-			 #ifdef FLAG_SANDBOX_MODE
-			 FlagGet(FLAG_SANDBOX_MODE) ||
-			 #endif
-			 (CheckBagHasItem(ITEM_TM28_DIG, 1) > 0 && CanMonLearnTMTutor(&mons[slotId], ITEM_TM28_DIG, 0) == CAN_LEARN_MOVE))
-			#endif
-			)
-			{
-				AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_FIELD_MOVES + FIELD_MOVE_DIG);
-				++k;
-			}
+			AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_FIELD_MOVES + FIELD_MOVE_FLY);
+			++k;
 		}
 	}
-	#endif
+	if (k < MAX_MON_MOVES) //Doesn't know 4 field moves
+	{
+		bool8 hasHM = CheckBagHasItem(ITEM_HM01_CUT, 1) > 0;
+		u16 species = GetMonData(&mons[slotId], MON_DATA_SPECIES2, NULL);
+		
+		if (species != SPECIES_NONE
+		&& species != SPECIES_EGG
+		&& hasHM
+		&& HasBadgeToUseFieldMove(FIELD_MOVE_CUT)
+		&& CanMonLearnTMTutor(&mons[slotId], ITEM_HM01_CUT, 0) == CAN_LEARN_MOVE)
+		{
+			AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_FIELD_MOVES + FIELD_MOVE_CUT);
+			++k;
+		}
+	}
+	if (k < MAX_MON_MOVES) //Doesn't know 4 field moves
+	{
+		bool8 hasHM = CheckBagHasItem(ITEM_HM06_ROCK_SMASH, 1) > 0;
+		u16 species = GetMonData(&mons[slotId], MON_DATA_SPECIES2, NULL);
+		
+		if (species != SPECIES_NONE
+		&& species != SPECIES_EGG
+		&& hasHM
+		&& HasBadgeToUseFieldMove(FIELD_MOVE_ROCK_SMASH)
+		&& CanMonLearnTMTutor(&mons[slotId], ITEM_HM06_ROCK_SMASH, 0) == CAN_LEARN_MOVE)
+		{
+			AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_FIELD_MOVES + FIELD_MOVE_ROCK_SMASH);
+			++k;
+		}
+	}
+	/*if (k < MAX_MON_MOVES) //Doesn't know 4 field moves
+	{
+		bool8 hasTM = CheckBagHasItem(ITEM_TM29_DIG, 1) > 0;
+		u16 species = GetMonData(&mons[slotId], MON_DATA_SPECIES2, NULL);
+		
+		if (species != SPECIES_NONE
+		&& species != SPECIES_EGG
+		&& hasTM
+		&& HasBadgeToUseFieldMove(FIELD_MOVE_DIG)
+		&& CanMonLearnTMTutor(&mons[slotId], ITEM_TM29_DIG, 0) == CAN_LEARN_MOVE)
+		{
+			AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_FIELD_MOVES + FIELD_MOVE_DIG);
+			++k;
+		}
+	}*/
 
-#ifdef FLAG_SANDBOX_MODE
-SKIP_FIELD_MOVES:
-#endif
 	if (!ShouldDisablePartyMenuItemsBattleTower())
 	{
 		if (GetMonData(&mons[1], MON_DATA_SPECIES, NULL) != SPECIES_NONE)

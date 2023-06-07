@@ -32,6 +32,7 @@ bool8 SpeciesHasSupremeOverlord(u16 species);
 bool8 SpeciesHasSharpness(u16 species);
 bool8 SpeciesHasPastelVeil(u16 species);
 bool8 SpeciesHasMyceliumMight(u16 species);
+bool8 SpeciesHasQuarkDrive(u16 species);
 
 bool8 AbilityIncreasesWildItemChance(u8 ability);
 bool8 IsChoiceAbility(u8 ability);
@@ -63,6 +64,7 @@ struct SpecialReplaceAbilityFlags
     bool8 hasSharpness : 1;
     bool8 hasPastelVeil : 1;
     bool8 hasMyceliumMight : 1;
+    bool8 hasQuarkDrive : 1;
 };
 
 extern const struct SpecialReplaceAbilityFlags gSpecialReplaceAbilityFlags[];

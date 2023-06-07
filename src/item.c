@@ -787,10 +787,32 @@ u8 CanMonLearnTMTutor(struct Pokemon* mon, u16 item, u8 tutor)
 		//if (CanMonLearnTMHM(mon, item - ITEM_TM01_FOCUS_PUNCH))
 		if (CanMonLearnTMHM(mon, TMIdFromItemId(item)))
 			move = ItemIdToBattleMoveId(item);
-		else
+		else if (species < SPECIES_KINGAMBIT)
 			return CANNOT_LEARN_MOVE;
 		//do {} while (0); // :morphon:
 	}
+
+
+
+#ifdef EXPANDED_MOVE_TUTORS
+	else if (!CanMonLearnTutorMove(mon, tutor) && species < SPECIES_KINGAMBIT)
+	{
+		return CANNOT_LEARN_MOVE;
+	}
+	else
+	{
+		move = GetExpandedTutorMove(tutor);
+	}
+#else
+	else if (!CanLearnTutorMove(mon->species, tutor) && species < SPECIES_KINGAMBIT)
+	{
+		return CANNOT_LEARN_MOVE;
+	}
+	else
+	{
+		move = GetTutorMove(tutor);
+	}
+#endif
 
 	if (species > SPECIES_KINGAMBIT) //use new tables
 	{
@@ -803,27 +825,6 @@ u8 CanMonLearnTMTutor(struct Pokemon* mon, u16 item, u8 tutor)
 		}
 		return CANNOT_LEARN_MOVE;
 	}
-
-
-#ifdef EXPANDED_MOVE_TUTORS
-	else if (!CanMonLearnTutorMove(mon, tutor))
-	{
-		return CANNOT_LEARN_MOVE;
-	}
-	else
-	{
-		move = GetExpandedTutorMove(tutor);
-	}
-#else
-	else if (!CanLearnTutorMove(mon->species, tutor))
-	{
-		return CANNOT_LEARN_MOVE;
-	}
-	else
-	{
-		move = GetTutorMove(tutor);
-	}
-#endif
 
 	if (MonKnowsMove(mon, move))
 		return ALREADY_KNOWS_MOVE;

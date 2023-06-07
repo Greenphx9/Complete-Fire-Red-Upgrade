@@ -143,3 +143,4 @@ extern const u8 gText_SlowStartEnd[];
 extern const u8 PrimalRainEndString[];
 extern const u8 PrimalSunEndString[];
 extern const u8 PrimalAirCurrentEndString[];
+extern const u8 gText_ProtosynthesisActivate[];

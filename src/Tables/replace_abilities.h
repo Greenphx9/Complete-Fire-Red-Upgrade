@@ -30,6 +30,7 @@ extern const u8 NAME_ARMOR_TAIL[];
 extern const u8 NAME_SHARPNESS[];
 extern const u8 NAME_PASTEL_VEIL[];
 extern const u8 NAME_MYCELIUM_MIGHT[];
+extern const u8 NAME_QUARK_DRIVE[];
 
 //Ability descs
 extern const u8 DESC_STRONG_BEAK[];
@@ -38,6 +39,7 @@ extern const u8 DESC_SUPREME_OVERLORD[];
 extern const u8 DESC_SHARPNESS[];
 extern const u8 DESC_PASTEL_VEIL[];
 extern const u8 DESC_MYCELIUM_MIGHT[];
+extern const u8 DESC_QUARK_DRIVE[];
 
 static struct ReplaceAbility sReplaceAbilities[] =
 {
@@ -385,5 +387,53 @@ static struct ReplaceAbility sReplaceAbilities[] =
         .currAbility = ABILITY_STALL,
         .replaceAbilityString = NAME_MYCELIUM_MIGHT,
         .replaceDescString = DESC_MYCELIUM_MIGHT,
+    },
+    {
+        .species = SPECIES_IRON_TREADS,
+        .currAbility = ABILITY_PROTOSYNTHESIS,
+        .replaceAbilityString = NAME_QUARK_DRIVE,
+        .replaceDescString = DESC_QUARK_DRIVE,
+    },
+    {
+        .species = SPECIES_IRON_BUNDLE,
+        .currAbility = ABILITY_PROTOSYNTHESIS,
+        .replaceAbilityString = NAME_QUARK_DRIVE,
+        .replaceDescString = DESC_QUARK_DRIVE,
+    },
+    {
+        .species = SPECIES_IRON_HANDS,
+        .currAbility = ABILITY_PROTOSYNTHESIS,
+        .replaceAbilityString = NAME_QUARK_DRIVE,
+        .replaceDescString = DESC_QUARK_DRIVE,
+    },
+    {
+        .species = SPECIES_IRON_JUGULIS,
+        .currAbility = ABILITY_PROTOSYNTHESIS,
+        .replaceAbilityString = NAME_QUARK_DRIVE,
+        .replaceDescString = DESC_QUARK_DRIVE,
+    },
+    {
+        .species = SPECIES_IRON_MOTH,
+        .currAbility = ABILITY_PROTOSYNTHESIS,
+        .replaceAbilityString = NAME_QUARK_DRIVE,
+        .replaceDescString = DESC_QUARK_DRIVE,
+    },
+    {
+        .species = SPECIES_IRON_THORNS,
+        .currAbility = ABILITY_PROTOSYNTHESIS,
+        .replaceAbilityString = NAME_QUARK_DRIVE,
+        .replaceDescString = DESC_QUARK_DRIVE,
+    },
+    {
+        .species = SPECIES_IRON_VALIANT,
+        .currAbility = ABILITY_PROTOSYNTHESIS,
+        .replaceAbilityString = NAME_QUARK_DRIVE,
+        .replaceDescString = DESC_QUARK_DRIVE,
+    },
+    {
+        .species = SPECIES_IRON_LEAVES,
+        .currAbility = ABILITY_PROTOSYNTHESIS,
+        .replaceAbilityString = NAME_QUARK_DRIVE,
+        .replaceDescString = DESC_QUARK_DRIVE,
     },
 };

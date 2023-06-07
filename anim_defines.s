@@ -506,6 +506,8 @@
 .equ AnimTask_DrillPeckHitSplats, 0x80b2869
 .equ SoundTask_PlaySE2WithPanning, 0x80DD411
 .equ SoundTask_LoopSEAdjustPanning, 0x80dcf39 @;Song Id, Source, Target Pan, Pan Increment, Num Times, Pan Increment Ofteness, Length of One
+.equ AnimTask_GetWeather, 0x80E44EB
+.equ Template_GraySmoke, 0x83E36A8
  
 @launchtemplate
 
@@ -1128,3 +1130,4 @@ waitbgfadein
 .equ ANIM_TAG_HOOPA_RING_LARGE, 0x2889
 .equ ANIM_TAG_OMEGA_SYMBOL, 0x288A
 .equ ANIM_TAG_ALPHA_SYMBOL, 0x288B
+.equ ANIM_TAG_CHILLING_WATER, 0x288C

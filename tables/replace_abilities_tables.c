@@ -118,4 +118,52 @@ const struct SpecialReplaceAbilityFlags gSpecialReplaceAbilityFlags[NUM_SPECIES]
 		.hasMyceliumMight = TRUE,
 	},
 #endif
+#ifdef SPECIES_IRON_TREADS
+	[SPECIES_IRON_TREADS] =
+	{
+		.hasQuarkDrive = TRUE,
+	},
+#endif
+#ifdef SPECIES_IRON_BUNDLE
+	[SPECIES_IRON_BUNDLE] =
+	{
+		.hasQuarkDrive = TRUE,
+	},
+#endif
+#ifdef SPECIES_IRON_HANDS
+	[SPECIES_IRON_HANDS] =
+	{
+		.hasQuarkDrive = TRUE,
+	},
+#endif
+#ifdef SPECIES_IRON_JUGULIS
+	[SPECIES_IRON_JUGULIS] =
+	{
+		.hasQuarkDrive = TRUE,
+	},
+#endif
+#ifdef SPECIES_IRON_MOTH
+	[SPECIES_IRON_MOTH] =
+	{
+		.hasQuarkDrive = TRUE,
+	},
+#endif
+#ifdef SPECIES_IRON_THORNS
+	[SPECIES_IRON_THORNS] =
+	{
+		.hasQuarkDrive = TRUE,
+	},
+#endif
+#ifdef SPECIES_IRON_VALIANT
+	[SPECIES_IRON_VALIANT] =
+	{
+		.hasQuarkDrive = TRUE,
+	},
+#endif
+#ifdef SPECIES_IRON_LEAVES
+	[SPECIES_IRON_LEAVES] =
+	{
+		.hasQuarkDrive = TRUE,
+	},
+#endif
 };

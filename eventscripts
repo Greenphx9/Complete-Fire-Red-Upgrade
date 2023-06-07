@@ -537,6 +537,8 @@ npc 1 2 4 EventScript_RockSmash
 npc 1 2 5 EventScript_RockSmash
 npc 1 2 6 EventScript_RockSmash
 
+npc 43 28 0 EventScript_BeginARaidBattle
+
 
 
 

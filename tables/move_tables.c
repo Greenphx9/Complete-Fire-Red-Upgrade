@@ -3392,6 +3392,12 @@ const struct SpecialMoveFlags gSpecialMoveFlags[MOVES_COUNT] =
 		.gTwoToFiveStrikesMoves = TRUE,
 	},
 #endif
+#ifdef MOVE_TRIPLEDIVE
+	[MOVE_TRIPLEDIVE] =
+	{
+		.gTwoToFiveStrikesMoves = TRUE,
+	},
+#endif
 #ifdef MOVE_BONEMERANG
 	[MOVE_BONEMERANG] =
 	{

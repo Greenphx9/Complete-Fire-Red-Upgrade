@@ -1380,6 +1380,24 @@ The user spins the\npointed part of its\nbody at high speed\nto pierce the targe
 #org @DESC_KOWTOW_CLEAVE
 The user slashes at\nthe target after\nkowtowing to make\nthe target let\ndown its guard.
 
+#org @DESC_TRIPLE_DIVE
+The user performs a\nperfectly timed triple\ndive, hitting the\ntarget three times\nin a row. 
+
+#org @DESC_CHILLING_WATER
+The user attacks the\ntarget by showering\nit with water that\nlowers the target's\nAttack stat. 
+
+#org @DESC_TRAILBLAZE
+The user attacks\nsuddenly as if leaping\nout from tall grass.\nThe user's nimble\nfootwork boosts its\nSpeed stat.
+
+#org @DESC_ICE_SPINNER
+The user covers its\nfeet in thin ice and\ntwirls around, slamming\ninto the target,\ndestroying the terrain. 
+
+#org @DESC_HYDRO_STEAM
+The user blasts the\ntarget with boiling-\nhot water. This move's\npower is boosted\nin sun instead of\nlowered. 
+
+#org @DESC_PSYBLADE
+The user rends the\ntarget with an ether-\neal blade. This move's\npower is boosted if\nelectric terrain is\nactive.
+
 #org @DESC_MAX_GUARD
 Enables the user to\nevade all attacks.\nIt may fail if used\nin succession.
 

@@ -360,6 +360,46 @@ static bool8 ImmunityAbilityCheck(u8 bank, u32 status, const u8* string);
 static bool8 CanBeAffectedByIntimidate(u8 bank);
 static bool8 AllMainStatsButOneAreMinned(u8 bank);
 
+u16 GetHighestStat(u8 bankAtk)
+{
+	u16 maxStatId;
+	u16 stats[STAT_SPDEF + 1]; //Create new array to avoid modifying original stats
+
+	stats[STAT_ATK] = gBattleMons[bankAtk].attack;
+	stats[STAT_DEF] = gBattleMons[bankAtk].defense;
+	stats[STAT_SPATK] = gBattleMons[bankAtk].spAttack;
+	stats[STAT_SPDEF] = gBattleMons[bankAtk].spDefense;
+	stats[STAT_SPEED] = gBattleMons[bankAtk].speed;
+
+	maxStatId = STAT_ATK;
+	for (u8 i = STAT_DEF; i < NELEMS(stats); ++i)
+	{
+		if (stats[i] > stats[maxStatId])
+			maxStatId = i;
+	}	
+	return maxStatId;
+}
+
+u16 GetHighestStatMon(struct Pokemon* mon)
+{
+	u16 maxStatId;
+	u16 stats[STAT_SPDEF + 1]; //Create new array to avoid modifying original stats
+
+	stats[STAT_ATK] = mon->attack;
+	stats[STAT_DEF] = mon->defense;
+	stats[STAT_SPATK] = mon->spAttack;
+	stats[STAT_SPDEF] = mon->spDefense;
+	stats[STAT_SPEED] = mon->speed;
+
+	maxStatId = STAT_ATK;
+	for (u8 i = STAT_DEF; i < NELEMS(stats); ++i)
+	{
+		if (stats[i] > stats[maxStatId])
+			maxStatId = i;
+	}	
+	return maxStatId;
+}
+
 u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 {
 	int i;
@@ -768,6 +808,18 @@ u8 AbilityBattleEffects(u8 caseID, u8 bank, u8 ability, u8 special, u16 moveArg)
 			gNewBS->SlowStartTimers[bank] = 3;
 			gBattleStringLoader = gText_SlowStartActivate;
 			BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+			effect++;
+			break;
+
+		case ABILITY_PROTOSYNTHESIS:
+			if ((!SpeciesHasQuarkDrive(SPECIES(bank)) && WEATHER_HAS_EFFECT && (gBattleWeather & (WEATHER_SUN_ANY | WEATHER_PRIMAL_ANY)))
+			|| (SpeciesHasQuarkDrive(SPECIES(bank)) && gTerrainType == ELECTRIC_TERRAIN))
+			{
+				gBankAttacker = bank;
+				PREPARE_STAT_BUFFER(gBattleTextBuff1, GetHighestStat(gBankAttacker));
+				gBattleStringLoader = gText_ProtosynthesisActivate;
+				BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+			}
 			effect++;
 			break;
 

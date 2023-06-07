@@ -12,6 +12,7 @@
 #include "../include/constants/trainers.h"
 #include "../include/constants/trainer_classes.h"
 
+#include "../include/new/ability_battle_effects.h"
 #include "../include/new/ability_battle_scripts.h"
 #include "../include/new/ai_master.h"
 #include "../include/new/ai_switching.h"
@@ -105,7 +106,7 @@ static void SavePartyItems(void);
 static void TryPrepareTotemBoostInBattleSands(void);
 static void TrySetupRaidBossRepeatedAttack(u8 turnActionNumber);
 static u8 GetWhoStrikesFirstUseLastBracketCalc(u8 bank1, u8 bank2);
-static u32 BoostSpeedInWeather(u8 ability, u8 itemEffect, u32 speed);
+static u32 BoostSpeedInWeather(u8 ability, u8 itemEffect, u32 speed, u8 bank);
 static u32 BoostSpeedByItemEffect(u8 itemEffect, u8 itemQuality, u16 species, u32 speed, bool8 isDynamaxed);
 static void TryClearLevelCapKeptOn(void);
 
@@ -2301,7 +2302,7 @@ s32 BracketCalc(u8 bank, u8 action, u16 move)
 	return 0;
 }
 
-static u32 BoostSpeedInWeather(u8 ability, u8 itemEffect, u32 speed)
+static u32 BoostSpeedInWeather(u8 ability, u8 itemEffect, u32 speed, u8 bank)
 {
 	if (WEATHER_HAS_EFFECT) {
 		switch (ability) {
@@ -2320,6 +2321,18 @@ static u32 BoostSpeedInWeather(u8 ability, u8 itemEffect, u32 speed)
 		case ABILITY_SLUSHRUSH:
 			if (gBattleWeather & WEATHER_HAIL_ANY)
 				speed *= 2;
+			break;
+		case ABILITY_PROTOSYNTHESIS:
+			if(bank != 255)
+			{
+				if ((!SpeciesHasQuarkDrive(SPECIES(bank)) 
+				&& gBattleWeather & (WEATHER_SUN_ANY | WEATHER_SUN_PRIMAL) 
+				&& itemEffect != ITEM_EFFECT_UTILITY_UMBRELLA 
+				&& GetHighestStat(bank) == STAT_SPEED)
+				|| (SpeciesHasQuarkDrive(SPECIES(bank) 
+				&& gTerrainType == ELECTRIC_TERRAIN)))
+					speed = (speed * 15) / 10;
+			}
 			break;
 		}
 	}
@@ -2370,7 +2383,7 @@ u32 SpeedCalc(u8 bank)
 	speed = (rawSpeed * gStatStageRatios[gBattleMons[bank].statStages[STAT_STAGE_SPEED-1]][0]) / gStatStageRatios[gBattleMons[bank].statStages[STAT_STAGE_SPEED-1]][1];
 
 	//Check for abilities that alter speed
-	speed = BoostSpeedInWeather(ability, itemEffect, speed);
+	speed = BoostSpeedInWeather(ability, itemEffect, speed, bank);
 
 	switch (ability) {
 	case ABILITY_UNBURDEN:
@@ -2457,7 +2470,21 @@ u32 SpeedCalcMon(u8 side, struct Pokemon* mon) //Used for the AI
 	speed = (speed * gStatStageRatios[statVal][0]) / gStatStageRatios[statVal][1];
 
 	//Check for abilities that alter speed
-	speed = BoostSpeedInWeather(ability, itemEffect, speed);
+	speed = BoostSpeedInWeather(ability, itemEffect, speed, 255);
+
+	if(ability == ABILITY_PROTOSYNTHESIS)
+	{
+		if ((!SpeciesHasQuarkDrive(mon->species)
+		&& GetHighestStatMon(mon) == STAT_SPEED 
+		&& gBattleWeather & (WEATHER_SUN_ANY | WEATHER_SUN_PRIMAL) 
+		&& itemEffect != ITEM_EFFECT_UTILITY_UMBRELLA
+		&& WEATHER_HAS_EFFECT)
+		|| (SpeciesHasQuarkDrive(mon->species)
+		&& gTerrainType == ELECTRIC_TERRAIN))
+		{
+			speed = (speed * 15) / 10;
+		}
+	} 
 
 	switch (ability) {
 	case ABILITY_SLOWSTART:

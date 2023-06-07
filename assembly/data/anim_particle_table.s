@@ -161,7 +161,7 @@ animparticle 0x8d1aea4,	0x1c0,	ANIM_TAG_ICE_CRYSTALS
 animparticle 0x8d1afcc,	0x100,	ANIM_TAG_ICE_SPIKES
 animparticle HANDS_AND_FEET_IMG,	0x800,	ANIM_TAG_HANDS_AND_FEET
 animparticle 0x8d1bddc,	0x200,	ANIM_TAG_MIST_CLOUD
-animparticle 0x8d0ab34,	0x800,	ANIM_TAG_CLAMP
+animparticle 0x8d1ab18,	0x800,	ANIM_TAG_CLAMP
 animparticle 0x8d02460,	0x180,	ANIM_TAG_BUBBLE
 animparticle 0x8d1b0e4,	0x180,	ANIM_TAG_ORBS
 animparticle 0x8d1b2f0,	0x200,	ANIM_TAG_WATER_IMPACT
@@ -398,6 +398,7 @@ animparticle 0x8d213f0,	0x800,	ANIM_TAG_MISTY_EXPLOSION
 animparticle LARGE_HOOPA_RING_IMG, (64 * 64 * 4) / 2, ANIM_TAG_HOOPA_RING_LARGE
 animparticle OMEGA_SYMBOL_IMG, (32 * 32) / 2, ANIM_TAG_OMEGA_SYMBOL
 animparticle ALPHA_SYMBOL_IMG, (32 * 32) / 2, ANIM_TAG_ALPHA_SYMBOL
+animparticle CHILLING_WATER_IMG, (32 * 32) / 2, ANIM_TAG_CHILLING_WATER
 
 gBattleAnimPaletteTable:
 animparticlepal 0x8d028b4,	ANIM_TAG_BONE
@@ -545,7 +546,7 @@ animparticlepal 0x8d1afac,	ANIM_TAG_ICE_CRYSTALS
 animparticlepal 0x8d1afac,	ANIM_TAG_ICE_SPIKES
 animparticlepal HANDS_AND_FEET_PAL,	ANIM_TAG_HANDS_AND_FEET
 animparticlepal 0x8d1be54,	ANIM_TAG_MIST_CLOUD
-animparticlepal 0x8d1ac98,	ANIM_TAG_CLAMP
+animparticlepal 0x8d1ab18,	ANIM_TAG_CLAMP
 animparticlepal 0x8d02894,	ANIM_TAG_BUBBLE
 animparticlepal 0x8d1b1f8,	ANIM_TAG_ORBS
 animparticlepal 0x8d1b3d4,	ANIM_TAG_WATER_IMPACT
@@ -783,3 +784,4 @@ animparticlepal BLUE_ROCKS_PAL,	ANIM_TAG_ROCKS
 animparticlepal LARGE_HOOPA_RING_PAL, ANIM_TAG_HOOPA_RING_LARGE
 animparticlepal OMEGA_SYMBOL_PAL, ANIM_TAG_OMEGA_SYMBOL
 animparticlepal ALPHA_SYMBOL_PAL, ANIM_TAG_ALPHA_SYMBOL
+animparticlepal CHILLING_WATER_PAL, ANIM_TAG_CHILLING_WATER

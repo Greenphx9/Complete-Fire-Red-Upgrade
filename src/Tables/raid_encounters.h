@@ -8974,6 +8974,48 @@ static struct Raid sSeafoamIslandsRaids6Star[] =
 	},
 };
 
+
+#define PARADOX_RAID(name)                                           \
+	{																 \
+		.species = SPECIES_##name,									 \
+		.ability = RAID_ABILITY_1,									 \
+		.drops =												   	 \
+		{															 \
+		/*100 %*/ ITEM_ORAN_BERRY,									 \
+		/* 80 %*/ ITEM_CHOPLE_BERRY,								 \
+		/* 80 %*/ ITEM_CHARTI_BERRY,								 \
+		/* 50 %*/ ITEM_HONDEW_BERRY,								 \
+		/* 50 %*/ ITEM_STAR_PIECE,									 \
+		/* 30 %*/ ITEM_SITRUS_BERRY,								 \
+		/* 30 %*/ ITEM_STARDUST,									 \
+		/* 25 %*/ ITEM_SITRUS_BERRY,								 \
+		/* 25 %*/ ITEM_FIGY_BERRY,									 \
+		/*  5 %*/ ITEM_RARE_CANDY,									 \
+		/*  4 %*/ ITEM_NUGGET,										 \
+		/*  1 %*/ ITEM_BIG_NUGGET,									 \
+		},															 \
+	}																 \
+
+static struct Raid sParadoxRaidDen[] =
+{
+	PARADOX_RAID(GREAT_TUSK),
+	PARADOX_RAID(SCREAM_TAIL),
+	PARADOX_RAID(BRUTE_BONNET),
+	PARADOX_RAID(FLUTTER_MANE),
+	PARADOX_RAID(SLITHER_WING),
+	PARADOX_RAID(SANDY_SHOCKS),
+	PARADOX_RAID(ROARING_MOON),
+	PARADOX_RAID(WALKING_WAKE),
+    PARADOX_RAID(IRON_TREADS),
+    PARADOX_RAID(IRON_BUNDLE),
+    PARADOX_RAID(IRON_HANDS),
+    PARADOX_RAID(IRON_JUGULIS),
+    PARADOX_RAID(IRON_MOTH),
+    PARADOX_RAID(IRON_THORNS),
+    PARADOX_RAID(IRON_VALIANT),
+    PARADOX_RAID(IRON_LEAVES),
+};
+
 const struct RaidData gRaidsByMapSection[KANTO_MAPSEC_COUNT][RAID_STAR_COUNT] =
 {
 	[MAPSEC_ROUTE_3 -  MAPSEC_DYNAMIC] =
@@ -9173,5 +9215,11 @@ const struct RaidData gRaidsByMapSection[KANTO_MAPSEC_COUNT][RAID_STAR_COUNT] =
 		[FOUR_STAR_RAID] = {sSeafoamIslandsRaids4Star, NELEMS(sSeafoamIslandsRaids4Star)},
 		[FIVE_STAR_RAID] = {sSeafoamIslandsRaids5Star, NELEMS(sSeafoamIslandsRaids5Star)},
 		[SIX_STAR_RAID] = {sSeafoamIslandsRaids6Star, NELEMS(sSeafoamIslandsRaids6Star)},
+	},
+	[MAPSEC_INDIGO_PLATEAU - MAPSEC_DYNAMIC] =
+	{
+		[FOUR_STAR_RAID] = {sParadoxRaidDen, NELEMS(sParadoxRaidDen)},
+		[FIVE_STAR_RAID] = {sParadoxRaidDen, NELEMS(sParadoxRaidDen)},
+		[SIX_STAR_RAID] = {sParadoxRaidDen, NELEMS(sParadoxRaidDen)},
 	},
 };

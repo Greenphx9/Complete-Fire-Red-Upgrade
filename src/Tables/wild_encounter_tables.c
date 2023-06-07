@@ -130,11 +130,11 @@ const struct WildPokemon gRoute2_LandMonsDay[] =
 	{3, 5, SPECIES_PURRLOIN},
 	{3, 5, SPECIES_SHINX},
 	{3, 5, SPECIES_PANSAGE},
-	{3, 5, SPECIES_PANSEAR},
+	{3, 5, SPECIES_CHERUBI},
 	{3, 5, SPECIES_PANPOUR},
 	{3, 5, SPECIES_GLAMEOW},
 	{3, 5, SPECIES_CROAGUNK},
-	{3, 5, SPECIES_CHERUBI},
+	{3, 5, SPECIES_LITLEO},
 	{3, 5, SPECIES_SKORUPI},
 	{3, 5, SPECIES_BONSLY},
 	{3, 5, SPECIES_HAPPINY},
@@ -148,8 +148,8 @@ const struct WildPokemon gRoute2_LandMonsNight[] =
 	{3, 5, SPECIES_PURRLOIN},
 	{3, 5, SPECIES_MAREEP},
 	{3, 5, SPECIES_PANSAGE},
+	{3, 5, SPECIES_CHERUBI},
 	{3, 5, SPECIES_PANSEAR},
-	{3, 5, SPECIES_PANPOUR},
 	{3, 5, SPECIES_GLAMEOW},
 	{3, 5, SPECIES_GULPIN},
 	{3, 5, SPECIES_SKIDDO},
@@ -290,7 +290,7 @@ const struct WildPokemonInfo gPewterCity_LandMonsDayInfo = { 22, gPewterCity_Lan
 const struct WildPokemon gPewterCity_LandMonsNight[] =
 {
 	{7, 10, SPECIES_BLITZLE},
-	{7, 10, SPECIES_WOOPER},
+	{7, 10, SPECIES_WOOPER_P},
 	{7, 10, SPECIES_DARUMAKA},
 	{7, 10, SPECIES_SWIRLIX},
 	{7, 10, SPECIES_SOLOSIS},
@@ -307,7 +307,7 @@ const struct WildPokemonInfo gPewterCity_LandMonsNightInfo = { 22, gPewterCity_L
 
 const struct WildPokemon gRoute3_LandMonsDay[] =
 {
-	{14, 16, SPECIES_LITLEO},
+	{14, 16, SPECIES_TOEDSCOOL},
 	{14, 16, SPECIES_PANCHAM},
 	{14, 16, SPECIES_GOOMY},
 	{14, 16, SPECIES_INKAY},
@@ -325,7 +325,7 @@ const struct WildPokemonInfo gRoute3_LandMonsDayInfo = { 22, gRoute3_LandMonsDay
 
 const struct WildPokemon gRoute3_LandMonsNight[] =
 {
-	{14, 16, SPECIES_SKIDDO},
+	{14, 16, SPECIES_TOEDSCOOL},
 	{14, 16, SPECIES_ESPURR},
 	{14, 16, SPECIES_NIDORAN_M},
 	{14, 16, SPECIES_NIDORAN_F},
@@ -1319,7 +1319,7 @@ const struct WildPokemon gSafariZone3_LandMonsDay[] =
 	{60, 60, SPECIES_CHANSEY},
 	{60, 60, SPECIES_SAWK},
 	{60, 60, SPECIES_KANGASKHAN},
-	{60, 60, SPECIES_ZOROARK},
+	{60, 60, SPECIES_TOEDSCRUEL},
 	{60, 60, SPECIES_LOPUNNY},
 	{60, 60, SPECIES_PURUGLY},
 	{60, 60, SPECIES_TROPIUS},
@@ -1337,7 +1337,7 @@ const struct WildPokemon gSafariZone3_LandMonsNight[] =
 	{60, 60, SPECIES_CHANSEY},
 	{60, 60, SPECIES_THROH},
 	{60, 60, SPECIES_KANGASKHAN},
-	{60, 60, SPECIES_ZOROARK_H},
+	{60, 60, SPECIES_TOEDSCRUEL},
 	{60, 60, SPECIES_LOPUNNY},
 	{60, 60, SPECIES_AMBIPOM},
 	{60, 60, SPECIES_TROPIUS},
@@ -1372,7 +1372,7 @@ const struct WildPokemon gSafariZone4_LandMonsNight[] =
 {
 	{60, 60, SPECIES_STANTLER},
 	{60, 60, SPECIES_RHYDON},
-	{60, 60, SPECIES_QUAGSIRE},
+	{60, 60, SPECIES_CLODSIRE},
 	{60, 60, SPECIES_XATU},
 	{60, 60, SPECIES_RAICHU_A},
 	{60, 60, SPECIES_PHANPY},
@@ -1819,10 +1819,28 @@ const struct WildPokemon gFlowerField_LandMonsNight[] =
 
 const struct WildPokemonInfo gFlowerField_LandMonsInfoNight = { 22, gFlowerField_LandMonsNight };
 
+const struct WildPokemon gParadoxDen_LandMons[] =
+{
+	{80, 80, SPECIES_TOEDSCRUEL},
+	{80, 80, SPECIES_TOEDSCRUEL},
+	{80, 80, SPECIES_WUGTRIO},
+	{80, 80, SPECIES_WUGTRIO},
+	{80, 80, SPECIES_TOEDSCRUEL},
+	{80, 80, SPECIES_WUGTRIO},
+	{80, 80, SPECIES_DUDUNSPARCE},
+	{80, 80, SPECIES_KINGAMBIT},
+	{80, 80, SPECIES_ANNIHILAPE},
+	{80, 80, SPECIES_FARIGIRAF},
+	{80, 80, SPECIES_KINGAMBIT},
+	{80, 80, SPECIES_WUGTRIO},
+};
+
+const struct WildPokemonInfo gParadoxDen_LandMonsInfo = { 22, gParadoxDen_LandMons };
+
 //Region Water
 const struct WildPokemon gPalletTown_FishingMons [] =
 {
-  {5, 5, SPECIES_MAGIKARP},
+  {5, 5, SPECIES_WOOPER_P},
   {5, 5, SPECIES_CHINCHOU},
   {15, 15, SPECIES_CHINCHOU},
   {15, 15, SPECIES_HORSEA},
@@ -1850,7 +1868,7 @@ static const struct WildPokemonInfo gPalletTown_SurfMonsInfo = { 5, gPalletTown_
 const struct WildPokemon gViridianCity_FishingMons[] =
 {
   {5, 5, SPECIES_QWILFISH_H},
-  {5, 5, SPECIES_QWILFISH},
+  {5, 5, SPECIES_WIGLETT},
   {15, 15, SPECIES_ARROKUDA},
   {15, 15, SPECIES_GOLDEEN},
   {25, 25, SPECIES_ARROKUDA},
@@ -1919,11 +1937,11 @@ const struct WildPokemonInfo gCeruleanCity_FishingMonsInfo = { 5,  gCeruleanCity
 
 static const struct WildPokemon gCeruleanCity_SurfMons[] =
 {
-  {35, 35, SPECIES_TYNAMO},
-  {35, 35, SPECIES_TYNAMO},
-  {45, 45, SPECIES_EELEKTRIK},
-  {55, 55, SPECIES_EELEKTRIK},
-  {65, 65, SPECIES_EELEKTROSS},
+  {35, 35, SPECIES_WIGLETT},
+  {35, 35, SPECIES_WIGLETT},
+  {45, 45, SPECIES_WUGTRIO},
+  {55, 55, SPECIES_WUGTRIO},
+  {65, 65, SPECIES_WUGTRIO},
 };
 
 static const struct WildPokemonInfo gCeruleanCity_SurfMonsInfo = { 5, gCeruleanCity_SurfMons };
@@ -3306,6 +3324,14 @@ const struct WildPokemonHeader gWildMonEveningHeaders[] =
 		.mapGroup = MAP_GROUP(VICTORY_ROAD_3F),
 		.mapNum = MAP_NUM(VICTORY_ROAD_3F),
 		.landMonsInfo = &gVictoryRoad3_LandMonsNightInfo,
+		.waterMonsInfo = NULL,
+		.rockSmashMonsInfo = NULL,
+		.fishingMonsInfo = NULL,
+	},
+	{
+		.mapGroup = 43,
+		.mapNum = 28,
+		.landMonsInfo = &gParadoxDen_LandMonsInfo,
 		.waterMonsInfo = NULL,
 		.rockSmashMonsInfo = NULL,
 		.fishingMonsInfo = NULL,

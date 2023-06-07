@@ -36,5 +36,15 @@
     "hasMyceliumMight": [
         "SPECIES_TOEDSCOOL",
         "SPECIES_TOEDSCRUEL"  
+    ],
+    "hasQuarkDrive": [
+        "SPECIES_IRON_TREADS",
+        "SPECIES_IRON_BUNDLE",
+        "SPECIES_IRON_HANDS",
+        "SPECIES_IRON_JUGULIS",
+        "SPECIES_IRON_MOTH",
+        "SPECIES_IRON_THORNS",
+        "SPECIES_IRON_VALIANT",
+        "SPECIES_IRON_LEAVES"
     ]
 }

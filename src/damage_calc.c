@@ -8,6 +8,7 @@
 #include "../include/constants/trainers.h"
 
 #include "../include/new/accuracy_calc.h"
+#include "../include/new/ability_battle_effects.h"
 #include "../include/new/ability_util.h"
 #include "../include/new/ai_util.h"
 #include "../include/new/battle_start_turn_start.h"
@@ -396,6 +397,7 @@ static u8 GetNumHitsBasedOnMove(u16 move, u8 atkAbility, unusedArg u16 atkSpecie
 	u8 numHits = 1;
 
 	if (move == MOVE_SURGINGSTRIKES
+	|| move == MOVE_TRIPLEDIVE
 	#ifdef SPECIES_ASHGRENINJA
 	|| (move == MOVE_WATERSHURIKEN && atkSpecies == SPECIES_ASHGRENINJA)
 	#endif
@@ -2768,6 +2770,26 @@ static s32 CalculateBaseDamage(struct DamageCalc* data)
 			if (!IsDynamaxed(bankAtk))
 				attack = (attack * 15) / 10;
 			break;
+		
+		case ABILITY_PROTOSYNTHESIS:
+			if ((!SpeciesHasQuarkDrive(SPECIES(bankAtk)) &&
+			WEATHER_HAS_EFFECT 
+			&& (gBattleWeather & (WEATHER_SUN_ANY | WEATHER_PRIMAL_ANY)))
+			|| (SpeciesHasQuarkDrive(SPECIES(bankAtk))
+			&& gTerrainType == ELECTRIC_TERRAIN))
+			{
+				switch(GetHighestStat(bankAtk))
+				{
+					case STAT_ATK:
+						attack = (attack * 13) / 10;
+						break;
+					case STAT_SPATK:
+						spAttack = (spAttack * 13) / 10;
+						break;
+				}
+			}
+			break;
+		
 	}
 
 	switch (data->atkPartnerAbility) {
@@ -2820,6 +2842,26 @@ static s32 CalculateBaseDamage(struct DamageCalc* data)
 			}
 		#endif
 			break;
+
+		case ABILITY_PROTOSYNTHESIS:
+			if ((!SpeciesHasQuarkDrive(SPECIES(bankDef)) &&
+			WEATHER_HAS_EFFECT 
+			&& (gBattleWeather & (WEATHER_SUN_ANY | WEATHER_PRIMAL_ANY)))
+			|| (SpeciesHasQuarkDrive(SPECIES(bankDef))
+			&& gTerrainType == ELECTRIC_TERRAIN))
+			{
+				switch(GetHighestStat(bankDef))
+				{
+					case STAT_DEF:
+						defense = (defense * 13) / 10;
+						break;
+					case STAT_SPDEF:
+						spDefense = (spDefense * 13) / 10;
+						break;
+				}
+			}
+			break;
+
 	}
 
 //Attacker Item Checks
@@ -3137,7 +3179,10 @@ static s32 CalculateBaseDamage(struct DamageCalc* data)
 					damage = (damage * 15) / 10;
 					break;
 				case TYPE_WATER:
-					damage /= 2;
+					if (move == MOVE_HYDROSTEAM)
+						damage = (damage * 15) / 10;
+					else 
+						damage /= 2;
 					break;
 			}
 		}
@@ -3932,6 +3977,11 @@ static u16 GetBasePower(struct DamageCalc* data)
 			if (data->atkSpecies == SPECIES_PALKIA_ORIGIN)
 				power = 90;
 			#endif
+			break;
+
+		case MOVE_PSYBLADE:
+			if (gTerrainType == ELECTRIC_TERRAIN && data->atkIsGrounded)
+				power = (power * 15) / 10;
 			break;
 
 		default:

@@ -828,6 +828,32 @@ gMoveAnimations:
 .word ANIM_TWIN_BEAM
 .word ANIM_HYPER_DRILL
 .word ANIM_KOWTOW_CLEAVE
+.word ANIM_TRIPLE_DIVE
+.word 0x81cfa01		@MOVE_SURF
+.word ANIM_GRASSY_GLIDE
+.word ANIM_ICE_SPINNER
+.word ANIM_HYDRO_STEAM
+.word ANIM_PSYBLADE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+.word 0x81c6f34		@MOVE_NONE
+
 .word ANIM_BREAKNECK_BLITZ
 .word ANIM_BREAKNECK_BLITZ
 .word ANIM_ALL_OUT_PUMMELING
@@ -16731,7 +16757,21 @@ ANIM_DRUM_BEATING:
 @Credits to GF
 .global ANIM_SNAP_TRAP
 ANIM_SNAP_TRAP:
-	goto 0x81CE29E @Original Clamp animation that uses teeth
+	loadparticle 0x27a1 
+	loadparticle 0x2797 
+	pokespritetoBG bank_target 
+	setblends 0x80c 
+	playsound2 149 0x3f 
+	launchtemplate 0x83e7948 0x2 0x6 0xffe0 0x0 0x2 0x333 0x0 0xa  
+	launchtemplate 0x83e7948 0x2 0x6 0x20 0x0 0x6 0xfccd 0x0 0xa  
+	pause 0xa 
+	launchtemplate 0x83e7c08 0x2 0x4 0x0 0x0 0x1 0x2  
+	launchtask AnimTask_move_bank 0x5 0x5 bank_target 0x3 0x0 0x5 0x1  
+	waitanimation 
+	pokespritefromBG bank_target 
+	resetblends 
+	waitanimation 
+	endanimation 
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 .pool
@@ -19939,6 +19979,155 @@ NIGHT_SLASH_LEFT: objtemplate ANIM_TAG_CUT ANIM_TAG_CUT OAM_NORMAL_32x32 0x83E32
 NIGHT_SLASH_RIGHT: objtemplate ANIM_TAG_CUT ANIM_TAG_CUT OAM_NORMAL_32x32 0x83E3290 0x0 gSpriteAffineAnimTable_NightSlashRight SpriteCB_HorizontalSlice
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+.pool
+ANIM_TRIPLE_DIVE:
+	loadparticle ANIM_TAG_SPLASH
+	loadparticle ANIM_TAG_SWEAT_BEAD
+	goto 0x81d41cd @DiveAttack
+	endanimation
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+.pool
+ANIM_CHILLING_WATER:
+	loadparticle ANIM_TAG_CHILLING_WATER
+	loadparticle ANIM_TAG_RAZOR_LEAF
+	launchtask AnimTask_pal_fade 0xa 0x5 PAL_BG 0x1 0x0 0xD 0x0
+	waitanimation
+	launchsoundtask 0x80dcf39 0x7 0xa1 0xffc0 SOUND_PAN_TARGET 0x5 0x5 0x0 0x5
+	launchtemplate CHILLING_WATER TEMPLATE_TARGET | 2, 0x3, 0x0 0x0 0x25
+	waitanimation
+	playsound2 0x8D SOUND_PAN_TARGET
+	launchtask AnimTask_move_bank_2 0x2 0x5 0x1 0x4 0x0 0x8 0x1
+	launchtask AnimTask_pal_fade_complex 0x2 0x6 PAL_DEF 0x1 0x2 0x0 0xb 0x7f4c
+	waitanimation
+	launchtask AnimTask_pal_fade 0xa 0x5 PAL_BG 0x1 0xD 0x0 0x0
+	waitanimation
+	endanimation
+
+.align 2
+CHILLING_WATER: objtemplate ANIM_TAG_CHILLING_WATER ANIM_TAG_CHILLING_WATER OAM_NORMAL_32x32 gDummySpriteAnimTable 0x0 0x83E7604 0x80B563D
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+.pool
+ANIM_ICE_SPINNER:
+	loadparticle 0x273b 
+	loadparticle 0x279d 
+	makebankinvisible bank_attacker
+	loadBG1 BG_ICE
+	playsound2 130 0xc0 
+	launchtemplate 0x83e665c 0x82 0x6 0xf 0x0 0xfff4 0xfff0 0x1e 0xffd8  
+	pause 0x1c 
+	playsound2 191 0x3f 
+	@launchtask 0x80d6389 0x2 0x5 0x0 0x1 0xe 0x1 0x0  
+	call 0x81d5151
+	call 0x81d5151
+	call 0x81d5151
+	call 0x81d5151
+	call 0x81d5151
+	call 0x81d5151
+	call 0x81d5151
+	call 0x81d5151
+	call 0x81d5151
+	waitbgfadein
+	pause 45
+	loaddefaultBG
+	waitbgfadein
+	makebankvisible bank_attacker
+	endanimation 
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+.pool
+@Credits to Matteo
+ANIM_HYDRO_STEAM:
+	loadparticle ANIM_TAG_WATER_GUN
+	loadparticle ANIM_TAG_ICE_CRYSTALS
+	loadparticle ANIM_TAG_GRAY_SMOKE
+	SetBlends 0x080C
+	pokespritetoBG side_target
+	leftbankBG_over_partnerBG bank_target
+	launchtask AnimTask_BlendParticle 0x5 0x5 ANIM_TAG_GRAY_SMOKE 0x0 0xC 0xC 0xFF7F @;White
+	launchtask AnimTask_GetWeather 0x2 0x0
+	Pause 0x01
+	jumpifargmatches 0x07 0x0001 HYDRO_STEAM_SUN_LOAD
+	launchtask AnimTask_move_bank 0x5 0x5 bank_attacker 0x0 0x2 0x17 0x1
+HYDRO_STEAM_CONTINUE_1:
+	pause 0x3
+	PlaySound2 0x87 0xC0
+	launchtemplate Template_SmallBubblePair 0x02 0x04 0x0A 0x0A 0x14 bank_attacker
+	Pause 0x04
+	PlaySound2 0x87 0xC0
+	launchtemplate Template_SmallBubblePair 0x02 0x04 0x14 0xFFEC 0x14 bank_attacker
+	Pause 0x04
+	PlaySound2 0x87 0xC0
+	launchtemplate Template_SmallBubblePair 0x02 0x04 0xFFF1 0x000F 0x0014 bank_attacker
+	Pause 0x04
+	PlaySound2 0x87 0xC0
+	launchtemplate Template_SmallBubblePair 0x02 0x04 0x0 0x0 0x0014 bank_attacker
+	Pause 0x04
+	PlaySound2 0x87 0xC0
+	launchtemplate Template_SmallBubblePair 0x02 0x04 0xFFF6 0xFFEC 0x0014 bank_attacker
+	Pause 0x04
+	PlaySound2 0x87 0xC0
+	launchtemplate Template_SmallBubblePair 0x02 0x04 0x0010 0xFFF8 0x0014 bank_attacker
+	Pause 0x04
+	PlaySound2 0x87 0xC0
+	waitanimation
+	soundcomplex 0x89 SOUND_PAN_ATTACKER 0x7 0x7
+	call SCALD_GUN
+	call SCALD_GUN
+	call SCALD_GUN
+	launchtask AnimTask_pal_fade 0xa 0x5 0x4 0x1 0x0 0x7 0x6739
+	jumpifargmatches 0x07 0x0001 HYDRO_STEAM_HEAVY_SHAKE_FOE
+	launchtask AnimTask_move_bank_2 0x2 0x5 0x1 0x2 0x0 0x20 0x1
+HYDRO_STEAM_CONTINUE_2:
+	call SCALD_GUN
+	call SCALD_GUN
+	launchtemplate Template_GraySmoke 0x82 0x4 0xFFF4 0xFFF1 bank_target 0x1
+	launchtemplate Template_GraySmoke 0x82 0x4 0xA 0xFFF1 bank_target 0x1
+	call SCALD_GUN
+	call SCALD_GUN
+	launchtemplate Template_GraySmoke 0x82 0x4 0xFFF4 0xFFF1 bank_target 0x1
+	launchtemplate Template_GraySmoke 0x82 0x4 0xA 0xFFF1 bank_target 0x1
+	call SCALD_GUN
+	call SCALD_GUN
+	launchtemplate Template_GraySmoke 0x82 0x4 0xFFF4 0xFFF1 bank_target 0x1
+	launchtemplate Template_GraySmoke 0x82 0x4 0xA 0xFFF1 bank_target 0x1
+	call SCALD_GUN
+	call SCALD_GUN
+	launchtemplate Template_GraySmoke 0x82 0x4 0xFFF4 0xFFF1 bank_target 0x1
+	launchtemplate Template_GraySmoke 0x82 0x4 0xA 0xFFF1 bank_target 0x1
+	WaitAnimation
+	launchtask AnimTask_pal_fade 0xa 0x5 0x4 0x1 0x7 0x0 0x6739
+	waitanimation
+	jumpifargmatches 0x07 0x0001 HYDRO_STEAM_RESET_BG
+HYDRO_STEAM_END_ANIMATION:
+	pokespritefromBG side_target
+	resetblends
+	endanimation
+
+HYDRO_STEAM_SUN_LOAD:
+	launchtemplate Template_Pal_Fade 0x2 0x5 PAL_BG 0x1 0x0 0x5 0xFF7F
+	waitanimation
+	launchtask AnimTask_move_bank 0x5 0x5 bank_attacker 0x0 0x4 0x13 0x1
+	goto HYDRO_STEAM_CONTINUE_1
+
+HYDRO_STEAM_RESET_BG:
+	launchtemplate Template_Pal_Fade 0x2 0x5 PAL_BG 0x1 0x5 0x0 0xFF7F
+	waitanimation
+	goto HYDRO_STEAM_END_ANIMATION
+
+HYDRO_STEAM_HEAVY_SHAKE_FOE:
+	launchtask AnimTask_move_bank_2 0x2 0x5 0x1 0x5 0x0 0x15 0x1
+	goto HYDRO_STEAM_CONTINUE_2
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ANIM_PSYBLADE:
+	goto 0x8780000
+	endanimation 
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	.pool

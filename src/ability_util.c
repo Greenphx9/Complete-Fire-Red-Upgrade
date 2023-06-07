@@ -208,6 +208,11 @@ bool8 SpeciesHasMyceliumMight(u16 species)
 	return gSpecialReplaceAbilityFlags[species].hasMyceliumMight;
 }
 
+bool8 SpeciesHasQuarkDrive(u16 species)
+{
+	return gSpecialReplaceAbilityFlags[species].hasQuarkDrive;
+}
+
 bool8 AbilityIncreasesWildItemChance(u8 ability)
 {
 	return ability == ABILITY_COMPOUNDEYES || ability == ABILITY_SUPERLUCK;

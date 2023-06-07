@@ -764,10 +764,11 @@ Mimicry
 #org @NAME_SCREEN_CLEANER
 Screen Cleaner
 
+#org @NAME_PROTOSYNTHESIS
+Protosynthesis
+
 #org @NAME_PASTEL_VEIL
 Pastel Veil
-
-
 
 #org @NAME_IRON_BARBS
 Iron Barbs
@@ -843,3 +844,6 @@ Sharpness
 
 #org @NAME_MYCELIUM_MIGHT
 Mycelium Might
+
+#org @NAME_QUARK_DRIVE
+Quark Drive

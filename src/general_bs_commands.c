@@ -2824,6 +2824,9 @@ void atk8D_setmultihitcounter(void) {
 	if (ABILITY(gBankAttacker) == ABILITY_SKILLLINK)
 		gMultiHitCounter = 5;
 
+	if (gCurrentMove == MOVE_TRIPLEDIVE)
+		gMultiHitCounter = 3;
+
 	#ifdef SPECIES_ASHGRENINJA
 	else if (ABILITY(gBankAttacker) == ABILITY_BATTLEBOND
 	&& gCurrentMove == MOVE_WATERSHURIKEN

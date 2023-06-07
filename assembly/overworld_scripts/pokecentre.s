@@ -14,8 +14,7 @@
 .global EventScript_Pokecentre
 EventScript_pokecentre_0X16A2CF:
 	lock
-	givepokemon 1300 100 0x0
-	givepokemon 1301 100 0x0
+	givepokemon 1321 100 0x0
 	faceplayer
 	call EventScript_pokecentre_0X1A6578
 	release

@@ -228,6 +228,8 @@ extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_UltraWormho
 extern const u16 gEventObjectPic_UltraWormholePal[];
 extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_Mindy;
 extern const u16 gEventObjectPic_MindyPal[];
+extern const struct EventObjectGraphicsInfo gEventObjectGraphicsInfo_ParadoxRaidDen;
+extern const u16 gEventObjectPic_ParadoxRaidDenPal[];
 
 	static NPCPtr sOverworldTable2[] = { 
 		&gEventObjectGraphicsInfo_Cresselia,
@@ -261,6 +263,7 @@ extern const u16 gEventObjectPic_MindyPal[];
 		&gEventObjectGraphicsInfo_Rayquaza,
 		&gEventObjectGraphicsInfo_UltraWormhole,
 		&gEventObjectGraphicsInfo_Mindy,
+		&gEventObjectGraphicsInfo_ParadoxRaidDen,
 	};
 
 	const struct EventObjectGraphicsInfo** const gOverworldTableSwitcher[255] =
@@ -303,6 +306,7 @@ extern const u16 gEventObjectPic_MindyPal[];
 		{gEventObjectPic_RayquazaPal, 0x121D},
 		{gEventObjectPic_UltraWormholePal, 0x121E},
 		{gEventObjectPic_MindyPal, 0x121F},
+		{gEventObjectPic_ParadoxRaidDenPal, 0x1220},
 		{NULL, 0x11FF},
 	};
 	const struct SpritePalette* const gObjectEventSpritePalettesSwitcher[255] = {

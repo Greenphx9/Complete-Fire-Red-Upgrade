@@ -15198,6 +15198,100 @@ const struct BattleMove gBattleMoves[] =
 		.split = SPLIT_PHYSICAL,
 		.z_move_effect = 0
 	},
+	[MOVE_TRIPLEDIVE] =
+	{
+		.effect = EFFECT_MULTI_HIT,
+		.power = 30,
+		.type = TYPE_WATER,
+		.accuracy = 95,
+		.pp = 10,
+		.secondaryEffectChance = 0,
+		.target = MOVE_TARGET_SELECTED,
+		.priority = 0,
+		.flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+		.z_move_power = 150,
+		.split = SPLIT_PHYSICAL,
+		.z_move_effect = 0
+	},
+	[MOVE_CHILLINGWATER] =
+	{
+		.effect = EFFECT_ATTACK_DOWN_HIT,
+		.power = 50,
+		.type = TYPE_WATER,
+		.accuracy = 100,
+		.pp = 20,
+		.secondaryEffectChance = 100,
+		.target = MOVE_TARGET_SELECTED,
+		.priority = 0,
+		.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+		.z_move_power = 150,
+		.split = SPLIT_SPECIAL,
+		.z_move_effect = 0
+	},
+
+	[MOVE_TRAILBLAZE] =
+	{
+		.effect = EFFECT_SPEED_UP_1_HIT,
+		.power = 50,
+		.type = TYPE_GRASS,
+		.accuracy = 100,
+		.pp = 20,
+		.secondaryEffectChance = 100,
+		.target = MOVE_TARGET_SELECTED,
+		.priority = 0,
+		.flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+		.z_move_power = 100,
+		.split = SPLIT_PHYSICAL,
+		.z_move_effect = 0
+	},
+
+	[MOVE_ICESPINNER] =
+	{
+		.effect = EFFECT_DAMAGE_SET_TERRAIN,
+		.power = 80,
+		.type = TYPE_ICE,
+		.accuracy = 100,
+		.pp = 15,
+		.secondaryEffectChance = 0,
+		.target = MOVE_TARGET_SELECTED,
+		.priority = 0,
+		.flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+		.z_move_power = 100,
+		.split = SPLIT_PHYSICAL,
+		.z_move_effect = 0
+	},
+
+	[MOVE_HYDROSTEAM] =
+	{
+		.effect = EFFECT_HIT,
+		.power = 80,
+		.type = TYPE_WATER,
+		.accuracy = 100,
+		.pp = 15,
+		.secondaryEffectChance = 0,
+		.target = MOVE_TARGET_SELECTED,
+		.priority = 0,
+		.flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+		.z_move_power = 100,
+		.split = SPLIT_SPECIAL,
+		.z_move_effect = 0
+	},
+
+	[MOVE_PSYBLADE] =
+	{
+		.effect = EFFECT_HIT,
+		.power = 80,
+		.type = TYPE_PSYCHIC,
+		.accuracy = 100,
+		.pp = 15,
+		.secondaryEffectChance = 0,
+		.target = MOVE_TARGET_SELECTED,
+		.priority = 0,
+		.flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+		.z_move_power = 100,
+		.split = SPLIT_PHYSICAL,
+		.z_move_effect = 0
+	},
 #endif
 };
 
@@ -15733,5 +15827,11 @@ const u8 gDynamaxMovePowers[MOVES_COUNT] =
 	[MOVE_TWINBEAM] = 140,
 	[MOVE_HYPERDRILL] = 140,
 	[MOVE_KOWTOWCLEAVE] = 140,
+	[MOVE_TRIPLEDIVE] = 140,
+	[MOVE_CHILLINGWATER] = 120,
+	[MOVE_TRAILBLAZE] = 100,
+	[MOVE_ICESPINNER] = 130,
+	[MOVE_HYDROSTEAM] = 130,
+	[MOVE_PSYBLADE] = 130, 
 };
 #endif
